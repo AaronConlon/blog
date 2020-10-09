@@ -14,6 +14,30 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "quotes": [2, "double"]
+    "quotes": [2, "double"],
+    "react/jsx-filename-extension": "off",
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "ignore",
+        "objects": "ignore",
+        "imports": "ignore",
+        "exports": "ignore",
+        "functions": "ignore"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".tsx", ".sass", ".js"]
+      }
+    }
   }
 }

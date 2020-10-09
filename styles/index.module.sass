@@ -1,0 +1,58 @@
+@use 'basic'
+
+.container
+  margin: 0 auto
+  padding: 0
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  width: basic.$vw100
+  height: 100vh
+  background-repeat: no-repeat
+  background-position: center center
+  background-size: cover
+  @media (min-width: basic.$mediaMinWidth) and (max-width: basic.$mediaBp1Width)
+    background-image: url('/sea-mid.jpg')
+  @media (min-width: basic.$mediaBp1Width)
+    background-image: url('/sea-large.jpg')
+  @media (max-width: basic.$mediaMinWidth)
+    background: none
+    &::before
+      content: ''
+      display: block
+      width: basic.$vw100
+      height: 14rem
+      clip-path: polygon(0 0, 100% 0, 100% 56%, 0% 80%)
+      background-color: #1572c4
+      z-index: -999
+      position: absolute
+      top: 0
+      left: 0
+  a
+    text-decoration: none
+  p
+    color: black
+    font-size: 1rem
+    line-height: 1.4rem
+    padding-bottom: 1rem
+    opacity: 0.7
+    display: inline-block
+    margin-top: 1rem
+    text-align: center
+    @media screen and ( max-width: 440px)
+      padding: .5rem
+    span
+      color: blue
+      border-bottom: 1px solid #d56c10ec
+      margin: 0 .4rem
+
+.logo img
+  width: 8rem
+  height: 8rem
+  border-radius: 50%
+  margin-bottom: 1rem
+  position: relative
+  top: 1rem
+  @media (max-width: basic.$mediaMinWidth - 80px)
+    top: -3rem
