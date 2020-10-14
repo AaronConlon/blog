@@ -76,6 +76,7 @@ const getPostSlugByTitle = (title: string) => {
   });
   return result;
 };
+
 export {
   getAllPostData,
   getPostsData,
