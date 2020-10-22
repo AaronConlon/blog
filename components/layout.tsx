@@ -16,6 +16,7 @@ export default function Layout({ children }: Props) {
           name="description"
           content="javascript node deno linux web developer"
         />
+        <meta charSet="utf-8" />
         <link
           rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>"
@@ -30,6 +31,7 @@ export default function Layout({ children }: Props) {
               textAlign="center"
               m="0 auto"
               p="1.4rem 1rem"
+              color="#0069d6"
             >
               <Link href="/">
                 <a>
@@ -50,7 +52,7 @@ export default function Layout({ children }: Props) {
             <span role="img" aria-label="emoji">
               🤗
             </span>
-            如果你有任何想与我讨论的内容,请给我发邮件,我保证会回复,这次一定,绝对不
+            如果你有任何想与我讨论的内容,请给我发邮件,我会回复,这次一定,绝对不
             <span role="img" aria-label="emoji">
               🕊
             </span>

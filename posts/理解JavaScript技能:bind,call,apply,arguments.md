@@ -1,6 +1,6 @@
 ---
 date: "2020/7/4"
-title: "理解JavaScript技能:bind-call-apply-arguments"
+title: "理解JavaScript技能:bind,call,apply,arguments"
 tags:
   - Javascript
   - 设计模式
@@ -8,10 +8,9 @@ author:
   name: Tim Neutkens
 ogImage:
 coverImg: "https://www.jav321.com/digital/video/blk00471/blk00471jp-12.jpg"
+mainImg: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=960"
 intro: "JavaScript语言的`this`功能让我感觉到了混乱,在一些其他的面向对象语言中,this始终指向的是对象当前的实例,但是在JavaScript中,这就不一定了,在js中取决于函数的调用者."
 ---
-
-![](https://miro.medium.com/max/1400/1*hAo_ppCOqQX9O9bVlMN_fw.png)
 
 JavaScript 语言的`this`功能让我感觉到了混乱,在一些其他的面向对象语言中,this 始终指向的是对象当前的实例,但是在 JavaScript 中,这就不一定了,在 js 中取决于函数的调用者.具体的实例如下:
 

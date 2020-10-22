@@ -1,6 +1,7 @@
+/* eslint-disable react/no-danger */
 import Head from "next/head";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { Box, Text } from "@chakra-ui/core";
+import { Box, Text, Image } from "@chakra-ui/core";
 // @ts-ignore
 import Layout from "../../components/layout.tsx";
 // @ts-ignore
@@ -13,6 +14,7 @@ export default function Post({
     title: string;
     date: Date;
     tags: string[];
+    mainImg: string;
     contentHtml: string;
   };
 }) {
@@ -20,9 +22,23 @@ export default function Post({
     <Layout>
       <Head>
         <title>{post.title}</title>
+        <link
+          rel="stylesheet"
+          href="https://highlightjs.org/static/demo/styles/dracula.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
+        />
+        <link rel="stylesheet" href="/post.css" />
       </Head>
       <Box>
-        <Text>sdadadad</Text>
+        <Box width="100%" margin="0 auto" paddingBottom="4rem" maxW="960px">
+          <Image src={post.mainImg} alt="" width="100%" />
+        </Box>
+        <Box width="100%" margin="0 auto" maxW="960px">
+          <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+        </Box>
       </Box>
     </Layout>
   );
@@ -38,12 +54,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log(params);
-
-  // const post = await getPost(params.slug as string);
+  const post = await getPost(params.slug as string);
   return {
     props: {
-      name: 'aaron',
+      post,
     },
   };
 };

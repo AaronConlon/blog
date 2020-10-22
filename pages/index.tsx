@@ -27,8 +27,6 @@ import { getAllPostData } from "../help";
 import { postProps } from "../help/types";
 
 export default function Home({ posts }: { posts: postProps[] }) {
-  // console.log(posts);
-
   return (
     <Layout>
       <Box maxWidth="960px" w="100vw" backgroundColor="white.100" m="0 auto">
