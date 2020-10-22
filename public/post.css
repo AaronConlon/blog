@@ -223,6 +223,7 @@ th {
 
 a {
   color: #0069d6 !important;
+  text-decoration: none !important;
 }
 a:hover {
   color: #0050a3 !important;
@@ -230,4 +231,15 @@ a:hover {
 }
 a img {
   border: none;
+}
+
+#tags div::before {
+  content: "";
+  position: relative;
+  left: -0.2rem;
+  display: inline-block;
+  height: 0.6rem;
+  width: 0.6rem;
+  border-radius: 50%;
+  background-color: #fff;
 }

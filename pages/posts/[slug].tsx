@@ -1,7 +1,8 @@
 /* eslint-disable react/no-danger */
 import Head from "next/head";
+import Link from "next/link";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { Box, Text, Image } from "@chakra-ui/core";
+import { Box, Heading, Image, Badge, Stack, Text } from "@chakra-ui/core";
 // @ts-ignore
 import Layout from "../../components/layout.tsx";
 // @ts-ignore
@@ -37,6 +38,24 @@ export default function Post({
           <Image src={post.mainImg} alt="" width="100%" />
         </Box>
         <Box width="100%" margin="0 auto" maxW="960px">
+          <Heading as="h1">{post.title}</Heading>
+          <Stack isInline id="tags" height="2rem">
+            {post.tags.map((tag) => (
+              <Badge
+                variantColor="purple"
+                key={tag}
+                height="1.2rem"
+                fontSize="0.8rem"
+                lineHeight="1.2rem"
+                paddingLeft="0.5rem"
+              >
+                <Link href={`/tags/${tag}`}>
+                  <a>{tag}</a>
+                </Link>
+              </Badge>
+            ))}
+          </Stack>
+          <Text>{post.date}</Text>
           <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
         </Box>
       </Box>
