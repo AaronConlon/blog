@@ -243,3 +243,80 @@ a img {
   border-radius: 50%;
   background-color: #fff;
 }
+
+#msg {
+  text-indent: 0;
+  padding: 1rem;
+}
+
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 25px !important;
+    line-height: 30px !important;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  pre {
+    position: relative;
+    width: 100%;
+    margin: 0 !important;
+    /* margin: 1rem auto !important; */
+  }
+
+  pre::before {
+    height: 0.8rem;
+    width: 0.8rem;
+    left: 1rem;
+  }
+
+  pre::after {
+    height: 0.8rem;
+    width: 0.8rem;
+    left: 2.5rem;
+  }
+
+  pre code {
+    border-radius: 0.4rem;
+    padding-bottom: 1rem !important;
+    font-size: 0.8rem;
+  }
+
+  pre code::after {
+    height: 0.8rem;
+    width: 0.8rem;
+    left: 4rem;
+  }
+
+  .hljs {
+    margin: 0.2rem;
+    padding: 0.2rem;
+    padding-top: 3rem;
+  }
+
+  ul {
+    margin-top: 0.6rem !important;
+    margin-bottom: 0.6rem !important;
+    margin-left: 2.5rem !important;
+  }
+  p img {
+    margin: 0 auto;
+  }
+  blockquote p {
+    padding-left: 0.4rem;
+    font-size: 0.8rem;
+    margin: 0.4rem 0;
+    line-height: 1.4rem;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #404040;
+    line-height: 28px !important;
+    font-weight: bolder !important;
+    display: block;
+    margin: 1.6rem 0.8rem !important;
+  }
+}

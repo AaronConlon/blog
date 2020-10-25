@@ -27,7 +27,9 @@ export default function Posts({
   }
   return (
     <div className={styles.containers}>
-      <Avatar />
+      <Avatar
+        customStyle={{ margin: "0 auto", height: "128px", width: "128px" }}
+      />
       {showSearchArea ? <Search /> : null}
       <h5>
         {tagsList.length}

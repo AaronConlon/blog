@@ -1,8 +1,9 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/no-danger */
 import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { Box, Heading, Image, Badge, Stack, Text } from "@chakra-ui/core";
+import { Box, Heading, Image, Badge, Stack, Text, Tag } from "@chakra-ui/core";
 // @ts-ignore
 import Layout from "../../components/layout.tsx";
 // @ts-ignore
@@ -34,20 +35,38 @@ export default function Post({
         <link rel="stylesheet" href="/post.css" />
       </Head>
       <Box>
-        <Box width="100%" margin="0 auto" paddingBottom="4rem" maxW="960px">
+        <Box width="100%" margin="0 auto" paddingBottom="2rem" maxW="960px">
           <Image src={post.mainImg} alt="" width="100%" />
         </Box>
         <Box width="100%" margin="0 auto" maxW="960px">
-          <Heading as="h1">{post.title}</Heading>
-          <Stack isInline id="tags" height="2rem">
+          <Heading
+            as="h1"
+            textAlign="center"
+            overflow="hidden"
+            // fontSize="1rem"
+            lineHeight={["2.5rem!important", "3rem!important"]}
+          >
+            {post.title}
+          </Heading>
+          <Stack
+            isInline
+            id="tags"
+            height="2rem"
+            margin="0 auto"
+            mr="0.4rem"
+            float="right"
+            display="flex"
+            alignItems="center"
+          >
             {post.tags.map((tag) => (
               <Badge
                 variantColor="purple"
                 key={tag}
-                height="1.2rem"
-                fontSize="0.8rem"
-                lineHeight="1.2rem"
-                paddingLeft="0.5rem"
+                height="2rem"
+                fontSize="0.6rem"
+                borderRadius="5px"
+                lineHeight="2rem"
+                paddingLeft="8px"
               >
                 <Link href={`/tags/${tag}`}>
                   <a>{tag}</a>
@@ -55,8 +74,13 @@ export default function Post({
               </Badge>
             ))}
           </Stack>
-          <Text>{post.date}</Text>
-          <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+          <Tag mb="2rem" variantColor="cyan" fontSize="0.6rem" ml="0.4rem">
+            最后更新: {post.date}
+          </Tag>
+          <div
+            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+            style={{ margin: "0 1rem" }}
+          />
         </Box>
       </Box>
     </Layout>

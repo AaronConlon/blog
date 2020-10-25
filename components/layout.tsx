@@ -47,12 +47,12 @@ export default function Layout({ children }: Props) {
         <main>{children}</main>
         <Divider />
         <Box m="2rem auto" textAlign="center">
-          <p>
+          <p id="msg">
             谢谢你能看到这里!
             <span role="img" aria-label="emoji">
               🤗
             </span>
-            如果你有任何想与我讨论的内容,请给我发邮件,我会回复,这次一定,绝对不
+            &nbsp;如果你有任何想与我讨论的内容,请给我发邮件.
             <span role="img" aria-label="emoji">
               🕊
             </span>
@@ -68,7 +68,9 @@ export default function Layout({ children }: Props) {
           </Link>
           <br />
           <br />
-          <Text color="gray.600">妙才 © 2020. All rights reserved.</Text>
+          <Text color="gray.600" fontSize=".7rem">
+            妙才 © 2020. All rights reserved.
+          </Text>
         </Box>
       </Box>
     </div>
