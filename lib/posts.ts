@@ -80,3 +80,7 @@ export async function getPost(slug: string) {
     }),
   };
 }
+
+export function search(query: string): any {
+  
+}

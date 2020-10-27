@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { getAllPostTitleAndSlug } from "../../help";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET") {
@@ -20,7 +21,14 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
   // logic
   const searchWord = req.query.keyword;
+  const allPost = getAllPostTitleAndSlug().filter((post) => {
+    const postPattern = new RegExp(searchWord, "i");
+    return postPattern.test(post.title);
+  });
+
   res.status(200).json({
     name: searchWord,
+    posts: allPost,
+    data: getAllPostTitleAndSlug(),
   });
 };
