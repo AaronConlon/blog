@@ -19,18 +19,21 @@ export default function Posts({
     [name: string]: Object[];
   };
 }) {
-  const [showSearchArea, setShowSearchArea] = React.useState(true);
-  // console.log(tags);
+  const [result, setResult] = React.useState({});
   const tagsList = Object.keys(tags);
-  function handdleClick() {
-    console.log(111);
+  function searchCallback(data: any) {
+    setResult(data);
+  }
+  function handdleClick(tagName: string) {
+    const target = tags[tagName];
+    setResult({ posts: target });
   }
   return (
     <div className={styles.containers}>
       <Avatar
         customStyle={{ margin: "0 auto", height: "128px", width: "128px" }}
       />
-      {showSearchArea ? <Search /> : null}
+      <Search callback={searchCallback} />
       <h5>
         {tagsList.length}
         &nbsp;tags here
@@ -45,6 +48,21 @@ export default function Posts({
         <span>@妙才</span>
         的博客 posts 页,可以通过搜索功能查找一些有趣的内容.
       </p>
+      <div className={styles.searchResult}>
+        {result?.posts ? (
+          result.posts.map((post) => (
+            <h4 key={post.title}>
+              <Link href={`/posts/${post.slug}`}>
+                <a>{post.title}</a>
+              </Link>
+            </h4>
+          ))
+        ) : (
+          <div>
+            <p>一片荒芜.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

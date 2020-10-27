@@ -9,7 +9,11 @@ export default function Tag({
   clickEvent: any;
 }) {
   return (
-    <button className={styles.btn} type="button" onClick={clickEvent}>
+    <button
+      className={styles.btn}
+      type="button"
+      onClick={() => clickEvent(tagName)}
+    >
       {tagName}
     </button>
   );
