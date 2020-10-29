@@ -3,6 +3,7 @@ date: "2020/7/2"
 title: "Nodejs学习基础 - 1"
 tags:
   - Nodejs
+  - Javascript
 author:
   name: Tim Neutkens
 ogImage:

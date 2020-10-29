@@ -73,45 +73,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
                 maxW="400px"
               />
             </Box>
-            <Box ml="1.5rem" position="relative">
-              <Link href={`/posts/${post.id}`}>
-                <a>
-                  <Heading as="h5" fontSize="1.25rem" mb=".8rem" pb=".3rem">
-                    {post.title}
-                  </Heading>
-                </a>
-              </Link>
-              <Text color="purple.800">{post.intro}</Text>
-              <Flex justifyContent="space-between" paddingTop="2rem">
-                <Badge
-                  variantColor="purple"
-                  height="1.5rem"
-                  fontSize="0.8rem"
-                  lineHeight="1.5rem"
-                >
-                  {post.date}
-                </Badge>
-                <Box height="2rem" lineHeight="2rem">
-                  {post.tags.map((tag) => (
-                    <Link href={`/tags/${tag}`} key={tag}>
-                      <a>
-                        <Badge
-                          variantColor="green"
-                          margin="0 .4rem"
-                          height="1.5rem"
-                          lineHeight="1.5rem"
-                          fontSize="0.8rem"
-                          position="relative"
-                          bottom=".4rem"
-                        >
-                          {tag}
-                        </Badge>
-                      </a>
-                    </Link>
-                  ))}
-                </Box>
-              </Flex>
-            </Box>
+           
           </Flex>
         ))}
         <Link href="/posts">
