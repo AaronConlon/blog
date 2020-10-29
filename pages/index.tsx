@@ -29,7 +29,7 @@ import { postProps } from "../help/types";
 export default function Home({ posts }: { posts: postProps[] }) {
   return (
     <Layout>
-      <Box maxWidth="960px" w="100vw" backgroundColor="white.100" m="0 auto">
+      <Box maxWidth="960px" w="100" backgroundColor="white.100" m="0 auto">
         <Flex m="0 auto" pb="1rem" justifyContent="center" alignItems="center">
           <Avatar
             name="youyi"
@@ -44,7 +44,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
             pr="2rem"
             pl="1rem"
           >
-            嘿.你好!我叫妙才,我的职业生涯规划,愿要成为一个卓越的软件开发工程师.
+            嘿.你好!我叫妙才.永远的现代魔法学徒.
           </Text>
         </Flex>
         <Box m="1rem auto">
@@ -60,24 +60,79 @@ export default function Home({ posts }: { posts: postProps[] }) {
         </Box>
         {posts.map((post) => (
           <Flex
-            justifyContent="flex-start"
-            w="100%"
-            m="2rem auto"
+            flexDirection={[
+              "column",
+              "column",
+              Math.random() > 0.5 ? "row-reverse" : "row",
+            ]}
+            justifyContent="center"
+            alignItems="center"
+            w="90%"
+            m="4rem auto"
             key={post.id}
           >
             <Box>
               <Image
                 src={post.coverImg}
-                width="100"
+                width="100%"
                 minW="360px"
-                maxW="400px"
+                // maxW="400px"
               />
             </Box>
-           
+            <Box p="1.5rem" position="relative" boxSizing="border-box">
+              <Link href={`/posts/${post.id}`}>
+                <a>
+                  <Heading
+                    as="h5"
+                    fontSize="1.25rem"
+                    mb=".8rem"
+                    pb=".3rem"
+                    textAlign={["center", "center", "left"]}
+                    wordBreak="break-all"
+                  >
+                    {post.title}
+                  </Heading>
+                </a>
+              </Link>
+              <Text color="purple.800" style={{ textIndent: "2rem" }}>
+                {post.intro}
+              </Text>
+              <Flex justifyContent="space-between" paddingTop="2rem">
+                <Badge
+                  variantColor="purple"
+                  height="1.5rem"
+                  fontSize="0.8rem"
+                  lineHeight="1.5rem"
+                  fontWeight="400"
+                >
+                  {post.date}
+                </Badge>
+                <Box height="2rem" lineHeight="2rem">
+                  {post.tags.map((tag) => (
+                    <Link href={`/tags/${tag}`} key={tag}>
+                      <a>
+                        <Badge
+                          variantColor="green"
+                          margin="0 .2rem"
+                          height="1.5rem"
+                          lineHeight="1.5rem"
+                          fontSize="0.8rem"
+                          fontWeight="400"
+                          position="relative"
+                          bottom=".4rem"
+                        >
+                          {tag}
+                        </Badge>
+                      </a>
+                    </Link>
+                  ))}
+                </Box>
+              </Flex>
+            </Box>
           </Flex>
         ))}
         <Link href="/posts">
-          <Button>
+          <Button ml="2rem">
             More&nbsp;
             <span role="img" aria-label="More">
               👀

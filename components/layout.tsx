@@ -46,7 +46,7 @@ export default function Layout({ children }: Props) {
         </header>
         <main>{children}</main>
         <Divider />
-        <Box m="2rem auto" textAlign="center">
+        <Box m="2rem" textAlign="center">
           <p id="msg">
             谢谢你能看到这里!
             <span role="img" aria-label="emoji">
