@@ -25,7 +25,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
       - run: yarn build
-      - run: npm run export
       # - run: yarn export
 
       - name: Deploy 🚀
