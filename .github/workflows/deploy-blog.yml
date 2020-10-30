@@ -25,6 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
       - run: yarn build
+      - run: yarn export
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
