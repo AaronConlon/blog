@@ -1,0 +1,362 @@
+/* 代码高亮区域样式 */
+.hljs {
+  padding: 1rem;
+  padding-top: 3rem;
+  margin: 1rem;
+  line-height: 1.4rem;
+}
+.hljs-params {
+  color: rgb(0, 255, 102);
+}
+
+.lineNumber {
+  padding-right: 0.5rem;
+  margin-right: 4px;
+  background-color: #282a36 !important;
+  color: #808080;
+  text-align: right;
+  min-width: 2rem;
+  display: inline-block;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+pre {
+  position: relative;
+  margin: 2rem auto !important;
+}
+
+pre code {
+  border-radius: 1rem;
+}
+
+pre::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+  /* border: ; */
+  background-color: #e65c52;
+  border-radius: 50%;
+  left: 2rem;
+  top: 1rem;
+}
+pre::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+  /* border: ; */
+  background-color: #eac622;
+  border-radius: 50%;
+  left: 4rem;
+  top: 1rem;
+}
+
+pre code::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+  /* border: ; */
+  background-color: #44d12a;
+  border-radius: 50%;
+  left: 6rem;
+  top: 1rem;
+}
+
+/* 下面是博客页面的Markdown样式 */
+p {
+  text-indent: 2rem;
+  line-height: 2rem;
+  word-spacing: 2px;
+}
+
+li {
+  line-height: 1.8rem;
+  word-spacing: 2px;
+}
+
+ul {
+  display: block;
+  margin-left: 4rem !important;
+}
+ul li p {
+  text-indent: 0;
+}
+ul ul {
+  margin-left: 2rem !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #404040;
+  line-height: 36px !important;
+  font-weight: bolder !important;
+  display: block;
+  margin: 2rem 1rem !important;
+  /* font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif!important; */
+}
+
+h1 ~ h2,
+h2 ~ h3,
+h3 ~ h4,
+h4 ~ h5,
+h5 ~ h6 {
+  text-indent: 1rem;
+}
+
+h6:before,
+h2:before,
+h3:before,
+h4:before,
+h5:before {
+  content: "の";
+  color: #812ab6;
+  display: inline-block;
+  margin: 0 1rem;
+  user-select: none;
+}
+h1 {
+  margin-bottom: 18px;
+  font-size: 40px !important;
+}
+h2 {
+  font-size: 32px !important;
+}
+h3 {
+  font-size: 28px !important;
+}
+h4 {
+  font-size: 24px;
+}
+h5 {
+  font-size: 22px;
+}
+h6 {
+  font-size: 20px;
+}
+
+p code {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 0 4px;
+  border-bottom: 3px solid #34cd65;
+  height: 1.6rem;
+  line-height: 1.6rem;
+  color: rgb(21, 27, 203);
+  background-color: #c0e6c2;
+  text-indent: 0 !important;
+}
+
+input[type="checkbox"]:checked:after {
+  content: "✓";
+  vertical-align: middle;
+  text-align: center;
+  line-height: 14px;
+  position: relative;
+  cursor: pointer;
+  height: 14px;
+  width: 14px;
+  left: 0;
+  top: -0.6rem;
+  font-size: 10px;
+  /* line-height: 18px; */
+  color: #fff;
+  display: inline-block;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 1px #5f95fc, 0 1px 0 #5f95fc;
+  -moz-box-shadow: inset 0 1px 1px #5f95fc, 0 1px 0 #5f95fc;
+  box-shadow: inset 0 1px 1px #5f95fc, 0 1px 0 #5f95fc;
+  background: #5f95fc;
+}
+
+p img {
+  margin: 2rem 1rem;
+}
+
+ul {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+ul li {
+  list-style-type: disc;
+}
+li li {
+  list-style-type: circle;
+}
+
+blockquote p {
+  background-color: #eef8f1;
+  text-indent: 0;
+  padding-left: 0.4rem;
+  border-left: 3px solid rgb(11, 215, 59);
+  margin: 1rem 0;
+  margin-left: 2rem;
+  border-top: 0.5rem solid #eef8f1;
+  border-bottom: 0.5rem solid #eef8f1;
+  color: #676a67;
+}
+
+table {
+  margin: 10px 0 15px 0;
+  border-collapse: collapse;
+  min-width: 50%;
+  margin: 2rem auto;
+}
+td,
+th {
+  border: 1px solid #ddd;
+  padding: 15px 10px;
+}
+th {
+  padding: 15px 10px;
+}
+
+a {
+  color: #0069d6 !important;
+  text-decoration: none !important;
+}
+a:hover {
+  color: #0050a3 !important;
+  text-decoration: none;
+}
+a img {
+  border: none;
+}
+
+#tags div::before {
+  content: "";
+  position: relative;
+  left: -0.2rem;
+  display: inline-block;
+  height: 0.6rem;
+  width: 0.6rem;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+#msg {
+  text-indent: 0;
+  padding: 1rem;
+}
+
+@media screen and (max-width: 480px) {
+  p {
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 25px !important;
+    /* line-height: 30px !important; */
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  h1 {
+    margin-bottom: 18px;
+    font-size: 28px !important;
+  }
+  h2 {
+    font-size: 22px !important;
+  }
+  h3 {
+    font-size: 20px !important;
+  }
+  h4 {
+    font-size: 18px;
+  }
+  h5 {
+    font-size: 16px;
+  }
+  h6 {
+    font-size: 14px;
+  }
+  h6:before,
+  h2:before,
+  h3:before,
+  h4:before,
+  h5:before {
+    content: "の";
+    color: #812ab6;
+    display: inline-block;
+    margin: 0 0.4rem;
+    user-select: none;
+  }
+  h1 ~ h2,
+  h2 ~ h3,
+  h3 ~ h4,
+  h4 ~ h5,
+  h5 ~ h6 {
+    text-indent: 0rem;
+  }
+  pre {
+    position: relative;
+    width: 100%;
+    margin: 0 !important;
+    /* margin: 1rem auto !important; */
+  }
+
+  pre::before {
+    height: 0.8rem;
+    width: 0.8rem;
+    left: 1rem;
+  }
+
+  pre::after {
+    height: 0.8rem;
+    width: 0.8rem;
+    left: 2.5rem;
+  }
+
+  pre code {
+    border-radius: 0.4rem;
+    padding-bottom: 1rem !important;
+    font-size: 0.8rem;
+  }
+
+  pre code::after {
+    height: 0.8rem;
+    width: 0.8rem;
+    left: 4rem;
+  }
+
+  .hljs {
+    margin: 0.6rem 0;
+    padding: 0.2rem;
+    padding-top: 3rem;
+  }
+
+  ul {
+    margin-top: 0.6rem !important;
+    margin-bottom: 0.6rem !important;
+    margin-left: 2.5rem !important;
+  }
+  p img {
+    margin: 0 auto;
+  }
+  blockquote p {
+    padding-left: 0.4rem;
+    font-size: 0.8rem;
+    margin: 0.4rem 0;
+    line-height: 1.4rem;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #404040;
+    /* line-height: 28px !important; */
+    font-weight: bolder !important;
+    display: block;
+    /* margin: 1.6rem 0.8rem !important; */
+  }
+}
