@@ -73,7 +73,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
           >
             <Box>
               <Image
-                src={`${assertPrefix}/${post.coverImg}`}
+                src={post.coverImg}
                 width="100%"
                 minW="360px"
                 // maxW="400px"
@@ -85,7 +85,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
               boxSizing="border-box"
               w="100%"
             >
-              <Link href={`/posts/${post.id}`}>
+              <Link href={`${assertPrefix}/posts/${post.id}`}>
                 <a>
                   <Heading
                     as="h5"
@@ -136,7 +136,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
             </Box>
           </Flex>
         ))}
-        <Link href="/posts">
+        <Link href={`${assertPrefix}/posts`}>
           <Button ml="2rem">
             More&nbsp;
             <span role="img" aria-label="More">
