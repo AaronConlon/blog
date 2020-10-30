@@ -79,7 +79,12 @@ export default function Home({ posts }: { posts: postProps[] }) {
                 // maxW="400px"
               />
             </Box>
-            <Box p="1.5rem" position="relative" boxSizing="border-box">
+            <Box
+              p="1.5rem"
+              position="relative"
+              boxSizing="border-box"
+              w="100%"
+            >
               <Link href={`/posts/${post.id}`}>
                 <a>
                   <Heading

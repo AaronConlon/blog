@@ -3,7 +3,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { Box, Heading, Image, Badge, Stack, Text, Tag } from "@chakra-ui/core";
+import { Box, Heading, Image, Badge, Stack, Tag } from "@chakra-ui/core";
 // @ts-ignore
 import Layout from "../../components/layout.tsx";
 // @ts-ignore

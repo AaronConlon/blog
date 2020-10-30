@@ -250,11 +250,51 @@ a img {
 }
 
 @media screen and (max-width: 480px) {
+  p {
+    font-size: 14px;
+  }
   h1 {
     font-size: 25px !important;
-    line-height: 30px !important;
+    /* line-height: 30px !important; */
     margin-bottom: 12px;
     overflow: hidden;
+  }
+  h1 {
+    margin-bottom: 18px;
+    font-size: 28px !important;
+  }
+  h2 {
+    font-size: 22px !important;
+  }
+  h3 {
+    font-size: 20px !important;
+  }
+  h4 {
+    font-size: 18px;
+  }
+  h5 {
+    font-size: 16px;
+  }
+  h6 {
+    font-size: 14px;
+  }
+  h6:before,
+  h2:before,
+  h3:before,
+  h4:before,
+  h5:before {
+    content: "の";
+    color: #812ab6;
+    display: inline-block;
+    margin: 0 0.4rem;
+    user-select: none;
+  }
+  h1 ~ h2,
+  h2 ~ h3,
+  h3 ~ h4,
+  h4 ~ h5,
+  h5 ~ h6 {
+    text-indent: 0rem;
   }
   pre {
     position: relative;
@@ -288,7 +328,7 @@ a img {
   }
 
   .hljs {
-    margin: 0.2rem;
+    margin: 0.6rem 0;
     padding: 0.2rem;
     padding-top: 3rem;
   }
@@ -314,9 +354,9 @@ a img {
   h5,
   h6 {
     color: #404040;
-    line-height: 28px !important;
+    /* line-height: 28px !important; */
     font-weight: bolder !important;
     display: block;
-    margin: 1.6rem 0.8rem !important;
+    /* margin: 1.6rem 0.8rem !important; */
   }
 }
