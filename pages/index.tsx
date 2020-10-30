@@ -17,7 +17,6 @@ import {
   Image,
   Badge,
   Button,
-  Divider,
 } from "@chakra-ui/core";
 // eslint-disable-next-line import/extensions
 import Layout from "../components/layout";
@@ -26,6 +25,7 @@ import { getAllPostData } from "../help";
 // eslint-disable-next-line import/extensions
 import { postProps } from "../help/types";
 
+const assertPrefix = "/qinyouyi_blog";
 export default function Home({ posts }: { posts: postProps[] }) {
   return (
     <Layout>
@@ -33,7 +33,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
         <Flex m="0 auto" pb="1rem" justifyContent="center" alignItems="center">
           <Avatar
             name="youyi"
-            src="/avatar.png"
+            src={`${assertPrefix}/avatar.png`}
             height={["20vw", "14vw", "16vw", "8vw"]}
             width={["20vw", "14vw", "16vw", "8vw"]}
             m="1rem"
@@ -73,7 +73,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
           >
             <Box>
               <Image
-                src={post.coverImg}
+                src={`${assertPrefix}/${post.coverImg}`}
                 width="100%"
                 minW="360px"
                 // maxW="400px"
