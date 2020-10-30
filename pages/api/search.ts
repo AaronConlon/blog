@@ -23,7 +23,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   // logic
   const searchWord = req.query.keyword;
   const allPost = getAllPostTitleAndSlug().filter((post) => {
-    const postPattern = new RegExp(searchWord, "i");
+    const postPattern = new RegExp(searchWord.toString(), "i");
     return postPattern.test(post.title);
   });
 
