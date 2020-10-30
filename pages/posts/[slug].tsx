@@ -68,7 +68,7 @@ export default function Post({
                 lineHeight="2rem"
                 paddingLeft="8px"
               >
-                <Link href={`/tags/${tag}`}>
+                <Link href={`/posts/${tag}`}>
                   <a>{tag}</a>
                 </Link>
               </Badge>

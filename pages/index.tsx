@@ -136,7 +136,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
             </Box>
           </Flex>
         ))}
-        <Link href={`${assertPrefix}/posts`}>
+        <Link href="/posts">
           <Button ml="2rem">
             More&nbsp;
             <span role="img" aria-label="More">
