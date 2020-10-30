@@ -2,19 +2,16 @@ import axios from "axios";
 import React from "react";
 import styles from "../styles/search.module.sass";
 
-export default function Search(props: { callback: Function }) {
-  const callbackFn = props.callback;
-  const searchRef = React.useRef("111");
+export default function Search({ callback }: { callback: Function }) {
+  const searchRef = React.useRef(null);
   const handleSearch = (event) => {
     axios
       .get(`/api/search?keyword=${searchRef.current.value}`)
       .then((response) => {
-        console.log(response.data);
-
-        callbackFn(response.data);
+        callback(response.data);
       })
       .catch((error) => {
-        callbackFn(error);
+        callback(error);
       });
     event.preventDefault();
   };
