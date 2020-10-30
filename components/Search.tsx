@@ -2,11 +2,12 @@ import axios from "axios";
 import React from "react";
 import styles from "../styles/search.module.sass";
 
+const assertPrefix = "/qinyouyi_blog";
 export default function Search({ callback }: { callback: Function }) {
   const searchRef = React.useRef(null);
   const handleSearch = (event) => {
     axios
-      .get(`/api/search?keyword=${searchRef.current.value}`)
+      .get(`${assertPrefix}/api/search?keyword=${searchRef.current.value}`)
       .then((response) => {
         callback(response.data);
       })

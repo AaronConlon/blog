@@ -1,5 +1,5 @@
 ---
-title: 'Powershell读书笔记'
+title: 'Powershell'
 date: '2020-08-03'
 tags:
 - powershell

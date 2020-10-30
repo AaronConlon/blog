@@ -9,6 +9,7 @@ import Layout from "../../components/layout.tsx";
 // @ts-ignore
 import { getAllPostIds, getPost } from "../../lib/posts.ts";
 
+const assertPrefix = "/qinyouyi_blog";
 export default function Post({
   post,
 }: {
@@ -32,7 +33,7 @@ export default function Post({
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
         />
-        <link rel="stylesheet" href="/post.css" />
+        <link rel="stylesheet" href={`${assertPrefix}/post.css`} />
       </Head>
       <Box>
         <Box width="100%" margin="0 auto" paddingBottom="2rem" maxW="960px">
