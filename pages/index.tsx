@@ -85,7 +85,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
               boxSizing="border-box"
               w="100%"
             >
-              <Link href={`${assertPrefix}/posts/${post.id}`}>
+              <Link href={`/posts/${post.id}`}>
                 <a>
                   <Heading
                     as="h5"
@@ -114,7 +114,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
                 </Badge>
                 <Box height="2rem" lineHeight="2rem">
                   {post.tags.map((tag) => (
-                    <Link href={`/tags/${tag}`} key={tag}>
+                    <Link href={`/posts/${tag}`} key={tag}>
                       <a>
                         <Badge
                           variantColor="green"
