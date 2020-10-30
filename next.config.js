@@ -1,4 +1,4 @@
 module.exports = {
-  basePath: "",
-  assertPrefix: "/qinyouyi_blog",
+  basePath: "/qinyouyi_blog",
+  assertPrefix: "",
 };
