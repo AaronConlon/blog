@@ -1,6 +1,5 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
-import Head from "next/head";
 import React from "react";
 // @ts-ignore
 import Tag from "../components/Tag.tsx";
@@ -19,7 +18,7 @@ export default function Posts({
     [name: string]: Object[];
   };
 }) {
-  const [result, setResult] = React.useState({});
+  const [result, setResult] = React.useState({ posts: [] });
   const tagsList = Object.keys(tags);
   function searchCallback(data: any) {
     setResult(data);
@@ -49,7 +48,7 @@ export default function Posts({
         的博客 posts 页,可以通过搜索功能查找一些有趣的内容.
       </p>
       <div className={styles.searchResult}>
-        {result?.posts ? (
+        {result.posts.length ? (
           result.posts.map((post) => (
             <h4 key={post.title}>
               <Link href={`/posts/${post.slug}`}>
@@ -59,7 +58,7 @@ export default function Posts({
           ))
         ) : (
           <div>
-            <p>一片荒芜.</p>
+            <p>入眼一片荒芜.</p>
           </div>
         )}
       </div>
@@ -67,7 +66,7 @@ export default function Posts({
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async () => {
   const tags = await getPostsData();
   const resultTagsObj = {};
   Object.keys(tags).forEach((tag) => {
