@@ -26,6 +26,7 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn build
       - run: yarn export
+      - run: touch ./out/.nojekyll
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
