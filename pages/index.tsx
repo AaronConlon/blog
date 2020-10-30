@@ -25,7 +25,7 @@ import { getAllPostData } from "../help";
 // eslint-disable-next-line import/extensions
 import { postProps } from "../help/types";
 
-const assertPrefix = "/qinyouyi_blog/gh-pages";
+const assertPrefix = "/qinyouyi_blog";
 export default function Home({ posts }: { posts: postProps[] }) {
   return (
     <Layout>
