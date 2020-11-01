@@ -45,6 +45,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
   };
   const handleResetCurrentTag = () => {
     setCurrentTag("");
+    setResultCount(posts.length);
   };
   const handleGetMoreResults = () => {
     setResultCount((count) => count + 3);
@@ -80,12 +81,12 @@ export default function Home({ posts }: { posts: postProps[] }) {
             LATEST BLOG POSTS
           </Heading>
         </Box>
-        {postsBackup.slice(0, resultCount).map((post) => (
+        {postsBackup.slice(0, resultCount).map((post, index) => (
           <Flex
             flexDirection={[
               "column",
               "column",
-              Math.random() > 0.5 ? "row-reverse" : "row",
+              index % 2 ? "row-reverse" : "row",
             ]}
             justifyContent="center"
             alignItems="center"
@@ -164,12 +165,8 @@ export default function Home({ posts }: { posts: postProps[] }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const a = 1;
-  return {
-    props: {
-      posts: getAllPostData().slice(0, 6),
-      a,
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async () => ({
+  props: {
+    posts: getAllPostData(),
+  },
+});
