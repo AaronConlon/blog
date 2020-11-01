@@ -1,3 +1,4 @@
+import Link from "next/link";
 // eslint-disable-next-line import/no-unresolved
 import styles from "../styles/tag.module.sass";
 
@@ -14,7 +15,9 @@ export default function Tag({
       type="button"
       onClick={() => clickEvent(tagName)}
     >
-      {tagName}
+      <Link href="/tag">
+        <a>{tagName}</a>
+      </Link>
     </button>
   );
 }
