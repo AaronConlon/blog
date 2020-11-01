@@ -56,7 +56,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
         <Flex m="0 auto" pb="1rem" justifyContent="center" alignItems="center">
           <Avatar
             name="youyi"
-            src={`avatar.png`}
+            src="/blog/avatar.png"
             height={["20vw", "14vw", "16vw", "8vw"]}
             width={["20vw", "14vw", "16vw", "8vw"]}
             m="1rem"
