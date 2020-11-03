@@ -68,6 +68,7 @@ export default function Post({
                 borderRadius="5px"
                 lineHeight="2rem"
                 paddingLeft="8px"
+                minW="4rem"
                 // cursor="pointer"
               >
                 {tag}
