@@ -6,7 +6,7 @@ tags:
 - 读书
 mainImg: "https://images.unsplash.com/photo-1545875615-86f54b81a82d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920"
 coverImg: "https://images.unsplash.com/photo-1499257398700-43669759a540?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=440"
-intro: "dsadada举个例子,`write-output`和`write-host`都能接受字符并且输出到屏幕,但是`write-output`还能返回输出的值作为结果,这在变量引用和管道传递方面很有用.简单函数不同但是结果相同,这在powershell中非常常见."
+intro: "powershell 很棒,我想任何一个善用 windows 的开发者都应该学习 powershell ,系统自带环境的优势让开发者能够使用 powershell 轻松辅助开发,提高工作效率,本文献给对 powershell 感兴趣的朋友.如果你有任何关于 powershell 的内容想要与我沟通,欢迎发邮件."
 ---
 
 # Powershell Notebook

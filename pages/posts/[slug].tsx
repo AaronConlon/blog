@@ -61,21 +61,20 @@ export default function Post({
           >
             {post.tags.map((tag) => (
               <Badge
-                variantColor="purple"
+                variantColor="green"
                 key={tag}
                 height="2rem"
                 fontSize="0.6rem"
                 borderRadius="5px"
                 lineHeight="2rem"
                 paddingLeft="8px"
+                // cursor="pointer"
               >
-                <Link href={`/posts/${tag}`}>
-                  <a>{tag}</a>
-                </Link>
+                {tag}
               </Badge>
             ))}
           </Stack>
-          <Tag mb="2rem" variantColor="cyan" fontSize="0.6rem" ml="0.4rem">
+          <Tag mb="2rem" variantColor="green" fontSize="0.6rem" ml="0.4rem">
             最后更新: {post.date}
           </Tag>
           <div
