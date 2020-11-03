@@ -13,7 +13,7 @@
   padding-right: 0.5rem;
   margin-right: 4px;
   background-color: #282a36 !important;
-  color: #808080;
+  color: #699a7c;
   text-align: right;
   min-width: 2rem;
   display: inline-block;
@@ -27,31 +27,31 @@ pre {
 }
 
 pre code {
-  border-radius: 1rem;
+  border-radius: 0.6rem;
 }
 
 pre::before {
   content: "";
   display: inline-block;
   position: absolute;
-  height: 1rem;
-  width: 1rem;
+  height: 0.7rem;
+  width: 0.7rem;
   /* border: ; */
   background-color: #e65c52;
   border-radius: 50%;
-  left: 2rem;
+  left: 1.8rem;
   top: 1rem;
 }
 pre::after {
   content: "";
   display: inline-block;
   position: absolute;
-  height: 1rem;
-  width: 1rem;
+  height: 0.7rem;
+  width: 0.7rem;
   /* border: ; */
   background-color: #eac622;
   border-radius: 50%;
-  left: 4rem;
+  left: 3rem;
   top: 1rem;
 }
 
@@ -59,12 +59,12 @@ pre code::after {
   content: "";
   display: inline-block;
   position: absolute;
-  height: 1rem;
-  width: 1rem;
+  height: 0.7rem;
+  width: 0.7rem;
   /* border: ; */
   background-color: #44d12a;
   border-radius: 50%;
-  left: 6rem;
+  left: 4.4rem;
   top: 1rem;
 }
 
