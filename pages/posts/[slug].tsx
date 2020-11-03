@@ -9,7 +9,7 @@ import Layout from "../../components/layout.tsx";
 // @ts-ignore
 import { getAllPostIds, getPost } from "../../lib/posts.ts";
 
-const assertPrefix = "/qinyouyi_blog";
+const assertPrefix = "/blog";
 export default function Post({
   post,
 }: {
