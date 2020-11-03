@@ -16,7 +16,7 @@ export function getAllPostIds() {
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => ({
       params: {
-        slug: encodeURI(fileName.replace(/\.md$/, "")),
+        slug: fileName.replace(/\.md$/, ""),
       },
     }));
 }
