@@ -274,3 +274,66 @@ assert(gifts['fifth'] == null);
 
 > Unicode 定义了一个全球的书写系统编码， 系统中使用的所有字母，数字和符号都对应唯一的数值编码。 
 
+如果我需要使用`utf-32`位的字符,则务必想起`Rune`.
+
+## Symbol
+
+使用一个Symbol对象表示Dart程序中声明的`运算符`或者`标识符`.代码压缩后会改变标识符的名称,不会改变标识符的`Symbol`.
+
+
+
+## 函数
+
+函数是对象,类型为`Function`.举例:
+
+```dart
+// 声明了返回类型和变量类型
+bool isNoble(int atomicNumber) {
+  return _noBoleGases[atomicNumber] != number;
+}
+
+// 简写的箭头函数
+bool isNoble(int atomicNumber) => _nobleGases[atomicNumber] != null;
+```
+
+函数参数有`可选参数`和`必选参数`的区别.
+
+```dart
+// 函数的参数具有名字和类型
+void demoFunc(bold: true, hidden: false)
+// 函数的参数被指定为必选
+const Scrollbar({Key key, @required Widget child})
+// 当child参数并未提供的时候,分析器报错
+```
+
+使用`required`的前置条件是直接或者间接引入了核心`package`即可,例如直接引入`package:meta/meta.dart`,或者引入了其他`package`,这个`package`export了`meta`即可.
+
+> 如果解析器报错提示未引入meta,则可以从直接或者间接引入找解决方案
+
+将参数放到 `[]` 中来标记参数是可选的, 使用`=`设置默认值：
+
+```dart
+String say(String from = 'root', String msg, [String device]) {
+  var result = '$from says $msg';
+  if (device != null) {
+    result = '$result with a $device';
+  }
+  return result;
+}
+```
+
+### main函数
+
+每个应用都具有的顶级`main`函数,作为应用服务的入口,其返回值为空,参数默认为可选的`List<String>`.
+
+### 匿名函数
+
+匿名函数也常常被称为`lambda`或者`closure`.
+
+```dart
+var list = ['apples', 'bananas', 'oranges'];
+list.forEach((item) {
+  print('${list.indexOf(item)}: $item');
+});
+```
+
