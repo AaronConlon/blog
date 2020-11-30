@@ -322,6 +322,8 @@ String say(String from = 'root', String msg, [String device]) {
 }
 ```
 
+​	每个函数都有返回值,默认返回隐式的`null`.
+
 ### main函数
 
 每个应用都具有的顶级`main`函数,作为应用服务的入口,其返回值为空,参数默认为可选的`List<String>`.
@@ -337,3 +339,135 @@ list.forEach((item) {
 });
 ```
 
+跟`js`有点像,也可以是箭头匿名函数,上述实例中跟`js`有差的地方在于显示的`function`关键字.
+
+### 词法作用域
+
+变量的作用域在编写代码的时候确定,或括号内是变量可见的作用域.
+
+### 闭包
+
+`闭包`即一个`函数对象`,即使函数对象的调用对象在原始作用域之外,也可以访问它的词法作用域内的变量.
+
+### 运算符
+
+运算符是可以被重载的.但是多数情况下并没有必要重载.
+
+> [重写运算符](https://www.dartcn.com/guides/language/language-tour#%E9%87%8D%E5%86%99%E8%BF%90%E7%AE%97%E7%AC%A6)
+
+| Description              | Operator                                                |
+| ------------------------ | ------------------------------------------------------- |
+| unary postfix            | `*expr*++`  `*expr*--`  `()`  `[]`  `.`  `?.`           |
+| unary prefix             | `-*expr*`  `!*expr*`  `~*expr*`  `++*expr*`  `--*expr*` |
+| multiplicative           | `*`  `/`  `%` `~/`                                      |
+| additive                 | `+`  `-`                                                |
+| shift                    | `<<`  `>>`  `>>>`                                       |
+| bitwise AND              | `&`                                                     |
+| bitwise XOR              | `^`                                                     |
+| bitwise OR               | `|`                                                     |
+| relational and type test | `>=`  `>`  `<=`  `<`  `as`  `is`  `is!`                 |
+| equality                 | `==`  `!=`                                              |
+| logical AND              | `&&`                                                    |
+| logical OR               | `||`                                                    |
+| if null                  | `??`                                                    |
+| conditional              | `*expr1* ? *expr2* : *expr3*`                           |
+| cascade                  | `..`                                                    |
+| assignment               | `=`  `*=`  `/=`  `+=`  `-=`  `&=`  `^=`  *etc.*         |
+
+运算符具有优先级,使用括号有利于提高可读性.
+
+| Operator  | Meaning                                                      |
+| --------- | ------------------------------------------------------------ |
+| `+`       | Add                                                          |
+| `–`       | Subtract                                                     |
+| `-*expr*` | Unary minus, also known as negation (reverse the sign of the expression) |
+| `*`       | Multiply                                                     |
+| `/`       | Divide                                                       |
+| `~/`      | Divide, returning an integer result, `有趣`                  |
+| `%`       | Get the remainder of an integer division (modulo)            |
+
+```dart
+assert(2 + 3 == 5);
+assert(2 - 3 == -1);
+assert(2 * 3 == 6);
+assert(5 / 2 == 2.5); // 结果是双浮点型
+assert(5 ~/ 2 == 2); // 结果是整型
+assert(5 % 2 == 1); // 余数
+
+assert('5/2 = ${5 ~/ 2} r ${5 % 2}' == '5/2 = 2 r 1');
+```
+
+Dart 还支持前缀和后缀，自增和自减运算符。
+
+| Operator  | Meaning                                               |
+| --------- | ----------------------------------------------------- |
+| `++*var*` | `*var* = *var* + 1` (expression value is `*var* + 1`) |
+| `*var*++` | `*var* = *var* + 1` (expression value is `*var*`)     |
+| `--*var*` | `*var* = *var* – 1` (expression value is `*var* – 1`) |
+| `*var*--` | `*var* = *var* – 1` (expression value is `*var*`)     |
+
+### 类型判定运算符
+
+`as`， `is`， 和 `is!` 运算符用于在运行时处理类型检查：
+
+| Operator | Meaning                                                      |
+| -------- | ------------------------------------------------------------ |
+| `as`     | Typecast (也被用于[指定库前缀](https://www.dartcn.com/guides/language/language-tour#指定库前缀)) |
+| `is`     | True if the object has the specified type                    |
+| `is!`    | False if the object has the specified type                   |
+
+例如， `obj is Object` 总是 true。 但是只有 `obj` 实现了 `T` 的接口时， `obj is T` 才是 true。
+
+使用 `as` 运算符将对象强制转换为特定类型。 通常，可以认为是 `is` 类型判定后，被判定对象调用函数的一种缩写形式。 请考虑以下代码：
+
+```dart
+if (emp is Person) {
+  // Type check
+  emp.firstName = 'Bob';
+}
+```
+
+使用 `as` 运算符进行缩写：
+
+```dart
+(emp as Person).firstName = 'Bob';
+```
+
+**提示：** 以上代码并不是等价的。 如果 `emp` 为 null 或者不是 Person 对象， 那么第一个 `is` 的示例，后面将不回执行； 第二个 `as` 的示例会抛出异常。
+
+> 跟TS区别不大
+
+### 赋值运算符
+
+使用 `=` 为变量赋值。 使用 `??=` 运算符时，只有当被赋值的变量为 null 时才会赋值给它。
+
+```dart
+// 将值赋值给变量a
+a = value;
+// 如果b为空时，将变量赋值给b，否则，b的值保持不变。
+b ??= value;
+// 有趣
+```
+
+复合赋值运算符（如 `+=` ）将算术运算符和赋值运算符组合在了一起。
+
+| `=`  | `–=` | `/=`  | `%=`  | `>>=` | `^=` |
+| ---- | ---- | ----- | ----- | ----- | ---- |
+| `+=` | `*=` | `~/=` | `<<=` | `&=`  | `|=` |
+
+以下说明复合赋值运算符的作用：
+
+|                             | Compound assignment | Equivalent expression |
+| --------------------------- | ------------------- | --------------------- |
+| **For an operator \*op\*:** | `a *op*= b`         | `a = a *op* b`        |
+| **Example:**                | `a += b`            | `a = a + b`           |
+
+以下示例使用赋值和复合赋值运算符：
+
+```dart
+var a = 2; // 使用 = 复制
+a *= 3; // 复制并做乘法运算： a = a * 3
+assert(a == 6);
+```
+
+> 更多运算符暂时略过,已阅读文档
