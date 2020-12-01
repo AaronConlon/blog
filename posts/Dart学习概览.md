@@ -470,4 +470,286 @@ a *= 3; // 复制并做乘法运算： a = a * 3
 assert(a == 6);
 ```
 
+
+
+### 级联运算符 (..)
+
+级联运算符 (`..`) 可以实现对同一个对像进行一系列的操作。 除了调用函数， 还可以访问同一对象上的字段属性。 这通常可以节省创建临时变量的步骤， 同时编写出更流畅的代码。
+
+> 比较特殊的一种`dart`语法
+
+考虑一下代码：
+
+```dart
+querySelector('#confirm') // 获取对象。
+  ..text = 'Confirm' // 调用成员变量。
+  ..classes.add('important')
+  ..onClick.listen((e) => window.alert('Confirmed!'));
+```
+
+第一句调用函数 `querySelector()` ， 返回获取到的对象。 获取的对象依次执行级联运算符后面的代码， 代码执行后的返回值会被忽略。
+
+上面的代码等价于：
+
+```dart
+var button = querySelector('#confirm');
+button.text = 'Confirm';
+button.classes.add('important');
+button.onClick.listen((e) => window.alert('Confirmed!'));
+```
+
+级联运算符可以嵌套，例如：
+
+```dart
+final addressBook = (AddressBookBuilder()
+      ..name = 'jenny'
+      ..email = 'jenny@example.com'
+      ..phone = (PhoneNumberBuilder()
+            ..number = '415-555-0100'
+            ..label = 'home')
+          .build())
+    .build();
+```
+
+
+
 > 更多运算符暂时略过,已阅读文档
+
+## 控制流程语句
+
+你可以通过下面任意一种方式来控制 Dart 程序流程：
+
+- `if` and `else`
+- `for` loops
+- `while` and `do`-`while` loops
+- `break` and `continue`
+- `switch` and `case`
+- `assert`
+
+使用 `try-catch` 和 `throw` 也可以改变程序流程
+
+其中,`if`条件不会进行类型隐式转换,因此必须提供`boolean`值作为条件.
+
+### for 循环
+
+进行迭代操作，可以使用标准 `for` 语句。 例如：
+
+```dart
+var message = StringBuffer('Dart is fun');
+for (var i = 0; i < 5; i++) {
+  message.write('!');
+}
+```
+
+闭包在 Dart 的 `for` 循环中会捕获循环的 index 索引值， 来避免 JavaScript 中常见的陷阱。
+
+```dart
+var callbacks = [];
+for (var i = 0; i < 2; i++) {
+  callbacks.add(() => print(i));
+}
+callbacks.forEach((c) => c());
+```
+
+和期望一样，输出的是 `0` 和 `1`。 但是示例中的代码在 JavaScript 中会连续输出两个 `2` 。
+
+实现了`iterable`的类,例如`List`和`Set`支持使用`for-in`进行迭代.
+
+### switch 和 case
+
+在 Dart 中 switch 语句使用 `==` 比较整数，字符串，或者编译时常量。 比较的对象必须都是同一个类的实例（并且不可以是子类）， 类必须没有对 `==` 重写。
+
+在 `case` 语句中，每个非空的 `case` 语句结尾需要跟一个 `break` 语句。 除 `break` 以外，还有可以使用 `continue`, `throw`，者 `return`。
+
+下面的 `case` 程序示例中缺省了 `break` 语句，导致错误：
+
+```dart
+var command = 'OPEN';
+switch (command) {
+  case 'OPEN':
+    executeOpen();
+    // ERROR: 丢失 break
+
+  case 'CLOSED':
+    executeClosed();
+    break;
+}
+```
+
+但是， Dart 支持空 `case` 语句， 允许程序以 fall-through 的形式执行。
+
+```dart
+var command = 'CLOSED';
+switch (command) {
+  case 'CLOSED': // Empty case falls through.
+  case 'NOW_CLOSED':
+    // Runs for both CLOSED and NOW_CLOSED.
+    executeNowClosed();
+    break;
+}
+```
+
+在非空 `case` 中实现 fall-through 形式， 可以使用 `continue` 语句结合 `lable` 的方式实现:
+
+```dart
+var command = 'CLOSED';
+switch (command) {
+  case 'CLOSED':
+    executeClosed();
+    continue nowClosed;
+  // Continues executing at the nowClosed label.
+
+  nowClosed:
+  case 'NOW_CLOSED':
+    // Runs for both CLOSED and NOW_CLOSED.
+    executeNowClosed();
+    break;
+}
+```
+
+### assert
+
+如果 `assert` 语句中的布尔条件为 false ， 那么正常的程序执行流程会被中断。 在本章中包含部分 assert 的使用， 下面是一些示例：
+
+```dart
+// 确认变量值不为空。
+assert(text != null);
+
+// 确认变量值小于100。
+assert(number < 100);
+
+// 确认 URL 是否是 https 类型。
+assert(urlString.startsWith('https'));
+```
+
+> **提示：** assert 语句只在开发环境中有效， 在生产环境是无效的； Flutter 中的 assert 只在 [debug 模式](https://flutter.io/debugging/#debug-mode-assertions) 中有效。 开发用的工具，例如 [dartdevc](https://webdev.dartlang.org/tools/dartdevc) 默认是开启 assert 功能。 其他的一些工具， 例如 [dart](https://www.dartcn.com/server/tools/dart-vm) 和 [dart2js,](https://webdev.dartlang.org/tools/dart2js) 支持通过命令行开启 assert ： `--enable-asserts`。
+
+assert 的第二个参数可以为其添加一个字符串消息。
+
+```dart
+assert(urlString.startsWith('https'),
+    'URL ($urlString) should start with "https".');
+```
+
+assert 的第一个参数可以是解析为布尔值的任何表达式。 如果表达式结果为 true ， 则断言成功，并继续执行。 如果表达式结果为 false ， 则断言失败，并抛出异常 ([AssertionError](https://api.dartlang.org/stable/dart-core/AssertionError-class.html)) 。
+
+> 更多内容已阅且省略
+
+## 类
+
+Dart 是一种基于类和 mixin 继承机制的面向对象的语言。 每个对象都是一个类的实例，所有的类都继承于 [Object.](https://api.dartlang.org/stable/dart-core/Object-class.html) 。 基于 * Mixin 继承* 意味着每个类（除 Object 外） 都只有一个超类， 一个类中的代码可以在其他多个继承类中重复使用。
+
+### 使用类的成员变量
+
+对象的由函数和数据（即方法和实例变量）组成。 方法的调用要通过对象来完成： 调用的方法可以访问其对象的其他函数和数据。
+
+使用 `?.` 来代替 `.` ， 可以避免因为左边对象可能为 null ， 导致的异常：
+
+```dart
+// 如果 p 为 non-null，设置它变量 y 的值为 4。
+p?.y = 4;
+```
+
+### 使用构造函数
+
+通过 *构造函数* 创建对象。 构造函数的名字可以是 `*ClassName*` 或者 `*ClassName*.*identifier*`。
+
+> **版本提示：** 在 Dart 2 中 `new` 关键字变成了可选的。
+
+一些类提供了[常量构造函数](https://www.dartcn.com/guides/language/language-tour#常量构造函数)。 使用常量构造函数，在构造函数名之前加 `const` 关键字，来创建编译时常量时：
+
+```dart
+var p = const ImmutablePoint(2, 2);
+```
+
+构造两个相同的编译时常量会产生一个唯一的， 标准的实例：
+
+```dart
+var a = const ImmutablePoint(1, 1);
+var b = const ImmutablePoint(1, 1);
+
+assert(identical(a, b)); // 它们是同一个实例。
+```
+
+如果常量构造函数在常量上下文之外， 且省略了 `const` 关键字， 此时创建的对象是非常量对象：
+
+```dart
+var a = const ImmutablePoint(1, 1); // 创建一个常量对象
+var b = ImmutablePoint(1, 1); // 创建一个非常量对象
+
+assert(!identical(a, b)); // 两者不是同一个实例!
+```
+
+###  获取对象的类型
+
+使用对象的 `runtimeType` 属性， 可以在运行时获取对象的类型， `runtimeType` 属性回返回一个 [Type](https://api.dartlang.org/stable/dart-core/Type-class.html) 对象。
+
+```dart
+print('The type of a is ${a.runtimeType}');
+```
+
+### 实例变量
+
+下面是声明实例变量的示例：
+
+```dart
+class Point {
+  num x; // 声明示例变量 x，初始值为 null 。
+  num y; // 声明示例变量 y，初始值为 null 。
+  num z = 0; // 声明示例变量 z，初始值为 0 。
+}
+```
+
+未初始化实例变量的默认人值为 “null” 。
+
+所有实例变量都生成隐式 *getter* 方法。 非 final 的实例变量同样会生成隐式 *setter* 方法。
+
+### 构造函数
+
+通过创建一个与其类同名的函数来声明构造函数.
+
+```dart
+class Point {
+  num x, y;
+
+  Point(num x, num y) {
+    // 还有更好的方式来实现下面代码，敬请关注。
+    this.x = x;
+    this.y = y;
+  }
+}
+```
+
+> **提示：** 近当存在命名冲突时，使用 `this` 关键字。 否则，按照 Dart 风格应该省略 `this` 。
+
+通常模式下，会将构造函数传入的参数的值赋值给对应的实例变量， Dart 自身的语法糖精简了这些代码：
+
+```dart
+class Point {
+  num x, y;
+
+  // 在构造函数体执行前，
+  // 语法糖已经设置了变量 x 和 y。
+  Point(this.x, this.y);
+}
+```
+
+#### 命名构造函数
+
+使用命名构造函数可为一个类实现多个构造函数， 也可以使用命名构造函数来更清晰的表明函数意图：
+
+```dart
+class Point {
+  num x, y;
+
+  Point(this.x, this.y);
+
+  // 命名构造函数
+  Point.origin() {
+    x = 0;
+    y = 0;
+  }
+}
+```
+
+切记，构造函数不能够被继承， 这意味着父类的命名构造函数不会被子类继承。 如果希望使用父类中定义的命名构造函数创建子类， 就必须在子类中实现该构造函数。
