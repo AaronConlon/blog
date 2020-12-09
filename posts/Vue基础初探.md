@@ -8,3 +8,42 @@ coverImg: 'https://images.unsplash.com/photo-1556998914-e5cb6fe38124?crop=entrop
 intro: '粗略看过两边文档,后续就没写过 vue 项目,工作上做了其他方面的内容,这里私下补一下,既可以应对以后的 vue 开发需求,也可以提高自己的开发水平.当前只是记录阅读网络上的他人博客内容的总结.它山之石可以攻玉.'
 ---
 
+# Vue3 
+
+## 基础
+
+- defineComponent
+
+  可以省略,也可以加上
+
+  ```js
+  export default defineComponent({
+    name: "xx",
+    component: {},
+  	setup() {
+      // init variables
+    }  
+  })
+  ```
+
+  
+
+- setUp function
+
+  instead data function and methods function.
+
+- reactive function
+
+  ```js
+  setup() {
+      const data = reactive({
+        a: "",
+        d: () => {}
+      });
+      return {
+        data,
+      };
+    },
+  ```
+
+  
