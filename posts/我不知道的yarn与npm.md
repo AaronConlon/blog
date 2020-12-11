@@ -137,6 +137,10 @@ npm config set aaa bbb
 
 我个人用户级配置文件用得多一点,上面提到的`yrm`也是直接改这个文件的配置.
 
+> Package-lock.json?
+
+锁定依赖版本,方便统一协作和后续的依赖安装,别改.
+
 ### 代理
 
 不谈代理,建议肉身翻走.
@@ -197,4 +201,5 @@ npm version major
 - [2018 年了，你还是只会 npm install 吗？](https://juejin.cn/post/6844903582337237006#heading-22)
 
 - [npm 模块安装机制简介 - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2016/01/npm-install.html)
+- [npm 依赖管理中被忽略的那些细节 - 政采云前端团队](https://www.zoo.team/article/npm-details)
 
