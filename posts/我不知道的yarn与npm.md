@@ -9,11 +9,9 @@ coverImg: 'https://images.unsplash.com/photo-1575325345079-cce3a789be43?crop=ent
 intro: 'Js开发避不开的包管理工具选择,谁能更胜一筹?2020年都快结束了我是否还对包管理工具一无所知,不好意思,接下来我选择坚持使用...'
 ---
 
-前几天我的 apple mini 到了,开箱愉快,对着 m1 架构的新设备,一顿操作和配置,其中过程不再细说.在我准备学习`electron`的时候,我发现我根本不懂`npm`和`yarn`,我只是在简单的使用着这哥俩.
+前几天我的 apple mini 到了,开箱愉快,对着 m1 架构的新设备,一顿操作和配置,其中过程不再细说.在我准备下载`electron`的时候,我发现我根本不懂`npm`和`yarn`,我只是在简单的使用着这哥俩.
 
-> 这是不行的.
-
-`npm`和`yarn`都是前端的包管理工具,二者的区别毫无意义,总之一句话"选择其一作为你的包管理工具".
+`npm`和`yarn`都是前端的包管理工具,二者的区别在某种程度上毫无意义,选择其一作为我们的包管理工具吧.
 
 ### 启程
 
@@ -44,11 +42,9 @@ intro: 'Js开发避不开的包管理工具选择,谁能更胜一筹?2020年都�
 
 ### 提速
 
-`npm`和`yarn`默认都使用官方的源,服务器在国外,速度肯定慢,而且时不时被墙,让人恼火却又无可奈何.如果你善用梯子且梯子牢固稳定当我没说.
+`npm`和`yarn`默认都使用官方的源,服务器在国外,下载速度相对来说肯定慢,而且还有神秘力量拦着,让人恼火却又无可奈何.如果你善用梯子且梯子牢固当我啥也没说.
 
-> 国内源:一般是间隔十分钟同步一次国外的源的数据,不支持发布自己的包.
-
-为了提速,有很多方法,比如:
+为了提速,一般有如下两种思路:
 
 - 临时提速
 
@@ -57,6 +53,8 @@ intro: 'Js开发避不开的包管理工具选择,谁能更胜一筹?2020年都�
   
 
 #### 临时提速
+
+上去就是直接指定`registry`地址:
 
 ```shell
 npm install axios --registry=https://registry.npm.taobao.org
@@ -68,13 +66,16 @@ npm install axios --registry=https://registry.npm.taobao.org
 
 ```shell
 npm i -g yrm
+yrm use taobao
 ```
+
+行吧,`yrm`居然是[i5ting (狼叔)](https://github.com/i5ting)写的...
 
 > [i5ting/yrm: YARN registry manager, fast switch between different registries: npm, cnpm, nj, taobao](https://github.com/i5ting/yrm)
 
-行吧,`yrm`居然是[i5ting (狼叔)](https://github.com/i5ting)写的...腾讯开发者大会上聊过,多希望能...停停停.
 
-`yrm`可以快速切换`registry`,还能测试各个仓库源的大致速度.
+
+`yrm`可以快速切换`registry`,还能测试各个仓库源的大致速度.我网络不好,sorry.
 
 ```shell
  ~/p/test yrm test
@@ -93,7 +94,7 @@ npm i -g yrm
 
 > 不太推荐 yrm,只因这货会直接重写当前用户目录下的.yarnrc 和 .npmrc 配置文件.
 
-如果仅仅需要快速换源,确实有用.但是当你用户目录下的配置文件有多个自己常用的配置的时候,就不合适了,毕竟一把梭重写配置文件.
+如果仅仅需要快速换源,确实有用.但是当你用户目录下的配置文件有多个自己常用的配置的时候,就不合适了,毕竟它会直接一把梭,重写家目录下的配置文件.
 
 
 
@@ -113,8 +114,6 @@ npm i -g yrm
 npm config set disturl https://npm.taobao.org/mirrors/node
 ```
 
-
-
 命令行配置有一个问题,举例:
 
 ```shell
@@ -127,7 +126,7 @@ npm config set aaa bbb
 
 也可以直接编辑配置文件,配置文件则有多个可以生效.跟很多`unix`的配置文件的一贯作风一样.如下层级依次生效:
 
-- 工程内配置文件: `/path/to/my/project/.npmrc`
+- 工程内配置文件: `/path/to/my/project/.npmrc`,最优先.
 
 - 用户级配置文件: `~/.npmrc`
 
@@ -139,11 +138,11 @@ npm config set aaa bbb
 
 > Package-lock.json?
 
-锁定依赖版本,方便统一协作和后续的依赖安装,别改.
+锁定依赖版本,方便统一协作和后续的依赖安装,建议别改.
 
 ### 代理
 
-不谈代理,建议肉身翻走.
+不谈代理,建议肉身翻走.好吧,跟其他配置一样,可以指定本地代理协议和端口.或者设置 shell 全局代理.
 
 ### 缓存
 
@@ -175,7 +174,7 @@ yarn cache dir/list/clean
 - --prefer-offline
 - --offline
 
-如果你之前缓存了部分包,后续还需要在别的`project`下安装依赖的话.默认走线上优先.三个选项无需解释,如果不指定版本,默认安装最新版.`offline`选项本地无缓存直接显示失败.
+如果你之前缓存了部分包,后续还需要在别的`project`下安装依赖的话.默认走线上优先.三个选项一看就知无需解释,如果不指定版本,默认安装最新版.`offline`选项本地无缓存直接显示失败.
 
 ### 发布
 
@@ -192,9 +191,9 @@ npm version minor
 npm version major
 ```
 
-最后再`npm publish`.
+最后再`npm publish`.(我没做过,逃)
 
-
+更多内容建议参考如下链接和官方文档.
 
 ### 更多参考
 
