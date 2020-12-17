@@ -1,15 +1,12 @@
 ---
-title: 'Powershell读书笔记'
+title: 'Powershell随写'
 date: '2020-08-03'
 tags:
 - powershell
-- 读书
-mainImg: "https://images.unsplash.com/photo-1545875615-86f54b81a82d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920"
-coverImg: "https://images.unsplash.com/photo-1499257398700-43669759a540?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=440"
+mainImg: 'https://images.unsplash.com/photo-1599418268698-b5a48a743a8e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=1080'
+coverImg: 'https://images.unsplash.com/photo-1599418268698-b5a48a743a8e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=400'
 intro: "powershell 很棒,我想任何一个善用 windows 的开发者都应该学习 powershell ,系统自带环境的优势让开发者能够使用 powershell 轻松辅助开发,提高工作效率,本文献给对 powershell 感兴趣的朋友.如果你有任何关于 powershell 的内容想要与我沟通,欢迎发邮件."
 ---
-
-# Powershell Notebook
 
 ## chapter1：getting started with powershell
 
