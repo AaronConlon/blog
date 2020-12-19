@@ -282,3 +282,52 @@ const memoized = (fn) => {
 
 # 数组的函数式编程
 
+我们将创建一组函数用于解决常见的数组问题,关键在于函数式的方法,而非命令式的方法.
+
+> 把函数应用于一个值,并且创建新的值的过程被称为"投影"
+
+`Array.map`就是典型的投影函数.我们来试着创建一个`map`函数.
+
+```js
+const map = (arr, fn) => {
+  const result = []
+  for(const v of arr) {
+    result.push(fn(v))
+  }
+	return result
+}
+```
+
+一个`filter`函数,对数组内容进行过滤.
+
+```js
+const filter = (arr, fn) => {
+  const result = []
+  for(const v of arr) {
+    if(fn(v)) result.push(v)
+  }
+  return result
+}
+```
+
+一个`reduce`函数,对数组的所有值进行`归约`操作.
+
+```js
+var reduce = (arr, fn, defaultAccumlator) => {
+  let accumlator;
+  if(defaultAccumlator !== undefined) {
+    accumlator = defaultAccumlator
+    for(const v of arr) {
+      accumlator = fn(accumlator, v)
+    }
+  } else {
+    accumlator = arr[0]
+    for(let i=1;i<arr.length;i++) {    
+      accumlator = fn(accumlator, arr[i])
+    }
+  }
+  return [accumlator]
+}
+```
+
+**继续**,上`zip`函数,
