@@ -196,3 +196,89 @@ people.sort(sortBy('age'))
 
 # 闭包与高阶函数
 
+ 简而言之,闭包就是一个内部函数.在一个函数内部的函数,可以称为`闭包函数`.
+
+从`技术上`来讲,上述闭包函数的闭包场景存在三个可访问的作用域:
+
+- 自身声明内变量
+- 外部函数变量
+- 全局变量
+
+**闭包可以记住上下文环境**.话说回来,由于我们要在函数式编程中处理很多函数,因此需要一种调试方法.
+
+举个例子,一个字符串数组,想要解析成整数数组,如下代码会有问题:
+
+```js
+['1', '2'].map(parseInt)
+```
+
+`map`函数用三个参数调用了`parseInt`,分别是:
+
+1. element
+2. index
+3. arr
+
+而`parseInt`函数全盘接纳,来看看此函数的定义:
+
+```js
+parseInt(string, radix);
+```
+
+`radix`是可选的基数,如果提供 10,则转换为十进制的整数.
+
+如果 `radix` 是 `undefined`、`0`或未指定的，JavaScript会假定以下情况：
+
+1. 如果输入的 `string`以 "`0x`"或 "`0x`"（一个0，后面是小写或大写的X）开头，那么radix被假定为16，字符串的其余部分被当做十六进制数去解析。
+2. 如果输入的 `string`以 "`0`"（0）开头， `radix`被假定为`8`（八进制）或`10`（十进制）。具体选择哪一个radix取决于实现。ECMAScript 5 澄清了应该使用 10 (十进制)，但不是所有的浏览器都支持。**因此，在使用 `parseInt` 时，一定要指定一个 radix**。
+3. 如果输入的 `string` 以任何其他值开头， `radix` 是 `10` (十进制)。
+
+如果第一个字符不能转换为数字，`parseInt`会返回 `NaN`。
+
+此时,`['1', '2'].map(parseInt)`的结果是: [1, NaN].
+
+如何用函数式的思维,创建一个高阶函数,对`parseInt`进行抽象.
+
+```js
+const unary = (fn) => fn.length === 1 ? fn : (arg) => fn(arg)
+['1','2','3'].map(unary(parseInt))
+```
+
+现在,即使`map`以三个参数调用`unary`函数执行后返回的函数,都只会让`element`参数生效.
+
+我们得到了预期中的结果:`[1,2,3]` :seedling:
+
+现在,让我们为自己的工具库添加一个工具函数,这个函数接收一个函数作为参数,让这个接收的函数只能被执行一次.
+
+```js
+const once = (fn) => {
+  let done = false
+  return () => done ? undefined : ((done = true), fn.apply(this, arguments))
+}
+```
+
+现在用一个变量`done`保存函数的执行状态.
+
+```js
+const demoFn = (a, b) => {
+  console.log(a, b, 'just called once.')
+}
+const newDemoFn = once(demoFn)
+newDemoFn(1, 2) // output: 1 2 just called once.
+newDemoFn(3, 4) // no output
+```
+
+继续,创建下一个函数`memoized`,使函数记住其计算结果:
+
+```js
+const memoized = (fn) => {
+  const lookupTable = {}
+  return (arg) => lookupTable[arg] || (lookupTable[arg] = fn(arg))
+}
+```
+
+一个速查`table`保存了函数解构,如果不存在则执行此函数,保存到速查表中并且返回此结果.
+
+**memoized 函数是经典的函数式编程,是闭包与纯函数的实战**
+
+# 数组的函数式编程
+
