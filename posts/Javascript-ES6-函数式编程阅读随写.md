@@ -330,4 +330,42 @@ var reduce = (arr, fn, defaultAccumlator) => {
 }
 ```
 
-**继续**,上`zip`函数,
+**继续**,上`zip`函数,用于合并两个单独的数组,返回一个处理过的新数组.这个函数可以对给定的两个数组的限定对象进行结对处理,如何处理取决于具体的函数逻辑.结对的结果就是返回一个新的数组.
+
+```js
+const zip = (arr1, arr2, fn) => {
+  let index, result = []
+  for(index = 0;index < Math.min(arr1.length, arr2.length);index++) {
+    result.push(fn(arr1[index], arr2[index]))
+  }
+  return result
+}
+```
+
+# currying 和偏应用
+
+**一些术语**:
+
+- unary function: 一元函数,只接收一个参数的函数.
+- binary function: 二元函数
+- 变参函数:接受可变数量参数的函数
+- currying: 柯里化,这是一个过程,将一个多参函数转变为一个嵌套的一元函数.
+
+上代码:
+
+```js
+const curry = binaryFn => {
+  return firstArg => {
+    return secondArg => {
+      return binaryFn(firstArg, secondArg);
+    }
+  }
+}
+// 简化
+const curry = binaryFn => firstArg => secondArg => binaryFn(firstArg, secondArg)
+```
+
+完美利用了闭包的特性,也许对于一些深谙此道的 coder 而言,这不算什么.但是对于此刻的我来说,从未如此清晰体会到闭包和 currying.如此之美.
+
+开发者编写代码的时候会在应用中编写日志,下面我们编写一个`日志函数`.
+
