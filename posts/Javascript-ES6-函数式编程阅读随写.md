@@ -369,3 +369,18 @@ const curry = binaryFn => firstArg => secondArg => binaryFn(firstArg, secondArg)
 
 开发者编写代码的时候会在应用中编写日志,下面我们编写一个`日志函数`.
 
+```js
+const loggerHelper = (mode, msg, errorMsg, lineNo) => {
+  if(mode === 'DEBUG') {
+    console.debug(msg, errorMsg + 'at line:' + lineNo)
+  } else if(mode === 'WARN') {
+    console.warn(msg, errorMsg + 'at line:' + lineNo)
+  } else if(mode === 'ERROR') {
+    console.error(msg, errorMsg + 'at line:' + lineNo)
+  } else {
+    throw "WRONG MODE"
+  }
+}
+```
+
+上述代码不是良好的设计,多次重用了部分代码,让整体不够简洁.之前创建的`curry`函数也无法处理这个
