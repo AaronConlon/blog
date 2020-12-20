@@ -519,5 +519,27 @@ const prettyJson = partial(JSON.stringify, undefined, null, 2)
 prettyJson(obj)
 ```
 
-啊!`partial`函数有 bug.
+啊!`partial`函数有 bug.`partialArgs`传递的是数组,数组传递的是引用.如果不创建一个新的数组,并且在最后重置数组的话,执行一次`partial`化后的函数`delayTenMs`,内部 args 就固定了,闭包变量保存了首次执行的时候提供的参数去替换`undefined`,这里的`undefined`就像占位符.
 
+书上并没有给出一个示例代码来解决问题,只是提出存在 bug 的观点,我写下了如下代码,使用扩展运算符重置占位符效果的`undefined`变量.
+
+```js
+const partial = (fn, ...partialArgs) => {  
+  let args = [...partialArgs]
+  return (...fullArgs) => {
+    let argIndex = 0
+    for (let index = 0; index < args.length && argIndex < fullArgs.length; index++) {
+      if(args[index] === undefined) {
+        args[index] = fullArgs[argIndex++]
+      }
+    }
+    const result = fn.apply(null, args)
+    args = [...partialArgs]
+    return result
+  }
+}
+```
+
+晚安.
+
+2020年12月21日01:41:11
