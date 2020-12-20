@@ -354,7 +354,7 @@ const zip = (arr1, arr2, fn) => {
 上代码:
 
 ```js
-const curry = binaryFn => {
+ const curry = binaryFn => {
   return firstArg => {
     return secondArg => {
       return binaryFn(firstArg, secondArg);
@@ -383,4 +383,141 @@ const loggerHelper = (mode, msg, errorMsg, lineNo) => {
 }
 ```
 
-上述代码不是良好的设计,多次重用了部分代码,让整体不够简洁.之前创建的`curry`函数也无法处理这个
+上述代码不是良好的设计,多次重用了部分代码,让整体不够简洁.之前创建的`curry`函数也无法处理这个日志函数.我们需要**更进一步**.我们需要把多参数函数转化为`unary function`.
+
+```js
+const curry = (fn) => {
+  if(typeof fn !== 'function') throw Error('No function provided')
+  // args 是可变参数
+  return function curryFn(...args) {
+    // 如果可变参数少于被柯里化的函数的参数数量
+    if(args.length < fn.length) {
+      return function() {
+        // 执行此函数,返回一个处理一次参数的函数
+        return curryFn.apply(null, args.concat(
+        	Array.slice.call(arguments)
+        ))
+      }
+    }
+    return fn.apply(null, args)
+}
+```
+
+> `arguments`对象是所有（非箭头）函数中都可用的**局部变量**。你可以使用`arguments`对象在函数中引用函数的参数。此对象包含传递给函数的每个参数，第一个参数在索引0处。
+
+回到`日志函数`:
+
+```js
+const errorDebugLog = curry(loggerHelper)('ERROR')('ERROR:')
+const warnDebugLog = curry(loggerHelper)('WARN')('WARN:')
+errorDebugLog('balabala..', 21) // output: 'ERROR: balabala at line 21'
+```
+
+这就是闭包的魅力,在首次传入`loggerHelper`的时候,闭包生成了可访问变量作用域,记住了函数信息.
+
+现在,让我们来解决两个问题:
+
+- 在数组内容中检查是否存在数字
+- 求数组的平方
+
+首先,创建一个检查函数:`findNumberInArr`
+
+```js
+const match = curry((expr, str) => str.match(expr))
+const hasNumber = curry(match(/[0-9]+/))
+const filter = curry((fn, arr) => arr.filter(fn))
+// create fn
+const findNumberInArr = filter(hasNumber)
+// test
+findNumberInArr(['demo', 'demo1']) // output: ['demo1']
+```
+
+现在求数组的平方,我们通过`curry`函数进行处理,这次不要直接通过`map`函数传入一个平方函数解决这个问题.换一个视角.
+
+```js
+const map = curry((fn, arr) => arr.map(f))
+const squareAll = map(x => x*x)
+// 现在,squareAll 是一个unary 函数
+squareAll([1,2,3]) // output: [1, 4, 9]
+```
+
+我们可以很多地方直接使用`squareAll`函数了.如果需要在多个地方求数组的平方,这个函数可以简化降低代码量,当然,我们还可以配合`memoized`函数进行缓存处理!
+
+是时候谈谈`偏应用`了,接下来我们将创建一个`partial`函数以解决我们的问题.
+
+比如我们有这样一个场景,我们需要在 10 秒后执行一个函数,这个需求在多个地方用得上,也许我们会直接如此编程:
+
+```js
+setTimeout(() => {
+  // some code
+}, 10000)
+```
+
+一旦需要在另一个地方使用这个逻辑,就需要重写一遍这些代码.而且无法使用`curry`函数进行处理,因为时间参数是最后一个参数.解决这个问题的方案之一就是创建一个封装函数:
+
+```js
+const setTimeoutWrapper = (time, fn) => {
+  setTimeout(fn, time)
+}
+```
+
+然后使用`curry`函数进行优化.然而,我们可以进一步减少创建此类函数的开销.
+
+**这就是偏应用**的应用场景.
+
+```js
+var partial = (fn, ...partialArgs) => {
+  let args = partialArgs
+  return (...fullArguments) {
+    let arg = 0
+    for(let i=0;i<args.length && arg < fullArguments.length;i++) {
+      if(args[i] === undefined) {
+        args[i] = fullArguments[arg++]
+      }
+    }
+    return fn.apply(null, args)
+  }
+}
+
+const delayTenMs = partial(setTimeout, undefined, 10)
+const demoFn = () => {
+  // sdasdsadad
+}
+delayTenMs(demoFn)
+```
+
+再次使用了闭包,记住了`setTimeout`需要的参数列表长度,暂未提供的参数用 undefined 代替.后续返回一个函数,提供参数的同时,补全之前用 undefined 代替的部分参数,最终执行函数.
+
+
+
+例如,我们需要美化一个`json`对象的输出.先看看 json stringify 函数的定义.
+
+```
+JSON.stringify(value[, replacer [, space]])
+```
+
+**参数**
+
+- `value`
+
+  将要序列化成 一个 JSON 字符串的值。
+
+- `replacer` 可选
+
+  如果该参数是一个函数，则在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理；如果该参数是一个数组，则只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中；如果该参数为 null 或者未提供，则对象所有的属性都会被序列化。
+
+- `space` 可选
+
+  指定缩进用的空白字符串，用于美化输出（pretty-print）；如果参数是个数字，它代表有多少的空格；上限为10。该值若小于1，则意味着没有空格；如果该参数为字符串（当字符串长度超过10个字母，取其前10个字母），该字符串将被作为空格；如果该参数没有提供（或者为 null），将没有空格。
+
+```js
+const obj = {foo: "bar", bar: "foo"}
+// 第二参数
+JSON.stringify(obj, null, 2)
+// 想办法移除样板代码 null 和 2
+const prettyJson = partial(JSON.stringify, undefined, null, 2)
+prettyJson(obj)
+```
+
+啊!`partial`函数有 bug.
+
