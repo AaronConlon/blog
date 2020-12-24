@@ -601,4 +601,107 @@ const pipe = (...fns) => value => reduce(fns, (acc,fn) => fn(acc), value)
 
 接下来,本书描述了**组合**的优势.
 
-组合支持结合律.
+组合支持结合律.书上并没有详细的介绍和案例分析.只是单纯举例:
+
+```js
+compose(f, compose(g, h)) == compose(compose(f,g), h)
+```
+
+通过组合小函数的方式,让函数的组合更加灵活.
+
+下面,我们来创建一个`identity`函数,用于分析调试.接收一个参数,打印并且返回.
+
+```js
+const identity = it => {
+  console.log(it)
+  return it
+}
+```
+
+由于组合和管道数据是流动的关系,可以在其间插入`identity`函数,输出数据用于调试.这确实非常简单有效.
+
+# 函子
+
+本章最重要的内容就是`编程错误处理`.我们需要了解一个新的概念:`functor:函子`,它将以纯函数的形式帮我们处理错误.
+
+> 函子是一个普通对象,它实现了`map`函数,在遍历每一个对象的时候生成一个新的对象.
+
+函子是`容器`,其持有值.
+
+```js
+const Container = function(val) {
+  this.value = val
+}
+```
+
+> 不使用箭头函数,箭头函数没有`[[construct]]`和`prototype`属性,无法用`new`实例化.
+
+现在,`container`可以持有传给它的任何值.
+
+```js
+let a = new Container(3)
+=> Container(value: 3)
+let bObj = new Container({a: 1})
+=> Container({a:1})
+```
+
+继续,创建一个`of`静态方法.
+
+```js
+Container.of = function(value) {
+  return new Container(value)
+}
+```
+
+于是,我们可以使用`static`函数创建对象了.
+
+```js
+const testObj = Container.of(3)
+=> Container(value:3)
+```
+
+接下来,我们需要创建`map`函数,之后这便是一个`函子`.
+
+![](https://i.loli.net/2020/12/24/vX1AIKxhgOlQzMd.png)
+
+看代码:
+
+```js
+Container.prototype.map = function(fn) {
+  return Container.of(fn(this.value))
+}
+```
+
+经过`map`函数处理,会返回一个新的 container 对象.于是,我们可以进行如下编码:
+
+```js
+let double = x => x + x
+Container.of(3).map(double)
+=> Container(6)
+Container.of(3).map(double).map(double)
+=> Container(12)
+```
+
+得到了我个人一直以来不够了解的链式调用的实现思路.
+
+> 函子是一个实现了 map 契约的对象
+
+所以,函子能用在什么地方?
+
+```js
+const MayBe = function (val) {
+  this.value = val
+}
+MayBe.of = function(v) {
+  return new MayBe(v)
+}
+MayBe.prototype.isNothing = function() {
+  return (this.value === null || this.value === undefined) 
+}
+MayBe.prototype.map = function(fn) {
+  return this.isNothing() ? MayBe.of(null) : MayBe.of(this.value)
+}
+```
+
+:construction_worker:
+
