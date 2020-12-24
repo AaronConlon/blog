@@ -492,7 +492,7 @@ delayTenMs(demoFn)
 
 例如,我们需要美化一个`json`对象的输出.先看看 json stringify 函数的定义.
 
-```
+```js
 JSON.stringify(value[, replacer [, space]])
 ```
 
@@ -552,3 +552,53 @@ const partial = (fn, ...partialArgs) => {
 
 > 每一个程序的输出应该是另一个未知程序的输入.
 
+我们将要创建`compose`函数,例如:
+
+```js
+const compose = (a, b) => c => a(b(c))
+```
+
+依然是熟悉的高阶函数,接收函数作为参数,返回函数.返回的函数的`参数`是关键.
+
+`compose`函数能解决我们常见的一些问题.你是否写过类似如下代码:
+
+```js
+const data = someFn('this')
+const result = otherFn(data)
+```
+
+一个函数的输出,作为另一个函数的输入.`compose`函数为此而生.
+
+```js
+const getResult = compose(otherFn, someFn)
+```
+
+`getResult`是一个函数,接收的参数跟`someFn`函数一致.我们创建了一个函数`getResult`.这是一种优雅而简单的实现方式.
+
+上述`someFn`只接收一个参数,如果需要接收多个参数的话,我们可以使用`curry`和`partial`两个函数进行优化.
+
+> 组合的思想就是把小函数组合成大函数,简单的函数易于阅读,测试和维护.
+
+创建小的函数单元,可以通过 compose 组合重建应对各种需求.
+
+但是,上述`compose`函数无法处理更多函数作为参数.仅仅支持两个函数作为参数是不够的,让我们来优化一下.
+
+```js
+const compose = (...fns) => (value) => reduce(fns.reverse(), (acc, fn) => fn(acc), value)
+```
+
+竟然如此简单桥面,接收一个入口参数`value`,首先设置为初始的`acc`值,依次执行并且返回作为下一个函数的入口.
+
+组合是从右到左执行的,而管道则从左到右.接下来创建`pipe`管道函数.
+
+```js
+const pipe = (...fns) => value => reduce(fns, (acc,fn) => fn(acc), value)
+```
+
+只是执行方向不同而已,因此参数列表不必反向.
+
+> 在公共代码库中建议使用单一的数据流,我更喜欢管道,因为这让我想起 shell 知识.同时使用管道和组合容易在团队中引起混淆.
+
+接下来,本书描述了**组合**的优势.
+
+组合支持结合律.
