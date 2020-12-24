@@ -705,3 +705,54 @@ MayBe.prototype.map = function(fn) {
 
 :construction_worker:
 
+上用例
+
+```js
+MayBe.of('string').map(x => x.toUpperCase())
+=> MayBe {value: 'STRING'}
+```
+
+即使不是`typescript`,无法避免`of`方法传入`null`或者`undefined`,内部的`map`方法也会做一次检查,逻辑抽象出来避免了错误.代码没有在`null`或者`undefined`下崩溃.这是一种声明式的方式去编程,这也是一个安全的容器.
+
+```js
+MayBe.of('pg')
+	.map(x => x.toUpperCase())
+	.map(x => `Mr. ${x}`)
+```
+
+链式调用,优美简洁.
+
+**另一个函子**`Either`,上述`MayBe`函子在传入`null`或者`undefined`后,最后的结果是`null`.可是我们很难分析出问题出在哪里.我们需要一个更强大的函子,解决分支拓展的问题.
+
+```js
+const Nothing = function(val) {
+  this.value = val
+}
+Nothing.of = function(v) {
+  return new Nothing(v)
+}
+Nothing.prototype.map = function(f) {
+  return this
+}
+const Some = function(val) {
+  this.value = val
+}
+Some.of = function(v) {
+  return new Some(v)
+}
+Some.prototype.map = function(f) {
+  return Some.of(f(this.value))
+}
+```
+
+`Nothing`的 map 函数,返回自身,而不是运行函数`f`.
+
+能在`Some`上运行函数,而`Nothing`不行.
+
+```js
+const Either = {
+  Some,
+  Nothing
+}
+```
+
