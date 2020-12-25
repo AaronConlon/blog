@@ -747,7 +747,9 @@ Some.prototype.map = function(f) {
 
 `Nothing`的 map 函数,返回自身,而不是运行函数`f`.
 
-能在`Some`上运行函数,而`Nothing`不行.
+2020年12月25日12:57:10	:100:
+
+能在`Some`上运行函数,而`Nothing`不行.来吧,实现`Either`.
 
 ```js
 const Either = {
@@ -756,3 +758,175 @@ const Either = {
 }
 ```
 
+如果我们有一个`web`请求,返回数据可能是正常数据,或者一条错误信息.
+
+```js
+const getData =(type) => {
+  let resp;
+  try {
+    resp = Some.of(data)
+  } catch {
+    resp = Nothing.of(error)
+  }
+}
+```
+
+后续返回的 response 对象依然是函子,可以使用链式调用的 map 函数.但是,错误信息能保存下去,`Nothing`从头到尾都不会变,直接返回`this`使得后续的 map 函数`失效`.
+
+现在,你根据上下文,可以很容易看出异常出在哪里.是的,是`catch`到了错误.
+
+上述函子都是`pointed`函子,ES6 的 Array.of 也是`pointed`函子.
+
+# 深入理解 Monad 函子
+
+`reddit`开放了一些`api`接口,例如:**https://www.reddit.com/search.json?q=something**
+
+粘贴一个随机的返回数据,不必详细深究:
+
+```json
+{
+  "kind": "Listing",
+  "data": {
+    "after": "t3_k1qcrx",
+    "dist": 25,
+    "facets": {}.
+    "modhash": "",
+    "children": [...],
+  "before": null
+  }
+}
+```
+
+`children`部分非常庞大,不再展开.每一个`children`都是一个对象,内含一个`Permalink`键,值是一个相对`url`,访问这个`url`则能获取到评论数组.
+
+我们如何按搜索的结果,获取文章的评论,最后返回一个数组,每个元素是一个对象,对象内是`title`和`comments`.
+
+```js
+const request = require('sync-request')
+const searchReddit = (search) => {
+  let response
+  try {
+    response = JSON.parse(request('GET','https://www.reddit.com/saerch.json?q=' + encodeURI(search)).getBody('utf8'))    
+  } catch(err) {
+    response = { msg: 'something wrong', errorCode: err['statusCode']}
+  }
+  return response
+}
+
+const getComments = (link) => {
+  let resp;
+  try {
+    resp = JSON.parse(request('GET', 'https://www.reddit.com/' + link).getBody('utf8'))
+  } catch (err) {
+    resp = {
+      msg: 'get comment failed', errorCode: err['statusCode']
+    }    
+  }
+  return resp
+}
+
+// 合并两个函数
+const mergeViaMayBe = (searchText) => {
+  let redditMayBe = MayBe.of(searchReddit(searchText))
+  let ans = redditMayBe
+  	.map(arr => arr['data'])
+  	.map(arr => arr['children'])
+  	.map(arr => map(arr, x => {
+      return {
+        title: x['data'].title,
+        permalink: x['data'].permalink
+      }
+    }))
+  .map(obj => map(obj, x => {
+    return {
+      title: x.title,
+      comments: MayBe.of(getComments(x.permalink.replace('?ref=search_posts', '.json')))
+    }
+  }))
+}
+```
+
+运用函子,可以使用链式方法解决问题,非常优雅.
+
+但是,这依然不够,观察上述结果中`comments`依然是`MayBe`对象,想要真正取值还是需要继续`map`调用.
+
+下面,介绍`Monad`函子以解决过多的`map`嵌套问题.让`MayBe`武装到牙齿.
+
+```js
+MayBe.prototype.join = function () {
+  return this.isNothing() ? MayBe.of(null) : this.value
+}
+let joinExample = MayBe.of(MayBe.of(1))
+=> MayBe{value: MayBe{value: 1}}
+joinExample.join()
+// 返回值展开一个层级
+=> MayBe {value: 1}
+```
+
+如果我们想要对内部的值进行操作,也许可以先展开层级,再执行`map`函数,以减少`map`的调用.那么既然当我们需要展开一层的时候都需要在后面跟一个`join`方法,我们可以再封装一个`chain`函数来做这件事.
+
+```js
+MayBe.prototype.chain = function(f){
+  return this.map(f).join()
+}
+```
+
+`Monad`就是包含`chain`方法的特殊函子.或者说,一个函子拥有`chain`方法,就可以称为`Monad`
+
+2020年12月26日01:34:57
+
+# 使用 Generator
+
+如果你是`promise`的粉丝,建议学习`Generator`及其解决异步代码问题的方式.
+
+让我们先来谈谈`同步和异步`:
+
+- 同步:函数执行的时候阻塞调用者,直到函数执行结束返回结果.
+
+- 异步:函数执行不会阻塞,但是函数执行结束就会返回结果.
+
+让我们来创建`Generator`,注意观察这个特殊语法.
+
+```js
+function * gen() {
+  return 'first generator'
+}
+```
+
+我们在函数前面用一个星号 **\*** 来表示这是一个`Generator`函数.
+
+```js
+let genResult = gen()
+```
+
+此刻,`genResult`并不是`first generator`,而是:
+
+`gen {[[GeneratorStatus]]: "suspended", [[GeneratorRecevier]]: Window}`
+
+这是一个`Generator`原始类型的实例.这个实例拥有`next`方法.执行此方法,上面的代码返回一个对象:
+
+`{value: 'first generator', done: true}`
+
+`Generator`实例如同序列,一旦使用`next`消费,则不能再次得到上次消费的值.也就是说,如果你继续执行`next()`方法,结果的`vaue`将是`undefined`.
+
+```js
+function * gen() {
+  yield 1
+  yield 2
+  yield 3
+}
+```
+
+有趣的是,实例执行`next`将会返回`yield`后的结果,并且下次执行`next`会从当前`yield`后继续执行.当所有`yield`结果都消费之后,`done`属性变成`true`.
+
+```js
+let genResult = gen()
+for(let v of genResult()) {
+  console.log(v)
+}
+// 1
+// 2
+// 3
+```
+
+`for..of..`利用了`next`和`done`属性完成遍历.
