@@ -968,7 +968,29 @@ let getDataTwo = (cb) => {
     cb('dummy data two')
   }, 1000)
 }
-
-
 ```
 
+一旦时间过去,就执行传入的回调函数`cb`.如果要用`generator`来解决回调函数可能导致的函数回调地狱的问题?
+
+让我们来改造`getDataOne`:
+
+```js
+let geneator;
+let getDataOne = () => {
+  setTimeout(() => {
+    // 调用 Generator
+    // 使用 next 加参数传送数据
+    generator.next('fake data one')
+  }, 1000)
+}
+```
+
+然而,我并不是很理解这段代码,`generator`是`undefined`,为何调用`next`.
+
+2020年12月26日22:56:50
+
+2020 年即将结束,在异步编程的问题上让我们拥抱`async`和`await`吧.
+
+终于看完了这本书,这本书非常适合我现在的水平,让我能够学习得很愉快.再次感谢,即使昨天是圣诞节我依然一个人过.
+
+再会啦.
