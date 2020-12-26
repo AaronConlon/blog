@@ -930,3 +930,45 @@ for(let v of genResult()) {
 ```
 
 `for..of..`利用了`next`和`done`属性完成遍历.
+
+`Generator`不止如此,还可以想其实例通过`next`函数传递数据.
+
+```js
+function * sayFullName(){
+  let firstName = yield
+  let secondName = yield
+  console.log(`${firstName} - ${secondName}`)
+}
+
+// call it
+let fullName = sayFullName()
+fullName.next()
+fullName.next('Fname')
+fullName.next('Sname')
+=> console log : Fname - Sname
+```
+
+首次运行`next`,函数暂停于: `let firstName = yield`
+
+再次运行带参数的`next`,则`let firstName = yield`转为`let firstName = "Fname"`
+
+> `Generator`与`异步应用`可以很和谐.
+
+假如有两个本质上是异步的函数如下:
+
+```js
+let getDataOne = (cb) => {
+  setTimeout(() => {
+    cb('dummy data one')
+  }, 1000)
+}
+
+let getDataTwo = (cb) => {
+  setTimeout(() => {
+    cb('dummy data two')
+  }, 1000)
+}
+
+
+```
+
