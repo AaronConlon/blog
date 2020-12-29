@@ -154,7 +154,116 @@ function asyncFunc() {
 
 请移步看看这里,[A cartoon intro to ArrayBuffers and SharedArrayBuffers - Mozilla Hacks - the Web developer blog](https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/).
 
-`SharedArrayBuffer`对象用来表示通用固定长度的原始二进制数据缓冲区,类似`ArrayBuffer`对象.
+`SharedArrayBuffer`对象用来表示通用固定长度的原始二进制数据缓冲区,类似`ArrayBuffer`对象.这里涉及到浏览器端的多线程`work`处理逻辑，共享数据和原子操作。
+
+# ES9如何？
+
+首先，支持了异步迭代器。
+
+```js
+async function fn(arr) {
+    for (let i of arr) {
+        await someFn(i)
+    }
+}
+```
+
+上述代码依然无法让循环实现异步，而是同步执行，且在内部的异步函数得出结果之前全部调用完成。
+
+```js
+
+const promises = [
+    new Promise(resolve => resolve(1)),
+    new Promise(resolve => resolve(2)),
+    new Promise(resolve => resolve(3))
+]
+async function foo() {
+    for await (let i of promises) {        
+        console.log(i)
+    }
+}
+foo()
+=> 1,2,3
+```
+
+如果我们可能需要用到异步循环，注意引入`ES9`的支持。
+
+**ES9**支持了 `promise`在最后时刻执行`finally`函数.
+
+**并且重新修订了字面量的转义**,终于支持了`String.raw`.后续的字符串模版全部不会被转义.
+
+```js
+let s = `\u{54}` //会转义成unicode "T"
+console.log(s);//>> T
+
+let str = String.raw`\u{54}`; //不会被转义
+console.log(str);//>> \u{54}
+```
+
+关于扩展运算符,`ES6`只支持数组的扩展.现在终于能操作对象了.
+
+```js
+const obj = {
+  a: 1,
+  b: 2,
+  c: 3
+};
+const { a, ...param } = obj; //这里...是rest
+console.log(a); //>> 1
+console.log(param); //>> {b: 2, c: 3}
+
+function foo({ a, ...param }) {//这里...还是rest
+  console.log(a); //>> 1
+  console.log(param); //>> {b: 2, c: 3}
+}
+
+const param = { b: 2, c: 3 };
+foo({ a: 1, ...param });  //此处...为spread
+```
+
+`ES9`还对正则表达式提供了非常给力的支持.例如之前`.`能匹配除了`回车`外的所有字符,现在添加`flag`标志`s`,就可以匹配回车了.
+
+```js
+/hello.world/s.test('hello\nworld') 
+=> true
+/a.b/s.text(`a
+b`)
+=> true
+```
+
+另外,对正则表达式命名捕获组也进行了支持:
+
+```js
+const reDate = /(\d{4})-(\d{2})-(\d{2})/,
+  match = reDate.exec("2018-08-06");
+console.log(match);//>> [2018-08-06, 2018, 08, 06]
+
+//这样就可以直接用索引来获取年月日：
+let year = match[1]; //>> 2018
+let month = match[2]; //>> 08
+let day = match[3]; //>> 06
+// 一旦字符串顺序变化,则除了要修改正则表达式之外,还需要修改上面三行取值的代码.
+```
+
+`ES9`支持对匹配组进行命名,获取匹配结果的时候可以通过分组的名字获取.
+
+```js
+const reDate = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/,
+  match = reDate.exec("2018-08-06");
+console.log(match);
+//>> [2018-08-06, 08, 06, 2018, groups: {day: 06, month: 08, year: 2018}]
+
+//此时用groups对象来获取年月日，无论正则表达式怎么变换，这下面三行不用改了，省事！
+let year = match.groups.year; //>> 2018
+let month = match.groups.month; //>> 08
+let day = match.groups.day; //>> 06
+```
+
+正则表达式的进阶小书里提及的断言,之前只支持正向现行断言,`ES9`支持了后行断言.
+
+
+
+
 
 
 
