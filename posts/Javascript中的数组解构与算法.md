@@ -99,7 +99,8 @@ arr.reduce((prev, current) => prev + current, 0)
 `ES6`继续带来了更多的数组功能,减少了外部库的载入和开发者的开发量.
 
 - @@iterator: 默认与 values() 返回值一致,可以用`for..of..`迭代
-- copyWithin: 
+- copyWithin: 强悍的修改自身数组的方法,可以指定`target`为复制到自身的位置,`start`和`end`为复制区间,复制过程会动态调整复制内容,但是总体本身的`length`不变,最后修改自身数组并返回.
+- entries: 返回包含数组所有键值对的@@iterator,如果使用`for..of`循环,每次`item`是一个数组,下标 0 是 key,1 是 value.
 
 
 
