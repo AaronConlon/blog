@@ -161,3 +161,66 @@ class Stack {
 
 
 现在我们了解了栈是什么结构,以及通过数组和 JavaScript 对象初步实现了`Stack`类.接下来我们尝试用`Stack`解决问题.
+
+### 进制转换
+
+ **十进制转二进制,以及任意进制转换**.
+
+先来看看如何计算十进制数转二进制:
+
+![](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fgss0.baidu.com%2F7Po3dSag_xI4khGko9WTAnF6hhy%2Fzhidao%2Fpic%2Fitem%2F8326cffc1e178a822eea2094f703738da977e834.jpg&refer=http%3A%2F%2Fgss0.baidu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1612013894&t=ca1c076b08aac87b4847d7caaa0d9cb4)
+
+如果用`栈`来保存余数,最后结果再取出即可.
+
+```js
+function decimalToBinary(decNum) {
+  const remStack = new Stack()
+  let num = decNum
+  let rem;
+  let binaryString = ''
+  while (num > 0) {
+    rem = Math.floor(num % 2)
+    remStack.push(rem)
+    num = Math.floor(num / 2)
+  }
+  while(!remStack.isEmpty()) {
+    binaryString += remStack.pop().toString()
+  }
+  return binaryString
+}
+```
+
+如果不是二进制,而是 2~36,开发者指定的进制,则可以适当调整此函数:
+
+```js
+function baseConverter(decNum, base) {
+  const remStack = new Stack()
+  // 便于数字表示
+  const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let num = decNum
+  let rem;
+  let baseString = ''
+  // 基数需要在 2~36 之间
+  if(!(base>=2 && base <= 36)) return ''
+  while (num > 0) {
+    // rem: 余数,
+    rem = Math.floor(num % base)
+    remStack.push(rem)
+    num = Math.floor(num / base)    
+  }
+  
+  while(!remStack.isEmpty()) {
+    baseString += digits[remStack.pop()] // 余数转化,方便显示进制数
+  }
+  
+  return baseString
+}
+```
+
+
+
+### 平衡圆括号
+
+
+
+### 汉诺塔
