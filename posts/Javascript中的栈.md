@@ -223,4 +223,60 @@ function baseConverter(decNum, base) {
 
 
 
+**question**:给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+有效字符串需满足：
+
+- 左括号必须用相同类型的右括号闭合。
+- 左括号必须以正确的顺序闭合。
+
+
+
+```js
+function parenthesesBalance(str) {
+  if(str.length === 0) return true
+  const pair = {'(': ')', '[': ']', '{': '}'}
+  const stack = new Stack()
+  for (let i = 0;i < str.length; i++) {
+    if(str(i) === '(' || str[i] === '[' || str[i] === '{'){
+      stack.push(str[i])
+    } else {
+      let last = stack.pop()
+      if(str[i] !== pair[last]) return false
+    }
+  }
+  return true  
+}
+```
+
+
+
 ### 汉诺塔
+
+在经典汉诺塔问题中，有 3 根柱子及 N 个不同大小的穿孔圆盘，盘子可以滑入任意一根柱子。一开始，所有盘子自上而下按升序依次套在第一根柱子上(即每一个盘子只能放在更大的盘子上面)。移动圆盘时受到以下限制:
+(1) 每次只能移动一个盘子;
+(2) 盘子只能从柱子顶端滑出移到下一根柱子;
+(3) 盘子只能叠在比它大的盘子上。
+
+请编写程序，用栈将所有盘子从第一根柱子移到最后一根柱子。
+
+你需要原地修改栈。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/hanota-lcci
+
+![](https://www.programmersought.com/images/621/4856108b92aae2dde25a0325f6317d95.png)
+
+![](https://upload-images.jianshu.io/upload_images/5977941-12d456543f5c31e5.png?imageMogr2/auto-orient/strip|imageView2/2/w/375/format/webp)
+
+```js
+/**
+ * @param {number[]} A
+ * @param {number[]} B
+ * @param {number[]} C
+ * @return {void} Do not return anything, modify C in-place instead.
+ */
+var hanota = function(A, B, C) {
+	
+};
+```
+
