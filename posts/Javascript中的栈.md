@@ -276,7 +276,30 @@ function parenthesesBalance(str) {
  * @return {void} Do not return anything, modify C in-place instead.
  */
 var hanota = function(A, B, C) {
-	
+  	// 当前所有碟子都在 A 栈
+    const length = A.length
+    const move = (n, a, b, c) => {        
+        if(n === 1) {
+          // 边界条件,最简单的移动逻辑.可以通过修改栈来实现效果.
+            c.push(a.pop())
+        } else {
+          	// 分解问题,缩小范围,递归调用整个处理问题的函数.
+          	// 将最下面碟子上的碟子,通过中间柱子 c,移动到 b
+            move(n - 1, a, c, b)
+          	// 直接移动 a 到 c
+            c.push(a.pop())
+          	// 将 b 上的碟子,通过中间柱子 a,移动到 c
+            move(n - 1, b, a, c)
+        }        
+    }
+    move(length, A, B, C)
 };
 ```
 
+> [如何理解汉诺塔的递归？ - invalid s的回答 - 知乎](https://www.zhihu.com/question/24385418/answer/258015386)
+
+看了知乎大佬的分析,勉强了解了思路.首先,将整个过程分解为:
+
+- n-1 个碟子通过中间柱子,移动到暂时存放的柱子,移动成功后这个柱子便可以理解为一开始的时候所有碟子所在的柱子
+- 直接移动 1 个碟子到目标柱子
+- 移动 n-1 个碟子到中间柱子
