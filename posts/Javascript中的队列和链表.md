@@ -24,6 +24,8 @@ intro: '几年前在学校使用 c++ 进行数据结构与算法的学习.学得
 
 
 
+# 队列
+
 队列,先进先出.排过队吗?按顺序添加和处理的任务,都可以用`队列`的结构进行存储和消费.
 
 ```js
@@ -92,15 +94,255 @@ class Deque extends Queue{
   constructor () {
     super()
   }
-
   addFront(e) {
     if(this.isEmpty()) {
       this.enqueue(e)
-    } 
-    
+    } else if(this._lowestCount > 0) {
+      this._lowestCount--      
+      this._items[this._lowestCount] = e
+    } else {
+      for (let i = this._count;i>0;i--) {
+        // 往后移动一位
+        this._items[i] = this._items[i - 1]
+      }
+      this._count++
+      this._lowestCount = 0
+      this._items[0] = e
+    }
+  }
+	// 从队尾出队
+  removeBack() {
+    if(this.isEmpty()) return undefined
+    const lastOne = this._items[this._count - 1]
+    if(this.size() === 1) {
+      this.clear()
+    }
+    delete this._items[this._count - 1]
+    this._count--
+    return lastOne
+  }
+
+  peekBack() {
+    return this._items[this._count]
   }
 }
 ```
 
+其他方法继承于`Queue`,可以实现双端数据操作.
 
+现在,让我们来模拟`击鼓传花`问题.
+
+> *班级中玩一个游戏，所有学生围成一圈，从某位同学手里开始向旁边的同学传一束花。这个时候某个人（比方班长），在击鼓，鼓声停下的一刻，花落在谁手里，谁就进去表演节目*.
+
+```js
+let a = new Queue();
+['杜小帅', '高海', '董文武', '雪儿', '洛克斯', '庄杯', 'K'].forEach(i => a.enqueue(i));
+let createANum =  () => Math.random().toFixed(1) * 10
+function start(queue) {
+  if(queue.size() === 1) {
+    console.log(`现场唯一的观众: ${queue.dequeue()}`);
+  } else {
+    if(createANum() > 7) {
+      console.log(`${a.dequeue()}, 请开始你的表演.`);
+    } else {
+      queue.enqueue(queue.dequeue())
+    }
+  }
+}
+while(a.size() >= 1) {
+  start(a)
+}
+
+// output
+// 庄杯, 请开始你的表演.
+// 董文武, 请开始你的表演.
+// 高海, 请开始你的表演.
+// 杜小帅, 请开始你的表演.
+// 我, 请开始你的表演.
+// 洛克斯, 请开始你的表演.
+// 现场唯一的观众: 雪儿
+```
+
+接下来是回文检查,什么是回文字?
+
+> 回文是指正反序都相等的字符串序列,例如 `lol`,`madam`等等.
+
+最简单的方式就是使用双端队列来处理这个问题.
+
+```js
+function palindromeCheaker(str) {
+  if(str === undefined || str === '' || str === null) return false;
+  const deque = new Deque();
+  [...str].forEach(i => deque.enqueue(i));
+  while(deque.size() > 1) {
+    if(deque.removeBack() !== deque.dequeue()) return false
+  }
+  return true
+}
+
+console.log(palindromeCheaker('121'), palindromeCheaker('madam'), palindromeCheaker('jay'))
+// output
+// true, true, false
+```
+
+JavaScript 任务也使用了队列这种数据结构.详情可以看看:
+
+[详解JavaScript中的Event Loop（事件循环）机制 - 知乎](https://zhuanlan.zhihu.com/p/33058983)
+
+
+
+# 链表
+
+存储多个元素,数组可能是最常用的数据结构,如果需要从起点或者中间插入元素,数组的操作成本很高.尽管`JavaScript`数组支持了一些方法来做这些事,但是背后的情况同样如此.
+
+> 数组的元素在内存中是连续的,链表则可以是不连续的,链表的关键是使用节点的属性保存下一个或者上一个链表的信息.
+
+相比于传统数组,链表添加或者移除一个元素不需要移动其他元素,大大降低了内存成本.
+
+![](https://pic2.zhimg.com/v2-8158f5bef33b4d38c0ff43d11139a003_1440w.jpg?source=172ae18b)
+
+上图是从网上随便找的示意图.观察可以发现,如果要找到某个节点,需要从`head`一路往下查找.让我们来实现这一数据结构.
+
+```js
+class LinkedList {
+  constructor() {
+    this.count = 0;
+    this.head = undefined;
+  }
+
+  push(e) {
+    const element = new Node(e)
+    this.count++
+    if (this.head === undefined) {
+      this.head = element
+    } else {
+      let current = this.head
+      while (current.next) {
+        current = current.next
+      }
+      current.next = element
+    }
+  }
+  /**
+   * 
+   * @param {number} index 返回删除节点的 element
+   */
+  removeAt(index) {
+    if (index >= 0 && index < this.count) {
+      let current = this.head
+      if (index == 0) {
+        this.head = current.next
+      } else {
+        let prev = this.getElementByIndex(index - 1)
+        current = prev.next
+        prev.next = current.next
+      }
+      this.count--
+      return current.element
+    } else {
+      return undefined
+    }
+  }
+
+  removeValue(element) {
+    const index = this.indexOf(element)
+    return this.removeAt(index)
+  }
+
+  getElementByIndex(index) {
+    if (index >= 0 && index < this.count) {
+      let node = this.head
+      for (let i = 0; i < index && node !== null; i++) {
+        node = node.next
+      }
+      return node
+    } else {
+      return undefined
+    }
+  }
+
+  insert(element, index) {
+    if (index >= 0 && index <= this.count) {
+      const node = new Node(element)
+      if (this.count === 0) {
+        this.head = node
+      } else {
+        let prev = this.getElementByIndex(index - 1)
+        node.next = prev.next
+        prev.next = node
+      }
+      this.count++
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * 
+   * @param {any} element search a element, return a index
+   */
+  indexOf(element) {
+    let current = this.head
+    let index = 0
+    while (current) {
+      if (current.element !== element) {
+        current = current.next
+        index++
+      } else {
+        return index
+      }
+    }
+    return -1
+  }
+
+  isEmpty() {
+    return this.count === 0
+  }
+
+  size() {
+    return this.count
+  }
+
+  getHead() {
+    return this.head
+  }
+
+  toString() {
+    if (this.count === 0) {
+      return ''
+    }
+    let current = this.head
+    while (current.next !== undefined) {
+      console.log(current.element);
+      current = current.next
+    }
+    console.log(current.element);
+  }
+}
+
+class Node {
+  constructor(element) {
+    this.element = element;
+    this.next = undefined;
+  }
+}
+```
+
+来思考一个算法题目,翻转链表:
+
+> 题意：反转一个单链表。
+>
+> 示例: 输入: 1->2->3->4->5->NULL
+> 输出: 5->4->3->2->1->NULL
+
+
+
+接着,看看`双向链表`:
+
+
+
+# 参考
+
+- [数据结构与算法-链表(上) - 知乎](https://zhuanlan.zhihu.com/p/52878334)
+- [数据结构与算法-链表(下) - 知乎](https://zhuanlan.zhihu.com/p/52841915)
 
