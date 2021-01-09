@@ -335,9 +335,154 @@ class Node {
 > 示例: 输入: 1->2->3->4->5->NULL
 > 输出: 5->4->3->2->1->NULL
 
+直接翻转指针,可以避免多余的链表创建和内存占用.
+
+```js
+// data is a LinkedList
+function reverseLinkList(data) {
+  if (data.size() > 1) {
+    let current = data.head
+    let prev = undefined
+    let next = undefined
+    while (current !== undefined) {
+      next = current.next;
+      current.next = prev;
+      prev = current
+      current = next
+    }
+    data.head = prev
+    return data
+  } else {
+    return data
+  }
+}
+```
+
 
 
 接着,看看`双向链表`:
+
+```js
+class DoublyNode extends Node {
+  constructor(element, prev = undefined, next = undefined) {
+    super(element, next)
+    this.prev = prev;
+  }
+}
+
+class DoublyLinkedList extends LinkedList {
+  constructor() {
+    super()
+    this.tail = undefined;
+  }
+  push(element) {
+    const node = new DoublyNode(element)
+    if (this.count === 0) {
+      this.head = node
+      this.tail = node
+    } else {
+      let current = this.head
+      while (current.next) {
+        current = current.next
+      }
+      current.next = node
+      node.prev = current
+    }
+    this.tail = node
+    this.count++
+  }
+  insert(element, index) {
+    const node = new DoublyNode(element)
+    if (index >= 0 && index <= this.count) {
+      if (this.count === 0) {
+        this.head = node
+        this.tail = node
+      } else {
+        let oldNode = this.getElementByIndex(index)
+        console.log(oldNode.element, 'is old node');
+        // 新插入节点设置了前后节点
+        node.next = oldNode
+        node.prev = oldNode.prev
+        // 旧的节点设置了 prev
+        oldNode.prev = node
+        if (node.prev) {
+          // 如果前节点存在
+          node.prev.next = node
+        } else {
+          // 不存在则说明插入的是链表头
+          this.head = node
+        }
+      }
+      this.count++
+      return true
+    }
+    return false
+  }
+  getTail() {
+    return this.tail
+  }
+  /**
+   * 
+   * @param {number} index 1. 链表长为 1
+   * 2. 长不为 1 => 1.删除首个元素/ 2.删除最后元素 / 3.删除中间元素
+   */
+  removeAt(index) {
+    const node = this.getElementByIndex(index)
+    // 空链表和无效 index
+    if (this.count === 0 && node === undefined) return undefined
+
+    // 链长 1,删除 1
+    if (this.count === 1 && node === this.head) {
+      this.head = undefined
+      this.tail = undefined
+      this.count = 0
+      return node
+    }
+    // 链长不为 1
+    // index 对应的 node 有效
+    if (node === this.head) {
+      this.head = node.next
+    } else if (node === this.tail) {
+      node.prev.next = undefined
+      this.tail = node.prev
+    } else {
+      node.prev.next = node.next
+      node.next.prev = node.prev
+    }
+    this.count--
+    return node
+  }
+}
+```
+
+
+
+双向链表增加了`tail`属性,保存了链表尾部元素,且对每个节点的结构,增加了`prev`属性保存前一个节点信息.
+
+下面看看`双向循环链表`,其跟双向链表的区别在于,对首个元素的`prev`设置为最后一个元素.最后一个元素的`next`设置为首个元素.因此,需要稍微调整代码结构.
+
+```js
+class LoopDoublyLinkedList extends DoublyLinkedList {
+  constructor() {
+    super()
+  }
+  push(element) {
+    super.push(element)
+    this.head.prev = this.tail
+    this.tail.next = this.head
+  }
+
+  insert(element, index) {
+
+  }
+
+  removeAt(index) {
+
+  }
+}
+```
+
+
 
 
 
