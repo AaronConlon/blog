@@ -20,7 +20,8 @@ intro: '几年前在学校使用 c++ 进行数据结构与算法的学习.学得
 - 双向链表
 - 循环链表
 - 排序链表
-- 链表模拟栈
+
+  
 
 
 
@@ -467,22 +468,123 @@ class LoopDoublyLinkedList extends DoublyLinkedList {
     super()
   }
   push(element) {
-    super.push(element)
-    this.head.prev = this.tail
-    this.tail.next = this.head
-  }
-
-  insert(element, index) {
-
+    const node = new DoublyNode(element)
+    if (this.count === 0) {
+      this.head = node
+      this.tail = node
+      node.prev = node
+      node.next = node
+    } else {
+      // 新节点的头和尾部改一下
+      node.next = this.head
+      node.prev = this.tail
+      this.tail.next = node
+      this.head.prev = node
+      this.tail = node
+    }
+    this.count++
   }
 
   removeAt(index) {
+    const node = this.getElementByIndex(index)
+    if (node) {
+      if (this.count === 1) {
+        this.clear()
+      } else {
+        let prev = node.prev
+        let next = node.next
+        prev.next = next
+        next.prev = prev
+        this.count--
+      }
+      return node
+    } else {
+      return undefined
+    }
+  }
+  insert(element, index) {
+    const node = new DoublyNode(element)
+    let targetNode = this.getElementByIndex(index)
+    if (targetNode === undefined) return false
 
+    // 确定了插入位置
+    if (index === 0) {
+      // 插入表头
+      node.next = this.head.next
+      node.prev = this.tail
+      this.head.prev = node
+      this.head = node
+      this.tail.next = node
+    } else {
+      node.prev = targetNode.prev
+      node.next = targetNode
+      targetNode.prev.next = node
+      targetNode.prev = node
+    }
+    this.count++
+  }
+  clear() {
+    this.head = undefined
+    this.tail = undefined
+    this.count = 0
+  }
+
+  toString() {
+    if (this.count === 0) return ''
+    let current = this.head
+    // console.log(current.element);
+    // console.log(current.next, this.head);
+    while (current !== this.tail) {
+      console.log(current.element);
+      current = current.next
+    }
+    console.log(current.element);
   }
 }
 ```
 
+双向循环链表的关键在于处理新节点的`prev`和`next`值,只要不是`空`链表,则每一个节点都有这两个值.
 
+接下来是`有序链表`.为了让节点之间保持顺序,我们可以修改`insert`方法,让插入的位置由内部计算得出.
+
+```js
+class SortedLinkedList extends LinkedList {
+  constructor() {
+    super()
+  }
+  insert(element, index=0) {
+    if(this.isEmpty()) {
+      return super.insert(element, 0)
+    }
+    // 自定义方法定义插入位置,用默认 index 代替 index 的效果.
+    const pos = this.getIndexNextSortedElement(element);
+    return super.insert(element, pos)
+  }
+  
+  getIndexNextSortedElement(element) {
+    let current = this.head;
+    let i = 0;
+    // 遍历,直接判断大小,也可以重新定义一个比较函数
+    for(;i < this.size() && current; i++) {
+      if(current.element < element) {
+        return i
+      }
+      current = current.next
+    }
+    return i
+  }
+}
+```
+
+其他方法都是继承的,不需要改变.由于插入的位置程序内部通过特定的比较算法去判断,因此实现了链表的有序性.
+
+在操作和查找一个有序的链表的场景之下,可以使用不同的查找算法提高查找效率.
+
+
+
+> 我想把这些数据结构都保存到自己的工具库中去,因此需要暂时停止下一步:集合和散列表的学习.转向 webpack5 和 babel7 ,用于创建良好的环境,支持自己保存工具库和自己的数据结构.
+>
+> 2021年01月13日00:27:40,晚安.
 
 
 
