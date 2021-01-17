@@ -190,11 +190,50 @@ loader 能将所有类型的文件通过特定插件和功能,将其转化为`we
 - test: 标识 loader 转换的目标文件,通常用正则表达式进行类型说明
 - use: 使用哪个或者哪些`loader`
 
+继续,那么如何处理我们前端开发绕不开的`CSS`问题?`webpack`如何处理这一切?`loader`可以吗?
+
 # CSS & SASS
 
+我个人喜欢`Sass`, 这项技术让我编写`css`的时候更轻松愉快.为了让`Sass`文件产生效果,需要做三件事:
+
+- sass转译成css
+- css转换成js
+- js注入页面DOM,构建style
+
+为了实现这一需求,我们需要三个`loader`:
+
+- style-loader: 让我们使用导入的语法,让css文件生效,详情: [style-loader | webpack](https://webpack.js.org/loaders/style-loader/)
+- css-loader: 
+- sass-loader
+
+以开发模式安装三个库之后,进行`webpack`配置:
+
+```js
+const path = require('path');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js', // 入口点
+  output: {
+    path: path.resolve(__dirname, 'out'), // 输出目录, path库的api
+    filename: 'my-first-webpack.bundle.js' // 输出构建文件名
+  },
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader' // 注意顺序,后者先进行处理
+        ]
+      }
+    ]
+  }
+};
+```
 
 
-# 
+
+
 
 
 
