@@ -202,8 +202,8 @@ loader 能将所有类型的文件通过特定插件和功能,将其转化为`we
 
 为了实现这一需求,我们需要三个`loader`:
 
-- style-loader: 让我们使用导入的语法,让css文件生效,详情: [style-loader | webpack](https://webpack.js.org/loaders/style-loader/)
-- css-loader: 
+- style-loader: 将 CSS 注入 DOM 中,详情: [style-loader | webpack](https://webpack.js.org/loaders/style-loader/)
+- css-loader:  解释 `JS`中使用`esModule`的语法导入`CSS`文件的行为,支持替换`CSS`文件中的`@import`和`url()`使用`import/require()`来解析.
 - sass-loader
 
 以开发模式安装三个库之后,进行`webpack`配置:
