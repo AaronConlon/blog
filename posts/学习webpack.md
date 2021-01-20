@@ -200,11 +200,19 @@ loader 能将所有类型的文件通过特定插件和功能,将其转化为`we
 - css转换成js
 - js注入页面DOM,构建style
 
-为了实现这一需求,我们需要三个`loader`:
+为了实现这一需求,我们需要三个关键`loader`:
 
 - style-loader: 将 CSS 注入 DOM 中,详情: [style-loader | webpack](https://webpack.js.org/loaders/style-loader/)
 - css-loader:  解释 `JS`中使用`esModule`的语法导入`CSS`文件的行为,支持替换`CSS`文件中的`@import`和`url()`使用`import/require()`来解析.详情:[css-loader | webpack](https://webpack.js.org/loaders/css-loader/)
-- sass-loader: 转译`SASS`文件
+- sass-loader: 转译`SASS`文件,这里提一下支持导入`node_modules`下的`CSS`文件,详情:[sass-loader | webpack](https://webpack.docschina.org/loaders/sass-loader/)
+
+以及安装多个依赖:
+
+```bash
+npm install sass-loader sass style-loader css-loader --save-dev
+```
+
+每一个`loader`基本上都支持特定的配置,如果默认配置不支持开发者需要的功能特性,则推荐阅读`loader`官方文档寻求帮助.
 
 以开发模式安装三个库之后,进行`webpack`配置:
 
@@ -231,13 +239,242 @@ module.exports = {
 };
 ```
 
+`Sass`到`CSS`,再到`JS`,最后注入到`HTML DOM`中,添加`Style`元素,内部是样式.当然,如果想要单独打包,不注入到`head`元素内的`style`内,而是通过常见的`css link`发挥效用也是可以的.
+
+# 缓存清理和插件
+
+在开发的时候,如果相关资源的名字不变,浏览器端可能会直接从硬盘读取之前缓存的资源.例如,我们每次更新代码,重新构建的出口文件都是`main.js`,那么浏览器端可能会使用缓存,而不是每次都使用最新构建的版本.
+
+在开发过程中,我们可能会经常看到一些带哈希值的文件名,例如:`main.jkdajkd2jdai2i.js`.
+
+`webpack`支持输出大包的文件的时候,为出口文件提供随机的`hash`值,作为最终构建文件的文件名的一部分,这一现象非常常见.
+
+让构建的输出文件名生成`hash`值并不复杂,可以直接在`webpack.conf.js`中配置.
+
+```js
+const path = require('path');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js', // 入口点
+  output: {
+    path: path.resolve(__dirname, 'out'), // 输出目录, path库的api
+    filename: 'main.[contenthash].js' // 输出构建文件名
+  },
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader'
+        ]
+      }
+    ]
+  }
+};
+```
+
+> webpack 的配置项丰富,也可以说成繁杂,仔细研究每一个配置项需要花费相应的时间和精力,必要时也许可以跳着看,看着形成一些印象,需要用的时候,再看也许能更快理解.
+
+现在,生成的`output`文件,会自动带上`hash`值,我们不必担心浏览器的缓存问题了.
+
+但是,看起来产生了新的问题.我们看看项目目录下的`index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>webpack learning</title>
+</head>
+<body>
+  <h1>Start...</h1>
+  <script src="./out/main.js"></script>
+</body>
+</html>
+```
+
+没什么问题,依然是引入了`output`打包生成的结果.只是由于我们自动生成了`hash`值,文件名变得难以记忆,且每次都不一样,这里必然是不能写死成`./out/main.js`.
+
+`webpack`提供了`plugins`插件机制来解决这一类问题.`nodejs`可以开发一些脚本帮助开发者自动处理这些枯燥琐碎的问题.
+
+请点开这里[Plugins | webpack](https://webpack.docschina.org/plugins/), `webpack`生态繁荣,插件繁多,这意味这绝大多数的日常开发问题,都能通过插件系统解决掉.如果你需要处理一些`webpack`构建相关的问题,不妨看看这里是否已经有了其他开发者提供的插件解决方案.
+
+回到硬编码的`./out/main.js`的问题,插件[HtmlWebpackPlugin | webpack](https://webpack.docschina.org/plugins/html-webpack-plugin/) 为我们提供了一个解决方案.
+
+先安装库:
+
+```bash
+npm install --save-dev html-webpack-plugin
+```
+
+这个插件能够很方便的创建自动链接了`bundles`的`HTML`文件.我们可以使用这个插件帮助我们自动更新具有`hash`值的`bundles`文件引用.在很多场景下都能看到例如`dist/index.html`的存在,且此文件内部`body`的最后面插入了一个`script`标签.如果你不止有一个`bunddle`,也能够都包含在`script`标签内.
+
+并且,还可以创建一个`template`模版文件以供使用.
+
+让我们来看看`webpack`的配置:
+
+```js
+const path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js', // 入口点
+  output: {
+    path: path.resolve(__dirname, 'out'), // 输出目录, path库的api
+    filename: 'main.[contenthash].js' // 输出构建文件名
+  },
+  plugins: [new HtmlWebpackPlugin({
+    // 几乎每个插件都支持丰富的配置,默认情况下,此插件创建的index.html非常简单,对此
+    // 开发者可以使用template文件代替,在template文件中添加通用代码,此插件会自动处理body最后的引入问题.
+    template: "./src/template.html"
+  })],
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader'
+        ]
+      }
+    ]
+  }
+};
+```
+
+# 开发模式问题
+
+切换不同的开发模式,为不同的开发模式添加不同的配置和针对性的功能非常常见.
+
+有时候,我们创建了`webpack.dev.js`和`webpack.prod.js`以及`webpack.common.js`三个配置文件.通过名字就能理解三个文件的作用,并且通过第三方库和特定的`package.json`定制`scripts`,我们可以共用`common`的配置,并且根据不同的命令,使用不同的配置文件进行打包.
+
+安装插件:
+
+```bash
+npm install --save-dev webpack-merge
+```
 
 
 
+现在创建这三个文件:
+
+```js
+// webpack.common.js
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js', // 入口点
+  plugins: [new HtmlWebpackPlugin({
+    template: "./src/template.html"
+  })],
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader'
+        ]
+      }
+    ]
+  }
+};
+
+// webpack.dev.js
+const path = require('path');
+const common = require("./webpack.common");
+const { merge } = require("webpack-merge")
+// 直接使用merge函数,合并两个配置对象
+module.exports = merge(common, {
+  mode: 'development',
+  output: {
+    path: path.resolve(__dirname, 'out'), // 输出目录, path库的api
+    filename: 'main.[contenthash].js' // 输出构建文件名
+  }
+}0;
+
+// webpack.prod.js
+const path = require('path');
+const common = require("./webpack.common");
+const { merge } = require("webpack-merge")
+module.exports = merge(common, {
+  mode: 'production',
+  output: {
+    path: path.resolve(__dirname, 'dist'), // 输出目录, path库的api
+    filename: 'main.js' // 输出构建文件名
+  }  
+});
+```
+
+就如同插件的名字关键字一样,`merge`合并多个配置.接着,直接修改`package.json`的`scripts`:
+
+```json
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.1",
+    "sass": "^1.32.4",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.15.0",
+    "webpack-cli": "^4.3.1",
+    "webpack-merge": "^5.7.3"
+  }
+}
+```
+
+现在,使用`npm run dev`和`npm run build`则能根据不同的模式进行构建了. `webpack`官方支持同时导出不同的配置,但个人看来,我更喜欢这种`merge`多文件的形式.
+
+# 热加载和开发服务器
+
+如果你想要在本地开发的时候使用热加载的功能,修改代码的同时,自动进行构建和浏览器端的刷新.`webpack`依然存在很多可选的方案.
+
+现在,来看看其中一种方案:
+
+`webpack-dev-server`.
+
+> 如果你有什么异常，请查看版本和官网说明，不同时间也许会有一定的差异。
+
+我没看过这个库的源码,不过这个库需要做的配置非常简单,效果却出奇的好.
+
+```json
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack serve --config webpack.dev.js --open", // 调用webpack-dev-server 打开浏览器
+    "build": "webpack --config webpack.prod.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.1",
+    "sass": "^1.32.4",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.15.0",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  }
+}
+```
+
+此时，修改`./src/index.js`立刻就能看到浏览器刷新，终端也会提示重新构建消息。
 
 
-
-# 
 
 
 
