@@ -474,7 +474,18 @@ module.exports = merge(common, {
 
 此时，修改`./src/index.js`立刻就能看到浏览器刷新，终端也会提示重新构建消息。
 
+# 处理图片
 
+`webpack`只能识别`json和JavaScript`,我们经常使用的图片,无法通过默认功能进行打包和对`output`文件进行跟进处理,例如无法自动转换打包后的`index.html`中的图片属性的地址.
 
+接下来使用的`loader`分别是:
 
+- html-loader
+- file-loader或者url-loader
+
+依然是使用`npm`进行安装,编辑`webpack.common.js`配置文件:
+
+```js
+
+```
 
