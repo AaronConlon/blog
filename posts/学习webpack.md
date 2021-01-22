@@ -179,7 +179,7 @@ eval("const a = () => console.log('a')\r\nconsole.log(a);\n\n//# sourceURL=webpa
 
 
 
-#  Loader
+#  LOADER
 
 为了对其他类型的文件进行处理和大包,`webpack`提供了`loader`功能.关于`loader`: 
 
@@ -486,6 +486,165 @@ module.exports = merge(common, {
 依然是使用`npm`进行安装,编辑`webpack.common.js`配置文件:
 
 ```js
+const path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
+module.exports = {
+  entry: './src/index.js', // 入口点
+  plugins: [new HtmlWebpackPlugin({
+    template: "./src/template.html"
+  })],
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader'
+        ]
+      },
+      {
+        test: /\.html$/i,
+        // html文件只配置一个loader
+        loader: 'html-loader'
+      },
+      {
+        test: /\.(jpg|png|gif|jpeg|svg)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            outputPath: 'imgs',
+            publicPath: 'cdn.example.com/static/imgs'
+          }
+        }
+      }
+    ]
+  }
+};
 ```
 
+针对`html`文件,使用`html-loader`进行处理,这个`loader`能对`html`中的资源进行自动化的处理,使得`js`注入的图片资源,`html-loader`将`img`中的`src`属性值,通过导入资源的方式引入.
+
+然后,我们需要配置一个新的`loader`去处理这些引入的资源.
+
+针对不同图片资源,使用`file-loader`进行处理,使用这个`loader`能让我们可以在`module`中使用`esModule`或者`commonjs`的方式导入图片资源,然后通过`js`注入到`html`文件中.
+
+针对性的`options`配置,可以实现开发者需要的效果,默认打包之后的资源名变成`hash`值,扩展名不变.我们可以设置增加一些名字,虽然上述配置中没有.
+
+上述配置中,配置了打包之后,保存资源的输出目录的名字,和注入到最终`html`文件中.
+
+> 每一个`loader`都有很多额外的可选配置,可以实现更多需求.
+
+有时候,你可能会听到将图片资源转为`base64`编码字符串,直接写入`html`中去的说法.
+
+> 将图片转成`base64`可以减少总体图片资源单独的`http`请求,这是一种优化速度的方式.
+
+这个时候,则可以使用`url-loader`.安装之后,可以直接配置`webpack.common.js`:
+
+```js
+const path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js', // 入口点
+  plugins: [new HtmlWebpackPlugin({
+    template: "./src/template.html"
+  })],
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader'
+        ]
+      },
+      {
+        test: /\.html$/i,
+        // html文件只配置一个loader
+        loader: 'html-loader'
+      },
+      {
+        test: /\.(jpg|png|gif|jpeg|svg|ico)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 8192,
+            outputPath: 'imgs',
+            publicPath: 'cdn.example.com/static/imgs'
+          }
+        }
+      }
+    ]
+  }
+};
+```
+
+将`file-loader`直接替换成`url-loader`,唯一需要在意的是资源大小`limit`的设置,默认`fallback`是让超过`limit`的资源,使用`file-loader`处理,且配置可以传递过去,上面的`outputPath`等依然对`file-loader`生效.
+
+`url-loader`还可以单独指定回调的`loader`,如果你不想用`file-loader`,想用例如`responsive-loader`的话也是可以的.
+
+# 多入口设置
+
+之前谈论的配置中,一直使用单一的`entry point`,默认从`src/index.js`作为起点.
+
+某些场景下,如果你需要多个`entry point`也是可以的 .
+
+```js
+// webpack.common.js
+const path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: {
+    // 多个,每个都让key作为最后打包注入的变量name
+    main: './src/index.js',
+    other: './src/other.js'
+  }, // 入口点
+  // ...other
+};
+// 修改 webpack.dev.js
+const path = require('path');
+const common = require("./webpack.common");
+const {merge} = require("webpack-merge")
+
+module.exports = merge(common, {
+  mode: 'development',
+  output: {
+    publicPath: '',
+    path: path.resolve(__dirname, 'out'), // 输出目录, path库的api
+    filename: '[name].[contenthash].js' // 输出构建文件名
+  }
+});
+```
+
+现在,打包的`index.html`内:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webpack learning</title>
+  </head>
+
+  <body>
+    <h1>Start......</h1>
+    <script src="main.3566bb7a2fe712fb86ed.js"></script>
+    <script src="other.5cb71429ff79cddc2f96.js"></script>
+  </body>
+
+</html>
+```
+
+有时候,并不想让所有内容都写入`main.balabala.js`中,可以将独立的一部分打包到另一个入口文件,这也是一种需求衍生的解决方案.
+
+# 优化 CSS 引入方案
+
+之前我们通过`import`或者`require`的方式引入`css`,并且用`js`的方式注入到最终`DOM`中去,创建`style`的`tag`.
+
+有一个问题.
+
+打包的`js`文件放在`body`的底部,那么`css`效果势必在最后才体现出来.
+
+让我们回顾一下直接通过`link`引入单独的`css`的流程.
