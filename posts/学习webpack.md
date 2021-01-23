@@ -639,12 +639,55 @@ module.exports = merge(common, {
 
 有时候,并不想让所有内容都写入`main.balabala.js`中,可以将独立的一部分打包到另一个入口文件,这也是一种需求衍生的解决方案.
 
+> 多个单独的`link`或者`script`标签下,浏览器并行下载多个文件,时间取决于最大的那个文件,有时候可以对此进行优化速度.后续优化部分再提.
+
 # 优化 CSS 引入方案
 
 之前我们通过`import`或者`require`的方式引入`css`,并且用`js`的方式注入到最终`DOM`中去,创建`style`的`tag`.
 
 有一个问题.
 
-打包的`js`文件放在`body`的底部,那么`css`效果势必在最后才体现出来.
+打包的`js`文件放在`body`的底部,那么`css`效果势必在最后才体现出来.并且`css`文件可以缓存,既减小了`bundle`的大小,又提高页面渲染的速度.
 
 让我们回顾一下直接通过`link`引入单独的`css`的流程.
+
+哦不,是来回顾一下浏览器渲染原理,我找了一篇非常好的博客文章.
+
+[深入浅出浏览器渲染原理 · Issue #51 · ljianshu/Blog](https://github.com/ljianshu/Blog/issues/51)
+
+
+
+```js
+// webpack.prod.js
+// 生产模式,打包成单独的css文件
+const path = require('path');
+const common = require("./webpack.common");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const { merge } = require("webpack-merge")
+
+module.exports = merge(common, {
+  mode: 'production',
+  output: {
+    path: path.resolve(__dirname, 'dist'), // 输出目录, path库的api
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "css/[name].[hash].css",
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          MiniCssExtractPlugin.loader, // 3. extract css into files
+          'css-loader', // 2. turns css into commonjs
+          'sass-loader' // 1. turns sass into css
+        ]
+      }
+    ]
+  }
+});
+```
+
