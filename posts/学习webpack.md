@@ -655,7 +655,7 @@ module.exports = merge(common, {
 
 [深入浅出浏览器渲染原理 · Issue #51 · ljianshu/Blog](https://github.com/ljianshu/Blog/issues/51)
 
-
+现在,我们知道了,如果你的`css`不是非常小部分的内容的话,单独引入的优势`css`脱离整体,单独下载,能利用到浏览器多线程的优势,减少资源拉取的时间.
 
 ```js
 // webpack.prod.js
@@ -690,4 +690,8 @@ module.exports = merge(common, {
   }
 });
 ```
+
+可能会引发一些问题,例如单独的`css`文件太多,浏览器产生很多`http`请求,服务器方面需要做出非常多的响应,在用户量很大的情况下,也许不是一个良好的选择.
+
+这个时候,合并一些`css`到一个`css`文件,让整体文件数量减少,单文件变大,只要比`chunk`包小,加载时间一般就不会超过主要的`js`文件.
 
