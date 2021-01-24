@@ -695,3 +695,117 @@ module.exports = merge(common, {
 
 这个时候,合并一些`css`到一个`css`文件,让整体文件数量减少,单文件变大,只要比`chunk`包小,加载时间一般就不会超过主要的`js`文件.
 
+
+
+> production 模式默认对构建内容进行压缩,开发模式则无所谓,一般不压缩.
+
+
+
+# 兼容性选择
+
+**兼容CSS**:
+
+针对不同浏览器厂商的实现,我们可以用`postcss-loader`和`autoprefixer`增加样式前缀来实现一定程度的兼容.
+
+```bash
+# 安装
+$ npm install --save-dev postcss-loader autoprefixer
+```
+
+配置`webpack.prod.js`:
+
+```js
+const path = require('path');
+const common = require("./webpack.common");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const { merge } = require("webpack-merge")
+
+module.exports = merge(common, {
+  mode: 'production',
+  output: {
+    path: path.resolve(__dirname, 'dist'), // 输出目录, path库的api
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "css/[name].[hash:8].css",
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [
+          MiniCssExtractPlugin.loader, // 4. extract css into files
+          'css-loader', // 3. turns css into commonjs
+          'postcss-loader', // 2. autoprefixer
+          'sass-loader' // 1. turns sass into css
+        ]
+      }
+    ]
+  }
+});
+```
+
+先将`sass`转译,再用`postcss-loader`增加前缀.
+
+另外创建`postcss.conf.js`指定插件为`autoprefixer`:
+
+```js
+// postcss.conf.js
+module.exports = {
+  plugins: [
+    require('autoprefixer')
+  ]
+}
+```
+
+再修改`package.json`,增加浏览器支持度配置:
+
+```json
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "sideEffects": [
+    "*.css",
+    "*.sass"
+  ],
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "scripts": {
+    // 这里插一嘴,windows下不支持直接使用 rm 命令,因为scripts部分是给 Unix 系统写的,删除文件夹我使用了rimraf,先用npm install --save-dev rimraf安装. 
+    "start": "webpack serve --config webpack.dev.js",
+    "dev": "rimraf out && webpack --config webpack.dev.js",
+    "build": "rimraf dist && webpack --config webpack.prod.js",
+    "clean": "rimraf dist && rimraf out"
+  }  
+}
+
+```
+
+**兼容JS**:
+
+还是因为不同浏览器厂商的支持度和实现不一的问题,且如果你想使用`ECMAScript`比较新的语法,而类似`IE`浏览器不支持,或者其他浏览器暂时不支持.
+
+这时候需要使用类似`babel`这些工具对我们的`js`代码进行处理,增加`polyfill`.
+
+> [Babel Doc](https://www.babeljs.cn/docs/): Babel 是一个工具链，主要用于将 `ECMAScript 2015+`版本的代码转换为向后兼容的JavaScript 语法，以便能够运行在当前和旧版本的浏览器和其他环境中.
+
+安装`babel`依赖:
+
+```bash
+$ npm install --save-dev @babel/core @babel/preset-env @babel/plugin-transform-runtime babel-loader
+$ npm install @babel/runtime @babel/runtime-corejs3
+```
+
+
+
+# 优化
+
+- 使用`ParallelUglifyPlugin`代替默认压缩插件
+- 使用`swc`代替`babel`进行编译
