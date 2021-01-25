@@ -306,10 +306,12 @@ module.exports = {
 先安装库:
 
 ```bash
-npm install --save-dev html-webpack-plugin
+npm install --save-dev html-webpack-plugin@next
 ```
 
 这个插件能够很方便的创建自动链接了`bundles`的`HTML`文件.我们可以使用这个插件帮助我们自动更新具有`hash`值的`bundles`文件引用.在很多场景下都能看到例如`dist/index.html`的存在,且此文件内部`body`的最后面插入了一个`script`标签.如果你不止有一个`bunddle`,也能够都包含在`script`标签内.
+
+
 
 并且,还可以创建一个`template`模版文件以供使用.
 
@@ -822,13 +824,19 @@ $ npm install @babel/runtime @babel/runtime-corejs3
 
 ```json
 module.exports = {
-  presets: ["@babel/preset-env"],
-  plugins: [
+  presets: [
     [
-      "@babel/plugin-transform-runtime",
+      "@babel/preset-env",
       {
+        "useBuiltIns": "usage",
+        "targets": "chrome 72", // 一个例子,不配置则使用 browerslist 的配置
         "corejs": 3 // version 3
       }
+    ]
+  ],
+  plugins: [
+    [
+      "@babel/plugin-transform-runtime"
     ]
   ]
 }
@@ -841,6 +849,8 @@ module.exports = {
 > 我觉得团队开发只应该使用纳入年度版本中的提案,暂未纳入年度版本中的特性存在着不会成为`js`一部分的可能性.
 
 # 优化
+
+这是一个很有意义的问题,需要我进一步配合项目进行深入学习,以下是我想到的一些知识点.
 
 - 使用`ParallelUglifyPlugin`代替默认压缩插件
 - 使用`swc`代替`babel`进行编译
