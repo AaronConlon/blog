@@ -794,6 +794,8 @@ module.exports = {
 
 这时候需要使用类似`babel`这些工具对我们的`js`代码进行处理,增加`polyfill`.
 
+**babel**转换的是语法,而不是`API`,只有引入了语法`polyfill`才能将新的`API`代码进行转换,让指定范围的运行环境稳定运行我们的代码.
+
 > [Babel Doc](https://www.babeljs.cn/docs/): Babel 是一个工具链，主要用于将 `ECMAScript 2015+`版本的代码转换为向后兼容的JavaScript 语法，以便能够运行在当前和旧版本的浏览器和其他环境中.
 
 安装`babel`依赖:
@@ -810,16 +812,38 @@ $ npm install @babel/runtime @babel/runtime-corejs3
 - .babelrc.json
 - ...
 
-如果不想单独创建一个配置文件,则也可以直接在`package.json`里添加一些配置.
+`@babel/preset-env`是`babel`推荐的预设功能,内置了常用插件,支持了`polyfill`能力,用户可以根据`target`指定环境去使用对应的插件.
+
+例如`target`是最新版的`chrome`,你会比支持`ie11`少用许多`polyfill`.
+
+`core.js`是一个`JavaScript标准库`的`polyfill`.`@babel/preset-env`依赖于`core.js`.
+
+推荐单独设置一个`.babel.config.js`文件,不适用`json`是因为没法写注释.
 
 ```json
-
+module.exports = {
+  presets: ["@babel/preset-env"],
+  plugins: [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3 // version 3
+      }
+    ]
+  ]
+}
 ```
 
 
+
+也许你听过`babel`针对`stage-x`的支持度设置,但是在`babel7`后`preset-env`已经支持完全替换`babel-preset-es2015`~`babel-preset-latest`.
+
+> 我觉得团队开发只应该使用纳入年度版本中的提案,暂未纳入年度版本中的特性存在着不会成为`js`一部分的可能性.
 
 # 优化
 
 - 使用`ParallelUglifyPlugin`代替默认压缩插件
 - 使用`swc`代替`babel`进行编译
 - 使用`cdn`对部分资源进行引用,减小打包的大小.
+- 使用缓存插件,减少不必要的重复打包.
+- 使用动态导入机制,减小打包大小.
