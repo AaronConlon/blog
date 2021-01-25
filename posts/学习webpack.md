@@ -803,9 +803,23 @@ $ npm install --save-dev @babel/core @babel/preset-env @babel/plugin-transform-r
 $ npm install @babel/runtime @babel/runtime-corejs3
 ```
 
+`babel7`支持多种配置类型,比如:
+
+- .babelrc
+- .babelrc.js
+- .babelrc.json
+- ...
+
+如果不想单独创建一个配置文件,则也可以直接在`package.json`里添加一些配置.
+
+```json
+
+```
+
 
 
 # 优化
 
 - 使用`ParallelUglifyPlugin`代替默认压缩插件
 - 使用`swc`代替`babel`进行编译
+- 使用`cdn`对部分资源进行引用,减小打包的大小.
