@@ -1,12 +1,5 @@
 import React from "react";
 import Link from "next/link";
-// import styles from "../styles/index.module.sass";
-// // @ts-ignore
-// import GithubStatus from "../components/GithubStatus.tsx";
-// // @ts-ignore
-// import Friends from "../components/Friends.tsx";
-// // @ts-ignore
-// import Avatar from "../components/Avatar.tsx";
 import { GetStaticProps } from "next";
 import {
   Box,
@@ -32,9 +25,7 @@ export default function Home({ posts }: { posts: postProps[] }) {
   React.useEffect(() => {
     if (currentTag !== "") {
       setPostsBackup(
-        postsBackup.filter((post) =>
-          post.tags.some((tag) => tag === currentTag)
-        )
+        postsBackup.filter((post) => post.tags.some((tag) => tag === currentTag))
       );
     } else {
       setPostsBackup(posts);
