@@ -123,7 +123,7 @@ module.exports = {
 yarn add -D @swc/core swc-loader
 ```
 
-现在,继续更新`webpack.config.js`文件内容:
+现在,继续更新`pacage.json`文件内容:
 
 ```js
 {
@@ -147,7 +147,7 @@ yarn add -D @swc/core swc-loader
   "scripts": {
     "dev": "webpack --config webpack.config.js"
   },
-  "eslintIgnore": [
+  "eslintignore": [
     "*.js"
   ]
 }
