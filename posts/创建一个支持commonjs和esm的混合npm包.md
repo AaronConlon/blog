@@ -101,3 +101,187 @@ intro: '如何创建一个同时支持 esm 和 commonjs 两种规范的混合包
 
 上述的`exports`属性指定了不同规范的加载入口点.
 
+但是,如果我们在`package.json`中指定了`type`的值为`module`,并且为`ESM`和`Commonjs`定义不同的入口点,并且入口点代码中使用了`require`引入其他的模块,则将会失败,因为子模块是根据`type`的值来约定文件内部规范的.
+
+
+
+换句话说,如果一个`Commonjs`包从`./dist/cjs/index.js`引入了此模块,但是`./dist/cjs/index.js`却通过`require`引入其他模块,则下一级测引入内容将根据`package.json`的`type`值进行判定模块所遵循的规范是什么.
+
+显而易见,当前`type`等于`module`,则下一层级是无法使用`ESM`禁止的`require`字段,最终引起错误.
+
+
+
+### 最终方案
+
+ok,让我们重新捋一遍目标需求:
+
+- 仅使用一份基础源码
+- 易于构建
+- 生成原生的 ESM 代码
+- 在不需要更多额外工具的情况下使用
+- 生成同时支持`ESM`和`Commonjs`规范的`hybird`包
+
+
+
+👇 下面进行实践演示:
+
+以下是项目结构:
+
+```bash
+.
+├── clear.js
+├── dist
+│   ├── cjs
+│   └── mjs
+├── fixup.js
+├── jest.config.js
+├── package-lock.json
+├── package.json
+├── readme.md
+├── src
+│   └── index.ts
+├── test
+│   └── example.test.ts
+├── tsconfig-base.json
+├── tsconfig-cjs.json
+└── tsconfig.json
+```
+
+由于源码使用`typescript`进行编写,这里简述`typescript`的配置文件:
+
+- tsconfig.json
+- tsconfig-base.json
+- tsconfig-cjs.json
+
+```json
+// tsconfig.json, 针对 esm 规范
+{
+  "extends": "./tsconfig-base.json", 
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "outDir": "dist/mjs"
+  }
+}
+// tsconfig-cjs.json, 针对 Commonjs
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist/cjs",
+    "target": "ES6"
+  }
+}
+// tsconfig-base.json 共享配置
+{
+  ...
+}
+```
+
+
+
+**核心代码**为: `src/index.ts`:
+
+```typescript
+function arrayShuffle(params: any[]) {
+  let len = params.length;
+  while (len > 1) {
+    const index = Math.floor(Math.random() * len--);
+    // eslint-disable-next-line no-param-reassign
+    [params[len], params[index]] = [params[index], params[len]];
+  }
+  return params;
+}
+
+export { arrayShuffle };
+```
+
+简单导出了一个数组的工具函数,对数组元素进行重新排序.
+
+对这份源码进行编译构建,一份构建为`ESM`模块,一份构建为`Commonjs`模块.以下是`package.json`中关键的构建`scripts`:
+
+```json
+{
+    "scripts": {
+        "build": "node clear.js && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && node fixup.js"
+    }
+}
+```
+
+为了让`windows`用户获得一致性体验,这里不使用`rm`命令对`dist`进行清理.
+
+以下是上述内容提及的两个脚本:
+
+- clear.js: 清理`dist`内部文件
+- fixup.js: 为构建好的`dist`内不同目录下的`package.json`设置不同的`type`属性值.
+
+`fixup.js` 的作用是创建`dist/cjs/package.json`和`dist/mjs/package.json`文件,为两种引入方案定义内部`type`.
+
+```json
+// dist/cjs/package.json
+{
+    "type": "commonjs"
+}
+// dist/mjs/package.json`
+{
+    "type": "module"
+}
+```
+
+关于`package.json`文件:
+
+```json
+{	
+  ...
+  "scripts": {
+    "test": "jest",
+    "build": "node clear.js && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && node fixup.js",
+    "lint": "eslint ./src/*"
+  },
+ 	...
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/mjs/index.js"
+    }
+  }
+}
+
+```
+
+不必添加`type`属性,在使用`fixup`脚本的时候,我们将它写入了不同目标规范的子目录内的`package.json`中了,另外还定义了一个导出映射对象:
+
+```json
+"exports": {
+    ".": {
+        "import": "./dist/mjs/index.js",  // ESM 
+        "require": "./dist/cjs/index.js"	// Commonjs
+    }
+}
+```
+
+## 总结
+
+综上所述,我们最终构建了一个`hybird`包,同时支持不同开发者的不同引入方案.
+
+开发者可以选择`import`或者`require`两种方案引入我们的包.
+
+```js
+// ESM
+import { arrayShuffle } from 'shuffle-my-array';
+// 或者
+// commonjs
+const { arrayShuffle } = require('shuffle-my-array);
+```
+
+参考此方案,你可以轻松使用`ESNext`或者`Typescript`进行开发编写一份源码,最终构建特定的`hybird package`.
+
+
+
+## 参考文章
+
+- [How to Create a Hybrid NPM Module for ESM and CommonJS. | SenseDeep](https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html)
+- [Get Ready For ESM. JavaScript Modules will soon be a… | by Sindre Sorhus | Jan, 2021 | 🦄 Sindre Sorhus’ blog](https://blog.sindresorhus.com/get-ready-for-esm-aa53530b3f77)
+- [Hybrid npm packages (ESM and CommonJS)](https://2ality.com/2019/10/hybrid-npm-packages.html)
+- 源码: [youyiqin/array_shuffle: It's a awesome function to help you to reorder your array elements.](https://github.com/youyiqin/array_shuffle)
+
