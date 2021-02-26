@@ -105,7 +105,7 @@ intro: '如何创建一个同时支持 esm 和 commonjs 两种规范的混合包
 
 
 
-换句话说,如果一个`Commonjs`包从`./dist/cjs/index.js`引入了此模块,但是`./dist/cjs/index.js`却通过`require`引入其他模块,则下一级测引入内容将根据`package.json`的`type`值进行判定模块所遵循的规范是什么.
+换句话说,如果一个`Commonjs`包从`./dist/cjs/index.js`引入了此模块,但是`./dist/cjs/index.js`却通过`require`引入其他模块,如此一来下一级的子模块引入的内容将根据`package.json`的`type`值进行判定模块所遵循的规范是什么.
 
 显而易见,当前`type`等于`module`,则下一层级是无法使用`ESM`禁止的`require`字段,最终引起错误.
 
