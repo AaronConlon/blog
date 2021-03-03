@@ -8,9 +8,9 @@ coverImg: 'https://images.unsplash.com/photo-1614103192137-835c33cd0685?crop=ent
 intro: '在 JavaScript 的世界里,存在着许多值得深入探讨和学习的知识,今天先来看看 undefined 和 null 的特性和对比.'
 ---
 
-许多编程语言都有`空`的概念,并使用`null`关键字表示它,表示这个变量当前并未存在指向,换句话也可以说是这个变量未初始化.
+许多编程语言都有`空值`的概念,并使用`null`关键字表示它,表示这个变量当前并未存在指向,换句话也可以说是这个变量未初始化.
 
-但是在`JavaScript`的世界里,存在着两种`空`的表示方法:`undefined`和`null`.本文简单描述了它们的区别以及各自适宜的使用场景.
+但是在`JavaScript`的世界里,存在着两种`空值`的表示方法:`undefined`和`null`.本文简单描述了它们的区别以及各自适宜的使用场景.
 
 # 1. Undefined vs. null
 
