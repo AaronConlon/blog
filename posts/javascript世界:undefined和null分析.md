@@ -79,9 +79,96 @@ const obj = {};
 obj?.prop // undefined
 ```
 
+> optional chaining 中只要出现异常,一律返回 undefined.
+
+比如: `val?.name`, 无论 val 是 `null` 还是 `undefined`,都返回 undefined.
+
 ## 3. null 出现场景
 
+`Object`的原型也是一个对象,只是此对象的原型值为`null`:
 
+```js
+Object.getPrototypeOf(Object.prototype) // null
+```
+
+正则表达式匹配不到结果,其值为`null`:
+
+```js
+/a/.exec('x') // null
+```
+
+另外,`JSON`规范不支持值为`undefined`,如下转换将会忽略部分属性.
+
+> JSON 语义中存在表示空值的`null`,不存在`undefined`这个类型.
+
+```js
+JSON.stringify({
+  a: undefined,
+  b: null
+})
+// {"b": null}
+```
+
+## 4. undefined 和 null 的特殊对待方式
+
+比如我们有一个简单函数如下:
+
+```js
+function foo(name='balabala') {
+  return name;
+}
+foo(); // balabala
+foo(null); // null 传入 null,优先级高于默认值
+foo(undefined); // balabala,传入 undefined 相当于传入原始值,优先级低于默认值
+```
+
+在对象解构赋值中的表现也一样:
+
+```js
+const [a = 'a'] = [];
+// a => 'a'
+const [b = 'b'] = [undefined];
+// b => 'b'
+const {prop: c = 'c'} = {}
+// c => 'c'
+const {prop: d = 'd'} = {prop: undefined}
+// d => 'd'
+```
+
+如果赋值为`null`:
+
+```js
+const [b = 'b'] = [null];
+// b => null
+const {prop: d = 'd'} = {prop: null}
+// d => null
+```
+
+在空值合并的操作中,`??`让我们在值为`null`或者`undefined`的时候使用默认值.
+
+```js
+null ?? 1 
+// 1
+undefined ?? 1 
+//1
+```
+
+那么在空值合并赋值时,有什么表现呢?
+
+```js
+function setName(obj) {
+  obj.name ??= '(Unnamed)';
+  return obj.name;
+}
+setName({
+  name: null
+})
+// '(Unnamed)'
+  setName({
+  name: undefined
+})
+// '(Unnamed)'
+```
 
 
 
