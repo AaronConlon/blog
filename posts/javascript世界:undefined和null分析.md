@@ -172,18 +172,34 @@ setName({
 
 ## 5. 处理 undefined 和 null
 
-举个例子,如果我们想要定义一个`file.title`属性,并且始终存在一个字符串值.因此,`undefined`和`null`都应该是禁止使用的.
+`undefined`和`null`都不用做实际值.举个🌰,如果我们想要定义一个`title`属性,并且始终存在一个字符串值.因此,`undefined`和`null`都应该被一致处理.
+
+方案 1:
 
 ```js
-function createFile(title) {
+function createTitle(title) {
   if(title === undefined || title === null) {
     throw new Error('`title` must not be nullish');
   }
-  // ...
+  // 或者
+  if(!title) {
+    // title 赋值
+    title = 'something'
+  }
 }
 ```
 
+方案 2:
 
+```js
+function createTitle(title) {
+  title ??= 'default'
+}
+```
+
+`空值合并运算符`相对来说,可以对`undefined`和`null`进行一致性处理,并且更健壮和清晰.
+
+我们可以在日常的开发中更多的使用空值合并运算符.
 
 
 
