@@ -161,26 +161,61 @@ function multiply(a, b) {
 
 ### 3.4 转换为数组索引(Array indices)
 
-- ToLength() 主要用于字符串索引计算
+- `ToLength()` 主要用于字符串索引计算
   - 此抽象方法是`ToIndex`抽象方法的辅助方法
   - 其值范围是0 ≤ ? ≤ Math.MAX_SAVE_INTEGER
-- 
+- `ToIndex()` 主要用于类数组索引计算
+  - 与 ToLength 主要区别在于,此抽象方法在索引越界的时候抛出异常
+  - 其值范围是0 ≤ ? ≤ Math.MAX_SAVE_INTEGER
+- `ToUint32()` 用于数组索引计算
+  - 其值范围是0 ≤ ? < 2^32-1
 
+### 3.5 转换为类数组对象的元素
 
+如果你要为`类数组`对象的某个元素设置值,将可能使用如下的抽象方法:
 
-加法操作对不同类型的数据将进行三种类型的转换,最终将得到一致的数据类型.最终数据都将转换为原始数据类型.
+- `ToInt8()`
+- `ToUint8()`
+- `ToUint8Clamp()`
+- `ToInt16()`
+- `ToUint16()`
+- `ToInt32()`
+- `ToUint32()`
+- `ToBigInt64()`
+- `ToBigUint64()`
 
-`{} + {}`将对两个空对象进行类型转换,因为`object`不是`原始数据(primitive)`类型.
+例如:
 
-> TC39: "负责将对象转换为原始数据类型的抽象函数是`ToPrimitive()`".
+```js
+let uint16 = new Int16Array;
+uint16 = Int16Array.from('12345');
 
-函数如其名,此函数的签名如下:
-
-```javascript
-ToPrimitive(input, PreferredType?)
+console.log(uint16);
+// expected output: Int16Array [1, 2, 3, 4, 5]
 ```
 
-`input`易于理解,可选的`PreferredType(首选类型)`则接受一个用于表示期待转换结果的原始类型标识字符串,最终返回一个原始类型值.
+此处的字符串`12345`在 `from`函数内部进行迭代,并且进行隐式的类型转换,最终为`Int16Array`对象设置了 5 个元素值.
+
+## 4. ECMAScript 规范示例解读
+
+`ECMAScript`规范明确提供了`JavaScript`的所有实现算法详细设计.大多数的`抽象方法`并没有在`JavaScript `引擎中实现,但是依然有少数抽象方法可以近乎理解为`JavaScript`引擎中对应的部分函数实现.举个例子,如下内容是`ECMAScript`规范的一部分:
+
+- Spec: If Type(value) is String
+  - JavaScript: `if (TypeOf(value) === 'string')` (very loose translation, defined below)
+- Spec: If IsCallable(method) is true
+  - JavaScript: `if (IsCallable(method))` (defined below)
+- Spec: Let numValue be ToNumber(value)
+  - JavaScript: `let numValue = Number(value)`
+- Spec: Let isArray be IsArray(O)
+  - JavaScript: `let isArray = Array.isArray(O)`
+- Spec: If O has a [[NumberData]] internal slot
+  - JavaScript: `if ('__NumberData__' in O)`
+- Spec: Let tag be Get(O, @@toStringTag)
+  - JavaScript: `let tag = O[Symbol.toStringTag]`
+- Spec: Return the string-concatenation of "[object ", tag, and "]".
+  - JavaScript: `return '[object ' + tag + ']';`
+
+> 一开始阅读规范文档令人感觉很痛苦,但是慢慢坚持下来便有渐入佳境的感觉.
 
 
 
