@@ -148,6 +148,22 @@ function multiply(a, b) {
 
 - 括号操作
 - 对象字面量的计算属性
+- in 操作符的`left-hand side`,用于判定`in` 的结果
+- Object 的几个需要访问`value`和遍历`key`相关的函数
+  - Object.fromEntries
+  - Object.defineProperty
+  - Object.getOwnPropertyDescriptor
+  - Object.prototype.hasOwnProperty
+  - Object.prototype.propertyIsEnumerable
+- Reflect 对象的相关方法
+
+
+
+### 3.4 转换为数组索引(Array indices)
+
+- ToLength() 主要用于字符串索引计算
+  - 此抽象方法是`ToIndex`抽象方法的辅助方法
+  - 其值范围是0 ≤ ? ≤ Math.MAX_SAVE_INTEGER
 - 
 
 
