@@ -15,15 +15,15 @@ intro: '你好,TC39.请问 JavaScript 世界中的对象转换是如何实现的
 
 ## 1. 起始
 
-`JavaScript` 是优秀的动态语言,数据类型的转换在日常编程开发中十分常见.本文将结合一些实际问题和个人疑惑对`类型转换`进行学习和解析,尽量深入`ECMAScript规范`,追索玄机.
+`JavaScript` 是优秀的动态语言,数据类型的转换在日常编程开发中十分常见.本文将结合一些实际问题和个人疑惑对`类型转换`进行学习和解析,尽量从`ECMAScript规范`出发,学习类型转换的设计理念和实现逻辑.
 
 > 如果喜欢,不妨亲自阅读 [ECMAScript® 2022 Language Specification](https://tc39.es/ecma262/multipage/)
 
 ## 2. 何为类型转换?
 
-首先我们要明确一点,`JavaScript`数据分为:
+首先我们要明确`JavaScript`数据分为:
 
-- 原始数据类型(without methods)
+- 原始数据类型(primitive)
   - undefined
   - null
   - string
@@ -55,7 +55,7 @@ Number('3') * Number('2')
 
 此时,字符串之间的乘法得出了我们想要的结果.究其实质是因为解释器对字符串进行了`强制类型转换(coercion)`.
 
-JavaScript 语言初期并没有异常捕获(`exceptions`)的规范设计,这也是为什么你会看到现今解释器对如下代码的解释.
+JavaScript 语言初期并没有设计异常捕获(`exceptions`),这也是为什么你会看到现今解释器对如下代码的解释.
 
 ```js
 1 / true // 1
@@ -81,7 +81,7 @@ new 1 // except error: 1 is not a constructor
 
 
 
-## 3. ECMAScript 的规范是如何使用类型转换函数的?
+## 3. ECMAScript 规范是如何定义类型转换的?
 
 先来看看如下一个使用`Typescript`编写的函数:
 
@@ -103,17 +103,20 @@ function multiply(a, b) {
 }
 ```
 
-在解释器内部可以通过如下`抽象操作`函数将目标数据进行类型强制转换:
+当语句需要执行强制转换的时候,如下`抽象操作`函数将目标数据转换为预期的原始数据类型或者`Object`:
 
 - ToBoolean()
 - ToNumber()
+- ToBumeric(), 兼顾 number 和 BigInt
 - ToBigInt()
 - ToString()
 - ToObject()
 
-> 上述函数是`ECMAScript`定义的函数,用于描述伪代码,便于编写规范,我们无法在 JavaScript 中调用它.
+> [抽象操作](https://tc39.es/ecma262/#sec-abstract-operations)是在ECMAScript规范中定义的函数,它们的定义是为了简洁地编写规范.JavaScript引擎不必将它们作为单独的函数在引擎中实现.不能直接从JavaScript调用它们.但是引擎实现了类似`Number()`这样的显示转换函数.
 
+对于需要被强制转化为`numeric`类型数据的值来说,将会用到`ToNumeric`抽象操作.转换的结果可能是`number`类型或者`BigInt`类型.
 
+如若需要将`x`转换为整形,则使用抽象操作`ToInteger`.
 
 
 
@@ -121,7 +124,7 @@ function multiply(a, b) {
 
 `{} + {}`将对两个空对象进行类型转换,因为`object`不是`原始数据(primitive)`类型.
 
-> TC39: "负责将对象转换为原始数据类型的函数是`ToPrimitive()`".
+> TC39: "负责将对象转换为原始数据类型的抽象函数是`ToPrimitive()`".
 
 函数如其名,此函数的签名如下:
 
@@ -136,3 +139,6 @@ ToPrimitive(input, PreferredType?)
 ## references
 
 - [Type coercion in JavaScript](https://2ality.com/2019/10/type-coercion.html)
+- [怎样阅读 ECMAScript 规范？ - SegmentFault 思否](https://segmentfault.com/a/1190000019240609)
+- [读懂 ECMAScript 规格 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2015/11/ecmascript-specification.html)
+
