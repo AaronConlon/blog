@@ -200,28 +200,107 @@ console.log(uint16);
 
 `ECMAScript`规范明确提供了`JavaScript`的所有实现算法详细设计.大多数的`抽象方法`并没有在`JavaScript `引擎中实现,但是依然有少数抽象方法可以近乎理解为`JavaScript`引擎中对应的部分函数实现.举个例子,如下内容是`ECMAScript`规范的一部分:
 
-- Spec: If Type(value) is String
-  - JavaScript: `if (TypeOf(value) === 'string')` (very loose translation, defined below)
-- Spec: If IsCallable(method) is true
-  - JavaScript: `if (IsCallable(method))` (defined below)
-- Spec: Let numValue be ToNumber(value)
-  - JavaScript: `let numValue = Number(value)`
-- Spec: Let isArray be IsArray(O)
-  - JavaScript: `let isArray = Array.isArray(O)`
-- Spec: If O has a [[NumberData]] internal slot
-  - JavaScript: `if ('__NumberData__' in O)`
-- Spec: Let tag be Get(O, @@toStringTag)
-  - JavaScript: `let tag = O[Symbol.toStringTag]`
-- Spec: Return the string-concatenation of "[object ", tag, and "]".
-  - JavaScript: `return '[object ' + tag + ']';`
+**The `typeof` Operator**
 
-> 一开始阅读规范文档令人感觉很痛苦,但是慢慢坚持下来便有渐入佳境的感觉.
+1.  Let val be the result of evaluating [UnaryExpression](https://tc39.es/ecma262/#prod-UnaryExpression). 让 val 作为评估此一元表达式的结果.
+
+2. If val is a [Reference Record](https://tc39.es/ecma262/#sec-reference-record-specification-type), then
+
+   a. If [IsUnresolvableReference](https://tc39.es/ecma262/#sec-isunresolvablereference)(val) is true, return "undefined". 如果这个值是一个引用记录(仅存于规范中的类型),并且是一个不可解析的引用(比如声明却未初始化的变量),则返回 `undefined`.
+
+3. Set val to ? [GetValue](https://tc39.es/ecma262/#sec-getvalue)(val). 令 val 等于 GetValue(val) 抽象操作的结果.如有异常则抛出.
+
+4. Return a String according to [Table 38](https://tc39.es/ecma262/#table-typeof-operator-results). 按`val`的类型选择下表中一个字符串结果.
+
+<h5 style="text-align:center">Table 38: typeof Operator Results</h5>
+
+| Type of val                                                  | Result      |
+| ------------------------------------------------------------ | ----------- |
+| Undefined                                                    | "undefined" |
+| Null                                                         | "object"    |
+| Boolean                                                      | "boolean"   |
+| Number                                                       | "number"    |
+| String                                                       | "string"    |
+| Symbol                                                       | "symbol"    |
+| BigInt                                                       | "bigint"    |
+| Object (does not implement [[Call]]) `不可调用的对象返回 object` | "object"    |
+| Object (implements [[Call]])                                 | "function"  |
+
+> ECMAScript 规范中为了方便描述算法和设计逻辑,设定了很多抽象操作和规范中的类型,定义了许多简写方式,类似: ? 和 ! 等.
+
+## 5. 隐式转换抽象方法示例
+
+### 5.1 ToPrimitive()
+
+这个抽象方法在许多隐式转换算法中被使用到,它可以把任意值转换为原始类型值.由于许多操作只接受原始类型数据(或最终将使用原始类型数据),此抽象方法在`ECMAScript`规范中被广泛调用.
+
+接下来我们来看看一个 JavaScript 版本的 `ToPrimitive`函数.
+
+```js
+function ToPrimitive(input: any, hint: 'default' | 'string' | 'number' = 'default') {
+  if (Typeof(input) === 'object') {
+    let exoticToPrim = input[Symbol.toPrimitive];
+    if (exoticToPrim !== undefined) {
+      let result = exoticToPrim.call(input, hint);
+      if(Typeof(result) !== 'object') {
+        return result;
+      }
+      throw new TypeError();
+    }
+    if (hint === 'default') {
+      hint = 'number'
+    }
+    return OrdinaryToPrimitive(input, hint);
+  } else {
+    // input 是原始数据类型
+    return input
+  }
+}
+```
+
+要理解这个函数,需要了解一些前置知识.
+
+首先, `hint`参数表示要转换到原始值的预期类型,默认是`number`.
+
+.其次,此函数的目的是为了将某个值转为原始类型数据,如此一来对于本身就是原始类型的数据来说直接返回即可.
+
+对于对象来说,则需要检查此对象是否重写了`Symbol.toPrimitive`方法.
+
+> `Symbol.toPrimitive` 是一个内置的 Symbol 值，它是作为对象的函数值属性存在的，当一个对象转换为对应的原始值时，会调用此函数。
+
+如果目标对象重写了方法,则将`hint`和`input`作为参数按重写的逻辑进行转换,出现异常则抛出.
+
+如果此对象没有`Symbol.toPrimitive`函数,则按常规抽象方法[OrdinaryToPrimitive](https://tc39.es/ecma262/#sec-ordinarytoprimitive)进行转换.
+
+接下来看看 `OrdinaryToPrimitive`的 JavaScript 函数可以如何实现.
+
+```js
+function OrdinaryToPrimitive(O: object, hint: 'string' | 'number') {
+  let methodNames;
+  if (hint === 'string') {
+    methodNames = ['toString', 'valueOf'];
+  } else {
+    methodNames = ['valueOf', 'toString'];
+  }
+  for (let name of methodNames) {
+    let method = O[name];
+    if (IsCallable(method)) {
+      let result = method.call(O);
+      if (TypeOf(result) !== 'object') {
+        return result;
+      }
+    }
+  }
+  throw new TypeError();
+}
+```
 
 
 
 ## references
 
 - [Type coercion in JavaScript](https://2ality.com/2019/10/type-coercion.html)
+- [How to Read the ECMAScript Specification](https://timothygu.me/es-howto/)
 - [怎样阅读 ECMAScript 规范？ - SegmentFault 思否](https://segmentfault.com/a/1190000019240609)
 - [读懂 ECMAScript 规格 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2015/11/ecmascript-specification.html)
 
