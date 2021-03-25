@@ -358,6 +358,71 @@ d == 'Wed Mar 27 2222 08:00:00 GMT+0800 (中国标准时间)' // true
 
 日期示例同时具有`toString()`和`valueOf()`方法,于此可以理解其重写逻辑是偏向`string`的.
 
+接下来我们来看看`toString()`方法的`JavaScript`版本实现:
+
+```js
+function ToString(argument) {
+  if (argument === undefined) {
+    return 'undefined';
+  } else if (argument === null) {
+    return 'null';
+  } else if (argument === true) {
+    return 'true';
+  } else if (argument === false) {
+    return 'false';
+  } else if (TypeOf(argument) === 'number') {
+    return Number.toString(argument);
+  } else if (TypeOf(argument) === 'string') {
+    return argument;
+  } else if (TypeOf(argument) === 'symbol') {
+    throw new TypeError();
+  } else if (TypeOf(argument) === 'bigint') {
+    return BigInt.toString(argument);
+  } else {
+    // argument is an object
+    let primValue = ToPrimitive(argument, 'string'); // (A)
+    return ToString(primValue);
+  }
+}
+```
+
+简洁明了, 在将原始值转换为`string`的中间,使用了`ToPrimitive`函数作为过渡.并且对于各种`type`的值有不同的处理.需要注意的是,对于`Symbol`是抛出异常.但这并不意味着`Symbol`对象无法转换为`string`.
+
+`Symbol.prototype.toString()`和`String()`都被重写了.
+
+```js
+function String(value) {
+  let s;
+  if (value === undefined) {
+    s = '';
+  } else {
+    if (new.target === undefined && TypeOf(value) === 'symbol') { // (A)
+      return SymbolDescriptiveString(value);
+    }
+    s = ToString(value);
+  }
+  if (new.target === undefined) {
+    // Function call
+    return s;
+  }
+  // New call
+  return StringCreate(s, new.target.prototype); // simplified!
+}
+
+function StringCreate(value, prototype) {
+  // Create a new String instance that has the given prototype
+}
+function SymbolDescriptiveString(sym) {
+  assert.equal(TypeOf(sym), 'symbol');
+  let desc = sym.description;
+  if (desc === undefined) {
+    desc = '';
+  }
+  assert.equal(TypeOf(desc), 'string');
+  return 'Symbol('+desc+')';
+}
+```
+
 
 
 ## references
@@ -367,4 +432,5 @@ d == 'Wed Mar 27 2222 08:00:00 GMT+0800 (中国标准时间)' // true
 - [怎样阅读 ECMAScript 规范？ - SegmentFault 思否](https://segmentfault.com/a/1190000019240609)
 - [读懂 ECMAScript 规格 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2015/11/ecmascript-specification.html)
 - [js隐式装箱-ToPrimitive | {XFE}](https://sinaad.github.io/xfe/2016/04/15/ToPrimitive/)
+- [【译】如何阅读ECMAScript规范(一) | 李冬琳的博客](http://ldllidonglin.github.io/blog/2020/03/10/2020-03-10-%E3%80%90%E8%AF%91%E3%80%91%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BBECMAScript%E8%A7%84%E8%8C%83(%E4%B8%80)/)
 
