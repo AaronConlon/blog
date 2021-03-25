@@ -295,6 +295,69 @@ function OrdinaryToPrimitive(O: object, hint: 'string' | 'number') {
 }
 ```
 
+👆上面的代码用到了属性 `key` 值,上述三个关键的属性 `key`在原始类型转换的时候用得很多.分别是:
+
+- toString
+- valueOf
+- Symbol.toPrimitive(默认只有 Symbol 和 Date 对象有此方法)
+
+从`hint`参数可知, 期望转换结果类型和调用的对象方法有直接关系.所以,标准库中`Number()`和`String()`函数在实现上都是按抽象方法`ToPrimitive`去执行,且设置`hint`为`number`或者`string`.
+
+**那么, 何种情况下使用哪一个`hint`值呢?**
+
+在隐式转换的时候,设定`hint`为`number`的情况有以下几个抽象方法:
+
+- toNumeric
+- toNumber
+- toBigInt / BigInt
+- < 或者 > 抽象关系比较
+
+设定`hint`为`string`的则是:
+
+- toString
+- toPropertyKey
+
+最后则是`hint`为`default`:
+
+- 抽象相等性比较( == )
+- 加操作(+)
+- new Date(value), value 可以是字符串或者 number
+
+但我们可以发现,`default`和`number`作为`hint`的值时,几乎没有差别,二者可以视为一致.
+
+在标准库中,只有`Date`和`Symbol`的实例重写了它们的默认行为.
+
+让我们来看看`Date`是如何重写的:
+
+```js
+Date.prototype[Symbol.toPrimitive] = function (
+  hint: 'default' | 'string' | 'number') {
+    let O = this;
+    if (TypeOf(O) !== 'object') {
+      throw new TypeError();
+    }
+    let tryFirst;
+    if (hint === 'string' || hint === 'default') {
+      tryFirst = 'string';
+    } else if (hint === 'number') {
+      tryFirst = 'number';
+    } else {
+      throw new TypeError();
+    }
+    return OrdinaryToPrimitive(O, tryFirst);
+  };
+```
+
+`tryFirst`首选项设置成了`string`,而不是默认的`default`等同于`number`,在日常的开发中我们也可以看到如下示例:
+
+```js
+const d = new Date('2222-03-27')
+d == 'Wed Mar 27 2222 08:00:00 GMT+0800 (中国标准时间)' // true
+> 1 + d // '1Wed Mar 27 2222 08:00:00 GMT+0800 (中国标准时间)'
+```
+
+日期示例同时具有`toString()`和`valueOf()`方法,于此可以理解其重写逻辑是偏向`string`的.
+
 
 
 ## references
@@ -303,4 +366,5 @@ function OrdinaryToPrimitive(O: object, hint: 'string' | 'number') {
 - [How to Read the ECMAScript Specification](https://timothygu.me/es-howto/)
 - [怎样阅读 ECMAScript 规范？ - SegmentFault 思否](https://segmentfault.com/a/1190000019240609)
 - [读懂 ECMAScript 规格 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2015/11/ecmascript-specification.html)
+- [js隐式装箱-ToPrimitive | {XFE}](https://sinaad.github.io/xfe/2016/04/15/ToPrimitive/)
 
