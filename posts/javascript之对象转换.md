@@ -358,6 +358,8 @@ d == 'Wed Mar 27 2222 08:00:00 GMT+0800 (中国标准时间)' // true
 
 日期示例同时具有`toString()`和`valueOf()`方法,于此可以理解其重写逻辑是偏向`string`的.
 
+### 5.2 ToString()
+
 接下来我们来看看`toString()`方法的`JavaScript`版本实现:
 
 ```js
@@ -410,7 +412,9 @@ Uncaught TypeError: Cannot convert a Symbol value to a string
 
 > 由此看来,`Symbol`实例的这两个方法确实与众不同.
 
-**让我们将目光转到`String()`和`toString()`的实现逻辑:**
+**让我们将目光转到`String()`和`Symbol.prototype.toString()`的实现逻辑:**
+
+- `String()`
 
 ```js
 function String(value) {
@@ -418,8 +422,9 @@ function String(value) {
   if (value === undefined) {
     s = '';
   } else {
+    // new.target: 检测是否通过 new 实例化,如果不是则为 undefined,是则指向构造方法或函数
     if (new.target === undefined && TypeOf(value) === 'symbol') {
-      // 
+      // 如果 value 是 symbol,并且不是通过 new String 调用,则返回 Symbol 的描述符函数执行结果
       return SymbolDescriptiveString(value);
     }
     s = ToString(value);
@@ -446,7 +451,294 @@ function SymbolDescriptiveString(sym) {
 }
 ```
 
+我们知道,`String`可以直接调用,也可以使用`new`实例化一个`string object`.
 
+> new String(1) // 实例化结果是一个对象,而不是 string 类型值,可以使用 `valueOf`方法获取其 string 类型值.字面量定义的字符串在使用的时候看起来似乎拥有`String`实例的方法,其实质是先转为`String`实例,再调用方法.详情可见:[基本字符串和字符串对象的区别.](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String#%E5%9F%BA%E6%9C%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8C%BA%E5%88%AB)
+
+如上所示,`String`构造函数将`Symbol`单独拎出来处理,针对`Symbol`返回其描述符字符串.
+
+- `Symbol.prototype.toString()`
+
+`Symbol`也可以直接使用`ToString`方法转换为字符串,其实现逻辑大致如下:
+
+```js
+Symbol.prototype.toString = function () {
+  let sym = thisSymbolValue(this);
+  return SymbolDescriptiveString(sym);
+};
+function thisSymbolValue(value) {
+  if (TypeOf(value) === 'symbol') {
+    return value;
+  }
+  if (TypeOf(value) === 'object' && '__SymbolData__' in value) {
+    let s = value.__SymbolData__;
+    assert.equal(TypeOf(s), 'symbol');
+    return s;
+  }
+}
+```
+
+> [官方描述: ECMAScript® 2022 Language Specification - Object.prototype.toString](https://tc39.es/ecma262/#sec-object.prototype.tostring)
+
+`Object.prototype.toString`的实现规范用代码来描述:
+
+```js
+Object.prototype.toString = function () {
+  if (this === undefined) {
+    return '[object Undefined]';
+  }
+  if (this === null) {
+    return '[object Null]';
+  }
+  let O = ToObject(this);
+  let isArray = Array.isArray(O);
+  let builtinTag;
+  if (isArray) {
+    builtinTag = 'Array';
+  } else if ('__ParameterMap__' in O) {
+    builtinTag = 'Arguments';
+  } else if ('__Call__' in O) {
+    builtinTag = 'Function';
+  } else if ('__ErrorData__' in O) {
+    builtinTag = 'Error';
+  } else if ('__BooleanData__' in O) {
+    builtinTag = 'Boolean';
+  } else if ('__NumberData__' in O) {
+    builtinTag = 'Number';
+  } else if ('__StringData__' in O) {
+    builtinTag = 'String';
+  } else if ('__DateValue__' in O) {
+    builtinTag = 'Date';
+  } else if ('__RegExpMatcher__' in O) {
+    builtinTag = 'RegExp';
+  } else {
+    builtinTag = 'Object';
+  }
+  let tag = O[Symbol.toStringTag];
+  if (TypeOf(tag) !== 'string') {
+    tag = builtinTag;
+  }
+  return '[object ' + tag + ']';
+};
+```
+
+首先将`undefined`和`null`进行严格比较判断,然后将之转化为一个`Object`,再针对其内部`插槽属性`(如上所示, if else 的双下划线开始和结束的字符串判断条件,就是检查对象内部的`插槽属性`)定义一个`内建标签`,最后根据`JS 引擎`提供的`Symbol.toStringTag`属性值来设定最终的返回字符串内容.
+
+如果是自定义的类,可以根据`Symbol.toStringTag`这个 API 来实现类型检出:
+
+```js
+class Yo {}
+Yo.prototype[Symbol.toStringTag] = 'Yo'
+String(new Yo()) // '[object Yo]'
+```
+
+> 开发者可以根据需要重写其实现,但不重写也依然无碍,毕竟有 Object 对象的原型实现兜底.
+
+
+
+### 5.3 ToPropertyKey()
+
+`ToPropertyKey`在规范中常用于括号操作相关的逻辑描述步骤,其工作方式如下:
+
+```js
+function ToPropertyKey (argument) {
+  let key = ToPrimitive(argument, 'string'); // 预期值类型为 string
+  // 针对 symbol 作为 key 类型的特殊设计
+  if(TypeOf(key) === 'symbol') {
+    return key;
+  }
+  return ToString(key);
+}
+```
+
+### 5.4 ToNumeric()
+
+当`number`体系中增加了`BigInt`之后,此方法也针对`BigInt`做了设计:
+
+```js
+function ToNumeric(value) {
+  let primValue = ToPrimitive(value, 'number');
+  if (TypeOf(primValue) === 'bigint') {
+    return primValue;
+  }
+  return ToNumber(primValue);
+}
+```
+
+如果将其转化为原始数据类型之后是`BigInt`,则直接返回,否则将使用`ToNumber`抽象操作:
+
+```js
+function ToNumber(argument) {
+  if (argument === undefined) {
+    return NaN;
+  } else if (argument === null) {
+    return +0;
+  } else if (argument === true) {
+    return 1;
+  } else if (argument === false) {
+    return +0;
+  } else if (TypeOf(argument) === 'number') {
+    return argument;
+  } else if (TypeOf(argument) === 'string') {
+    return parseTheString(argument); // 此函数略
+  } else if (TypeOf(argument) === 'symbol') {
+    throw new TypeError(); // symbol 和 bigint 将引发类型错误异常
+  } else if (TypeOf(argument) === 'bigint') {
+    throw new TypeError();
+  } else {
+    // argument is an object
+    let primValue = ToPrimitive(argument, 'number');
+    return ToNumber(primValue);
+  }
+}
+```
+
+从上述实现我们可以很清楚理解到日常工作中可能用到的变量类型隐式转换是如何实现的,以及出现`TypeError`的原因.
+
+
+
+## 6. 隐式转换范例
+
+### 6.1 Addition operator(+)
+
+> 此加法运算需要和一元运算符 `+`区分开来.一元运算符使用的是`ToNumber`抽象操作.
+
+`JavaScript`中加法运算符的规定代码实现如下:
+
+```js
+function Addition(leftHandSide, rightHandSide) {
+  let lprim = ToPrimitive(leftHandSide);
+  let rprim = ToPrimitive(rightHandSide);
+  if (TypeOf(lprim) === 'string' || TypeOf(rprim) === 'string') {
+    return ToString(lprim) + ToString(rprim);
+  }
+  let lnum = ToNumeric(lprim);
+  let rnum = ToNumeric(rprim);
+  if (TypeOf(lnum) !== TypeOf(rnum)) {
+    throw new TypeError();
+  }
+  let T = Type(lnum);
+  return T.add(lnum, rnum);
+}
+```
+
+算法步骤:
+
+- 将左右操作数转化为原始数据类型
+- 如果其中一个是字符串,则都转为字符串
+- 如果二者的原始数据类型分别是`BigInt`和`Number`,则报类型异常错误
+- 否则执行`numeric`类型的相加操作.
+
+示例:
+
+```js
+> 1 + 2n
+Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions
+> 1n + 1n
+2n
+> [1] + 2  // 数组转原始数据类型,优先转 string
+'12'
+> 1 + true
+2
+> 1 + {}
+'1[object Object]'
+```
+
+### 6.2 Abstract Equality Comparison (==)
+
+抽象相等性比较,且允许我如此翻译,其代码实现如下,一些实现细节的体会直接写在注释中.
+
+```js
+/** Loose equality (==) */
+function abstractEqualityComparison(x, y) {
+  // 对于类型一致的使用严格相等性比较
+  if (TypeOf(x) === TypeOf(y)) {
+    // Use strict equality (===)
+    return strictEqualityComparison(x, y);
+  }
+
+  // Comparing null with undefined
+  if (x === null && y === undefined) {
+    return true;
+  }
+  if (x === undefined && y === null) {
+    return true;
+  }
+
+  // Comparing a number and a string
+  // 有趣的数字和字符串比较,都转为了数字.
+  if (TypeOf(x) === 'number' && TypeOf(y) === 'string') {
+    return abstractEqualityComparison(x, Number(y));
+  }
+  if (TypeOf(x) === 'string' && TypeOf(y) === 'number') {
+    return abstractEqualityComparison(Number(x), y);
+  }
+
+  // Comparing a bigint and a string
+  // 字符串和 BigInt 的比较,将字符串转为 BigInt
+  if (TypeOf(x) === 'bigint' && TypeOf(y) === 'string') {
+    let n = StringToBigInt(y);
+    if (Number.isNaN(n)) {
+      return false;
+    }
+    return abstractEqualityComparison(x, n);
+  }
+  if (TypeOf(x) === 'string' && TypeOf(y) === 'bigint') {
+    return abstractEqualityComparison(y, x);
+  }
+
+  // Comparing a boolean with a non-boolean
+  // 转为数字进行比较
+  if (TypeOf(x) === 'boolean') {
+    return abstractEqualityComparison(Number(x), y);
+  }
+  if (TypeOf(y) === 'boolean') {
+    return abstractEqualityComparison(x, Number(y));
+  }
+
+  // Comparing an object with a primitive
+  // (other than undefined, null, a boolean)
+  // 对象和四大原始数据类型的比较,将对象转为原始数据类型
+  if (['string', 'number', 'bigint', 'symbol'].includes(TypeOf(x))
+    && TypeOf(y) === 'object') {
+      return abstractEqualityComparison(x, ToPrimitive(y));
+    }
+  if (TypeOf(x) === 'object'
+    && ['string', 'number', 'bigint', 'symbol'].includes(TypeOf(y)) {
+      return abstractEqualityComparison(ToPrimitive(x), y);
+    }
+  
+  // Comparing a bigint with a number
+	// bigint 和数字的比较,则判定正负无穷性和 NaN,这几个类型无法比较,一律返回 false
+  if ((TypeOf(x) === 'bigint' && TypeOf(y) === 'number')
+    || (TypeOf(x) === 'number' && TypeOf(y) === 'bigint')) {
+      if ([NaN, +Infinity, -Infinity].includes(x)
+        || [NaN, +Infinity, -Infinity].includes(y)) {
+          return false;
+        }
+    	// 否则按数学性值的相等比较, 1 == 1n 为 true
+      if (isSameMathematicalValue(x, y)) {
+        return true;
+      } else {
+        return false;
+      }
+    }  
+  return false;
+}
+```
+
+部分抽象操作可以查看`ECMAScript 文档`.
+
+## 7. 术语补充
+
+本文到此即将结束,我们在类型转换的规范描述中经常看到如下几个术语,加深其理解对于我们理解`ECMAScript 规范`有一定的帮助.
+
+- *type conversion*: 我们希望输出的值具备指定的类型,如果输入已经由类型,通常类型转换只是简单的返回其类型,否则将其值转换为`hint`预期类型.
+- *Explicit type conversion*: 显示类型转换指的是语言方面通过支持一些操作或者函数出发类型转换,类似`JavaScript`中的`Number()/String()/Boolean()`等等,显示的类型转换易于阅读和理解,故社区中常有`显示大于隐式`的说法,其支持者甚多.在`JavaScript`中显示转换会对值做两种类型的操作:
+  - Checked: 检查是否可以转换,如果不行则抛出异常
+  - Unchecked: 返回一个设计性错误的值,如本文开头所述`1 / false` 返回 `Infinity`.
+- *type casting*: 类型定义,类似于`Java`中,在一个范围内,不可以将不同类型的值赋值给一个变量.按编程语言的设计而定, 其实质是明确的类型检查.
+- *Type coercion*: 隐式类型转换, 弱类型语言的特征之一.
 
 ## references
 
@@ -456,4 +748,4 @@ function SymbolDescriptiveString(sym) {
 - [读懂 ECMAScript 规格 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2015/11/ecmascript-specification.html)
 - [js隐式装箱-ToPrimitive | {XFE}](https://sinaad.github.io/xfe/2016/04/15/ToPrimitive/)
 - [【译】如何阅读ECMAScript规范(一) | 李冬琳的博客](http://ldllidonglin.github.io/blog/2020/03/10/2020-03-10-%E3%80%90%E8%AF%91%E3%80%91%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BBECMAScript%E8%A7%84%E8%8C%83(%E4%B8%80)/)
-
+- [Cast to Number in Javascript using the Unary (+) Operator | by Nikhil John | Medium](https://medium.com/@nikjohn/cast-to-number-in-javascript-using-the-unary-operator-f4ca67c792ce)
