@@ -388,7 +388,29 @@ function ToString(argument) {
 
 简洁明了, 在将原始值转换为`string`的中间,使用了`ToPrimitive`函数作为过渡.并且对于各种`type`的值有不同的处理.需要注意的是,对于`Symbol`是抛出异常.但这并不意味着`Symbol`对象无法转换为`string`.
 
-`Symbol.prototype.toString()`和`String()`都被重写了.
+`Symbol.prototype.toString()`和`String()`都被重写了.我们不妨看看如下示例:
+
+```js
+> const sym = Symbol('sym')
+undefined
+> ''+sym
+Uncaught TypeError: Cannot convert a Symbol value to a string
+> `${sym}`
+Uncaught TypeError: Cannot convert a Symbol value to a string
+```
+
+隐式转换和模板字符串都会抛出异常.但是显示转换和调用`toString`方法都可以执行.
+
+```js
+> String(sym)
+'Symbol(sym)'
+> sym.toString()
+'Symbol(sym)'
+```
+
+> 由此看来,`Symbol`实例的这两个方法确实与众不同.
+
+**让我们将目光转到`String()`和`toString()`的实现逻辑:**
 
 ```js
 function String(value) {
@@ -396,7 +418,8 @@ function String(value) {
   if (value === undefined) {
     s = '';
   } else {
-    if (new.target === undefined && TypeOf(value) === 'symbol') { // (A)
+    if (new.target === undefined && TypeOf(value) === 'symbol') {
+      // 
       return SymbolDescriptiveString(value);
     }
     s = ToString(value);
