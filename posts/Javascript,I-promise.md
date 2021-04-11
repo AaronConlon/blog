@@ -94,7 +94,57 @@ Error
 
 ## 1.4 显示 DOM 变化
 
-对于大多数`DOM`元素的变化来说,它们的改动数据并不是实时更新的,`DOM`和`布局`的改动也是通过`事件循环`机制来实现的.如果需要频繁更新`DOM`,可以考虑`requestAnimationFrame()`函数.
+对于大多数`DOM`元素的变化来说,它们的改动数据并不是实时更新的,`DOM`和`布局`的改动也与`事件循环`机制有关.如果需要频繁更新`DOM`,可以考虑`requestAnimationFrame()`函数.
+
+> **`window.requestAnimationFrame()`** 告诉浏览器——你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行
+
+## 1.5 event loop 阻塞和消除
+
+来看看一个阻塞事件循环的例子🌰 From `Dr. Axel Rauschmayer`:
+
+```js
+<p>
+  <a id="block" href="">Block for 5 seconds</a>
+<p>
+    <button id="btn">This is a button</button>
+<div id="statusMessage"></div>
+<script>
+document.getElementById('block').addEventListener('click', onClick);
+document.getElementById('btn').addEventListener('click', onClickBtn);
+
+function onClickBtn() {
+  console.log("click the btn")
+}
+
+function onClick(event) {
+  event.preventDefault();
+
+  setStatusMessage('Blocking...');
+
+  // Call setTimeout(), so that browser has time to display
+  // status message
+  setTimeout(function () {
+    sleep(5000);
+    setStatusMessage('Done');
+  }, 0);
+}
+function setStatusMessage(msg) {
+  document.getElementById('statusMessage').textContent = msg;
+}
+function sleep(milliseconds) {
+  var start = Date.now();
+  while ((Date.now() - start) < milliseconds);
+}
+</script>
+```
+
+我给`button`加了点击监听,如上所示,当你点击链接触发监听函数的时候再点击`button`,事件循环被阻塞5秒.这个期间点击`button`的监听函数无法如`"预期"`马上执行其逻辑,阻塞状态结束之后,点击函数的监听效果才会出现.
+
+我们有两种方法消除事件循环的阻塞,其一便是将耗时的任务转移到`Worker API`中去,让另一个线程去处理.其二便是不使用同步的长时间等待逻辑,而是选择使用异步的方式去改写耗时的同步代码.例如上述的`sleep`函数便可以使用`setTimeout`来让我们达到异步的效果.
+
+## 1.6 异步接收结果
+
+
 
 # 参考
 
