@@ -297,6 +297,8 @@ promise
 
 `promise`支持链式调用,每个`then`函数内部最后将返回一个新的`promise`实例,默认返回一个值为`undefined`,状态为`fulfilled`的`promise`实例.
 
+**`Promise`出现之前,编写可以一次性监听所有回调函数的错误处理逻辑是困难的,`Promise实例`的实例方法`catch`能应对链式调用之前所有的`then`函数错误和显示的`reject`行为**.
+
 我们可以显示地使用`return value`指定返回的`promise`对象的值.举个例子:
 
 ```js
@@ -333,7 +335,23 @@ asyncFunc1()
 })
 ```
 
+## 2.2 Promise 静态方法
 
+`Promise`类具有两个能创建一个新的实例的静态方法:
+
+- Promise.resolve(param)
+- Promise.reject(param)
+
+二者区别在于返回的`promise`实例的状态,前者为`fulfilled`,后者为`rejected`.
+
+此外,`Promise`类还有如下几个静态方法:
+
+- `Promise.all(iterable)`
+- `Promise.race(iterable)`
+- `Promise.any(iterable)`
+- `Promise.allSettled(iterable)`
+
+这几个静态方法各有其应用场景.
 
 # 参考
 
