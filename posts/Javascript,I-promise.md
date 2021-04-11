@@ -55,6 +55,8 @@ Error
 
 ## 1.2 浅述浏览器事件循环
 
+`JavaScript`具有一个基于`事件循环(event loop)`的并发模型.
+
 我们可以简单的认为每个浏览器`tab`运行于一个简单的`事件循环`进程来实现`非阻塞`,浏览器中的诸多单一任务,例如:
 
 - 解析 HTML
@@ -144,8 +146,199 @@ function sleep(milliseconds) {
 
 ## 1.6 异步接收结果
 
+首先,让我们来看看如何通过`事件处理机制`来异步获取结果,来看看一个`XMLHttpRequest`的例子:
+
+```js
+const req = new XMLHttpRequest();
+req.open('GET', url);
+// req.send();
+req.onload = () => {
+  if(req.status === 200) {
+    // balabala
+  } else {
+  	console.log(`Error: ${req.statusText}`) 
+  } 
+}
+
+req.onerror = () => {
+  console.log('Error...')
+}
+
+req.send();
+```
+
+`req.send()`执行的时候只是将之添加到`任务队列`中,而非立刻执行此请求.因此,我们也可以将之写在设置`onload`和`onerror`事件的代码之前.
+
+类似`Vue`和`Angular`中我们有时候会看到如下代码:
+
+```js
+// Vue
+<button v-on:click="fb">
+  Add 1
+</button>
+// Angular
+<button (click)="fb()">
+  some thing
+</button>
+```
+
+上述代码`并不是行内属性`,我们可以很灵活的利用`JavaScript`和框架的特性灵活编写代码,为`DOM`添加事件监听.
+
+> 上述示例代码风格只能给相应的属性设置一个值,后续的`onload`值将会覆盖前者.
+
+在`IE9`之后,更常见的事件处理机制的使用方案也许是`addEventListener`(IE8 则可以使用`attachEvent`进行 hack),这种方案能够更大限度的设置事件监听的范围,例如设置多个同类型的事件处理函数,删除某个监听函数等等.
+
+接着,我们来看看通过`callback`回调函数获取异步结果的示例:
+
+```js
+// Node.js
+fs.readFile('file.txt', { encoding: 'utf8'}, (error, text) => {
+  if(error) {
+    // balabala
+  }
+  // 无错误
+  // balabala
+})
+```
+
+如上所示,如果读取文件内容顺利,将会执行回调函数.回调函数约定接收两个参数,一个是`错误`对象,另一个便是`预期数据`,如果我们不按约定编写回调函数,也不会报错.
+
+如上这种异步编程风格被称为`continuation-passing style(CPS)`,开发者总是使用一个回调函数作为参数去调用,显示的将`控制流`作为参数进行传递,开发者可以看到程序内部隐式的控制流跳转.
+
+`CPS`挺有趣的,我们来看一个简单例子.
+
+```js
+// 省略部分代码
+const a = foo(x)
+const b = someFunction(a)
+```
+
+如果我们按`CPS`风格来写:
+
+```js
+const b = foo(x, someFunction)
+```
+
+由此可见,我们可以在例如`惰性求值/异步/流程控制`等场景下编写上述风格的代码,`"也许"`是一种更好的选择(仁者见仁智者见智).
+
+来看另一个例子:
+
+```js
+function foo(input, callback) {
+	setTimeout(() => {
+    callback(input)
+  }, 0)
+}
+console.log('a')
+foo('b', function step2(param) {
+	console.log(param)
+  foo('c', function step3(param) {
+  	console.log(param)
+  })
+ 	console.log('d')
+})
+console.log('e')
+```
+
+输出结果:` a e b d c`.
+
+回调和控制流相互嵌套,常常让我们写出`"回调地狱"`代码.
+
+在`Promise`出现之前,开发者们编写着各种回调函数,为了避免隐式`BUG`而孜孜不倦地检查异常处理逻辑,重复地为每一个回调函数编写冗长的`if error`错误监听.
+
+# 2. Promise 异步
+
+`TC39`依据`Promise/A+`制定了`ES6 Promise`规范,自此`JavaScript`异步编程向前迈进了一大步,开发者们可以更好的编写异步代码以应对复杂的场景和需求.
+
+## 2.1 promise 实例和状态转换
+
+`Promise`实例具有三种状态:
+
+- `pending`: 初始化
+- `fulfilled`: 成功
+- `rejected`: 失败
+
+> fulfilled 和 rejected 统称`settled`.
+
+通过`Promise`构造器实例化一个`promise`的时候,其状态为`pending`.在实例化的时候传入一个函数`(execotor)`去处理状态转换逻辑.
+
+> 本文不会对`promise`做面面俱到的介绍,推荐阅读官方文档.
+
+首先,我们来创建一个`promise`实例:
+
+```js
+let promise = new Promise((resolve, reject) => {
+  // balabala
+  if(...) {
+    resolve(value) // success
+  } else {
+  	reject(reason) // failure
+  }
+})
+promise
+  .then(function(value) {
+		// balabala
+  })
+	.then(function(value) {
+		// balabala
+  })
+	.catch(reason => {
+  	// balabala
+  })
+```
+
+传入的函数内部,可以显示按逻辑指定下一个状态.下图是`MDN`提供的`Promise`状态转移图.
+
+![](https://mdn.mozillademos.org/files/8633/promises.png)
+
+> `then`函数可以接收不同形参的函数以实现不同的状态处理逻辑,但是我们推荐使用单参数和使用 catch 处理错误的代码风格.
+
+需要注意的是,`promise`实例的状态转换是单向的,一旦`settled`则不可逆转.
+
+`promise`支持链式调用,每个`then`函数内部最后将返回一个新的`promise`实例,默认返回一个值为`undefined`,状态为`fulfilled`的`promise`实例.
+
+我们可以显示地使用`return value`指定返回的`promise`对象的值.举个例子:
+
+```js
+asyncFunc()
+	.then(function(v1) {
+  	return 1
+  	// return Promise.resolve(1)  	
+})
+	.then(function(v2) {
+  	console.log(v2); // 1
+})
+```
+
+除了`return`一个显示的值,在一些`Promise`相关的库源码中我们可能还会看到某些场景下返回一个`thenable`对象.
+
+> `thenable对象`: 任意具有`then`方法的对象.
+
+返回`thenable对象`的时候将执行其`then`方法,`Promise`实例对象也是`thenable对象`,因此在某些嵌套`Promise`的场景下,可以返回一个`异步函数调用`,就像这样:
+
+```js
+asyncFunc1()
+	.then(v1 => {
+  	asyncFunc2()
+  		.then(v2 => {
+      	//balabala
+    })
+})
+
+// 扁平化
+asyncFunc1()
+	.then(v1 => asyncFunc2())
+	.then(v2 => {
+  	// balabala
+})
+```
+
 
 
 # 参考
 
 - [JavaScript 运行机制详解：再谈Event Loop - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2014/10/event-loop.html)
+- [JavaScript进阶01：异步1-事件监听和回调函数 | forkai's Notes](https://notes.forkai.com/2017/11/06/javascript%E8%BF%9B%E9%98%B601%EF%BC%9A%E5%BC%82%E6%AD%A51-%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/)
+- [architecture - Difference between event handlers and callbacks - Stack Overflow](https://stackoverflow.com/questions/2069763/difference-between-event-handlers-and-callbacks)
+- [javascript - addEventListener vs onclick - Stack Overflow](https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick)
+- 
