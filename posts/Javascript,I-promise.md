@@ -353,6 +353,18 @@ asyncFunc1()
 
 这几个静态方法各有其应用场景.
 
+### 2.2.1 all
+
+首先,`Promise.all(iterable)`方法接收一个`iterable`对象作为参数,最终返回一个`promise 实例`.
+
+首先,如果`iterable`对象是空的,则返回的结果是空数组.
+
+```js
+
+```
+
+
+
 # 参考
 
 - [JavaScript 运行机制详解：再谈Event Loop - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2014/10/event-loop.html)
