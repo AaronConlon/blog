@@ -357,10 +357,92 @@ asyncFunc1()
 
 首先,`Promise.all(iterable)`方法接收一个`iterable`对象作为参数,最终返回一个`promise 实例`.
 
-首先,如果`iterable`对象是空的,则返回的结果是空数组.
+首先,如果`iterable`对象是空的,则返回的结果是空数组(尽管我们基本上不会这么做).
+
+其次,如果传入的是原始数据类型则转换为`fulfilled`状态的`promise`实例,其值是原始对象.如果传入的本来就是`promise`对象,则直接按`promise`对象处理.
+
+我们通过示例代码来理解规范:
 
 ```js
+> Promise.all([1, Promise.resolve(2)]).then(r => console.log(r))
+Promise { <pending> }
+> [ 1, 2 ]
+> Promise.all([1, Promise.resolve(2), Promise.reject(3)])
+  	.then(r => console.log(r))
+  	.catch(r => console.log(r))
+Promise { <pending> }
+> 3
+```
 
+由上可知,当可迭代对象的所有元素都是`fulfilled`状态的`promise 实例`的话,返回一个数组,数组的值是这些`promise 实例的值`.
+
+如果一旦其中之一出现`rejected`状态的`promise 实例`,则整体状态转化为`rejected`,且值为最先出现的`rejected`状态实例的值.
+
+我们可以使用`Promise.all`来执行一组异步操作,这些操作的时间花费取决于最长的那个元素,并且最终如果一切顺利,则结果的顺序是不变的.
+
+`Promise.all()`方法适用于`合并请求`的场景,例如某些项目中,提交的多个数据需要调用云端接口进行数据校验,当所有数据都通过校验的时候才能执行下一步操作,来看看代码:
+
+```js
+// 有一个返回 promise 对象的 asyncApi 函数
+const test = (value) => asyncApi(value)
+Promise.all([
+  test('xxx'),
+  test('xx'),
+  test('x')
+]).then(results => {
+  results.forEach(result => {
+    // balabala 你的代码逻辑
+    // 都通过了
+  })
+  // do more...
+}).catch(error => {
+  // 失败的值, balabala
+  console.log(error)
+})
+```
+
+如果我们想要合并检查结果,则可以稍微修改一下代码:
+
+```js
+Promise.all([
+  test('xxx').catch(err => err),
+  test('xx').catch(err => err),
+  test('x').catch(err => err)
+]).then(results => {
+  results.forEach(result => {
+    // balabala 你的代码逻辑
+    // 都通过了
+  })
+  // do more...
+}).catch(error => {
+  // 失败的值, balabala
+  console.log(error)
+})
+```
+
+如果某个`test函数`返回的`promise`状态为`rejected`,如上代码也会将错误数据作为值,`catch`函数之后返回一个`fulfilled`状态的`promise 新实例`.最终`results`数组也包含了可能出现的错误信息,我们可以操作合并的结果进行处理.
+
+### 2.2.2 race
+
+`Promise.race(iterable)`如其名,类似于`Promise.all()`,接收同类型参数,一旦迭代器中某个`promise`状态转化为`settled`,立即返回此结果.
+
+> 传入的迭代为空的话,返回的`promise`始终`pending`.
+
+`Promise.race()`非常适合做异步请求的`超时`处理.来看一个例子:
+
+```js
+// asyncApi() 返回 promise
+function timeout(ms, promise) {
+  
+}
+Promise.race([
+  asyncApi('xx'),
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject('timeout...')
+    })
+  })
+])
 ```
 
 
