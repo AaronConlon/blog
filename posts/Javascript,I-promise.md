@@ -355,6 +355,8 @@ asyncFunc1()
 
 ### 2.2.1 all
 
+> IE 浏览器不支持😞
+
 首先,`Promise.all(iterable)`方法接收一个`iterable`对象作为参数,最终返回一个`promise 实例`.
 
 首先,如果`iterable`对象是空的,则返回的结果是空数组(尽管我们基本上不会这么做).
@@ -424,6 +426,8 @@ Promise.all([
 
 ### 2.2.2 race
 
+> IE 浏览器不支持😂
+
 `Promise.race(iterable)`如其名,类似于`Promise.all()`,接收同类型参数,一旦迭代器中某个`promise`状态转化为`settled`,立即返回此结果.
 
 > 传入的迭代为空的话,返回的`promise`始终`pending`.
@@ -432,18 +436,65 @@ Promise.all([
 
 ```js
 // asyncApi() 返回 promise
-function timeout(ms, promise) {
-  
+function timeout(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(`timeout: ${ms} ms`)
+    }, ms)
+  })
 }
+
 Promise.race([
   asyncApi('xx'),
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject('timeout...')
-    })
-  })
-])
+  timeout(5000)
+]).then(res => {
+  // success
+}).catch(error => {
+  // timeout or error
+})
 ```
+
+### 2.2.3 any
+
+`Promise.any(iterable)`是`Promise.all()`的反面,其语法无异.
+
+> IE 浏览器不支持😞
+
+需要注意的是如果传入的迭代器是空的,则返回`rejected`的`promise `实例.只要有一个成功,则返回此结果.如果迭代器内的`promise`全部返回`rejected`状态,则最终返回`rejected`的`promise`实例.
+
+因此,此方法适用于验证多个异步结果中是否有`fulfilled`的`promise`实例.
+
+如果我们需要向多个数据源获取某一个数据,则可以使用此方法最快速的获取到数据,亦或者所有异步请求都失败.
+
+### 2.2.4 allSettled
+
+> IE 浏览器不支持😞
+
+`Promise.allSettled(iterable)`方法返回一个在所有给定的`promise`转为`settled`状态后的数组,数组元素是每一个`promise`结果.
+
+如果我们有多个互不依赖的`异步任务`,或者我们总想知道每个`promise`的结果,而不需要其中的`rejected`状态`promise`去引发`catch`,来看看`MDN`的例子:
+
+```js
+const promise1 = Promise.resolve(3);
+const promise2 = new Promise((resolve, reject) => setTimeout(reject, 100, 'foo'));
+const promises = [promise1, promise2];
+
+Promise.allSettled(promises).
+  then((results) => results.forEach((result) => console.log(result)));
+```
+
+输出是:
+
+```shell
+> Object { status: "fulfilled", value: 3 }
+> Object { status: "rejected", reason: "foo" }
+```
+
+如上所示,状态为`fulfilled`时,具有`value`,状态为`rejected`时,具有`reason`.
+
+还记得我们在`Promise.all()`中的迭代器返回的是`promise.catch(err => err)`吗?其实,使用`Promise.allSettled()`相对更好.
+
+## 2.3 Promise 的优劣
 
 
 
