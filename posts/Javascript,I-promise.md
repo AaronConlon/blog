@@ -527,25 +527,129 @@ readFilePromisified(name, opts?): Promise<string | Buffer>
 
 # 3. MyPromise
 
-如何实现一个简单的`Promise`?
+如何不借助外部库和`ES6 Promise`实现一个简单的`MyPromise`?
 
-需要明确一下几点:
-
-- 可以使用 `new` 创建`Promise`
-- 可以`resolve`或者`reject`,状态不可逆
-- 可以通过`then`注册回调函数,可选的链式调用支持,链式调用返回新的`Promise`.
-
-## 3.1 初次尝试
+首先,我们可以定义一个对象保存`Promise`的三种状态.
 
 ```js
-class Promise {
-  constructor(initFn) {
-    this.status = 'pending'
-    initFn()
+const states = {
+  pending: 'Pending',
+  fulfilled: 'Fulfilled',
+  rejected: 'Rejected'
+}
+```
+
+接着,我们使用`class`来定义我们的`MyPromise`:
+
+```js
+class MyPromise {
+  constructor(executor) {
+    const resolve = () => {
+      this.state = states.fulfilled
+    }
+    const reject = () => {
+      this.state = states.rejected
+    }
+    this.state = states.pending // 默认
+    try {
+      executor(resolve, reject)
+    } catch (error) {
+      reject(error)
+    }
+  }
+}
+```
+
+如此一来,我们实例化的时候传入的`executor`函数内部的错误就能被`catch`处理,并且执行`reject`函数,改变`MyPromise`的`state`.
+
+为了在调用`resolve`或者`reject`的时候能改变`MyPromise`的值,我们需要对这两个函数进行优化.
+
+```js
+class MyPromise {
+  constructor(executor) {
+    
+    const getCallback = state => value => {
+      this.state = state;
+      this.value = value;
+    }
+
+    const resolve = getCallback(states.fulfilled)
+    const reject = getCallback(states.rejected)
+    
+    this.state = states.pending // 默认
+    try {
+      executor(resolve, reject)
+    } catch (error) {
+      reject(error)
+    }
+  }
+}
+```
+
+我们使用高阶函数`getCallback`来消除重复代码,减少代码量.此时,再使用`resolve(value)`或者`reject(value)`即可修改`MyPromise`的值.
+
+此外,我们还要添加`resolve`和`reject`作为`MyPromise`的静态方法.
+
+```js
+class MyPromise {
+  ...
+  static resolve(value) {
+    return new MyPromise(resolve => resolve(value))
+  }
+
+	static reject(value) {
+    return new MyPromise((_, reject) => reject(value))
+  }
+}
+```
+
+Ok,现在`new MyPromise(resolve => resolve(1))`等效于`MyPromise.resolve(1)`了.
+
+接着,我们来实现实例方法:`"then"`.我们知道,如果按常规的思路来,`then`方法取决于`MyPromise`的状态,不同的状态具有不同的值,也许需要写一堆`if`语句,如果不想要写这些`if`语句,我们可以换一种思路来为实例设置`then`方法.
+
+```js
+class MyPromise {
+  constructor(executor) {
+    const members = {
+      [states.fulfilled]: {
+        state: states.fulfilled,
+        // 链的机制
+        then: onResolved => MyPromise.resolve(onResolved(this.value))
+      },
+      [states.rejected]: {
+        state: states.rejected,
+        // rejected 状态直接忽略返回即可
+        then: _ => this
+      },
+      [states.pending]: {
+        state: states.pending        
+      },
+    };
+    // 修改状态,添加 then 实例方法
+    const changeState = state => Object.assign(this, members[state]);
+    // getCallback
+    const getCallback = state => value => {
+      this.state = state;
+      this.value = value;
+    }
+
+    const resolve = getCallback(states.fulfilled)
+    const reject = getCallback(states.rejected)
+    // 初始化状态
+    changeState(states.pending);
+    try {
+      executor(resolve, reject)
+    } catch (error) {
+      reject(error)
+    }
   }
   
-  then(fn) {
-    
+  static resolve(value) {
+    return new MyPromise(resolve => resolve(value))
+  }
+
+  static reject(value) {
+    return new MyPromise((_, reject) => reject(value))
   }
 }
 ```
@@ -554,8 +658,10 @@ class Promise {
 
 # 参考
 
+- [Exploring ES6 - exploring-es6.pdf](chrome-extension://bocbaocobfecmglnmeaeppambideimao/pdf/viewer.html?file=file%3A%2F%2F%2FUsers%2Fyi%2FDesktop%2Fexploring-es6.pdf)
 - [JavaScript 运行机制详解：再谈Event Loop - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2014/10/event-loop.html)
 - [JavaScript进阶01：异步1-事件监听和回调函数 | forkai's Notes](https://notes.forkai.com/2017/11/06/javascript%E8%BF%9B%E9%98%B601%EF%BC%9A%E5%BC%82%E6%AD%A51-%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/)
 - [architecture - Difference between event handlers and callbacks - Stack Overflow](https://stackoverflow.com/questions/2069763/difference-between-event-handlers-and-callbacks)
 - [javascript - addEventListener vs onclick - Stack Overflow](https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick)
 - [Getting Started | bluebird](http://bluebirdjs.com/docs/getting-started.html)
+- [Implementing JavaScript Promise in 70 lines of code! | Hacker Noon](https://hackernoon.com/implementing-javascript-promise-in-70-lines-of-code-b3592565af0f)
