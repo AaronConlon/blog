@@ -635,7 +635,7 @@ class MyPromise {
 
     const resolve = getCallback(states.fulfilled)
     const reject = getCallback(states.rejected)
-    // 初始化状态
+    // 初始化状态, 我们通过对象复制的方法修改了状态
     changeState(states.pending);
     try {
       executor(resolve, reject)
@@ -653,6 +653,53 @@ class MyPromise {
   }
 }
 ```
+
+如上,我们初步实现了`then`实例方法.但是,如果传入`then`的方法出现异常,依然需要做特殊处理才能得到一个`rejected`的`promise`.
+
+举个例子:
+
+```js
+MyPromise.resolve(1).then(() => throw new Error());
+```
+
+按规范来看,我们需要返回的是一个`rejected`的`promise`.而不是引发异常.
+
+既然我们已经支持实例化传入的`executor`中的异常能够被`catch`,并且能处理好状态和值,或许我们可以按这个思路寻找解决方案.
+
+不妨修改一下`fulfilled`的`then`逻辑:
+
+```js
+class MyPromise {
+  constructor(executor) {
+    const members = {
+      [states.fulfilled]: {
+        ...
+        then: callback => MyPromise.try(() => callback(this.value))
+    }
+    ...
+  }
+  ...
+  static try(callback) {
+    return new MyPromise(resolve => resolve(callback()))
+  }
+}
+```
+
+我们通过一个`try`函数,得到一个全新的`Promise`实例.其值和状态应该取决于`callback`函数的返回值.
+
+由于我们已经支持实例化参数即使异常依然可以得到具有预期的状态和值的`MyPromise`实例,因此我们可以将麻烦的`then`函数参数作为`callback`
+
+```js
+// callback 函数将使用 this.value 作为参数传递下去
+const tryCall = callback => MyPromise.try(() => callback(this.value))
+then: tryCall
+```
+
+
+
+如果我们传入`then`的`reactions()`通过`try`函数去创建一个新的`promise`实例,就能保证异常可以被内部`catch`处理了.
+
+
 
 
 
