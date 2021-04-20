@@ -51,8 +51,6 @@ Error
 
 栈是有限度的,不同环境的栈空间大小不等,分配的栈空间被占满之后,将会引发栈溢出错误.
 
-
-
 ## 1.2 浅述浏览器事件循环
 
 `JavaScript`具有一个基于`事件循环(event loop)`的并发模型.
@@ -63,11 +61,11 @@ Error
 - 执行脚本中的 JavaScript 代码
 - 响应用户交互
 - 异步网络请求
-- 等等
+- ...
 
 这些任务形成了独立于主线程的`任务队列(task queue)`,所有任务只能逐一通知主线程进行处理.由于`JavaScript`的单线程限制,即使`Web Worker标准`允许`JavaScript`脚本创建多个线程,但是子线程由主线程控制,且不可操作`DOM`,可以说`JavaScript`的本质依然是`单线程`.
 
-如下是`Philip Roberts`演讲的时候使用的示意图:
+如下是`Philip Roberts`演讲的时候使用的图示:
 
 ![](https://www.ruanyifeng.com/blogimg/asset/2014/bg2014100802.png)
 
