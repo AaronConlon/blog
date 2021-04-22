@@ -8,7 +8,7 @@ coverImg: 'https://images.unsplash.com/photo-1618655108396-ce1ba6c80b7d?crop=ent
 intro: '事件循环是 JavaScript 语言中非常重要的部分,理解事件循环有利于理解 JavaScript 的设计理念,让我们能编写更好的代码.本文用简单的术语对其进行总结.'
 ---
 
-​        事件循环是 JavaScript 语言中非常重要的部分,理解事件循环有利于理解 JavaScript 的设计理念,让我们能编写更好的代码.本文用简单的术语对其进行总结.
+​        事件循环是 JavaScript 语言中非常重要的部分,理解事件循环有利于理解 JavaScript 的设计理念,让我们能编写更好的代码.本文用简单的术语对浏览器端的 JavaScript 事件循环和任务队列知识进行浅析和分享.
 
 ### 1. 简介
 
@@ -91,7 +91,7 @@ bar
 
 ### 3. 事件循环
 
-`JavaScript`主线程既可以在运行时将一些耗时亦或需要延后执行的任务单独放到`回调队列（callback queue）`中去，也可以接收浏览器其他线程发送过来的新任务，执行一些`WebApi`。
+`JavaScript`主线程既可以在运行时将一些耗时亦或需要延后执行的任务单独放到`回调队列（callback queue）`中去，也可以接收浏览器其他线程发送过来的新任务，执行一些`“WebApi“`，尽管没有规范规定该如何实现，但每个浏览器都有自己的实现。
 
 > **To coordinate events, user interaction, scripts, rendering, networking, and so forth, user agents must use event loops as described in this section.**
 
@@ -105,7 +105,9 @@ bar
 
 当函数`调用栈（深度有限）`被清空的时候，便从回调队列中取出回调任务并执行。
 
-`回调队列`保存着等待执行的所有压入的回调函数，这里的回调函数是在一定的条件下才入队的，并且其执行也是依据队列的特性顺序出队执行的。
+> Callback Queue: 名为队列，实为回调函数的有序集合，主线程取用这些回调任务的顺序是不定的，满足条件的任务会逐一被取出压入调用栈中执行。
+
+`回调队列`保存着等待执行的所有压入的回调函数，这里的回调函数是在一定的条件下被添加到这个集合中来的。
 
 > Each [agent](https://tc39.es/ecma262/#sec-agents) has an associated event loop, which is unique to that agent.An [event loop](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop) has one or more task queues.
 
@@ -113,16 +115,16 @@ bar
 
 为了更精细地控制队列内的不同级别的回调任务的执行顺序，让回调队列内的任务得到更优的时效性和效率平衡，不同的任务又分为：
 
-- `宏任务(macrotasks)`
-- `微任务（microtasks）`
+- `宏任务(macrotasks)`：上图中`callback queue`内都是宏任务。
+- `微任务（microtasks）`：存于独立的唯一队列。
 
 让我们把视线从前面的那张流程图中转过来，事件循环需要更细粒度的控制流。
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1555240091093/6Ph81iBLm.png?auto=compress)
 
-`MacroTask`和`MicroTask`都能算`callback task`，但在其执行流程上不能理解为一个`queue`，二者的执行顺序和流程稍后进行分析。
+`MacroTask`和`MicroTask`的执行顺序和流程稍后进行分析。
 
-我们可以从可操作粒度上体会不同的任务之间`“宏“`与`“微“`的区别。
+我们可以从可操作粒度上体会不同的任务之间`“宏“`与`“微“`的区别（略微补充一些 nodejs 的内容）。
 
 ### 4. 宏任务和微任务
 
@@ -130,11 +132,12 @@ bar
 
 以下类型为宏任务：
 
-- `setTimeout, setInterval, setImmediate`
+- `setTimeout, setInterval, setImmediate(nodejs)`
 - `I/O tasks`
 - `IndexDB`
 - `webWorkers postMessage`
 - `UI`渲染任务
+- `<script>`标签引入的代码
 - ...
 
 
@@ -170,6 +173,39 @@ bar
 
 之后将执行渲染，后续则从宏任务队列中取出一个任务添加到主线程的调用栈中。
 
+### 6. 简单测试题
+
+如下代码按事件循环的理念来说，其执行结果如何？
+
+```js
+console.log('start');
+setTimeout(() => console.log('a'))
+
+Promise.resolve().then(() => {
+  console.log('b');
+}).then(() => {
+  console.log('c');
+})
+
+setTimeout(() => console.log('d'))
+Promise.resolve().then(() => console.log('e'))
+console.log('end');
+```
+
+其输出顺序为：
+
+```sh
+start
+end
+b
+e
+c
+a
+d
+```
+
+主线程从上到下，依次输出`start`和`end`，接着微任务`b`和 `e`，同时产生的微任务输出 `c`，后续两个计时器`a`和`d`依次被打印。
+
 ### 最后
 
 本文浅析了 JavaScript 在浏览器端的事件循环和任务队列的知识点，浅薄之见，如有错漏欢迎大家指正，谢谢。
@@ -189,6 +225,8 @@ bar
 - [浏览器中的事件循环机制 - SegmentFault 思否](https://segmentfault.com/a/1190000012748907)
 
 - [Task Queue and Job Queue - Deep dive into Javascript Event Loop Model](https://blog.greenroots.info/task-queue-and-job-queue-deep-dive-into-javascript-event-loop-model-cjui19qqa005wdgs1742fa4wz)
+
+- JavaScript 事件循环：从起源到浏览器再到 nodejs - Node 地下铁
 
   
 
