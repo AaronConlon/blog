@@ -8,7 +8,17 @@ coverImg: 'https://images.unsplash.com/photo-1611923973164-e0e5f7f69872?crop=ent
 intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 前辈的电子书,充满感激.'
 ---
 
-虽然此前我已经接触过一些异步编程的概念,并且有过一定的实际运用.但是自我感觉,我对`JavaScript`异步编程的了解依然十分浅显,因此我打算再次对`JavaScript`中的异步编程进行学习和总结,然后分享出来.
+2015年，`ECMAScript`新增了一个`Promise`对象，用于表示一个`异步操作`的最终完成（失败）及其结果的值。
+
+感谢`Promise`，让开发者们多了一种选择，让不喜欢回调模式的开发者们从回调的泥沼中挣脱出来。
+
+今天，我们一起来学习一下以下内容：
+
+- 回调的历史
+- Promise 基础
+- Promise Api 应用场景分析
+- Promise Third Library
+- 实现一个 `IPromise` 
 
 
 
