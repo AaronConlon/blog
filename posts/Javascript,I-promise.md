@@ -14,23 +14,105 @@ intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 
 
 今天，我们一起来学习一下以下内容：
 
-- 回调的历史
-- Promise 基础
+- 函数回调
+- Promise 体系
+- 回调 vs Promise
 - Promise Api 应用场景分析
+- Async / await
 - Promise Third Library
 - 实现一个 `IPromise` 
 
+# 1. 回调
 
+JavaScript 语言为了让部分任务按异步的方式进行，提供了编写`回调函数`的方法，让某些任务在达成一些条件之后再执行开发者指定的`回调函数`。
 
-# 2. Promise 异步
+举两个例子:
 
-`TC39`依据`Promise/A+`制定了`ES6 Promise`规范,自此`JavaScript`异步编程向前迈进了一大步,开发者们可以更好的编写异步代码以应对复杂的场景和需求.
+```js
+// browser
+setTimeout(() => {
+  // balabala
+}, 1000)
+
+// nodejs
+const fs = require('fs')
+fs.readFile('filename', (err, data) => {
+  if(err) throw err;
+  // balabala
+})
+// more
+console.log(1)
+```
+
+如上所示，要么延迟执行回调，要么读取文件后执行回调，二者都不会立即执行从而阻塞主线程，而是各自具有自己的执行条件，满足条件后放入任务循环队列中等待主线程空闲才得以执行。
+
+上述回调函数在某些场景下曾让许多开发者写出如下类型的代码：
+
+```js
+
+fs.readFile('file1.txt', function(err, data){
+  if(err) throw err;
+  // ...一些操作
+  fs.readFile('file2.txt', function (err, data) {
+    if(err) throw err;
+    // ...一些操作
+    fs.readFile('file3.txt', function (err, data) {
+      if(err) throw err;
+      // ...一些操作
+      fs.readFile('file4.txt', function (err, data) {
+        if(err) throw err;
+        // ...一些操作
+      });
+    });
+  });
+})
+```
+
+为什么会这样？因为某些场景下需要对异步操作进行排序，需要保证运行逻辑具有一定的顺序，并且还需要对每一个回调进行错误处理。
+
+上述案例省略了真实的逻辑代码，我们可以看出这种回调的嵌套让代码很容易失控，并且难以阅读和维护。
+
+无论是写下这段代码的人还是阅读这段代码的人都被其所"折磨"，江湖人称`“回调地狱”`。
+
+即使我们将之摊开，为每一个回调函数都编写一个具名的独立函数来调用，依然可读性不佳：
+
+```js
+fs.readFile('file1.txt', step1);
+
+function step1(err, data) {
+  if(err) throw err;
+  // ...
+  fs.readFile('file2.txt', step2)
+}
+function step2(err, data) {
+  if(err) throw err;
+  // ...
+  fs.readFile('file3.txt', step3)
+}
+function step3(err, data) {
+  if(err) throw err;
+  // ...
+  fs.readFile('file4.txt', step4)
+}
+function step4(err, data) {
+  if(err) throw err;
+  // ...
+}
+```
+
+这些独立函数的命名也许会让开发者觉得非常不适，为了展开层层嵌套，我们编写了许多几乎不会被`重用`的函数，即使现代编辑器在代码跳转的功能上非常方便，阅读此类代码的时候依然会让我们不断的转移视线。
+
+> “懒惰”使人进步。
+
+使用`Promise`,可以避免此类问题，显著减少编码量，提高代码的可读性。
+
+# 2. Promise 体系
 
 > IE 浏览器不支持`Promise`,我们可以使用`es-promise`等第三方库.
 
 ## 2.1 promise 实例和状态转换
 
-`Promise`实例具有三种状态:
+每个`Promise`实例具有三种状态:
 
 - `pending`: 初始化
 - `fulfilled`: 成功
@@ -38,21 +120,29 @@ intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 
 
 > fulfilled 和 rejected 统称`settled`.
 
-通过`Promise`构造器实例化一个`promise`的时候,其状态为`pending`.在实例化的时候传入一个函数`(execotor)`去处理状态转换逻辑.
+下图是`MDN`提供的`Promise`状态转移图示.
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/promises.png)
+
+
 
 > 本文不会对`promise`做面面俱到的介绍,推荐阅读官方文档.
 
 首先,我们来创建一个`promise`实例:
 
 ```js
-let promise = new Promise((resolve, reject) => {
+// 实例化
+const promise = new Promise((resolve, reject) => {
   // balabala
   if(...) {
+    // 实例状态变更，设置值
     resolve(value) // success
+    resolve(...) // 忽略
   } else {
   	reject(reason) // failure
   }
 })
+// 链式调用，实例方法 then 返回一个新的实例
 promise
   .then(function(value) {
 		// balabala
@@ -63,57 +153,26 @@ promise
 	.catch(reason => {
   	// balabala
   })
+	.finally(() => {})
 ```
 
-传入的函数内部,可以显示按逻辑指定下一个状态.下图是`MDN`提供的`Promise`状态转移图.
+上述示例展示了`promise`的一些特性，如实例化、状态转换赋值、链式调用和异常处理，下面我们会讲到静态方法和实例方法。
 
-![](https://mdn.mozillademos.org/files/8633/promises.png)
+## 2.1 Promise 构造器
 
-> `then`函数可以接收不同形参的函数以实现不同的状态处理逻辑,但是我们推荐使用单参数和使用 catch 处理错误的代码风格.
+我们通过`new Promise(executor)`实例化一个`promise`的时候,其状态为`pending`.在实例化的时候传入一个函数`executor`函数去变更实例的状态和值.
 
-需要注意的是,`promise`实例的状态转换是单向的,一旦`settled`则不可逆转.
+## 2.2 Promise 实例方法
 
-`promise`支持链式调用,每个`then`函数内部最后将返回一个新的`promise`实例,默认返回一个值为`undefined`,状态为`fulfilled`的`promise`实例.
+> 需要注意的是,`promise`实例的状态转换是单向的,一旦`settled`则不可逆转,同时我们可以多次利用此`settled`状态的实例。
 
-**`Promise`出现之前,编写可以一次性监听所有回调函数的错误处理逻辑是困难的,`Promise实例`的实例方法`catch`能应对链式调用之前所有的`then`函数错误和显示的`reject`行为**.
+返回的`promise`实例支持链式调用,每个`then`函数内部最后将返回一个新的`promise`实例。
 
-我们可以显示地使用`return value`指定返回的`promise`对象的值.举个例子:
+默认返回一个值为`undefined`,状态为`fulfilled`的实例.
 
-```js
-asyncFunc()
-	.then(function(v1) {
-  	return 1
-  	// return Promise.resolve(1)  	
-})
-	.then(function(v2) {
-  	console.log(v2); // 1
-})
-```
+> `回调函数`的写法编写可以一次性监听所有回调函数的错误处理逻辑是很困难的,`Promise实例`的实例方法`catch`能处理链式调用之前所有的`then`函数错误和显式的`reject`行为.
 
-除了`return`一个显示的值,在一些`Promise`相关的库源码中我们可能还会看到某些场景下返回一个`thenable`对象.
-
-> `thenable对象`: 任意具有`then`方法的对象.
-
-返回`thenable对象`的时候将执行其`then`方法,`Promise`实例对象也是`thenable对象`,因此在某些嵌套`Promise`的场景下,可以返回一个`异步函数调用`,就像这样:
-
-```js
-asyncFunc1()
-	.then(v1 => {
-  	asyncFunc2()
-  		.then(v2 => {
-      	//balabala
-    })
-})
-
-// 扁平化
-asyncFunc1()
-	.then(v1 => asyncFunc2())
-	.then(v2 => {
-  	// balabala
-})
-```
-
-## 2.2 Promise 静态方法
+## 2.3 Promise 静态方法
 
 `Promise`类具有两个能创建一个新的实例的静态方法:
 
@@ -488,3 +547,4 @@ then: tryCall
 - [javascript - addEventListener vs onclick - Stack Overflow](https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick)
 - [Getting Started | bluebird](http://bluebirdjs.com/docs/getting-started.html)
 - [Implementing JavaScript Promise in 70 lines of code! | Hacker Noon](https://hackernoon.com/implementing-javascript-promise-in-70-lines-of-code-b3592565af0f)
+- [现代 JavaScript 教程](https://zh.javascript.info/)
