@@ -15,12 +15,10 @@ intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 
 今天，我们一起来学习一下以下内容：
 
 - 函数回调
-- Promise 体系
-- 回调 vs Promise
-- Promise Api 应用场景分析
+- Promise 浅析
 - Async / await
 - Promise Third Library
-- 实现一个 `IPromise` 
+- 实现一个 `MiniPromise` 
 
 # 1. 回调
 
@@ -44,9 +42,9 @@ fs.readFile('filename', (err, data) => {
 console.log(1)
 ```
 
-如上所示，要么延迟执行回调，要么读取文件后执行回调，二者都不会立即执行从而阻塞主线程，而是各自具有自己的执行条件，满足条件后放入任务循环队列中等待主线程空闲才得以执行。
+如上所示，要么延迟执行回调，要么读取文件后执行回调，二者都不会立即执行从而阻塞主线程，而是各自具有自己的执行条件，满足条件后放入任务循环队列中等待主线程空闲才得以取出并执行。
 
-上述回调函数在某些场景下曾让许多开发者写出如下类型的代码：
+上述回调函数在某些场景下曾让开发者写出如下类型的代码：
 
 ```js
 
@@ -112,19 +110,20 @@ function step4(err, data) {
 
 ## 2.1 promise 实例和状态转换
 
-每个`Promise`实例具有三种状态:
-
-- `pending`: 初始化
-- `fulfilled`: 成功
-- `rejected`: 失败
-
-> fulfilled 和 rejected 统称`settled`.
-
-下图是`MDN`提供的`Promise`状态转移图示.
-
-![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/promises.png)
+使用`new`实例化的`Promise`对象具有三种状态:
 
 
+- `Fulfilled` - `has resolution`: resolve 成功,调用 `onFulfilled`函数
+-  `Rejected` - `has rejection`: reject, 调用`onRejected`函数
+-  `Pending` - `unresolved`: 初始化状态
+
+> 短横线左边是`Promise/A+`术语,而右边则是`ES6 Promise`术语.
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/image-1582215000590-ffa807c19d5f6959de485fc66664e123.png)
+
+初始状态为`pending`,转为`Fulfilled`或者`Rejected`之后不会再有变化.`Fulfilled`和`Rejected`状态也被称为`Settled`。
+
+`Promise`的状态流转并不复杂，但是我们需要注意其中一些细节。
 
 > 本文不会对`promise`做面面俱到的介绍,推荐阅读官方文档.
 
@@ -162,9 +161,162 @@ promise
 
 我们通过`new Promise(executor)`实例化一个`promise`的时候,其状态为`pending`.在实例化的时候传入一个函数`executor`函数去变更实例的状态和值.
 
+上述代码的片段：
+
+```js
+// 实例化
+const promise = new Promise((resolve, reject) => {
+  // balabala
+  if(...) {
+    // 实例状态变更，设置值
+    resolve(value) // success
+    resolve(...) // 忽略
+  } else {
+  	reject(reason) // failure
+  }
+})
+```
+
+需要关注以下几点：
+
+- `Executor`函数的参数没有限制，但是`Promise`的机制将会为`Executor`函数传入两个函数：`resolve`和`reject`，因此我们得以显示转换`Promise`实例的状态，设置其值。传入的`Executor`函数的形参建议直接命名为`resolve`和`resolve`，当然开发者可以任意命名，甚至不设置形参（这也意味着此实例的状态不会改变，这也写并没有什么意义）。
+- `resolve`和`reject`函数的实参可以是不同类型的值，但是会被进一步处理。也就是说，显示转换状态设置值的时候，传入的参数不一定会直接作为`settled`状态的值。
+
+我们来看看给`resolve`函数传入以下三种不同的值会有怎样的结果。
+
+- 原始类型值
+- Promise 实例
+- thenable 对象
+
+首先是`原始类型值`：
+
+```js
+const p = new Promise((resolve, reject) => {
+  resolve(Symbol())
+  // resolve(1)
+  // resolve('1')
+  // resolve(null)
+  // resolve(undefined)
+  // resolve(1n)
+  // resolve(true)
+  // reject 也是如此
+})
+
+p.then((v) => {
+  console.log('resolve'， v);
+}).catch((i) => {
+  console.log('reject', i);
+})
+```
+
+经过测试，原始类型数据传入`resolve`函数，都能顺利将状态转为`fulfilled`并且设置为当前状态下的值。使用`reject`函数则将状态转为`rejected`,值则是原始类型的值。
+
+其次，来看看传入`Promise`对象。
+
+```js
+const p = new Promise((resolve, reject) => {
+  resolve(Promise.resolve(1))
+})
+p.then((v) => {
+  console.log('resolve', v);
+}).catch((i) => {
+  console.log('reject', i)
+})
+// output
+resolve 1
+```
+
+`then`方法接收到的`v`并不是一个`fulfilled`状态的`Promise`实例，而是`1`。
+
+如果传给`resolve`函数的是一个`rejected`状态的`Promise`实例，如下：
+
+```js
+const p = new Promise((resolve, reject) => {
+  resolve(Promise.reject(1))
+})
+// output
+reject 1
+```
+
+在某些特殊场景下，我们可能会`resolve`一个`Promise`实例，这时候传入的`Promise`实例的状态和值将会设置当前`Promise`实例的状态和值。
+
+> 具有`then`方法的对象称为`thenable`对象，`Promise`实例对象也是一种`thenable`对象。
+
+```js
+const obj = {
+  name: 'youyi',
+  then() {
+    console.log('this is then', arguments);
+    arguments[0](1)
+  }
+}
+const p = new Promise((resolve, reject) => {
+  resolve(obj)
+})
+
+p.then((v) => {
+  console.log('resolve', v);
+}).catch((i) => {
+  console.log('reject', i)
+})
+// output
+this is then [Arguments] {
+  '0': [Function (anonymous)],
+  '1': [Function (anonymous)]
+}
+resolve 1
+```
+
+`executor`内`resolve`一个`thenable`对象，则会将`then`方法视作一个`executor`，在其内部可以显示编写`resolve`和`reject`的逻辑来改变整个`Promise`实例的状态和值。
+
 ## 2.2 Promise 实例方法
 
-> 需要注意的是,`promise`实例的状态转换是单向的,一旦`settled`则不可逆转,同时我们可以多次利用此`settled`状态的实例。
+`Promise`实例有三个实例方法：
+
+- `then`
+- `catch`
+- `finally`
+
+> 重申：`promise`实例的状态转换是单向的,一旦`settled`则不可逆转,同时我们可以多次利用此`settled`状态的实例。
+
+让我们来写一个示例：
+
+```js
+new Promise((resolve ,reject) => resolve(1))
+  .then(() => {
+    console.log('1');
+  })
+  .then((v) => {
+    console.log('2', v);
+    throw new Error('my error')
+  })
+  .then(() => {
+    console.log('3');
+  })
+  .catch(err => {
+    console.log('catch any error');
+    return 4 // 或者 return Promise.resolve(4)
+  })
+  .then((v) => {
+    console.log('4', v);
+    return 5
+  })
+  .finally(() => {
+    console.log('finally');
+  })
+  .then(v => {
+    console.log(5, v);
+  })
+// output
+1
+2 undefined
+catch any error
+4 4
+finally
+5 5
+```
+
+
 
 返回的`promise`实例支持链式调用,每个`then`函数内部最后将返回一个新的`promise`实例。
 
@@ -172,14 +324,59 @@ promise
 
 > `回调函数`的写法编写可以一次性监听所有回调函数的错误处理逻辑是很困难的,`Promise实例`的实例方法`catch`能处理链式调用之前所有的`then`函数错误和显式的`reject`行为.
 
+每个实例方法都返回一个`Promise`实例，区别在于`then`和`catch`通过`return`显示返回一个新的`Promise`实例，而`finally`则让上一个`Promise`实例穿过自己，让下面的实例方法接收到。
+
+`catch`方法能处理链式调用之前所有的异常，也就是说当前面的`Promise`状态转为`rejected`的时候，会跳过`then`方法，从而执行`catch`方法。
+
 ## 2.3 Promise 静态方法
 
 `Promise`类具有两个能创建一个新的实例的静态方法:
 
-- Promise.resolve(param)
-- Promise.reject(param)
+- Promise.resolve(value)
+- Promise.reject(reason)
 
 二者区别在于返回的`promise`实例的状态,前者为`fulfilled`,后者为`rejected`.
+
+`Promise.resolve(value)`可以视为以下代码的简写:
+
+```js
+new Promise(resolve => {
+  resolve(value)
+})
+```
+
+`Promise.reject(reason)`亦如此。
+
+需要注意的是，传入的实参`（value/reason）`可以有几种情形：
+
+- 如果`value`是一个原始数据类型的值，则设置`Promise`实例值为此值，状态设置为`fulfilled`
+- 如果`value`是一个`Promise`实例，对于`Promise.resolve(value)`来说，如果`value`此时是`fulfilled`状态，则将其值作为`value`处理，否则将此`Promise`直接作为`value`作为值处理。对于`Promise.reject(reason)`来说，一律将此传入的`Promise`实例作为 `reason`处理，最终返回`rejected`状态的`Promise`实例，其值是一个`Promise`实例。
+- 如果传入的实参是一个非`Promise`的`thenable`对象，则调用此对象的`then`方法，并且传入`resolve`和`reject`作为实参,将`then`方法作为`executor`，在内部可以设置当前实例的状态和值, 必须显示调用`resolve`或者`reject`方法，使用`return`其他值则无效。
+
+```js
+const obj = {
+  name: 'o',
+  then() {
+    console.log('this is then', arguments);
+    arguments[1](1)
+  }
+}
+const p = Promise.resolve(obj)
+p
+	.then(r => console.log('resolve', r))
+  .catch(r => {
+		console.log('reject', r);
+	})
+
+// output
+this is then [Arguments] {
+  '0': [Function (anonymous)],
+  '1': [Function (anonymous)]
+}
+reject 1
+```
+
+
 
 此外,`Promise`类还有如下几个静态方法:
 
@@ -360,7 +557,54 @@ readFilePromisified(name, opts?): Promise<string | Buffer>
 
 原生`Promise`暂未支持上述两项特性,也许我们可以看看类似`Bluebird`这样的第三方库,它们实现了更多功能.
 
-# 3. MyPromise
+# 3. async / await
+
+`async/await`是一种使用 `Promise`的特殊语法，并且非常容易理解和使用。
+
+我们直接看示例：
+
+```js
+async function foo() {
+  // balabala
+  // return Promise.resolve(value) 推荐写法
+  return 1;
+}
+```
+
+在函数前添加`async`标识此函数总是返回一个`Promise`,即使我们显示指定其他的类型值，也会被包装成一个`Promise`并返回，当然，依然推荐显示地指定返回`Promise`。
+
+> Try...catch...配合 async/await 使用以处理错误。
+
+另一个关键词`await`只在`async`函数内有效：
+
+```js
+async function foo() {
+  const res = await axios.get('your url')
+}
+```
+
+在日常工作中无论是浏览器还是`Nodejs`，都可以看到`await`的身影。
+
+使用这两个关键字可以让`异步流程`看起来更像`同步流程`，`await`会暂停函数的执行，直到其等待的`Promise`状态变为`settled`，对于一些具有前后顺序的异步任务来说，使用`await`体验非常好。
+
+尽管其语法简单，我们也需要关注以下两点细节：
+
+- 顶层`await`：此提案当前依然是 `stage 3`，在正式进入稳定版之前，顶层对于`await`的使用依然需要立即执行表达式（IIFE），不幸的是，这种模式导致图形执行和应用程序的静态可分析性的确定性降低。由于这些原因，缺少顶层 `await` 被认为比该功能带来的危害有更高的风险。
+- 顶层 `await` 仅限于 ES 模块。明确不支持脚本或 CommonJS 模块。
+- `await`支持`thenable`对象,如果其后是一个`thenable`对象，则会执行此对象的`then`方法，并且传入`resolve`和`reject`函数作为参数，最终得到一个`settled`的`Promise`实例。
+- `await`和`Promise.all`等静态方法配合良好。
+
+```js
+const res = await Promise.all([
+  promise1,
+  promise2,
+  ...
+])
+```
+
+
+
+# 4. MiniPromise
 
 如何不借助外部库和`ES6 Promise`实现一个简单的`MyPromise`?
 
@@ -534,17 +778,13 @@ then: tryCall
 
 如果我们传入`then`的`reactions()`通过`try`函数去创建一个新的`promise`实例,就能保证异常可以被内部`catch`处理了.
 
-
-
-
-
 # 参考
 
 - [Exploring ES6 - exploring-es6.pdf](chrome-extension://bocbaocobfecmglnmeaeppambideimao/pdf/viewer.html?file=file%3A%2F%2F%2FUsers%2Fyi%2FDesktop%2Fexploring-es6.pdf)
-- [JavaScript 运行机制详解：再谈Event Loop - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2014/10/event-loop.html)
-- [JavaScript进阶01：异步1-事件监听和回调函数 | forkai's Notes](https://notes.forkai.com/2017/11/06/javascript%E8%BF%9B%E9%98%B601%EF%BC%9A%E5%BC%82%E6%AD%A51-%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/)
 - [architecture - Difference between event handlers and callbacks - Stack Overflow](https://stackoverflow.com/questions/2069763/difference-between-event-handlers-and-callbacks)
 - [javascript - addEventListener vs onclick - Stack Overflow](https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick)
 - [Getting Started | bluebird](http://bluebirdjs.com/docs/getting-started.html)
 - [Implementing JavaScript Promise in 70 lines of code! | Hacker Noon](https://hackernoon.com/implementing-javascript-promise-in-70-lines-of-code-b3592565af0f)
 - [现代 JavaScript 教程](https://zh.javascript.info/)
+- [JavaScript | promise resolve() Method - GeeksforGeeks](https://www.geeksforgeeks.org/javascript-promise-resolve-method/)
+
