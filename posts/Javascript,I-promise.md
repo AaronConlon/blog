@@ -387,6 +387,8 @@ reject 1
 
 这几个静态方法各有其应用场景.
 
+> 是否支持这些静态方法取决于当前环境，我们可以使用第三方库来进行替换，例如`bluebird`。
+
 ### 2.2.1 all
 
 首先,`Promise.all(iterable)`方法接收一个`iterable`对象作为参数,最终返回一个`promise 实例`.
@@ -602,9 +604,73 @@ const res = await Promise.all([
 ])
 ```
 
+- Error 处理
+
+```js
+async function thisThrows() {
+  throw new Error("Thrown from thisThrows()");
+}
+
+async function run() {
+  try {
+      await thisThrows();
+  } catch (e) {
+      console.error(e);
+  } finally {
+      console.log('We do cleanup here');
+  }
+}
+
+run();
+// output 
+Error: Thrown from thisThrows()
+    at ...
+We do cleanup here
+```
+
+我们可以在`async`函数中使用`try...catch...`处理异常问题，就像`Promise`使用实例方法`catch`一样。
+
+# 4. Promisify
+
+`Promise`很棒，但是遵循常见的错误优先的回调风格的函数依然可以在许多场景下活跃着，无论是其开发者在编写代码的时候还未出现`Promise`，亦或是开发者更喜欢回调风格的范式，跟这些回调风格的函数打交道似乎无可避免。
+
+> Nodejs 官方提供了 util.promisify 工具函数用于将传统回调风格的函数转换为返回`Promise`的函数。
+
+我们可以构建一个将`callback`风格的函数转换为`Promise`风格的函数的工具函数。
+
+```js
+function promisify(f, multiArgs = false){
+  return function(...args) {
+    return new Promise((resolve, reject) => {
+      function callback(err, ...results) {
+        err ? reject(err) : resolve(multiArgs ? results : results[0])
+      }
+      args.push(callback)
+      f.call(this, ...args)
+    })
+  }
+}
+
+const fs = require('fs')
+const fsPromise = promisify(fs.readdir)
+fsPromise('.').then(r => {
+  console.log('resolve', r);
+}).catch(r => {
+  console.log('reject', r);
+})
+// output 
+resolve [
+  'index.js'
+]
+```
+
+在这个转换过程中，我们将原来的函数包裹进去，并且返回一个可执行的函数，这个函数接收的参数跟原来的`回调风格`函数一致，只是将之转换为`Promise`风格的函数后，传参可以省略`回调函数`，我们在内部构建了一个回调函数，并且将之作为原函数的回调部分作为参数传给了返回函数。
+
+现在，我们将传统回调风格的函数转化为返回`Promise`的函数了，我们可以放心使用`Promise`的新特性了。
 
 
-# 4. MiniPromise
+
+# 5. MiniPromise
 
 如何不借助外部库和`ES6 Promise`实现一个简单的`MyPromise`?
 
@@ -787,4 +853,6 @@ then: tryCall
 - [Implementing JavaScript Promise in 70 lines of code! | Hacker Noon](https://hackernoon.com/implementing-javascript-promise-in-70-lines-of-code-b3592565af0f)
 - [现代 JavaScript 教程](https://zh.javascript.info/)
 - [JavaScript | promise resolve() Method - GeeksforGeeks](https://www.geeksforgeeks.org/javascript-promise-resolve-method/)
-
+- [Error handling with Async/Await in JS | by Ian Segers | ITNEXT](https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a)
+- [Understanding JavaScript Promises](https://nodejs.dev/learn/understanding-javascript-promises)
+- [util.promisify(original) | Node.js API 文档](http://nodejs.cn/api/util/util_promisify_original.html)
