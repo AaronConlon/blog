@@ -223,6 +223,8 @@ p.then((v) => {
 ```js
 const p = new Promise((resolve, reject) => {
   resolve(Promise.resolve(1))
+  // or 
+  reject(Promise.resolve(1))
 })
 p.then((v) => {
   console.log('resolve', v);
@@ -234,6 +236,8 @@ resolve 1
 ```
 
 如果传入给`promise`的参数也是一个`Promise`实例，则相当于一个空包装，最终将得到一个相同状态和值的`Promise`实例。
+
+> `reject(Promise.resolve(1))` 不会照搬`resolve`的特性，对于传入一个`Promise`实例的情形，会将之作为`Rejected`状态下的`reason`。
 
 ```js
 const p = new Promise((resolve, reject) => {
