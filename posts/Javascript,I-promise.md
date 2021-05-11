@@ -588,9 +588,7 @@ async function foo() {
 
 > 可以理解为 async 函数最后显式返回的值经过 Promise.resolve 函数的转化，返回一个新的 Promise 实例
 
-在函数前添加`async`标识此函数总是返回一个`Promise`,即使我们显示指定其他的类型值，也会被包装成一个`Promise`并返回，当然，依然推荐显示地指定返回`Promise`。
-
-> Try...catch...配合 async/await 使用以处理错误。
+在函数前添加`async`标识此函数总是返回一个`Promise`实例,即使我们显示指定其他的类型值的返回值，也会被包装成一个`Promise`并返回，当然，依然推荐显示地指定返回`Promise`。
 
 使用`async`关键字可以让函数具有`异步`特征，但总体上代码依然是`同步`求值的。
 
@@ -621,7 +619,9 @@ async function foo() {
 
 在日常工作中无论是浏览器还是`Nodejs`，都可以看到`await`的身影。
 
-尽管其语法简单，我们也需要关注以下两点细节：
+那么，为什么我们更推荐使用`async/await`语法，它又有怎样的细节需要我们关注的呢？
+
+来看以下几点特性：
 
 - 顶层`await`：此提案当前依然是 `stage 3`，在正式进入稳定版之前，顶层对于`await`的使用依然需要立即执行表达式（IIFE），不幸的是，这种模式导致图形执行和应用程序的静态可分析性的确定性降低。由于这些原因，缺少顶层 `await` 被认为比该功能带来的危害有更高的风险。
 - 顶层 `await` 仅限于 ES 模块。明确不支持`CommonJS`模块。
@@ -638,29 +638,106 @@ const res = await Promise.all([
 
 - Error 处理
 
-```js
-async function thisThrows() {
-  throw new Error("Thrown from thisThrows()");
-}
+> `async/await`配合`try...catch..`可以更清晰地同时处理同步和异步的异常
 
-async function run() {
+让我们来看一个例子：
+
+```js
+const makeRequest = async () => {
   try {
-      await thisThrows();
+    const data = JSON.parse(await getJSON())
+    console.log(data)
   } catch (e) {
-      console.error(e);
-  } finally {
-      console.log('We do cleanup here');
+    console.log(e)
   }
 }
-
-run();
-// output 
-Error: Thrown from thisThrows()
-    at ...
-We do cleanup here
 ```
 
-我们可以在`async`函数中使用`try...catch...`处理异常问题，就像`Promise`使用实例方法`catch`一样。
+无论是异步函数`getJSON()`还是同步函数`JSON.parse()`都能被同一个`try...catch...`结构对异常进行处理，代码逻辑相对使用`Promise.then / catch`的方式来说会更清晰，可读性更强。
+
+也许可读性的评判更容易掺杂主观意识，但是对于异步`Debug`代码来说，`async/await`显然更轻松。
+
+为什么？我想有以下两点理由：
+
+- 在`then`中难以对箭头函数下断点
+- 即使是在 `then`中下了断点，类似单步步入的操作也不会得到预期的结果，原因在于这种调试方式只能在同步代码中使用。
+
+我们来看两个示例：
+
+```js
+const makeRequest = () => {
+   return callAPromise()
+     .then(() => callAPromise())
+     .then(() => callAPromise())
+}
+// async / await
+const makeRequest = async() => {
+   await callAPromise()
+   await callAPromise()
+}
+```
+
+在调试过程中由于`await`的特殊性，我们可以像调试同步代码这么方便自然。
+
+> 另外，使用`async / await`语法，我们应该留心异步代码的平行加速问题。
+
+来看示例：
+
+```js
+async function delay(id) {
+  return new Promise((res) => {
+    setTimeout(() => {
+      console.log(`task ${id} finished.`)
+    }, 1000)
+  })
+}
+async function demo1() {
+  await delay(1)
+  await delay(2)
+  await delay(3)
+}
+demo1()
+// 另一个 demo
+async function demo2() {
+  const p1 = delay(1)
+  const p2 = delay(2)
+  const p3 = delay(3)
+  await p1
+  await p2
+  await p3
+}
+```
+
+对于没有异步执行顺序需求的`async/await`语法来说，我们可以一次性初始化其异步任务，然后再分别等待其结果即可。
+
+> 在重视`性能`的应用中，使用`async/await`语法可以减少内存的占用。
+
+在使用`new Promise`初始化时，我们创建`Promise`实例的函数即使是在处理程序转换`Promise`实例的状态时依然被保存在栈追踪信息内，然而我们知道这些信息随着初始化函数的返回其实已经没有必要存在了，但是`Javascript`引擎会在创建`Promise`时尽可能保存完整的调用栈，在抛出错误时调用栈可以由运行时的错误处理逻辑获取，故我们能在栈追踪信息中看到它们，最终占用一些内存，增加了计算和存储成本。
+
+如果我们使用`async/await`语法：
+
+```js
+function fooPromiseExecutor(resolve, reject) {
+  setTimeout(reject, 1000, 'bar')
+}
+
+async function foo() {
+  await new Promise(fooPromiseExecutor)
+}
+foo()
+/// Uncaught (in promise) bar
+// foo
+// async function (async)
+// foo
+```
+
+由于`fooPromiseExecutor`已经返回，故不在错误信息中了。
+
+`Javascript`运行时可以简单地在嵌套函数中存储指向包含函数的指针，就如同对待同步函数一样，指针时机存储在内存中，用于在出错的时候生成错误信息，如此一来便省去了这“微小”的消耗。
+
+最后我想说，相对于使用`Promise`的实例方法来编写异步代码，使用`async/await`的语法，显然代码量将会减少🐶，何乐而不为？
+
+
 
 # 4. Promisify
 
