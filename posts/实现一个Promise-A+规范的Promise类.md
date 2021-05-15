@@ -133,19 +133,27 @@ Yi.prototype.broadcast = function() {
 }
 ```
 
-对于类似笔者这种功力不足的开发者来说，为了更好地实现`Yi`，理解`Promise`的原理，我想可以降低整体的复杂度，先用`setTimeout`模拟微任务，ok，最终版本一定会按平台通过`nextTick`或者`MutationObserver`来替换`setTimeout`。
+对于类似笔者这种功力不足的开发者来说，为了更好地实现`Yi`，理解`Promise`的原理，我想可以降低整体的复杂度，先用`setTimeout`模拟微任务，后续最终版本一定会按平台通过`nextTick`或者`MutationObserver`来替换`setTimeout`。
 
 话说回来，`then`方法中我们实例化一个不会在`executor`中同步让自己进入`settled`状态的`Yi(promise)`实例，并且根据当前的实例状态为这个新的实例添加了两个属性方法`onFulfilled`和`onRejected`，然后将之放入当前实例的`consumers`数组中暂存。
 
 接着，我们调用了一个核心函数：`broadcast`。
 
-瞧瞧其实现，当当前实例在`pending`状态下调用此方法，我们直接返回。
+瞧瞧其实现，如若当前实例在`pending`状态下调用此方法，我们直接返回。
 
-只有状态稳定了，我们再根据其状态`fulfilled`或者`rejected`来获取我们将要调用的异步任务函数，也就是在`then`方法的`executor`函数中为新`Yi(Promise)`实例创建的属性方法。
+只有进入`settled`状态，我们再根据其状态`fulfilled`或者`rejected`来获取我们将要调用的异步任务函数，也就是在`then`方法的`executor`函数中为新`Yi(Promise)`实例创建的属性方法。
 
 我们为初始化的`Yi(Promise)`实例通过`then`传入的状态变更处理函数`onFulfilled`和`onRejected`赋值给了内部新实例化，且在`then`中返回的`Yi(Promise)`实例。
 
 在`resolve`、`reject`这两个可以变更实例状态的方法中调用了`broadcast`方法。
 
 因为而状态变更会让所有的元素都执行`then`中添加的异步任务，并且我们的实例可以在不同时机多次调用`then`方法新增`consumers`的元素，因此需要在适当的时机清空当前实例的`consumers`数组。
+
+对于一个`Promise`的实现来说，我们还需要添加一个`catch`方法，这个方法可以看成`then`方法的语法糖。
+
+```js
+Yi.prototype.catch = function(onRejected) {
+  return this.then(undefined, onRejected)
+}
+```
 
