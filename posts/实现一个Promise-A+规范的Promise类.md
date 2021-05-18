@@ -237,3 +237,10 @@ Yi.prototype.catch = function(onRejected) {
 }
 ```
 
+
+
+
+
+## 致谢
+
+再次感谢 @bluejava 回复我的咨询邮件，并且耐心地与我蹩脚的英语沟通，即使他也许不会注意到这里。
