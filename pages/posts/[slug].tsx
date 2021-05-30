@@ -9,7 +9,6 @@ import {
 import Layout from "../../components/layout.tsx";
 // @ts-ignore
 import { getAllPostIds, getPost } from "../../lib/posts.ts";
-import "../../styles/dracula.css";
 
 const assertPrefix = "/blog";
 export default function Post({
