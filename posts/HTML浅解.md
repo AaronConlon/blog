@@ -3,8 +3,8 @@ title: 'HTML浅解'
 date: '2021/5/24'
 tags:
 - HTML
-mainImg: 'https://images.unsplash.com/photo-1621579274840-bd3dc60bf590?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjE3OTA2Njc&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1621579274840-bd3dc60bf590?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjE3OTA2Njc&ixlib=rb-1.2.1&q=80&w=400'
+mainImg: 'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjIzNzk4NTM&ixlib=rb-1.2.1&q=80&w=1080'
+coverImg: 'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjIzNzk4NTM&ixlib=rb-1.2.1&q=80&w=400'
 intro: '作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？'
 ---
 
@@ -306,5 +306,4 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 - `onload`: 图像顺利加载完成
 - `onerror`: 图像资源 404、403、500、请求超时或者返回的资源不是有效的图片
 - `onabort`: 图像加载被强制停止，例如主动点击浏览器`stop`按钮
-
 
