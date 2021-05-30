@@ -1,13 +1,15 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/no-danger */
 import Head from "next/head";
-import Link from "next/link";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { Box, Heading, Image, Badge, Stack, Tag } from "@chakra-ui/core";
+import {
+  Box, Heading, Image, Badge, Stack, Tag
+} from "@chakra-ui/core";
 // @ts-ignore
 import Layout from "../../components/layout.tsx";
 // @ts-ignore
 import { getAllPostIds, getPost } from "../../lib/posts.ts";
+import "../../styles/dracula.css";
 
 const assertPrefix = "/blog";
 export default function Post({
@@ -25,10 +27,6 @@ export default function Post({
     <Layout>
       <Head>
         <title>{post.title}</title>
-        <link
-          rel="stylesheet"
-          href="https://highlightjs.org/static/demo/styles/dracula.css"
-        />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
