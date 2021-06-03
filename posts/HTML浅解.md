@@ -336,3 +336,35 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 
 表格允许开发者们将图片、图像、链接等数据排列到单元格的行和列中。
 
+一个表格标签，内部嵌套着行盒子`tr`(table row)和单元格`td`。如果有必要，可以添加一行`th`表格列标题。
+
+甚至是使用`thead`、`tbody`、`tfoot`将整体结构拆开：
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Savings</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Sum</td>
+      <td>$180</td>
+    </tr>
+  </tfoot>
+</table>
+```
+
+表格标签支持多属性控制样式，但是推荐使用`CSS`控制样式。
