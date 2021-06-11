@@ -194,7 +194,84 @@ grid-template-columns: 100px auto 100px;
 }
 ```
 
-如果简写忽略了第二个值，则默认等于第一个值，新的标准
+如果简写忽略了第二个值，则默认等于第一个值。
+
+#### 3.1.4 grip-template-areas
+
+网格布局可以通过字符串，抽象画的划分不同`item`所属的区域。
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px;
+  grid-template-areas: 'a b c'
+                       'd e f'
+                       'g h i';
+}
+
+.area-a {
+  grid-area: a;
+  ....
+}
+```
+
+`grid-template-areas`通过空格将不同区域分割开来，然后可以在`css`中直接使用`grid-area`属性和区域名作为值，再为标签添加类即可针对性的设置样式。
+
+不使用的区域可以使用`.`占位，可以不同`cell`具有相同的`area`名，以便于指定样式，例如：
+
+```css
+grid-template-areas: 'a . a'
+                     'b . b'
+                     'c . d';
+```
+
+> `grip-template-rows`可以定义子项高度，同时也可以为网格线命名，而网格线可以有多个名字。`grid-template-areas`指定区域名的时候，也默认生成了`areaName-start`和`areaName-end`这样的网格线别名。
+
+#### 3.1.5 grid-auto-flow
+
+容器划分好网格后，容器内`item`按顺序放置，默认先行后列，这个顺序是可以更改的。`grid-auto-flow`就是设置这个顺序的属性，默认值为`row`,先行后列，如果需要先列后行，则设置值为`column`。
+
+当某行或者某列按次序放置子项的时候，存在剩余宽度不足的情形，如果需要可以在`row`或`column`后添加一个`dense`值，二者用空格分开，意为尽可能让子项连续密集显示，如此一来就会跳过宽度超过剩余宽度的子项，按序优先使用后续满足条件的子项。例如：
+
+![image-20210611213814388](/Users/yi/Library/Application Support/typora-user-images/image-20210611213814388.png)
+
+属性：
+
+```css
+grid-auto-flow: row dense;
+```
+
+结果：
+
+![](https://www.wangbase.com/blogimg/asset/201903/bg2019032514.png)
+
+对于某些严格需要避免中间空白的布局来说，这个属性非常有效。
+
+#### 3.1.6 单元格位置
+
+`justify-items`设置单元格水平布局，`align-items`设置单元格垂直布局，二者可选的值为：
+
+- start
+- end
+- center
+- Stretch （默认值，拉伸）
+
+如果要设置整个容器内的单元格位置，也就是将容器内所有单元格视为一个整体，其布局属性可用：
+
+- justify-content:：整体水平对齐
+- align-content： 整体垂直对齐
+- place-content：此为上述两个属性的简写方式，如果忽略第二个值则采用第一个值
+
+这几个布局属性的值类似`flex`的布局值，分别是：
+
+- start
+- end
+- center
+- stretch（拉伸）
+- Space-around 项目两侧间隔相等，子项之间距离两个间隔
+- Space-between 子项之间距离相等，第一个子项和最后一个子项左边或右边没有空白，紧贴容器
+- Space-evenly 子项左右空白距离相等
 
 ## 参考
 
