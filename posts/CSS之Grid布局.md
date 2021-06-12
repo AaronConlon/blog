@@ -234,7 +234,7 @@ grid-template-areas: 'a . a'
 
 当某行或者某列按次序放置子项的时候，存在剩余宽度不足的情形，如果需要可以在`row`或`column`后添加一个`dense`值，二者用空格分开，意为尽可能让子项连续密集显示，如此一来就会跳过宽度超过剩余宽度的子项，按序优先使用后续满足条件的子项。例如：
 
-![image-20210611213814388](/Users/yi/Library/Application Support/typora-user-images/image-20210611213814388.png)
+![](https://i.imgur.com/P3bSu2L.png)
 
 属性：
 
@@ -244,7 +244,7 @@ grid-auto-flow: row dense;
 
 结果：
 
-![](https://www.wangbase.com/blogimg/asset/201903/bg2019032514.png)
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/bg2019032514-20210612221449095.png)
 
 对于某些严格需要避免中间空白的布局来说，这个属性非常有效。
 
@@ -272,6 +272,166 @@ grid-auto-flow: row dense;
 - Space-around 项目两侧间隔相等，子项之间距离两个间隔
 - Space-between 子项之间距离相等，第一个子项和最后一个子项左边或右边没有空白，紧贴容器
 - Space-evenly 子项左右空白距离相等
+
+#### 3.1.7 grid-auto-rows and grid-auto-columns
+
+当`容器网格`只有三行的时候，如果需要指定某个`子项`在第五行，这时候浏览器自动`根据子项大小`创建新的网格以放置额外的子项，我们可以通过`grid-auto-rows`和`grid-auto-columns`指定自动创建的网格的高度和宽度。
+
+例如：
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px;
+  grid-auto-rows: 50px; 
+}
+```
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/bg2019032525.png)
+
+之所以`8`和`9`会占据图中的位置，是因为我们使用`css`指定其行和列的位置值：
+
+```css
+.item-8 {
+  background-color: #d0e4a9;
+  grid-row-start: 4;
+  grid-column-start: 2;
+}
+
+.item-9 {
+  background-color: #4dc7ec;
+  grid-row-start: 5;
+  grid-column-start: 3;
+}
+```
+
+由此引出`grid-row-start`和`grid-column-start`属性，可以指定其元素的位置。
+
+除了`start`还有`end`可以指定，看示例：
+
+```css
+.item-1 {
+  grid-column-start: 2;
+  grid-column-end: 4;
+}
+```
+
+此时如果没有指定`grid-auto-flow: row dense;`,则会让布局看起来如下图所示：
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/bg2019032526.png)
+
+为了方便记忆，可以将网格线数字改为网格线名。
+
+这四个属性的值还可以使用`span`关键字，表示"跨越"，即左右边框（上下边框）之间跨越多少个网格。
+
+```css
+.item-1 {
+  grid-column-start: span 2;
+}
+```
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/bg2019032528.png)
+
+
+
+#### 3.1.8 属性简写
+
+此前我有翻译过`google html & css guide`文档风格指南，其中有一条建议是尽量在`css`中使用简写，我认为这是一个很好的准则。
+
+`grid-template`属性是`grid-template-columns`、`grid-template-rows`和`grid-template-areas`这三个属性的合并简写形式。
+
+`grid`属性是`grid-template-rows`、`grid-template-columns`、`grid-template-areas`、 `grid-auto-rows`、`grid-auto-columns`、`grid-auto-flow`这六个属性的合并简写形式。
+
+> 如果你喜欢简写，务必不要弄错简写的属性顺序。
+
+`grid-column`属性是`grid-column-start`和`grid-column-end`的合并简写形式，`grid-row`属性是`grid-row-start`属性和`grid-row-end`的合并简写形式。
+
+```css
+.item {
+  grid-column: <start-line> / <end-line>;
+  grid-row: <start-line> / <end-line>;
+}
+```
+
+下面是一个例子。
+
+```css
+.item-1 {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+}
+/* 等同于 */
+.item-1 {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+```
+
+
+
+上面代码中，项目`item-1`占据第一行，从第一根列线到第三根列线。
+
+这两个属性之中，也可以使用`span`关键字，表示跨越多少个网格。
+
+```css
+.item-1 {
+  background: #b03532;
+  grid-column: 1 / 3;
+  grid-row: 1 / 3;
+}
+/* 等同于 */
+.item-1 {
+  background: #b03532;
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+}
+```
+
+[上面代码](https://jsbin.com/volugow/edit?html,css,output)中，项目`item-1`占据的区域，包括第一行 + 第二行、第一列 + 第二列。
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/bg2019032529.png)
+
+`grid-area`属性还可用作`grid-row-start`、`grid-column-start`、`grid-row-end`、`grid-column-end`的合并简写形式，直接指定项目的位置。
+
+```css
+.item {
+  grid-area: <row-start> / <column-start> / <row-end> / <column-end>;
+}
+
+.item-1 {
+  grid-area: 1 / 1 / 3 / 3;
+}
+```
+
+效果如上图所示。
+
+### 3.2 子项属性
+
+子项和容器的属性可以拆分开来，通过诸如`justify-self`等带`self`关键字的属性控制单独的子项的样式，并且优先级高于容器上相关的样式属性。
+
+#### 3.2.1 justify-self 、align-self、place-self
+
+`justify-self`属性设置单元格内容的水平位置（左中右），跟`justify-items`属性的用法完全一致，但只作用于单个项目。
+
+`align-self`属性设置单元格内容的垂直位置（上中下），跟`align-items`属性的用法完全一致，也是只作用于单个项目。
+
+```css
+.item {
+  justify-self: start | end | center | stretch;
+  align-self: start | end | center | stretch;
+}
+```
+
+`place-self`属性是`align-self`属性和`justify-self`属性的合并简写形式。
+
+```css
+place-self: center center;
+```
+
+如果省略第二个值，`place-self`属性会认为这两个值相等。
 
 ## 参考
 
