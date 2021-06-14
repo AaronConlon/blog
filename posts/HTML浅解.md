@@ -418,3 +418,45 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 ```
 
 浏览器对此链接的点击行为做出反应，调用默认的邮件处理程序预置目标邮件地址，并且可以在`mail`地址后添加参数，邮件处理程序会解析类似`主题`或`body`的预置内容。
+
+### 13. Frames
+
+浏览器可以通过创建不同的`Frame`分割视图区域，并且每个`Frame`有单独的`HTML`结构，浏览器标签所有的`Frame`的集合被称为`frameset`。
+
+> `frameset`代替`body`标签，定义页面的行与列的布局。
+
+这种技术的缺点也很明显：
+
+- 小屏幕设备显示功能效果不好，难以让分割视图的特性发挥效果。
+- 不同分辨率的终端显示效果可能不同
+- 浏览器的返回按钮可能会出乎意料，甚至无法实现用户想要的效果
+- 少数浏览器不支持此标签
+- 跨`Frame`通信较为复杂
+
+示例:
+
+```html
+<!DOCTYPE html>
+<html>
+   
+   <head>
+      <title>HTML Frames</title>
+   </head>
+   
+   <frameset cols = "25%,50%,25%">
+      <frame name = "left" src = "https://www.baidu.com" />
+      <frame name = "center" src = "https://www.baidu.com" />
+      <frame name = "right" src = "https://www.baidu.com" />
+      
+      <noframes>
+         <body>Your browser does not support frames.</body>
+      </noframes>
+   </frameset>   
+</html>
+```
+
+还有一个标签：`iframe`也是提供一个内嵌的`frame`功能，不过它可以脱离`frameset`使用，更具有灵活性。
+
+这种技术的应用较为少见，请谨慎使用（笔者在广告功能中常能见到其踪影）。
+
+### 14. 字体滚动
