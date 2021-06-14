@@ -433,6 +433,22 @@ place-self: center center;
 
 如果省略第二个值，`place-self`属性会认为这两个值相等。
 
+## 4. 解题
+
+学习了`grid`布局的知识后，让我们将之运用到一开头我的需求中来，再次看这个图：
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/GlXYwLiM4uyUIst-20210613022942072.png)
+
+针对性的容器`CSS`如下：
+
+```css
+.container {
+  
+}
+```
+
+
+
 ## 参考
 
 - [CSS Grid 网格布局教程 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
