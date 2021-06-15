@@ -467,3 +467,47 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 
 ### 15. HTML 通用属性
 
+> 在 base、head、html、meta、param、script、style、title 元素上无效
+
+H5 之前有五个除了上述几个元素外其他所有元素共有的可用属性：
+
+- class
+- id
+- style
+- title
+- tabindex
+- accesskey
+
+前四者较为常用，后两者却容易被忽视。`tabindex`属性用于获取或指定当前元素的`tab`键激活顺序，其值范围为：`0~32767`。
+
+如果不设置，则默认值是 0，并且按出现顺序进行跳转，但是可以设置值为`-1`，使得元素不能被`TAB`键访问，如果某些元素是隐藏的，在其未显示之前不应该被`TAB`键访问到，因此可以设置`tabindex=-1`。
+
+> 如果为`div`设置了`tabindex`，则其内部嵌套的元素如果没有设置`tabindex`，则无法通过方向键跳转。
+
+如果针对某些元素设置了`tabindex`，则`tab`键将从大到小进行跳转，慎用此特性以免给惯用快捷键访问的用户造成困扰，但如果良好地设计`tabindex`，则可以提供良好的无障碍访问功能。
+
+同样的，`accesskey`也容易被人忽略，即使其功能强大。
+
+我们可以为元素设置`accesskey`的值，然后通过不同系统的浏览器快捷键+此属性的值进行快速访问。
+
+![image-20210616060934949](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/image-20210616060934949.png)
+
+> [HTML accesskey属性与web自定义键盘快捷访问 « 张鑫旭-鑫空间-鑫生活](https://www.zhangxinxu.com/wordpress/2017/05/html-accesskey/comment-page-1/#comment-414139)
+
+如果你喜欢`vimium`的功能，我猜这个属性的功能能够让你很开心。但是很多应用都没有使用到这个属性，这是无障碍访问功能的一部分，常常被人忽视，使其看起来犹如屠龙之技。
+
+并且不同浏览器之间快捷键不同，对于元素的交互行为也不一样，这两个缺陷使其应用性大打折扣。浏览器快捷键和操作系统之间的影响可以从上图中看出端倪，而行为上的不一致，最简明的例子就是`IE`浏览器和`chrome`浏览器之间对`<a>`元素的行为不一致。前者只是让其获得焦点，后者却可以触发点击行为。
+
+[accesskey - npm](https://www.npmjs.com/package/accesskey)这里有一个支持增强`accesskey`功能和处理一致性行为的第三方库，或许以后用得上。
+
+> 不过话说回来，这个属性提醒了我可以在`electron`技术上使用这个功能，这样就可以减少使用系统快捷键绑定的逻辑代码。
+
+`HTML5`版本出来之后，新增了部分全局属性：
+
+- contenteditable：是否可编辑
+- Data-*：自定义的元素数据存储，可以配合`JavaScript`或者`CSS`属性选择器使用
+- draggable：实验中的属性，是否可以拖动
+- dropzone：较为少见的属性，不如使用此名第三方库（[dropzone/dropzone: Dropzone is an easy to use drag'n'drop library. It supports image previews and shows nice progress bars.](https://github.com/dropzone/dropzone)）
+- hidden：常用
+- spellcheck：拼写检查，也是实验中的功能
+
