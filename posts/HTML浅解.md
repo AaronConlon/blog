@@ -511,3 +511,65 @@ H5 之前有五个除了上述几个元素外其他所有元素共有的可用�
 - hidden：常用
 - spellcheck：拼写检查，也是实验中的功能
 
+
+
+### 16. 字体知识
+
+字体是相对于操作系统而言的，不同操作系统默认支持某些特定的字体，因此在样式表中我们可以指定多种字体以支持不同的操作系统，如果没有指定字体，则使用系统默认的字体。
+
+CSS 定义了 5 个常用的字体名称: `serif, ``sans-serif, ``monospace`, `cursive,`和 `fantasy. `这些都是非常通用的，当使用这些通用名称时，使用的字体完全取决于每个浏览器，而且它们所运行的每个操作系统也会有所不同。
+
+示例样式如下：
+
+```css
+p {
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+}
+```
+
+提供了三种字体，前面的优先，如果系统不支持此字体则一次往后递增，最后使用默认字体。
+
+我们可以使用`@font-face`自定义字体：
+
+```css
+@font-face {
+    font-family: <fontFamily>; /* 自定义的字体名称; */
+    src: <source> [<format>][,<source> [<format>]]*;  /* 自定义的字体的存放路径、格式; */
+    [font-weight: <weight>]; /*  是否为粗体 */ 
+    [font-style: <style>]; /*  定义字体样式，如斜体 */
+}
+```
+
+字体具有不同的格式，源文件格式可能会是：
+
+- .tff
+- .otf
+
+前者字体格式值为`TrueType`，后者为`OpenType`，甚至还有：
+
+- Embedded Open Type (.eot)
+- Web Open Font Format (.woff)
+
+为了保证兼容性，可以同时提供多种自定义字体：
+
+```css
+@font-face {
+    font-family: 'myFont';
+    src: url('myFont.eot'); /* IE9 Compat Modes */
+    src: url('myFont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('myFont.woff') format('woff'), /* Modern Browsers */
+}
+```
+
+自定义字体的另一个广泛使用案例：`图标字体`。
+
+![image-20210618003909597](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/image-20210618003909597.png)
+
+图标字体可以很方便的配合伪类使用，并且非常灵活，开发者可以轻松修改其颜色和大小等。另外，兼容性很好，在某些需要兼容`IE`的项目中可以放心使用。
+
+使用图标字体还有以下几个优点：
+
+- 轻松替换
+- 不会失真
+- 便捷，可压缩
+
