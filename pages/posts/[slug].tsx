@@ -31,6 +31,16 @@ export default function Post({
           href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
         />
         <link rel="stylesheet" href={`${assertPrefix}/post.css`} />
+        {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0BNBT8YXG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `<!-- Global site tag (gtag.js) - Google Analytics -->
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());        
+            gtag('config', 'G-J0BNBT8YXG');`
+        }}>          
+        </script>
       </Head>
       <Box>
         <Box width="100%" margin="0 auto" paddingBottom="2rem" maxW="960px">
