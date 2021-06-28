@@ -15,11 +15,66 @@ intro: '动手写一个 chrome 扩展程序，从零配置开发环境，一步�
 
 开发环境目标如下：
 
-- 使用 react 框架进行 `override tabpage` 的开发
-- 支持`swc`编译和`typescript`开发
+- 使用 `react` 框架进行 `override tabpage` 的开发
+- 支持`swc`编译和`typescript` + `react`开发
 - 支持`eslint`格式验证
 - 支持`sass`
 - 支持图片导入和处理
+
+
+
+首先，使用`yarn`初始化项目目录。
+
+### wepack + react + ts + swc
+
+接着，配置`webpack+ts`，使用`swc`代替`ts-loader`处理`ts`文件。
+
+需要安装的库如下：
+
+##### 开发模式依赖安装
+
+- @types/react
+- @types/react-dom
+
+- typescript
+- webpack
+- webpack-cli
+- swc
+- webpack-dev-server
+
+##### 构建模式依赖安装
+
+- react react-dom
+
+##### 几个配置文件
+
+- `tsconfig.json`
+
+```json
+{
+  "include": ["./src/*/*"],
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "target": "ES6",
+    "module": "CommonJS",
+    "lib": ["esnext", "DOM"],
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "removeComments": true,
+    "noEmit": false,
+    "strict": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true
+  }
+}
+```
+
+##### package.json
+
+```json
+```
 
 
 
