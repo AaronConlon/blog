@@ -204,7 +204,7 @@ yarn add -D babel-plugin-transform-runtime
 
 - [@babel/plugin-transform-runtime · Babel](https://babeljs.io/docs/en/babel-plugin-transform-runtime#docsNav)
 
-- [吃一堑长一智系列: 99% 开发者没弄明白的 babel 知识 - 知乎](https://zhuanlan.zhihu.com/p/361874935)
+- [吃一堑长一智系列: 99% 开发者没弄明白的 babel 知识](https://zhuanlan.zhihu.com/p/361874935)
 
   
 
