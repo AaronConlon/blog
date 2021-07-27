@@ -19,7 +19,7 @@ intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 
 - Async / await
 - Promisify
 
-  
+
 
 # 1. 回调
 
@@ -106,7 +106,7 @@ function step4(err, data) {
 
 使用`Promise`,可以避免此类问题，显著减少编码量，提高代码的可读性。
 
-# 2. Promise 
+# 2. Promise
 
 > IE 浏览器不支持`Promise`,我们可以使用`bluebird`或`es6-promise`等第三方库.
 
@@ -223,7 +223,7 @@ p.then((v) => {
 ```js
 const p = new Promise((resolve, reject) => {
   resolve(Promise.resolve(1))
-  // or 
+  // or
   reject(Promise.resolve(1))
 })
 p.then((v) => {
@@ -306,7 +306,7 @@ const p = Promise.resolve(1)
 let c = p.then()
 console.log(p);
 setTimeout(() => {
-  console.log(c);  
+  console.log(c);
 }, 200);
 // output
 Promise { 1 }
@@ -563,7 +563,7 @@ function foo(param, (err, data) => {
 // callback
 fs.readFile(name, opts?, (err, string|Buffer) => void)
 // Promise
-readFilePromisified(name, opts?): Promise<string | Buffer>         
+readFilePromisified(name, opts?): Promise<string | Buffer>
 ```
 
 `Promise`方案让函数参数和回调解耦开来,所有的参数都用于此函数的输入.
@@ -771,7 +771,7 @@ fsPromise('.').then(r => {
 }).catch(r => {
   console.log('reject', r);
 })
-// output 
+// output
 resolve [
   'index.js'
 ]

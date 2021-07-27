@@ -1,4 +1,4 @@
----
+--
 title: '构建typescript练习环境'
 date: '2021/1/31'
 tags:
@@ -99,7 +99,7 @@ module.exports = {
         test: /\.ts$/,
         exclude: '/node_modules/',
         use: {
-          loader: 'swc-loader',          
+          loader: 'swc-loader',
           options: {
             sync: true,
             jsc: {
@@ -184,7 +184,7 @@ module.exports = {
         test: /\.ts$/,
         exclude: '/node_modules/',
         use: {
-          loader: 'swc-loader',          
+          loader: 'swc-loader',
           options: {
             sync: true,
             jsc: {

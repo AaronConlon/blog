@@ -94,7 +94,7 @@ color: #e5e5e5;
 ```html
 <!-- 不推荐 -->
 <p>What?_
-    
+
 <!-- 推荐 -->
 <p>Yes please.
 ```
@@ -162,7 +162,7 @@ color: #e5e5e5;
 <!-- 不推荐 -->
 <title>Test</title>
 <article>This is only a test.
-    
+
 <!-- 推荐 -->
 <!DOCTYPE html>
 <meta charset="utf-8">
@@ -172,7 +172,7 @@ color: #e5e5e5;
 
 #### 3.1.3 语义化
 
-> Use elements (sometimes incorrectly called “tags”) for what they have been created for. 
+> Use elements (sometimes incorrectly called “tags”) for what they have been created for.
 
 根据其设计用途使用`HTML`元素（有时被错误地称为标签）。比如，使用标题元素`h1~h6`来展示标题，使用`p`元素来展示段落，使用`a`元素来展示超链接，诸如此类。
 
@@ -228,7 +228,7 @@ color: #e5e5e5;
   <u>HTML is stupid!!1</u>
 <center>I can’t believe there’s no way to control the styling of
   my website without doing everything all over again!</center>
-    
+
 <!-- 推荐 -->
 <!DOCTYPE html>
 <title>My first CSS-only redesign</title>
