@@ -16,7 +16,7 @@ intro: '我买了一本书叫《精通vim》，所以打算捡起落下的 vim�
 
 - vim 简介
 - 插件系统和配置
-- 开发刚需和简介方案
+- 刚需和方案
   - 文件匹配
   - 侧边栏目录
   - 代码补全
@@ -171,81 +171,101 @@ nnoremap Q :Hello<CR>
 
 我们可以通过`github`轻松找到这些管理器的地址和安装使用方法，如果遇到一些问题，可以在`readme`文档和`issue`中找到一些指引。
 
+后续在增强我们的使用体验的时候，再引入各种插件支持。
+
 ### 配置文件
 
 在用户层面，`$HOME/.vimrc`是`vim`的默认配置文件，如果没有则可以创建，后续可以通过`source %`命令加载此文件，或者重启`vim`让其自动加载配置文件的配置，获得某些个性化支持。
 
 > Talk is cheap.
 
-让我们从一个简短的`.vimrc`文件开始，此文件来源于[vim-galore-zh_cn/minimal-vimrc.vim at master · youyiqin/vim-galore-zh_cn](https://github.com/youyiqin/vim-galore-zh_cn/blob/master/contents/minimal-vimrc.vim):
+这里有一个很好用的在线配置小站：[VimConfig - Sane and simple Vim configuration](https://vimconfig.com/)，用户可以在浏览器界面选择编辑器特性，最终得到一个可用的配置文件。
 
-> 由于有备注，在此不在做多余解释
+让我们从一个简短的`.vimrc`文件开始:
 
 ```bash
-"
-" A (not so) minimal vimrc.
-"
-
-" You want Vim, not vi. When Vim finds a vimrc, 'nocompatible' is set anyway.
-" We set it explicitely to make our position clear!
-set nocompatible " 和 vi 的兼容性设置，此项为不需要兼容 vi
+syntax on " turn on syntax highlight
+" undo file 实现编辑保存后撤销
+set undofile
+set undodir=~/.vim/undodir/
+set nocompatible " 不兼容 vi
 set nu " 显示行号
-filetype plugin indent on  " Load plugins according to detected filetype.
-syntax on                  " Enable syntax highlighting.
-
-set autoindent             " Indent according to previous line.
-set expandtab              " Use spaces instead of tabs.
-set softtabstop =4         " Tab key indents by 4 spaces.
-set shiftwidth  =4         " >> indents by 4 spaces.
-set shiftround             " >> indents to next multiple of 'shiftwidth'.
-
-set backspace   =indent,eol,start  " Make backspace work as you would expect.
-set hidden                 " Switch between buffers without having to save first.
-set laststatus  =2         " Always show statusline.
-set display     =lastline  " Show as much as possible of the last line.
-
-set showmode               " Show current mode in command-line.
-set showcmd                " Show already typed keys when more are expected.
-
-set incsearch              " Highlight while searching with / or ?.
-set hlsearch               " Keep matches highlighted.
-
+set expandtab " tab 转空格
+set breakindent " 换行缩进
+" tab 宽度，支持退格删除
+set shiftwidth=0 
+set tabstop=2
+set backspace=2
+" 智能缩进
+set smartindent
+set showcmd " show command in status line
+set showmatch " show matching brackets
+set ignorecase " do case insensitive matching 忽略大小写匹配
+set incsearch " Incremental search
+set autowrite " auto save before commands like :next and :make
+set hidden " auto save buffer before switch buffers
+set mouse=a "enable mouse usage
 set ttyfast                " Faster redrawing.
 set lazyredraw             " Only redraw when necessary.
 
-set splitbelow             " Open new windows below the current window.
-set splitright             " Open new windows right of the current window.
-
-set cursorline             " Find the current line quickly.
-set wrapscan               " Searches wrap around end-of-file.
-set report      =0         " Always report changed lines.
-set synmaxcol   =200       " Only highlight the first 200 columns.
-
-set list                   " Show non-printable characters.
-if has('multi_byte') && &encoding ==# 'utf-8'
-  let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
-else
-  let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
-endif
-
-" The fish shell is not very compatible to other shells and unexpectedly
-" breaks things that use 'shell'.
-if &shell =~# 'fish$'
-  set shell=/bin/bash
-endif
-
-" Put all temporary files under the same directory.
-" https://github.com/mhinz/vim-galore#handling-backup-swap-undo-and-viminfo-files
-set backup
-set backupdir   =$HOME/.vim/files/backup/
-set backupext   =-vimbackup
-set backupskip  =
-set directory   =$HOME/.vim/files/swap//
-set updatecount =100
-set undofile
-set undodir     =$HOME/.vim/files/undo/
-set viminfo     ='100,n$HOME/.vim/files/info/viminfo
+" auto trailing space
+" Removes trailing spaces
+function TrimWhiteSpace()
+  %s/\s*$//
+  ''
+endfunction
+" 自动清除行头尾空格
+autocmd FileWritePre * call TrimWhiteSpace()
+autocmd FileAppendPre * call TrimWhiteSpace()
+autocmd FilterWritePre * call TrimWhiteSpace()
+autocmd BufWritePre * call TrimWhiteSpace()
+" file type
+" 启动文件类型插件以支持部分插件功能
+filetype on
+filetype plugin on
+filetype indent on
+" 修改 leader 键，设置强制提权保存和高亮当前行的优化
+let mapleader = ','
+noremap <Leader>W :w !sudo tee % > /dev/null
+highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+set cursorline
 ```
+
+当我们开始使用`vim`的时候，`.vimrc`将会跟着我们的需求变化而变化，如果在使用上有任何特性需求，都可以搜索相关解决方法。
+
+
+
+## 刚需
+
+> 我的刚需也许不是你的刚需
+
+笔者对写代码有以下几个希望能够方便操作的需求：
+
+- 文件匹配和切换
+- 侧边栏目录
+- 代码补全和注释
+- 构建错误和报告
+- 代码风格
+- 编辑器终端
+- 会话机制
+
+逐个寻找解决方案。
+
+> 插件的安装和使用不方便逐一详细说明，其中会需要解决一个个不同场景下的问题，使用者依然需要慢慢找折腾。
+
+### 文件匹配和切换
+
+我选择极具盛名的`fzf`命令行模糊查找器，在`github`上可以轻松找到其仓库，安装之后需要配合`vim`插件:`fzf.vim`
+
+[junegunn/fzf.vim: fzf vim](https://github.com/junegunn/fzf.vim)
+
+看看这命令：
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/v2-3671b2af3814a94c9aaa144f53cc02dc_720w.jpg)
+
+使用此插件可以轻松搜索到我们需要的东西，真是神器。
+
+更多详细的安装和使用知识掠去不表，我觉得网友这一篇已经写得很好了[fzf.vim 猛男必备超强 vim 搜索插件[视频]](https://zhuanlan.zhihu.com/p/116915939)，还搭配了视频食用。
 
 
 
@@ -253,4 +273,7 @@ set viminfo     ='100,n$HOME/.vim/files/info/viminfo
 
 - [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
 - [wsdjeg/vim-galore-zh_cn: Vim 从入门到精通](https://github.com/wsdjeg/vim-galore-zh_cn)
+- [《精通Vim：用Vim 8和Neovim实现开发 住·尼尔 电子工业出版社 9787121383281》](https://item.jd.com/10025575766068.html?cu=true&utm_source=www.google.com&utm_medium=tuiguang&utm_campaign=t_1001542270_1002004306_0_1931988517&utm_term=f32ba044fccd40d193538fe185580d0d)
+- [fzf.vim 猛男必备超强 vim 搜索插件[视频] - 知乎](https://zhuanlan.zhihu.com/p/116915939)
+- [junegunn/fzf.vim: fzf vim](https://github.com/junegunn/fzf.vim)
 
