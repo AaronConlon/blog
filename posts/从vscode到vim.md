@@ -20,7 +20,7 @@ intro: '我买了一本书叫《精通vim》，所以打算捡起落下的 vim�
   - 文件匹配
   - 侧边栏目录
   - 代码补全
-  - 构建错误和报告
+  - 构建错误报告
   - 代码风格
   - 编辑器终端
   - 会话机制
@@ -237,14 +237,14 @@ set cursorline
 
 ## 刚需
 
-> 我的刚需也许不是你的刚需
+> 我的刚需也许不是你的刚需，推荐使用`vim-Plug`管理插件。
 
 笔者对写代码有以下几个希望能够方便操作的需求：
 
 - 文件匹配和切换
 - 侧边栏目录
 - 代码补全和注释
-- 构建错误和报告
+- 构建错误报告
 - 代码风格
 - 编辑器终端
 - 会话机制
@@ -266,6 +266,89 @@ set cursorline
 使用此插件可以轻松搜索到我们需要的东西，真是神器。
 
 更多详细的安装和使用知识掠去不表，我觉得网友这一篇已经写得很好了[fzf.vim 猛男必备超强 vim 搜索插件[视频]](https://zhuanlan.zhihu.com/p/116915939)，还搭配了视频食用。
+
+### 侧边栏文件目录树
+
+大名鼎鼎的[preservim/nerdtree: A tree explorer plugin for vim.](https://github.com/preservim/nerdtree)我们依然可以通过添加键盘映射的方式获得跟`vscode`类似的操作体验。
+
+例如：
+
+```bash
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+```
+
+这里对`map`简单介绍一下：
+
+`map a b`表示按键映射，按`a`等于按`b`。在`map`前面可以添加默认字符：`v`/`n`/`i`分别代表`visual`可视化模式/`normal`普通模式/`insert`插入模式下的按键映射。
+
+`nore`等同于`no recursive`非递归调用，以免引起按键映射异常。
+
+`<C-n>`表示组合键`ctrl+n`，首字母非常好理解，其他按键组合也可以根据首字母来理解。
+
+`vim`有一个`leader`键，用于和其他按键配合来实现复杂的组合按键效果。
+
+我们可以使用`let mapleader = ','`指定`leader`键为`','`。
+
+> 使用插件很重要的一点就是阅读文档，文档能给我们提供很多信息和解决异常的方法。
+
+### 代码补全和注释
+
+代码补全我选择了国内大佬`jayli`开发的`vim-easycomplete`:
+
+[vim-easycomplete/README-cn.md at master · jayli/vim-easycomplete](https://github.com/jayli/vim-easycomplete/blob/master/README-cn.md)
+
+自称为`余杭区最好用的vim自动补全插件`，不能配合`supertab`使用。这个插件支持`LSP`安装，对于需要补全的语言需要安装特定的`LSP Server`，并且支持输入目录匹配，自此可以实现跟`vscode`地址补全功能的特性。
+
+`vim-easycomplete`依赖于`LSP Server`的引擎支持，可以通过`:EasyCompleteInstallServer ${Plugin_Name}`来安装插件：
+
+| 插件名称  | 补全类型/支持语言     | LSP Server 命令        | 快捷安装 LSP 依赖 | 环境依赖    |
+| --------- | --------------------- | ---------------------- | ----------------- | ----------- |
+| directory | 文件路径补全          | 不需要                 | 不需要            | 不需要      |
+| buf       | 关键词/字典补全       | 不需要                 | 不需要            | 不需要      |
+| ts        | JavaScript/TypeScript | tsserver               | Yes               | node/npm    |
+| vim       | Vim                   | vim-language-server    | Yes               | node/npm    |
+| cpp       | C/C++                 | ccls                   | Yes               | ruby/brew   |
+| css       | CSS                   | css-languageserver     | Yes               | node/npm    |
+| html      | html                  | html-languageserver    | Yes               | node/npm    |
+| sh        | Bash                  | bash-language-server   | Yes               | node/npm    |
+| json      | JSON                  | json-languageserver    | Yes               | node/npm    |
+| yml       | Yaml                  | yaml-language-server   | Yes               | node/npm    |
+| py        | Python                | pyls                   | Yes               | python/pip  |
+| java      | Java                  | eclipse-jdt-ls         | Yes               | java/jdk    |
+| go        | Go                    | gopls                  | Yes               | go          |
+| rb        | Ruby                  | solargraph             | Yes               | ruby/bundle |
+| lua       | Lua                   | emmylua-ls             | Yes               | java/jdk    |
+| nim       | Nim                   | nimlsp                 | Yes               | nim/nimble  |
+| grvy      | groovy                | groovy-language-server | Yes               | java/jdk    |
+| snips     | 代码片段补全          | ultisnips/vim-snippets | 不需要            | 不需要      |
+
+这种程度的支持，能够让我们很好的实现符合要求的代码补全功能，当然还需要安装如下两个插件：
+
+```bash
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+```
+
+视扩展管理插件的格式来替换，上述使用了`vim-plug`的格式。
+
+> 更多相关配置酌情参考官方文档
+
+注释我选择了：[preservim/nerdcommenter: Vim plugin for intensely nerdy commenting powers](https://github.com/preservim/nerdcommenter)
+
+安装后零配置，即可使用`<leader>cc`注释，使用`<leader>c<space>`取消注释，其他方式请查看官方文档。
+
+### 构建错误报告
+
+当代码出现可以优化的部分，或者出现错误的时候，我们希望能够在编辑的时候自动按照某种规则检查代码，并且给出提示，如此一来我们便可以及早对错误和警告进行修复。对此，我们引入一个新的模式：`quickfix`模式。
+
+`quickfix`思想即保存一个位置列表，开发者通过一系列的命令实现这个位置列表中的跳转。
+
+在前端开发中，很少有类似`C/C++`或`Go`这样的编译场景，即使是`Typescript`的编译，通常也交由`webpack`的工作流去处理，我们需要的是代码`linter`。
+
+当代码出现不符合语法和规范的时候，希望能将告警信息和`quickfix`结合，即需要在编辑器上做出标识，也能让我们拥有`quickfix`信息提示，以及快速跳转到关键行的能力。
 
 
 
