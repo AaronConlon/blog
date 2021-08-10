@@ -228,15 +228,35 @@ module.exports = {
 
 最后，为了让`prettier`格式化的时候不跟`stylelint`冲突，我们需要：[prettier/stylelint-config-prettier: Turns off all rules that are unnecessary or might conflict with prettier.](https://github.com/prettier/stylelint-config-prettier)的支持，在`.stylelintrc`中添加最后一个扩展配置。
 
-
-
 ## Git 提交
 
 最后是`在 git 提交之前格式化代码，并且规范化 git info body`。
 
 我们将使用`lint-staged`和`husky`来实现这个需求。
 
+一把梭：
 
+`npx mrm@2 lint-staged`可以根据我们已经配置好的各种`linter`的配置，生成`package.json`中的`lint-staged`配置，调用各种`linter`去处理目标文件。
+
+最后，还需要引入`commitlint`来规范提交的`git`信息。
+
+全局安装好这个非常有用的工具，并且初始化一份简单的配置文件：
+
+```bash
+// install package
+npm install -g @commitlint/cli @commitlint/config-conventional
+// init config
+echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+```
+
+最后，我们手动添加一个`commitlint`的`hooks`:
+
+```bash
+# Add hook
+npx husky add .husky/commit-msg 'npx --no-install commitlint --edit $1'
+# or
+yarn husky add .husky/commit-msg 'yarn commitlint --edit $1'
+```
 
 ## 优化
 
