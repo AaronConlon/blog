@@ -1,0 +1,21 @@
+---
+title: '使用react开发chrome扩展程序开发踩坑'
+date: '2021/10/2'
+tags:
+- React
+- Chrome
+mainImg: 'https://images.unsplash.com/photo-1597007519573-0575fd4cc96b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MzMxODI4Njg&ixlib=rb-1.2.1&q=80&w=1080'
+coverImg: 'https://images.unsplash.com/photo-1597007519573-0575fd4cc96b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MzMxODI4Njg&ixlib=rb-1.2.1&q=80&w=400'
+intro: '仅以本文纪念我的第一个正式的 chrome 扩展程序：《空》的开发历程，遇到问题也找到了一些解决办法，最重要的是开发了一个自己会一直使用的程序，增强了自己的开发能力❤️'
+---
+
+## 踩坑列表
+
+- react router 跳转后刷新页面导致文件丢失错误
+- 待续
+
+## 思考和答疑
+
+### 页面刷新导致的文件丢失错误
+
+暂时找不到原因，但是可以使用`MemoryHistory`路由代替`BrowserHistory`来实现路由，也许是`chrome`插件的机制导致的，待查阅官方文档。
