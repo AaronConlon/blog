@@ -27,7 +27,7 @@ const getAllPostData = () => {
     }
   });
 
-  return result.sort((a, b) => (a.date > b.date ? -1 : 1));
+  return result.sort((a, b) => b.date - a.date);
 };
 
 // return tags with title and uri target : slug or id,who care.
