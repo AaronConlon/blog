@@ -16,6 +16,8 @@ intro: '我需要使用 GitHub action 来自动部署一些应用。'
 
 2018 年 10 月，GitHub 推出了`Github Action`持续集成服务，其中包括抓取代码、运行测试、发布到第三方服务、远程登录服务器等等。为了方便开发者执行一些操作，GitHub 允许开发者编写独立的可共享的脚本文件来自动化地执行相关任务。
 
+例如，在 push 新的内容到仓库后自动构建一个静态站点，亦或是通过设置好的 shell 脚本，将数据同步到 VPS 上，再在 VPS 上执行一些任务，这部分就非常灵活了。
+
 我们可以在[官方市场](https://github.com/marketplace?type=actions)或者[awesome actions](https://github.com/sdras/awesome-actions)找到具有特定功能的共享`action`脚本。
 
 ### 基本概念
@@ -119,6 +121,30 @@ jobs:
 ### 发布一个 React 应用
 
 现在，我的手头有一个名为`emoji_search_zh`的应用，在这个应用里我们可以通过搜索中文关键字去检索`emoji`字符，并且可以很方便的复制到剪贴板📋（听起来似乎有点鸡肋👦🏻）。
+
+现在，一步步来部署：
+
+#### 配置 homepage
+
+当应用准备好部署时，将`homepage`添加到`package.json`上。
+
+```json
+"homepage": "https://<githubusername>.github.io/<app>"
+```
+
+> 注意替换掉账户名和应用名称，这个名称可以是仓库名
+
+#### 启用 GitHub Pages
+
+创建一个分支用于部署，例如：`gh-pages`:
+
+`git checkout -b gh-pages`
+
+> 创建分支有利于保持我们源代码和应用部署的独立性
+
+
+
+#### 创建工作流 action
 
 
 
