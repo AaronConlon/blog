@@ -138,17 +138,18 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 - concat: 将字符串和参数进行拼接，返回新的字符串，参数可以是多个。
 - raw: 此方法将会忽略转义符，在某些情况下可用，但是兼容性不佳，可以使用第三方库`string.raw`代替。
 - 提取字符串，三者区别在于对负数参数的处理，返回副本
-  - slice
-  - substr
-  - substring
+  - slice(beginIndex, endIndex): 负数下标会加字符串长度，异常的范围则返回空字符串，当想要获取倒数若干个元素时使用负数很方便。
+  - substr: 预计被移除
+  - substring: 代替`substr`，取参数范围，即使第二个参数大于第一个参数，内部自动按大小处理参数顺序，任意参数小于 0 或为`NaN`，视为 0。
 - 判断开头或结尾
   - startsWith: 支持搜索长度，默认为字符串的 length
   - endsWith
   - 使用正则表达式来 test
 - includes: 检查字符串是否包含另一个字符串，可以指定起始位置，默认为 0
-- 字符串位置检索，没找到返回 -1 ，同样支持设置起始位置
-  - indexOf
-  - lastIndexOf
+- 字符串位置检索，没找到返回 -1 ，同样支持设置起始位置，默认为 0，负数亦为 0。
+  - indexOf: 默认搜索字符串`undefield`
+  - lastIndexOf: 默认搜索字符串`undefield`
+  - search: 参数是正则表达式
 - 清理前后空格，返回清理后的副本
   - trim
   - trimLeft
@@ -156,11 +157,127 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 - 正则表达式匹配
   - match: 通过匹配正则表达式，返回一个结果数组，默认返回空数组
   - matchAll: 参数是正则表达式，否则将会隐式通过字符串创建正则表达式，正则表达式必须设置全局模式，否则抛出类型错误异常，全部匹配有利于获取可读性更高的正则表达式捕获组，MDN 上的解释和示例非常好，但是迭代匹配对象的时候结果缺少`groups`对象，这个对象会让我们在写正则表达式的时候设置了具名捕获组时，将匹配名和值保存在`groups`中，示例也可以参考[Javascript String matchAll()](https://www.programiz.com/javascript/library/string/matchall)。
+- 字符补充
+  - padEnd(targetLength, padString = ' ')
+  - padStart(targetLength, padString = ' ')
+- repeat: 重复字符串若干次(次数自动转化为整数，负数则报错，0 则返回空字符串)，返回新的字符串
+- 字符串替换，支持正则表达式，第二个参数可以是一个具有返回值的函数，返回的内容用于替换。
+  - replace
+  - replaceAll
+- split([separator[, limit]]): 不指定分隔符时，返回一个包含此字符串的数组。分隔符为空字符串时，切割整个字符串，每一个字符作为一个元素返回此数组，指定`limit`时，限定返回数组的长度。
+- 大小写转换
+  - toLowerCase
+  - toUpperCase
 
 
 
+## Boolean
 
+### Boolean 基础
+
+`Boolean`对象是一个布尔值的对象包装器，只有俩值：
+
+- true
+- false
+
+看看若干自动转化为布尔值的其他值的转换结果示例：
+
+**以下都转化为 false**
+
+- 0
+- -0
+- null
+- false
+- NaN
+- undefield
+
+**其他都转化为 true**，包括`[]、字符串'false'`。
+
+不要将值为`false`的布尔对象在条件判断时视为`false`!例如：
+
+```js
+const x = new Boolean(false);
+// x 在条件判断时视为 true
+if(x) {
+  // code will exec
+}
+```
+
+
+
+## Null 和 Undefined
+
+### 基础
+
+`null`是一个特殊的值，当你认为某个变量或属性需要一个值，却打算暂时不为其分配值的时候，可以选择`null`，用于代表其为`空`或`未知的值`。
+
+`undefield`通常用于表示一个变量被声明了，但是还未定义或分配值。
+
+补充一点：
+
+二者都是`falsy`的值之一，另外还有其他四个：
+
+- false
+- 0 、 -0
+- ""
+- NaN
+
+其他都是`truthy`的值。
+
+> 在 JSON 数据转换中，对象值为 undefined  的将会被忽略
+
+另外，二者都是原始数据类型。
+
+需要注意的是，`typeof null`的结果是`object`，而`undefield`则是`undefield`。
+
+再谈二者区别，在作为参数传递时，`null`是一个值传递，而`undefield`将被忽略。
+
+> 更多比较请点击查看[`undefined` vs. `null` revisited](https://2ality.com/2021/01/undefined-null-revisited.html)
+
+
+
+## Symbol
+
+### Symbol 基础
+
+`symbol`是唯一且不可变的原始数据类型，其用途是确保对象具有唯一的非字符串形式的属性。切记，`Symbol`不支持语法`new Symbol()`，使用时将会报错 Symbol 不是一个构造器。
+
+我们可以直接使用`symbol()`函数来根据传参创建一个`Symbol`类型的值，其语法为：
+
+`Symbol([description])`
+
+描述字段仅供调试，不可用于访问 symbol 本身。
+
+> 具有相同 description 的 symbol 是不相等的。
+
+`symbols`还具有若干没有暴露给开发者的属性，用于辅助实现众多的数据类型方法。
+
+### Symbol 方法
+
+- Symbol.for(key): 使用给定的字符串`key`（不是字符串将会转化为字符串）搜索全局符号注册表是否具有某个`key`的`symbol`，如果没有则创建一个，后续在检索的时候将返回此已存在的实例。注意，使用`Symbol(x)`定义的符号与使用此 description 来创建的全局符号(`Symbol.for(x)`)是不等的。
+- Symbol.keyFor(sym): 使用符号实例`sym`在全局注册表中检索其可能存在的`key`!使用`Symbol(description)`创建的普通符号的`key`为`undefield`。当`sym`不是符号时，抛出类型异常。
+
+### Symbol 其他
+
+当使用 symbol 实例作为对象的属性时，这些属性是不可枚举的，这意味着如果使用`for...in`去迭代此对象，将无法获取到字符属性及其值，在`JSON.stringify`中也会被忽略。
+
+来看看如下几个方法：
+
+- Object.getOwnPropertyNames 返回常规属性数组
+- Object.getOwnPropertySymbols 返回符号属性数组
+- Object.getOwnPropertyDescriptors 返回描述符数组，包含符号属性和常规属性
+
+另外，符号属性是对内存中符号的一个引用，开发者需要显示的保存这些符号，以免在后续需要直接使用时需要麻烦地遍历其符号属性来获取引用。
+
+此外，ES6 引入了众多内置符号，例如：
+
+- Symbol.iterator
+- Symbol.asyncIterator
+- ...
+
+当真的需要为对象或某些数据提供可迭代的特性时，可以重载或实现这些内置符号的属性方法。
 
 
 
 # 判断类型
+
