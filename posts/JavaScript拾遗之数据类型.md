@@ -259,7 +259,9 @@ if(x) {
 
 ### Symbol 其他
 
-当使用 symbol 实例作为对象的属性时，这些属性是不可枚举的，这意味着如果使用`for...in`去迭代此对象，将无法获取到字符属性及其值，在`JSON.stringify`中也会被忽略。
+当使用 symbol 实例作为对象的属性时，这些属性默认是`可枚举`的，但不会被`Object.keys()`、`Object.getOwnPropertyNames()`返回，在`JSON.stringify`中会被忽略。
+
+> Reflect.ownKeys 可以获取目标对象自身的所有属性组成的数组
 
 来看看如下几个方法：
 
@@ -293,13 +295,18 @@ if(x) {
 
 ### Object 基础
 
+`Object`在 JavaScript 中用于存储各种键值集合和更复杂的实体。我们可以通过`Object()`构造函数或`对象字面量`的方式来创建`Object`。
+
 > JavaScript 的一切都是对象？
 
 上述其中原始数据类型就不是对象，但是我们可以调用他们的方法，其原理是在调用之前，创建了`Wrapper Object`。
 
 JavaScript 将基本类型的值（除了 null/undefield/symbol/bigInt）使用构造器函数创建临时对象，这个临时对象就是我们所谈论的包装对象 `Wrapper Object`。
 
+### Object 静态方法
 
+- Object.assign(target, ...sources): 将所有`可枚举`属性(包括符号属性)的值从一个或多个源对象分配到目标对象，按源对象的顺序，后续的对象属性值会覆盖同名的属性值，并且返回此目标对象。如果是简单的复制对象的值，且值为原始数据类型，则使用此方法非常方便。
+- 
 
 # 判断类型
 
