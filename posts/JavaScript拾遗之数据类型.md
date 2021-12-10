@@ -78,22 +78,53 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 
 当我们需要对数进行处理时，熟悉这些方法非常有用。
 
-- isNaN: `NaN`是全局属性，但`NaN`不等于`NaN`，判断目标是否不是一个数，在不进行类型转换的前提下，最好的方法就是使用`Number.isNaN()`方法。全局的`isNaN()`会对`'NaN'`这样的字符串进行转化，并认为这是一个`NaN`。
-- isFinite: 判断目标是否为有限的数，全局的`isFinite()`函数会将字符串转化为数字，再判断是否是一个有限的数，`Number.isFinite`不会，当你不需要自动类型转换的时候，务必使用`Number.isFinite()`
-- isInteger: 判断目标类型是否是`number`，并且是整数！同样需要注意，这个方法不会自动转换类型！
-- parseFloat: 将目标字符串转化为浮点数，其中的关键在于在解析的过程中遇到`+、v、0-9、.、科学计数法e`之外的字符时，将会直接忽略该字符和以后的字符。并且第二个小数点也会使得解析终止，另外`空白符`在首尾时将会被忽略。如果无法解析，则返回`NaN`。如果一个目标是具有`toString`或`valueOf`方法的对象，则会将这些方法返回的内容作为目标进行解析。目标是`BigInt`则会丢失精度。
-- parseInt: 此方法解析一个字符串（如果不是字符串，将先使用`toString()`进行自动转换），并且返回指定`基数(radix)`的十进制整数。基数是`2~36`之间的整数。尽管基数在规范中是可选参数，但是在不同浏览器之间对于不指定基数情况下的实现结果不相同，因此强烈建议指定基数！同样类似于`parseFloat`，对特殊字符将会终止转化，忽略首尾空白字符，转换`BigInt`会丢失精度！
+#### isNaN
+
+`NaN`是全局属性，但`NaN`不等于`NaN`，判断目标是否不是一个数，在不进行类型转换的前提下，最好的方法就是使用`Number.isNaN()`方法。全局的`isNaN()`会对`'NaN'`这样的字符串进行转化，并认为这是一个`NaN`。
+
+#### isFinite
+
+判断目标是否为有限的数，全局的`isFinite()`函数会将字符串转化为数字，再判断是否是一个有限的数，`Number.isFinite`不会，当你不需要自动类型转换的时候，务必使用`Number.isFinite()`
+
+#### isInteger
+
+判断目标类型是否是`number`，并且是整数！同样需要注意，这个方法不会自动转换类型！
+
+#### parseFloat
+
+将目标字符串转化为浮点数，其中的关键在于在解析的过程中遇到`+、v、0-9、.、科学计数法e`之外的字符时，将会直接忽略该字符和以后的字符。并且第二个小数点也会使得解析终止，另外`空白符`在首尾时将会被忽略。如果无法解析，则返回`NaN`。如果一个目标是具有`toString`或`valueOf`方法的对象，则会将这些方法返回的内容作为目标进行解析。目标是`BigInt`则会丢失精度。
+
+#### parseInt
+
+此方法解析一个字符串（如果不是字符串，将先使用`toString()`进行自动转换），并且返回指定`基数(radix)`的十进制整数。基数是`2~36`之间的整数。尽管基数在规范中是可选参数，但是在不同浏览器之间对于不指定基数情况下的实现结果不相同，因此强烈建议指定基数！同样类似于`parseFloat`，对特殊字符将会终止转化，忽略首尾空白字符，转换`BigInt`会丢失精度！
 
 > 要将一个数字转换为特定 radix 中的字符串字段，请使用 `thatNumber.toString(radix)`函数!
 
 ### Number 对象上的额外属性
 
-- toFixed(digits): 使用定点表示法来格式化一个数字，不足个数的使用 0 来补全，返回数字字符串（该数字会在必要时被`四舍五入`）。
-- toExponential(digits): 将数字转化为指定具有小数点后若干位的指数形式。
-- toLocaleString: 在需要将数字显示国际化的时候可查。
-- toPrecision: 返回指定精度的字符串表示（如果需要保持整体的有效个数长度，可以使用此方法。）
-- toString([radix]): 常用于转换数字为指定进制的数字字符串（2~36）
-- valueOf: 返回一个被 Number 对象包装的原始值！
+#### toFixed(digits)
+
+使用定点表示法来格式化一个数字，不足个数的使用 0 来补全，返回数字字符串（该数字会在必要时被`四舍五入`）。
+
+#### toExponential(digits)
+
+将数字转化为指定具有小数点后若干位的指数形式。
+
+#### toLocaleString
+
+ 在需要将数字显示国际化的时候可查。
+
+#### toPrecision
+
+返回指定精度的字符串表示（如果需要保持整体的有效个数长度，可以使用此方法。）
+
+#### toString([radix])
+
+常用于转换数字为指定进制的数字字符串（2~36）
+
+#### valueOf
+
+返回一个被 Number 对象包装的原始值！
 
 ### Number 应用
 
@@ -130,44 +161,101 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 
 ### String 方法
 
-- fromCharCode(num1[,...[, numN]]): 接收一系列`UTF-16`代码单元的数字，范围在`0~0xFFFF`之间，超过将被截断，最后返回长度为参数个数的字符串，此方法基于字符都是 16 位表示的，当我们需要使用更多的字符时，就力有未逮了。
-- fromCodePoint: ES6 新增了此方法以弥补 fromCharCode 在处理 Unicode 字符方面的缺陷，Unicode 为了支持更多字符，提供了`基本多语言平面（BMP）`机制，对每一个字符使用额外的 16 位来选择一个增补平面，这种字符使用一对 16 位的码元策略被称为`代理对`，迭代字符串可以智能识别代理对，而按索引访问这些字符时则无法获得预期的值。
-- charCodeAt: 返回 0~63355 之间的整数，代表索引处的`UTF-16`码元，超过索引位置时返回 `NaN`
-- codePointAt: 返回一个 Unicode 编码点值的非负整数或超过索引位置时返回`undefield`
-- normalize: 有些字符可以由单个`BMP`字符表示，也可以由代理对表示，为了方便的比较字符串是否一致，需要将之按某种规范进行序列化，然后再对比结果，这方面所用极少，可用时查看。
-- concat: 将字符串和参数进行拼接，返回新的字符串，参数可以是多个。
-- raw: 此方法将会忽略转义符，在某些情况下可用，但是兼容性不佳，可以使用第三方库`string.raw`代替。
-- 提取字符串，三者区别在于对负数参数的处理，返回副本
-  - slice(beginIndex, endIndex): 负数下标会加字符串长度，异常的范围则返回空字符串，当想要获取倒数若干个元素时使用负数很方便。
-  - substr: 预计被移除
-  - substring: 代替`substr`，取参数范围，即使第二个参数大于第一个参数，内部自动按大小处理参数顺序，任意参数小于 0 或为`NaN`，视为 0。
-- 判断开头或结尾
-  - startsWith: 支持搜索长度，默认为字符串的 length
-  - endsWith
-  - 使用正则表达式来 test
-- includes: 检查字符串是否包含另一个字符串，可以指定起始位置，默认为 0
-- 字符串位置检索，没找到返回 -1 ，同样支持设置起始位置，默认为 0，负数亦为 0。
-  - indexOf: 默认搜索字符串`undefield`
-  - lastIndexOf: 默认搜索字符串`undefield`
-  - search: 参数是正则表达式
-- 清理前后空格，返回清理后的副本
-  - trim
-  - trimLeft
-  - trimRight
-- 正则表达式匹配
-  - match: 通过匹配正则表达式，返回一个结果数组，默认返回空数组
-  - matchAll: 参数是正则表达式，否则将会隐式通过字符串创建正则表达式，正则表达式必须设置全局模式，否则抛出类型错误异常，全部匹配有利于获取可读性更高的正则表达式捕获组，MDN 上的解释和示例非常好，但是迭代匹配对象的时候结果缺少`groups`对象，这个对象会让我们在写正则表达式的时候设置了具名捕获组时，将匹配名和值保存在`groups`中，示例也可以参考[Javascript String matchAll()](https://www.programiz.com/javascript/library/string/matchall)。
+#### fromCharCode(num1[,...[, numN]])
+
+接收一系列`UTF-16`代码单元的数字，范围在`0~0xFFFF`之间，超过将被截断，最后返回长度为参数个数的字符串，此方法基于字符都是 16 位表示的，当我们需要使用更多的字符时，就力有未逮了。
+
+#### fromCodePoint
+
+ES6 新增了此方法以弥补 fromCharCode 在处理 Unicode 字符方面的缺陷，Unicode 为了支持更多字符，提供了`基本多语言平面（BMP）`机制，对每一个字符使用额外的 16 位来选择一个增补平面，这种字符使用一对 16 位的码元策略被称为`代理对`，迭代字符串可以智能识别代理对，而按索引访问这些字符时则无法获得预期的值。
+
+#### charCodeAt
+
+返回 0~63355 之间的整数，代表索引处的`UTF-16`码元，超过索引位置时返回 `NaN`
+
+#### codePointAt
+
+返回一个 Unicode 编码点值的非负整数或超过索引位置时返回`undefield`
+
+#### normalize
+
+有些字符可以由单个`BMP`字符表示，也可以由代理对表示，为了方便的比较字符串是否一致，需要将之按某种规范进行序列化，然后再对比结果，这方面所用极少，可用时查看。
+
+#### concat
+
+将字符串和参数进行拼接，返回新的字符串，参数可以是多个。
+
+#### raw
+
+此方法将会忽略转义符，在某些情况下可用，但是兼容性不佳，可以使用第三方库`string.raw`代替。
+
+#### 提取字符串
+
+三者区别在于对负数参数的处理，返回副本
+
+- slice(beginIndex, endIndex): 负数下标会加字符串长度，异常的范围则返回空字符串，当想要获取倒数若干个元素时使用负数很方便。
+- substr: 预计被移除
+- substring: 代替`substr`，取参数范围，即使第二个参数大于第一个参数，内部自动按大小处理参数顺序，任意参数小于 0 或为`NaN`，视为 0。
+
+#### 判断开头或结尾
+
+- startsWith: 支持搜索长度，默认为字符串的 length
+- endsWith
+- 使用正则表达式来 test
+
+#### includes
+
+检查字符串是否包含另一个字符串，可以指定起始位置，默认为 0
+
+#### 字符串位置检索
+
+没找到返回 -1 ，同样支持设置起始位置，默认为 0，负数亦为 0。
+
+- indexOf: 默认搜索字符串`undefield`
+- lastIndexOf: 默认搜索字符串`undefield`
+- search: 参数是正则表达式
+
+#### 清理前后空格
+
+返回清理后的副本
+
+- trim
+- trimLeft
+- trimRight
+
+
+
+#### 正则表达式匹配
+
+- match: 通过匹配正则表达式，返回一个结果数组，默认返回空数组
+- matchAll: 参数是正则表达式，否则将会隐式通过字符串创建正则表达式，正则表达式必须设置全局模式，否则抛出类型错误异常，全部匹配有利于获取可读性更高的正则表达式捕获组，MDN 上的解释和示例非常好，但是迭代匹配对象的时候结果缺少`groups`对象，这个对象会让我们在写正则表达式的时候设置了具名捕获组时，将匹配名和值保存在`groups`中，示例也可以参考[Javascript String matchAll()](https://www.programiz.com/javascript/library/string/matchall)。
+
+#### 字符填充和替换
+
 - 字符补充
+
   - padEnd(targetLength, padString = ' ')
   - padStart(targetLength, padString = ' ')
+
 - repeat: 重复字符串若干次(次数自动转化为整数，负数则报错，0 则返回空字符串)，返回新的字符串
+
 - 字符串替换，支持正则表达式，第二个参数可以是一个具有返回值的函数，返回的内容用于替换。
+
   - replace
   - replaceAll
-- split([separator[, limit]]): 不指定分隔符时，返回一个包含此字符串的数组。分隔符为空字符串时，切割整个字符串，每一个字符作为一个元素返回此数组，指定`limit`时，限定返回数组的长度。
-- 大小写转换
-  - toLowerCase
-  - toUpperCase
+
+  
+
+#### split([separator[, limit]])
+
+  不指定分隔符时，返回一个包含此字符串的数组。分隔符为空字符串时，切割整个字符串，每一个字符作为一个元素返回此数组，指定`limit`时，限定返回数组的长度。
+
+
+
+#### 大小写转换
+
+- toLowerCase
+- toUpperCase
 
 
 
@@ -305,8 +393,121 @@ JavaScript 将基本类型的值（除了 null/undefield/symbol/bigInt）使用�
 
 ### Object 静态方法
 
-- Object.assign(target, ...sources): 将所有`可枚举`属性(包括符号属性)的值从一个或多个源对象分配到目标对象，按源对象的顺序，后续的对象属性值会覆盖同名的属性值，并且返回此目标对象。如果是简单的复制对象的值，且值为原始数据类型，则使用此方法非常方便。
-- 
+#### Object.assign
 
-# 判断类型
+> Object.assign(target, ...sources)
+
+将所有源自身`可枚举`属性(包括`符号属性`)的值从一个或多个源对象分配到目标对象，按源对象参数的顺序，后续的对象属性值会覆盖同名的属性值，并且返回此目标对象。如果是简单的复制对象的值，且值为原始数据类型，我们称之为`浅克隆`。
+
+该方法使用源对象的`[[Get]]`和目标对象的`[[Set]]`，所以它会调用相关 getter 和 setter。
+
+举个例子：
+
+```js
+const obj = {
+  foo: 1,
+  get bar() {
+    return 2;
+  }
+};
+
+let copy = Object.assign({}, obj);
+console.log(copy); // { foo: 1, bar: 2 } copy.bar的值来自obj.bar的getter函数的返回值
+```
+
+
+
+在出现错误的情况下，例如，如果属性不可写，会引发[`TypeError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError)，如果在引发错误之前添加了任何属性，则可以更改`target`对象。
+
+看这个例子：
+
+```js
+const target = Object.defineProperty({}, "foo", {
+    value: 1,
+    writable: false
+}); // target 的 foo 属性是个只读属性。
+
+Object.assign(target, {bar: 2}, {foo2: 3, foo: 3, foo3: 3}, {baz: 4});
+// TypeError: "foo" is read-only
+// 注意这个异常是在拷贝第二个源对象的第二个属性时发生的。
+
+console.log(target.bar);  // 2，说明第一个源对象拷贝成功了。
+console.log(target.foo2); // 3，说明第二个源对象的第一个属性也拷贝成功了。
+console.log(target.foo);  // 1，只读属性不能被覆盖，所以第二个源对象的第二个属性拷贝失败了。
+console.log(target.foo3); // undefined，异常之后 assign 方法就退出了，第三个属性是不会被拷贝到的。
+console.log(target.baz);  // undefined，第三个源对象更是不会被拷贝到的。
+```
+
+
+
+> `Object.assign` 会尝试将`target`转换为对象，例如传入`null`或`undefined`，将会报错。如若 sources 中包含 `null`或`undefined`，则忽略这两个源。
+
+假如源值是一个对象的引用，它仅仅会复制其引用。
+
+> Object.assign([1,2], [3,4,5]) 枚举数组，最后得出`[4,5,3]`
+
+还有几点徐亚补充：
+
+- assign 可以拷贝 Symbol 属性
+- 继承属性和不可枚举属性`无法拷贝`
+- 原始类型会被包装成对象
+
+最后一点举个例子：
+
+```js
+const v1 = "abc";
+const v2 = true;
+const v3 = 10;
+const v4 = Symbol("foo")
+
+const obj = Object.assign({}, v1, null, v2, undefined, v3, v4);
+// 原始类型会被包装，null 和 undefined 会被忽略。
+// 注意，只有字符串的包装对象才可能有自身可枚举属性。
+console.log(obj); // { "0": "a", "1": "b", "2": "c" }
+```
+
+
+
+#### Object.create
+
+> Object.create(proto，[propertiesObject])
+
+此方法创建一个新对象，并且使用指定的对象来提供创建对象的原型。
+
+> 在 Vue 的源代码中，作者使用过 Object.create(null) 来创建空对象。
+
+相较于`{}`对象来说，`Object.create(null)`或`Object.defineProperties(null)`返回的对象都不具有`原型`对象。
+
+`{}`具有`Object`对象的一系列属性，如果我们只需要一个纯粹的字典，其实我们可以使用`Object.create(null)`，如果需要扩展一些功能，再额外添加即可。
+
+`create`方法还可以用于兼容所有版本 JavaScript 的类式继承，但笔者认为`ES6`支持的`Class`的可读性更好一些，兼容性方面我们有`Babel`。
+
+#### 定义属性
+
+通过`Object`构造器对象来定义属性，可以有两种方式：
+
+- defineProperty
+- defineProperties
+
+前者是对单个属性进行定义，后者支持传入一个数组，同时对多个属性进行定义。
+
+无论是单个属性或多个属性，都由以下几个部分组成：
+
+- prop 属性名
+- descriptor 描述符
+  - 数据描述符:
+  - 存取描述符
+
+> 如果一个描述符不具有 `value`、`writable`、`get` 和 `set` 中的任意一个键，那么它将被认为是一个数据描述符。如果一个描述符同时拥有 `value` 或 `writable` 和 `get` 或 `set` 键，则会产生一个异常。
+
+提供描述符的时候，只能选择一种描述符来使用，否则将会抛出异常。
+
+描述符可以拥有的键值如下表所示：
+
+|| `configurable` | `enumerable` | `value` | `writable` | `get`  | `set`  |
+| -------------- | ------------ | ------- | ---------- | ------ | ------ | ------ |
+| 数据描述符     | 可以         | 可以    | 可以       | 可以   | 不可以 | 不可以 |
+| 存取描述符     | 可以         | 可以    | 不可以     | 不可以 | 可以   | 可以   |
+
+各键的含义如字面所示，用于控制属性的操作性。
 
