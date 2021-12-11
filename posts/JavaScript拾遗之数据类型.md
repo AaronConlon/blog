@@ -480,7 +480,22 @@ console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 
 `{}`具有`Object`对象的一系列属性，如果我们只需要一个纯粹的字典，其实我们可以使用`Object.create(null)`，如果需要扩展一些功能，再额外添加即可。
 
-`create`方法还可以用于兼容所有版本 JavaScript 的类式继承，但笔者认为`ES6`支持的`Class`的可读性更好一些，兼容性方面我们有`Babel`。
+`create`方法还可以用于兼容所有版本 JavaScript 的类式继承，但笔者认为`ES6`支持的`Class`的可读性更好一些，兼容性方面我们有`Babel`支持，无需担心。
+
+#### Object.is
+
+判断两个值是否是同一个值：
+
+- 都是 [`undefined`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined)
+- 都是 [`null`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null)
+- 都是 `true` 或 `false`
+- 都是相同长度的字符串且相同字符按相同顺序排列
+- 都是相同对象（意味着每个对象有同一个引用）
+- 都是数字且
+  - 都是 `+0`
+  - 都是 `-0`
+  - 都是 [`NaN`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN)
+  - 或都是非零而且非 [`NaN`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN) 且为同一个值
 
 #### 定义属性
 
@@ -511,3 +526,120 @@ console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 
 各键的含义如字面所示，用于控制属性的操作性。
 
+#### 遍历对象
+
+常用的遍历的方式如下：
+
+- Object.keys
+- Object.values
+- Object.entries
+
+##### Keys
+
+> Object.keys(obj)
+
+返回一个由给定对象的`自身`的`可枚举`属性组成的字符串数组（不包含 Symbol 属性，即使是可枚举的）。
+
+数组元素的顺序和手动遍历对象属性时一致。
+
+> ES6 中如果传入的`obj`是字符串这些非对象类型数据，将会转为对象，如字符串转对象，取得其类数组下标返回。
+
+##### values
+
+> Object.values(obj)
+
+返回一个给定对象`自身`的所有`可枚举`字符串属性值的数组，值的顺序和使用`for...in`循环的顺序相同（区别在于`for...in`枚举原型链上的属性）。
+
+##### entries
+
+> Object.entries(obj)
+
+返回一个给定对象`自身`且`可枚举`字符串属性的`键值对`数组，并且保持顺序，不返回原型链上的属性。
+
+借助此方法和`Map`构造函数接受一个可迭代的`entries`的特征，我们可以轻松将对象转化为`Map`：
+
+```js
+const obj = { name: 'yo', age: 100};
+const map = new Map(Object.entries(obj))
+```
+
+另外，也支持使用此可迭代的`entries`数组创建对象：
+
+```js
+const entries = new Map([
+  ['name', 'yo'],
+  ['age', 100]
+]);
+
+const obj = Object.fromEntries(entries);
+// obj is { name: "yo", age: 100 }
+```
+
+
+
+#### 冻结对象
+
+> Object.freeze(obj)
+
+冻结一个对象意味着被冻结的对象不能被修改，返回此被冻结的对象，而不是一个副本。
+
+可以使用`Object.isFrozen(obj)`来检查是否是一个冻结的对象。
+
+但是冻结对象不总是`不可变的`，当冻结的对象的属性值是一个对象时，我们称之为`浅冻结`，可以修改此属性值的对象。
+
+使用此方法可以冻结一个数组。
+
+通过递归，可以实现一个深冻结函数：
+
+```js
+function deepFreeze(obj) {
+  const propNames = Object.getOwnPropertyNames(obj);
+  propNames.forEach(name => {
+    const prop = obj[name];
+    if(typeof prop == 'object' && prop !== null) {
+      deepFreeze(prop);
+    };
+  });
+  
+  // 冻结自身
+  return Object.freeze(obj);
+}
+```
+
+
+
+#### 密封对象
+
+> Object.seal(obj)
+
+如果只需要将某个对象封闭起来，阻止添加新属性并且设置为不可配置，保持原来的值的可读性和可写性，那么不需要冻结此对象，只需要使用`seal`方法封闭对象即可。
+
+支持配合`Object.isSeal`判断对象是否是一个封闭对象。
+
+> Object.isExtensible(obj) 可以检测对象是否是可扩展的，当对象被冻结或封闭时，对象不可扩展。
+
+#### 其他方法
+
+获取描述符：
+
+- getOwnPropertyDescriptor
+- getOwnPropertyDescriptors
+
+
+
+获取属性相关：
+
+- getOwnPropertyNames: 获取字符串属性数组
+- getOwnPropertySymbols: 获取符号属性数组
+
+
+
+获取对象原型：
+
+- getPrototypeOf
+
+
+
+# 参考
+
+- [MDN Web Docs](https://developer.mozilla.org/zh-CN/)
