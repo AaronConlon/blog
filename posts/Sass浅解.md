@@ -383,6 +383,14 @@ $accent-color: #6a1b9a !default;
 
 其中`margin`属性名还可以视为命名空间嵌套着使用，编译出`margin-top: 2rem`的样式。
 
+`&`父选择器可以作为判断条件，例如：
+
+`if(&, '&.app-background', '.app-background')`
+
+当前处于子级范围时，采用前者，否则采用后者。
+
+> 即使是 css，选择器就已经非常强大了。
+
 此外，还可以根据特定的条件去设置属性和值，此时声明一个`null`作为表达式，最终将不会编译此属性。
 
 举个例子：
@@ -399,17 +407,116 @@ $rounded-corners: false
 
 `css`支持`自定义属性`，也称为`css`变量。这个机制允许开发者灵活的设置属性，同时`JavaScript`能够访问这些值。
 
+在`sass`中对`css`自定义属性的处理需要关注的核心只有一个：仅有插值是动态的，其他标记都将原样编译为`css`，举个例子：
+
+```scss
+$primary: #81899b
+$accent: #302e24
+$warn: #dfa612
+// 插值将顺利转换
+:root
+  --primary: #{$primary}
+  --accent: #{$accent}
+  --warn: #{$warn}
+
+  // Even though this looks like a Sass variable, it's valid CSS so it's not
+  // evaluated.
+  // 下一行将原样编译为 css
+  --consumed-by-js: $primary
+```
+
+此外，还需要了解一个非常强大的`sass`选择器：`占位符`选择器。
+
+占位符选择器和其他`css`选择器类似，它以`%`开头，并且不会包含在`css`输出中，举个例子：
+
+```scss
+.alert:hover, %strong-alert
+  font-weight: bold
 
 
+%strong-alert:hover 
+  color: red
+```
 
+最终编译的结果如下：
 
+```css
+.alert:hover {
+  font-weight: bold;
+}
+```
 
+但是，我们却可以在`sass`中引用其内容对其他选择器进行扩展，减少代码量，举个例子：
 
+```scss
+%toolbelt
+  box-sizing: border-box
+  border-top: 1px rgba(#000, .12) solid
+  padding: 16px 0
+  width: 100%
 
+  &:hover
+    border: 2px rgba(#000, .5) solid
 
+.action-buttons
+  @extend %toolbelt
+  color: #4285f4
 
+.reset-buttons
+  @extend %toolbelt
+  color: #cddc39
+```
 
+如上所示，`.action-buttons`和`.reset-button`都被扩展了，最后的编译结果为：
 
+```css
+.action-buttons, .reset-buttons {
+  box-sizing: border-box;
+  border-top: 1px rgba(0, 0, 0, 0.12) solid;
+  padding: 16px 0;
+  width: 100%;
+}
+.action-buttons:hover, .reset-buttons:hover {
+  border: 2px rgba(0, 0, 0, 0.5) solid;
+}
+
+.action-buttons {
+  color: #4285f4;
+}
+
+.reset-buttons {
+  color: #cddc39;
+}
+```
+
+显然我们可以灵活编写占位符选择器，并且选择适当的情况下`扩展`其他选择器，还不用关心占位符选择器这部分代码，因为最终在不引用的情况下会忽略这部分而编译整体。
+
+## 模块化
+
+编程语言模块化可以将复杂的单文件拆分成多个小文件，将复杂环境拆分梳理为若干小环境，降低开发者的心智压力。
+
+按照惯例，开发者将以`下划线`开头的`sass`文件视为`片段文件`，这些片段文件将被`@import`指令使用，如果不然`sass`编译器将忽略编译这些片段文件。
+
+一句话，使用下划线开头的文件作为片段文件，在需要用到片段文件的`sass`文件使用`@import`指令将之引入。
+
+> css 具有自己的 @import 规则，浏览器在解析到 css 的导入行为时将会发起一个 http 请求获取此目标文件。
+
+`sass`将会获取目标导入文件，并且将此文件和被导入的文件结合，编译出最终样式表。
+
+当将片段文件导入到目标文件后，目标文件可以使用片段文件中的内容。
+
+## 规则
+
+Sass的大部分额外功能都是在CSS之上添加新[@规则](https://developer.mozilla.org/zh-CN/docs/Web/CSS/At-rule)
+
+以下是我们可以在日常开发中使用起来的规则：
+
+- @import 引入样式、mixin、函数、变量
+- @mixin、@include 增强复用样式块
+- @function 增强内置函数外的函数功能
+- @at-root 将样式放入 CSS 文档的根目录中
+- @error、@warn、@debug 用于调试
+- @if、@each、@for、@while 控制函数逻辑
 
 
 
