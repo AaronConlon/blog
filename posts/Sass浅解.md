@@ -383,6 +383,22 @@ $accent-color: #6a1b9a !default;
 
 其中`margin`属性名还可以视为命名空间嵌套着使用，编译出`margin-top: 2rem`的样式。
 
+此外，编译器都能对多个父选择器做出判断：
+
+```scss
+ul, ol
+  text-align: left
+
+  & &
+    padding:
+      bottom: 0
+      left: 0
+```
+
+上述父选择器按顺序进行编译，不必担心`ul`和`ol`在使用父选择器时出现顺序异常。
+
+
+
 `&`父选择器可以作为判断条件，例如：
 
 `if(&, '&.app-background', '.app-background')`
@@ -497,7 +513,7 @@ $warn: #dfa612
 
 按照惯例，开发者将以`下划线`开头的`sass`文件视为`片段文件`，这些片段文件将被`@import`指令使用，如果不然`sass`编译器将忽略编译这些片段文件。
 
-一句话，使用下划线开头的文件作为片段文件，在需要用到片段文件的`sass`文件使用`@import`指令将之引入。
+一句话，使用下划线开头的文件作为片段文件，在需要用到片段文件的`sass`文件使用`@import`指令将之引入，引入时需要`忽略下划线`。
 
 > css 具有自己的 @import 规则，浏览器在解析到 css 的导入行为时将会发起一个 http 请求获取此目标文件。
 
@@ -517,6 +533,199 @@ Sass的大部分额外功能都是在CSS之上添加新[@规则](https://develop
 - @at-root 将样式放入 CSS 文档的根目录中
 - @error、@warn、@debug 用于调试
 - @if、@each、@for、@while 控制函数逻辑
+
+接着，我们逐一加深这些知识点的印象。
+
+### @import
+
+原生的`css`让浏览器呈现时增加`http`请求，而`sass`则在编译期间解决问题。
+
+导入多个文件时可以添加逗号作为分隔，使用`.sass`语法时不需要为`URL`添加括号。并且导入的文件内容将会放在`@import`指令出现的位置，但嵌套导入的 mixin、函数、变量依然具有原作用域。
+
+另外，对于导入的文件`URL`，编译器都能很好的自动进行忽略扩展名的文件查找，并且在路径上统一使用`/`作为分隔符。开发者不需要为不同平台的地址问题费心思了。
+
+对于加载路径的优先级而言，本地文件的优先级高于`node_modules`下的库文件。
+
+如果导入的是一个`css`文件（本地或远程）亦或使用了`url()`或媒体查询时，最终将会直接作为原生的`css`导入使用。
+
+### @mixin
+
+通过`@mixin`定义一个具名的`mixin`，通过`@include mixinName` 使用`mixin`。
+
+> 从笔者个人层面来看，`mixin`就是`sass`这门语言的"函数"
+
+ `mixin`能够让我们轻松通过`复用`机制减少非语义类的使用，并且`mixin`非常灵活。
+
+接下来我直接看几个`mixin`及其用法：
+
+```scss
+@mixin square($size, $radius: 0)
+  width: $size
+  height: $size
+
+  @if $radius != 0
+    border-radius: $radius
+
+.avatar
+  @include square(100px, $radius: 4px)
+```
+
+如上所示，可以预定义一个`mixin`，参数支持具有默认值的可选参数，这一点跟`JS`很像。
+
+再看一个示例：
+
+```scss
+@mixin square($size, $radius: 0, $n: 1)
+  width: $size
+  height: $size
+
+  @if $n != 1
+    border: #{$n}px
+
+.avatar
+  @include square(100px, $n: 4)
+```
+
+可以传递具名的参数，这样可以忽略传参的顺序。
+
+再看：
+
+```scss
+@mixin order($height, $selectors...)
+  @for $i from 0 to length($selectors)
+    #{nth($selectors, $i + 1)}
+      position: absolute
+      height: $height
+      margin-top: $i * $height
+
+@include order(150px, "input.name", "input.address", "input.zip")
+```
+
+如果最后一个参数以`...`结尾，即可将传入的额外参数视为一个可以迭代的列表。
+
+> nth 是内建函数
+
+最终的编译结果为：
+
+```css
+input.name {
+  position: absolute;
+  height: 150px;
+  margin-top: 0px;
+}
+
+input.address {
+  position: absolute;
+  height: 150px;
+  margin-top: 150px;
+}
+
+input.zip {
+  position: absolute;
+  height: 150px;
+  margin-top: 300px;
+}
+```
+
+再看一个`.scss`示例：
+
+```scss
+@mixin syntax-colors($args...) {
+  @debug keywords($args); // (string: #080, comment: #800, $variable: $60b)
+
+  @each $name, $color in keywords($args) {
+    pre span.stx-#{$name} {
+      color: $color;
+    }
+  }
+}
+
+@include syntax-colors(
+  $string: #080,
+  $comment: #800,
+  $variable: #60b,
+)
+```
+
+传递多个参数，`mixin`的定义参数位不定键名参数，最终可以使用内建的函数获取到键值对。
+
+再看：
+
+```scss
+@mixin btn($args...) {
+  @warn "The btn() mixin is deprecated. Include button() instead.";
+  @include button($args...);
+}
+```
+
+看到这里，是否能感受到我们可以使用`sass`很方便的创建某个`UI`库的样式表，可以为团队创建基础的`sass`片段。
+
+另外，`mixin`还支持内容块，只需要在`mixin`中添加一行`@content`即可，举个例子：
+
+```scss
+@mixin hover
+  &:not([disabled]):hover
+    @content
+
+.button
+  border: 1px solid black
+  @include hover
+    border-width: 2px
+```
+
+到这里我已经觉得复杂了，还可以支持多个`@content`和给内容块传参，善用`sass`真不容易，需要大量的使用场景和解决问题的经验。
+
+
+
+### @function
+
+通过`@function`来定义函数，并且可以在任何地方直接调动函数，就像我们使用`css`原生的函数一样。
+
+此前笔者提及`mixin`如`sass`的函数，然而实际上`sass`的函数由`@function`定义，二者是单独的概念。
+
+来看一个基础函数`pow`：
+
+```scss
+@function pow($base, $exponent)
+  $result: 1
+  @for $_ from 1 through $exponent
+    $result: $result * $base
+
+  @return $result
+
+.sidebar
+  float: left
+  margin-left: pow(4, 3) * 1px
+```
+
+如其名，计算乘方。关注函数的标识、参数、结构控制、返回值，这部分跟`mixin`是一样的。
+
+此外，`sass`内建了诸多强大的函数方便我们开发使用，针对不同类型有：
+
+- 颜色
+- 列表
+- 映射表
+- 数学模块
+- meta
+- 选择器
+- 字符串
+
+`sass`有诸多语法和数据类型，根据这些数据可以配合这部分内建函数处理问题，例如我们需要调整一个颜色值：
+
+```scss
+color.adjust($color,
+  $red: null, $green: null, $blue: null,
+  $hue: null, $saturation: null, $lightness: null,
+  $whiteness: null, $blackness: null,
+  $alpha: null)
+adjust-color(...) //=> color 
+
+@debug color.adjust(#6b717f, $red: 15); // #7a717f
+@debug color.adjust(#d2e1dd, $red: -10, $blue: 10); // #c8e1e7
+@debug color.adjust(#998099, $lightness: -30%, $alpha: -0.4); // rgba(71, 57, 71, 0.6)
+```
+
+这个内建函数实在是强大而方便，此刻笔者不必赘述，我也非常欠缺使用经验。
 
 
 
