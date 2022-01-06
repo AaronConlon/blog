@@ -1,376 +1,328 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta name="description" content="javascript node deno linux web developer"/><meta charSet="utf-8"/><link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;🎯&lt;/text&gt;&lt;/svg&gt;"/><title>Javascript算法:三种哈希冲突解决方法</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"/><link rel="stylesheet" href="/blog/post.css"/><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-J0BNBT8YXG"></script><script><!-- Global site tag (gtag.js) - Google Analytics -->
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());        
-            gtag('config', 'G-J0BNBT8YXG');</script><link rel="preload" href="/blog/_next/static/css/4042611ca5d9bbe3711f.css" as="style"/><link rel="stylesheet" href="/blog/_next/static/css/4042611ca5d9bbe3711f.css" data-n-g=""/><link rel="preload" href="/blog/_next/static/css/68a162b2197b3f99dff8.css" as="style"/><link rel="stylesheet" href="/blog/_next/static/css/68a162b2197b3f99dff8.css" data-n-p=""/><noscript data-n-css="true"></noscript><link rel="preload" href="/blog/_next/static/chunks/main-c37f7d67026ad75148c3.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/webpack-eb080e3f091731f228fb.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/framework.1daf1ec1ecf144ee9147.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/commons.cb58dfc173e18379cc5b.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/6335da8543c52d3af527c387f688061357787349.aa32db8a194765817dea.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/pages/_app-9f98083181fbc24cfd05.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/2c3b9bffc7150b37a7b3810dfcf1c0b0fac2bd18.7a872eda8469b3325c5d.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/pages/posts/%5Bslug%5D-3f78a055fbbe14cdff0b.js" as="script"/></head><body><div id="__next"><style data-emotion-css="d6jcgn">html{line-height:1.15;-webkit-text-size-adjust:100%;}body{margin:0;}main{display:block;}h1{font-size:2em;margin:0.67em 0;}hr{box-sizing:content-box;height:0;overflow:visible;}pre{font-family:monospace,monospace;font-size:1em;}a{background-color:transparent;}abbr[title]{border-bottom:none;-webkit-text-decoration:underline;text-decoration:underline;-webkit-text-decoration:underline dotted;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;}b,strong{font-weight:bolder;}code,kbd,samp{font-family:monospace,monospace;font-size:1em;}small{font-size:80%;}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline;}sub{bottom:-0.25em;}sup{top:-0.5em;}img{border-style:none;}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0;}button,input{overflow:visible;}button,select{text-transform:none;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner{border-style:none;padding:0;}fieldset{padding:0.35em 0.75em 0.625em;}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal;}progress{vertical-align:baseline;}textarea{overflow:auto;}[type="checkbox"],[type="radio"]{box-sizing:border-box;padding:0;}[type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none !important;}input[type="number"]{-moz-appearance:textfield;}[type="search"]{-webkit-appearance:textfield;outline-offset:-2px;}[type="search"]::-webkit-search-decoration{-webkit-appearance:none !important;}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit;}details{display:block;}summary{display:list-item;}template{display:none;}[hidden]{display:none !important;}html{box-sizing:border-box;font-family:sans-serif;}*,*::before,*::after{box-sizing:border-box;}blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre{margin:0;}button{background:transparent;padding:0;}fieldset{margin:0;padding:0;}ol,ul{margin:0;padding:0;}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;text-rendering:optimizelegibility;}hr{border-top-width:1px;}img{border-style:solid;}textarea{resize:vertical;}button,[role="button"]{cursor:pointer;}button::-moz-focus-inner{border:0 !important;}table{border-collapse:collapse;}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit;}button,input,optgroup,select,textarea{padding:0;line-height:inherit;color:inherit;}pre,code,kbd,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}img,svg,video,canvas,audio,iframe,embed,object{display:block;vertical-align:middle;}img,video{max-width:100%;height:auto;}html{line-height:1.5;color:#1A202C;}*,*::before,*::after{border-width:0;border-style:solid;border-color:#E2E8F0;}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#A0AEC0;}input::-ms-input-placeholder,textarea::-ms-input-placeholder{color:#A0AEC0;}input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:#A0AEC0;}input::-moz-placeholder,textarea::-moz-placeholder{color:#A0AEC0;}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#A0AEC0;}input::placeholder,textarea::placeholder{color:#A0AEC0;}</style><div><div class="layout_container__1BBI- css-0"><header><div class="css-0"><style data-emotion-css="em7ozm">.css-em7ozm{font-size:2.25rem;line-height:1.25;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";text-align:center;margin:0 auto;padding:1.4rem 1rem;color:#0069d6;}@media screen and (min-width:48em){.css-em7ozm{font-size:3rem;}}</style><h1 class="css-em7ozm"><a href="/blog">妙才<style data-emotion-css="1i1myri">.css-1i1myri{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:30%;}</style><sub class="css-1i1myri">blog</sub></a></h1></div></header><main><div class="css-0"><style data-emotion-css="t9c2rr">.css-t9c2rr{width:100%;margin:0 auto;padding-bottom:2rem;max-width:960px;}</style><div class="css-t9c2rr"><style data-emotion-css="8atqhb">.css-8atqhb{width:100%;}</style><img alt="" class="css-8atqhb"/></div><style data-emotion-css="1td051d">.css-1td051d{width:100%;margin:0 auto;max-width:960px;}</style><div class="css-1td051d"><style data-emotion-css="1299f13">.css-1299f13{font-size:1.875rem;line-height:2.5rem!important;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";text-align:center;overflow:hidden;}@media screen and (min-width:30em){.css-1299f13{line-height:3rem!important;}}@media screen and (min-width:48em){.css-1299f13{font-size:2.25rem;}}</style><h1 class="css-1299f13">Javascript算法:三种哈希冲突解决方法</h1><style data-emotion-css="7e9jz6">.css-7e9jz6{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:2rem;margin:0 auto;margin-right:0.4rem;float:right;}</style><div id="tags" class="css-7e9jz6"><style data-emotion-css="18h3rpj">.css-18h3rpj{display:inline-block;padding-left:8px;padding-right:0.25rem;text-transform:uppercase;font-size:0.6rem;border-radius:5px;font-weight:700;white-space:nowrap;vertical-align:middle;background-color:#c6f6d5;color:#22543d;height:2rem;line-height:2rem;min-width:4rem;margin-right:0.5rem;}</style><div class="css-18h3rpj">Javascript</div><div class="css-18h3rpj">哈希冲突</div><style data-emotion-css="qgikqf">.css-qgikqf{display:inline-block;padding-left:8px;padding-right:0.25rem;text-transform:uppercase;font-size:0.6rem;border-radius:5px;font-weight:700;white-space:nowrap;vertical-align:middle;background-color:#c6f6d5;color:#22543d;height:2rem;line-height:2rem;min-width:4rem;}</style><div class="css-qgikqf">算法</div></div><style data-emotion-css="8ddayy">.css-8ddayy{display:-webkit-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-flex;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;min-height:2rem;max-width:100%;border-radius:0.25rem;font-weight:500;min-width:2rem;padding-left:0.75rem;padding-right:0.75rem;background-color:#c6f6d5;color:#22543d;margin-bottom:2rem;font-size:0.6rem;margin-left:0.4rem;}</style><div class="css-8ddayy">最后更新: <!-- -->2021/3/10</div><div style="margin:0 1rem"><p>在本文中,我们将学习到如何处理哈希冲突,如何编写健壮和优雅的代码,体会算法之美.</p>
-<h2>1. 哈希函数</h2>
-<p>散列表是根据关键码值<code>(Key value)</code>而直接进行访问的数据结构.也就是说,它通过把关键码值映射到表中一个位置来访问记录,以加快查找的速度.</p>
-<p>这个映射函数叫做<code>哈希(散列)函数</code>,存放记录的数组叫做散列表.</p>
-<p>哈希函数不是一个纯函数,函数参数和值是<code>多对一</code>的关系.因为这种特性,哈希值理论上是无法逆推的.让我们来看一个在社区中常见的哈希函数:</p>
-<pre><code><span>private</span> <span><span>loseloseHashCode</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">2</span>  <span>if</span> (<span>typeof</span> key === <span>'number'</span>) {
-<span class="lineNumber">3</span>    <span>return</span> key;
-<span class="lineNumber">4</span>  }
-<span class="lineNumber">5</span>  <span>const</span> tableKey = <span>this</span>.toStrFn(key);
-<span class="lineNumber">6</span>  <span>let</span> hash = <span>0</span>;
-<span class="lineNumber">7</span>  <span>for</span> (<span>let</span> i = <span>0</span>; i &#x3C; tableKey.length; i++) {
-<span class="lineNumber">8</span>    hash += tableKey.charCodeAt(i);
-<span class="lineNumber">9</span>  }
-<span class="lineNumber">10</span>  <span>return</span> hash % <span>37</span>;
-<span class="lineNumber">11</span>}</code></pre> 
+            gtag('js', new Date());
+            gtag('config', 'G-J0BNBT8YXG');</script><link rel="preload" href="/blog/_next/static/css/15b7ac151cc27d0bf446.css" as="style"/><link rel="stylesheet" href="/blog/_next/static/css/15b7ac151cc27d0bf446.css" data-n-g=""/><link rel="preload" href="/blog/_next/static/css/59a87fe619da797e3375.css" as="style"/><link rel="stylesheet" href="/blog/_next/static/css/59a87fe619da797e3375.css" data-n-p=""/><noscript data-n-css="true"></noscript><link rel="preload" href="/blog/_next/static/chunks/main-c37f7d67026ad75148c3.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/webpack-eb080e3f091731f228fb.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/framework.1daf1ec1ecf144ee9147.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/commons.cb58dfc173e18379cc5b.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/6335da8543c52d3af527c387f688061357787349.aa32db8a194765817dea.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/pages/_app-ebdd114948c696bf4519.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/2c3b9bffc7150b37a7b3810dfcf1c0b0fac2bd18.7a872eda8469b3325c5d.js" as="script"/><link rel="preload" href="/blog/_next/static/chunks/pages/posts/%5Bslug%5D-077731781a3ac9bd700e.js" as="script"/></head><body><div id="__next"><style data-emotion-css="d6jcgn">html{line-height:1.15;-webkit-text-size-adjust:100%;}body{margin:0;}main{display:block;}h1{font-size:2em;margin:0.67em 0;}hr{box-sizing:content-box;height:0;overflow:visible;}pre{font-family:monospace,monospace;font-size:1em;}a{background-color:transparent;}abbr[title]{border-bottom:none;-webkit-text-decoration:underline;text-decoration:underline;-webkit-text-decoration:underline dotted;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;}b,strong{font-weight:bolder;}code,kbd,samp{font-family:monospace,monospace;font-size:1em;}small{font-size:80%;}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline;}sub{bottom:-0.25em;}sup{top:-0.5em;}img{border-style:none;}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0;}button,input{overflow:visible;}button,select{text-transform:none;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner{border-style:none;padding:0;}fieldset{padding:0.35em 0.75em 0.625em;}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal;}progress{vertical-align:baseline;}textarea{overflow:auto;}[type="checkbox"],[type="radio"]{box-sizing:border-box;padding:0;}[type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none !important;}input[type="number"]{-moz-appearance:textfield;}[type="search"]{-webkit-appearance:textfield;outline-offset:-2px;}[type="search"]::-webkit-search-decoration{-webkit-appearance:none !important;}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit;}details{display:block;}summary{display:list-item;}template{display:none;}[hidden]{display:none !important;}html{box-sizing:border-box;font-family:sans-serif;}*,*::before,*::after{box-sizing:border-box;}blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre{margin:0;}button{background:transparent;padding:0;}fieldset{margin:0;padding:0;}ol,ul{margin:0;padding:0;}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;text-rendering:optimizelegibility;}hr{border-top-width:1px;}img{border-style:solid;}textarea{resize:vertical;}button,[role="button"]{cursor:pointer;}button::-moz-focus-inner{border:0 !important;}table{border-collapse:collapse;}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit;}button,input,optgroup,select,textarea{padding:0;line-height:inherit;color:inherit;}pre,code,kbd,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}img,svg,video,canvas,audio,iframe,embed,object{display:block;vertical-align:middle;}img,video{max-width:100%;height:auto;}html{line-height:1.5;color:#1A202C;}*,*::before,*::after{border-width:0;border-style:solid;border-color:#E2E8F0;}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#A0AEC0;}input::-ms-input-placeholder,textarea::-ms-input-placeholder{color:#A0AEC0;}input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:#A0AEC0;}input::-moz-placeholder,textarea::-moz-placeholder{color:#A0AEC0;}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#A0AEC0;}input::placeholder,textarea::placeholder{color:#A0AEC0;}</style><div><div class="layout_container__1BBI- css-0"><header><div class="css-0"><style data-emotion-css="em7ozm">.css-em7ozm{font-size:2.25rem;line-height:1.25;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";text-align:center;margin:0 auto;padding:1.4rem 1rem;color:#0069d6;}@media screen and (min-width:48em){.css-em7ozm{font-size:3rem;}}</style><h1 class="css-em7ozm"><a href="/blog">妙才<style data-emotion-css="1i1myri">.css-1i1myri{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:30%;}</style><sub class="css-1i1myri">blog</sub></a></h1></div></header><main><div class="css-0"><style data-emotion-css="t9c2rr">.css-t9c2rr{width:100%;margin:0 auto;padding-bottom:2rem;max-width:960px;}</style><div class="css-t9c2rr"><style data-emotion-css="8atqhb">.css-8atqhb{width:100%;}</style><img alt="" class="css-8atqhb"/></div><style data-emotion-css="1td051d">.css-1td051d{width:100%;margin:0 auto;max-width:960px;}</style><div class="css-1td051d"><style data-emotion-css="1299f13">.css-1299f13{font-size:1.875rem;line-height:2.5rem!important;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";text-align:center;overflow:hidden;}@media screen and (min-width:30em){.css-1299f13{line-height:3rem!important;}}@media screen and (min-width:48em){.css-1299f13{font-size:2.25rem;}}</style><h1 class="css-1299f13">Javascript算法:三种哈希冲突解决方法</h1><style data-emotion-css="7e9jz6">.css-7e9jz6{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:2rem;margin:0 auto;margin-right:0.4rem;float:right;}</style><div id="tags" class="css-7e9jz6"><style data-emotion-css="18h3rpj">.css-18h3rpj{display:inline-block;padding-left:8px;padding-right:0.25rem;text-transform:uppercase;font-size:0.6rem;border-radius:5px;font-weight:700;white-space:nowrap;vertical-align:middle;background-color:#c6f6d5;color:#22543d;height:2rem;line-height:2rem;min-width:4rem;margin-right:0.5rem;}</style><div class="css-18h3rpj">Javascript</div><div class="css-18h3rpj">哈希冲突</div><style data-emotion-css="qgikqf">.css-qgikqf{display:inline-block;padding-left:8px;padding-right:0.25rem;text-transform:uppercase;font-size:0.6rem;border-radius:5px;font-weight:700;white-space:nowrap;vertical-align:middle;background-color:#c6f6d5;color:#22543d;height:2rem;line-height:2rem;min-width:4rem;}</style><div class="css-qgikqf">算法</div></div><style data-emotion-css="8ddayy">.css-8ddayy{display:-webkit-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-flex;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;min-height:2rem;max-width:100%;border-radius:0.25rem;font-weight:500;min-width:2rem;padding-left:0.75rem;padding-right:0.75rem;background-color:#c6f6d5;color:#22543d;margin-bottom:2rem;font-size:0.6rem;margin-left:0.4rem;}</style><div class="css-8ddayy">最后更新: <!-- -->2021/3/10</div><div><p>在本文中,我们将学习到如何处理哈希冲突,如何编写健壮和优雅的代码,体会算法之美.</p><h2 id="1-">1. 哈希函数</h2><p>散列表是根据关键码值<code>(Key value)</code>而直接进行访问的数据结构.也就是说,它通过把关键码值映射到表中一个位置来访问记录,以加快查找的速度.</p><p>这个映射函数叫做<code>哈希(散列)函数</code>,存放记录的数组叫做散列表.</p><p>哈希函数不是一个纯函数,函数参数和值是<code>多对一</code>的关系.因为这种特性,哈希值理论上是无法逆推的.让我们来看一个在社区中常见的哈希函数:</p><details open=""><summary class="Code_summary__2YXsZ">Details</summary><div class="Code_container__2ip2n"><div class="Code_header__6pHWW"><div class="CopyCode_normal__JylQA"><div style="cursor:pointer"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M11 1.5h2.5v12a1 1 0 01-1 1h-10a1 1 0 01-1-1v-12H4m.5-1h6v2a1 1 0 01-1 1h-4a1 1 0 01-1-1v-2z" stroke="currentColor"></path></svg></div></div></div><div class="Code_code_area__GjtJr"><div class="Code_line_num__3uYIf"><ul></ul></div><pre class="Code_code__1ValO"><code class="lang-typescript">private loseloseHashCode(key: K) {
+  if (typeof key === &#x27;number&#x27;) {
+    return key;
+  }
+  const tableKey = this.toStrFn(key);
+  let hash = 0;
+  for (let i = 0; i &lt; tableKey.length; i++) {
+    hash += tableKey.charCodeAt(i);
+  }
+  return hash % 37;
+}</code></pre></div></div></details><p>上述代码是从哈希表的实现中摘取出来的,大致效果是通过不同类型的<code>key</code>获取一个数字作为<code>hashValue</code>.</p><p>上述哈希函数的取值范围较小,不要让这个哈希函数限制你的<code>想象</code>,在后续的<code>多重散列</code>学习的时候将会讨论这个话题.</p><h2 id="2-">2. 哈希冲突</h2><p>在创建我们的哈希表的时候,对于不同的键值,依据一个哈希函数生成的键值有可能出现重复的情形<code>(一对多的关系)</code>,这种场景我们称之为<code>哈希冲突</code>.</p><p>为了应对哈希冲突,开发者们思考出了许多解决方案,今天我们来看看其中比较常用的三个解决方案.</p><h3 id="">开放定址</h3><p>开放定址理论中有<code>分离链接</code>的说法,指的是为哈希表的每一个位置创建一个<code>链表</code>,将元素存在链表里,这是最简单和常见的解决方法,但是在哈希表实例之外,还需要一些<code>额外的存储空间</code>.</p><p>如下是图示:</p><p><img src="https://zhangruochi.com/Hash-Table/2019/08/23/3.png"/></p><p>接下来看代码示例:</p><details open=""><summary class="Code_summary__2YXsZ">Details</summary><div class="Code_container__2ip2n"><div class="Code_header__6pHWW"><div class="CopyCode_normal__JylQA"><div style="cursor:pointer"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M11 1.5h2.5v12a1 1 0 01-1 1h-10a1 1 0 01-1-1v-12H4m.5-1h6v2a1 1 0 01-1 1h-4a1 1 0 01-1-1v-2z" stroke="currentColor"></path></svg></div></div></div><div class="Code_code_area__GjtJr"><div class="Code_line_num__3uYIf"><ul></ul></div><pre class="Code_code__1ValO"><code class="lang-typescript">import { defaultToString } from &quot;../help&quot;;
+import LinkedList from &quot;../linkedList/index&quot;;
 
-<p>上述代码是从哈希表的实现中摘取出来的,大致效果是通过不同类型的<code>key</code>获取一个数字作为<code>hashValue</code>.</p>
-<p>上述哈希函数的取值范围较小,不要让这个哈希函数限制你的<code>想象</code>,在后续的<code>多重散列</code>学习的时候将会讨论这个话题.</p>
-<h2>2. 哈希冲突</h2>
-<p>在创建我们的哈希表的时候,对于不同的键值,依据一个哈希函数生成的键值有可能出现重复的情形<code>(一对多的关系)</code>,这种场景我们称之为<code>哈希冲突</code>.</p>
-<p>为了应对哈希冲突,开发者们思考出了许多解决方案,今天我们来看看其中比较常用的三个解决方案.</p>
-<h3>开放定址</h3>
-<p>开放定址理论中有<code>分离链接</code>的说法,指的是为哈希表的每一个位置创建一个<code>链表</code>,将元素存在链表里,这是最简单和常见的解决方法,但是在哈希表实例之外,还需要一些<code>额外的存储空间</code>.</p>
-<p>如下是图示:</p>
-<p><img src="https://zhangruochi.com/Hash-Table/2019/08/23/3.png" alt=""></p>
-<p>接下来看代码示例:</p>
-<pre><code><span>import</span> { defaultToString } <span>from</span> <span>"../help"</span>;
-<span class="lineNumber">2</span><span>import</span> LinkedList <span>from</span> <span>"../linkedList/index"</span>;
-<span class="lineNumber">3</span> 
-<span class="lineNumber">4</span><span>export</span> <span>default</span> <span><span>class</span> <span>HashTableSeparateChaining</span> </span>{
-<span class="lineNumber">5</span>  <span>table</span>: { [name: <span>string</span>]: LinkedList };
-<span class="lineNumber">6</span> 
-<span class="lineNumber">7</span>  toStrFn: <span>Function</span>;
-<span class="lineNumber">8</span> 
-<span class="lineNumber">9</span>  count: <span>number</span>;
-<span class="lineNumber">10</span> 
-<span class="lineNumber">11</span>  <span><span>constructor</span>(<span></span>)</span> {
-<span class="lineNumber">12</span>    <span>this</span>.table = {};
-<span class="lineNumber">13</span>    <span>this</span>.toStrFn = defaultToString;
-<span class="lineNumber">14</span>    <span>this</span>.count = <span>0</span>;
-<span class="lineNumber">15</span>  }
-<span class="lineNumber">16</span> 
-<span class="lineNumber">17</span>  put(key: unknown, <span>value</span>: unknown): <span>boolean</span> {
-<span class="lineNumber">18</span>    <span>if</span> (key !== <span>undefined</span> &#x26;&#x26; value !== <span>undefined</span>) {
-<span class="lineNumber">19</span>      <span>const</span> hashCode = <span>this</span>.getHashCode(key);
-<span class="lineNumber">20</span>      <span>if</span> (<span>this</span>.table[hashCode] === <span>undefined</span>) {
-<span class="lineNumber">21</span>        <span>const</span> linked = <span>new</span> LinkedList();
-<span class="lineNumber">22</span>        <span>this</span>.table[hashCode] = linked;
-<span class="lineNumber">23</span>      }
-<span class="lineNumber">24</span>      <span>this</span>.table[hashCode].push([key, value]);
-<span class="lineNumber">25</span>      <span>this</span>.count++;
-<span class="lineNumber">26</span>      <span>return</span> <span>true</span>;
-<span class="lineNumber">27</span>    }
-<span class="lineNumber">28</span>    <span>return</span> <span>false</span>;
-<span class="lineNumber">29</span>  }
-<span class="lineNumber">30</span> 
-<span class="lineNumber">31</span>  get(key: unknown): unknown {
-<span class="lineNumber">32</span>    <span>const</span> hashCode = <span>this</span>.getHashCode(key);
-<span class="lineNumber">33</span>    <span>if</span> (<span>this</span>.table[hashCode] &#x26;&#x26; !<span>this</span>.table[hashCode].isEmpty()) {
-<span class="lineNumber">34</span>      <span>let</span> current = <span>this</span>.table[hashCode].head;
-<span class="lineNumber">35</span>      <span>while</span> (current) {
-<span class="lineNumber">36</span>        <span>if</span> (current.val[<span>0</span>] === key) {
-<span class="lineNumber">37</span>          <span>return</span> current.val[<span>1</span>];
-<span class="lineNumber">38</span>        }
-<span class="lineNumber">39</span>      }
-<span class="lineNumber">40</span>      current = current.next;
-<span class="lineNumber">41</span>    }
-<span class="lineNumber">42</span>    <span>return</span> <span>undefined</span>;
-<span class="lineNumber">43</span>  }
-<span class="lineNumber">44</span> 
-<span class="lineNumber">45</span>  remove(key: unknown): <span>boolean</span> {
-<span class="lineNumber">46</span>    <span>const</span> hashCode = <span>this</span>.getHashCode(key);
-<span class="lineNumber">47</span>    <span>const</span> linked = <span>this</span>.table[hashCode];
-<span class="lineNumber">48</span>    <span>if</span> (linked &#x26;&#x26; linked.indexOf(key) !== -<span>1</span>) {
-<span class="lineNumber">49</span>      linked.remove(key);
-<span class="lineNumber">50</span>      <span>if</span> (linked.isEmpty()) {
-<span class="lineNumber">51</span>        <span>delete</span> <span>this</span>.table[hashCode];
-<span class="lineNumber">52</span>      }
-<span class="lineNumber">53</span>      <span>this</span>.count--;
-<span class="lineNumber">54</span>      <span>return</span> <span>true</span>;
-<span class="lineNumber">55</span>    }
-<span class="lineNumber">56</span>    <span>return</span> <span>false</span>;
-<span class="lineNumber">57</span>  }
-<span class="lineNumber">58</span> 
-<span class="lineNumber">59</span>  getHashCode(key: unknown): <span>number</span> {
-<span class="lineNumber">60</span>    <span>if</span> (<span>typeof</span> key === <span>"number"</span>) <span>return</span> key;
-<span class="lineNumber">61</span>    <span>const</span> tableKey: <span>string</span> = <span>this</span>.toStrFn(key);
-<span class="lineNumber">62</span>    <span>let</span> hash = <span>0</span>;
-<span class="lineNumber">63</span>    <span>for</span> (<span>let</span> i = <span>0</span>; i &#x3C; tableKey.length; i++) {
-<span class="lineNumber">64</span>      hash += tableKey.charCodeAt(i);
-<span class="lineNumber">65</span>    }
-<span class="lineNumber">66</span>    <span>return</span> hash % <span>37</span>;
-<span class="lineNumber">67</span>  }
-<span class="lineNumber">68</span> 
-<span class="lineNumber">69</span>  <span><span>size</span>(<span></span>)</span> {
-<span class="lineNumber">70</span>    <span>return</span> <span>this</span>.count;
-<span class="lineNumber">71</span>  }
-<span class="lineNumber">72</span>}</code></pre> 
+export default class HashTableSeparateChaining {
+  table: { [name: string]: LinkedList };
 
-<blockquote>
-<p><strong>分离链接法</strong>关键在于对内部存储对象使用链表来存储"<code>哈希碰撞</code>"的值.</p>
-</blockquote>
-<h3>线性探查法</h3>
-<p>如果不额外使用链表空间来存储值,依然选择将值存储到表中,则可以选择使用<code>线性探查法</code>.</p>
-<p>线性探查的关键在于,<code>如果一个 position 已经被占用,则尝试 position+1 的位置,依次类推</code>.</p>
-<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/LinearProbing-Add.png" alt=""></p>
-<p>白色区域表示空闲位置，绿色区域表示已经存储数据.</p>
-<p>在删除的时候,有两种思路去处理收尾的代码逻辑.</p>
-<ul>
-<li>标记法: 标记已删除的位置,并且后续不可再使用,查找的时候也跳过.</li>
-<li>位置移动修复法: 检验是否需要将后续存在的一个或者多个元素移动到之前的位置,以此来防止出现通过哈希值找到一个被删除的空位置.</li>
-</ul>
-<p>对于第一种思路,也称为<code>惰性探查</code>,核心思想在于每个位置都有一个是否已删除的标记,遇到碰撞的时候递增哈希值,在移除碰撞的值的时候,将此标志位设置为<code>true</code>,方便再次插入碰撞的值的时候直接利用,或者在获取值的时候跳过具有已删除标志的位置,示例代码如下:</p>
-<pre><code><span>import</span> { defaultToString, ValuePairLazy } <span>from</span> <span>"../help"</span>;
-<span class="lineNumber">2</span> 
-<span class="lineNumber">3</span><span>export</span> <span>default</span> <span><span>class</span> <span>HashTableLinearProbingLazy</span>&#x3C;<span>K</span>, <span>V</span>> </span>{
-<span class="lineNumber">4</span>  <span>protected</span> table: { [key: <span>string</span>]: ValuePairLazy&#x3C;K, V> };
-<span class="lineNumber">5</span> 
-<span class="lineNumber">6</span>  <span><span>constructor</span>(<span>
-<span class="lineNumber">7</span>    <span>public</span> size = <span>0</span>,
-<span class="lineNumber">8</span>    <span>protected</span> toStrFn: (key: K) => <span>string</span> = defaultToString
-<span class="lineNumber">9</span>  </span>)</span> {
-<span class="lineNumber">10</span>    <span>this</span>.table = {};
-<span class="lineNumber">11</span>  }
-<span class="lineNumber">12</span> 
-<span class="lineNumber">13</span>  <span>private</span> <span><span>loseloseHashCode</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">14</span>    <span>if</span> (<span>typeof</span> key === <span>"number"</span>) <span>return</span> key;
-<span class="lineNumber">15</span>    <span>const</span> tableKey = <span>this</span>.toStrFn(key);
-<span class="lineNumber">16</span>    <span>let</span> hash = <span>0</span>;
-<span class="lineNumber">17</span>    <span>for</span> (<span>let</span> i = <span>0</span>; i &#x3C; tableKey.length; i++) {
-<span class="lineNumber">18</span>      hash += tableKey.charCodeAt(i);
-<span class="lineNumber">19</span>    }
-<span class="lineNumber">20</span>    <span>return</span> hash % <span>37</span>;
-<span class="lineNumber">21</span>  }
-<span class="lineNumber">22</span> 
-<span class="lineNumber">23</span>  hashCode(key: K): <span>number</span> {
-<span class="lineNumber">24</span>    <span>return</span> <span>this</span>.loseloseHashCode(key);
-<span class="lineNumber">25</span>  }
-<span class="lineNumber">26</span> 
-<span class="lineNumber">27</span>  put(key: K, <span>value</span>: V): <span>boolean</span> {
-<span class="lineNumber">28</span>    <span>if</span> (key != <span>null</span> &#x26;&#x26; value != <span>null</span>) {
-<span class="lineNumber">29</span>      <span>const</span> position = <span>this</span>.hashCode(key);
-<span class="lineNumber">30</span>      <span>if</span> (
-<span class="lineNumber">31</span>        <span>this</span>.table[position] === <span>undefined</span> ||
-<span class="lineNumber">32</span>        (<span>this</span>.table[position] != <span>null</span> &#x26;&#x26; <span>this</span>.table[position].isDeleted)
-<span class="lineNumber">33</span>      ) {
-<span class="lineNumber">34</span>        <span>this</span>.table[position] = <span>new</span> ValuePairLazy(key, value);
-<span class="lineNumber">35</span>      } <span>else</span> {
-<span class="lineNumber">36</span>        <span>let</span> index = position + <span>1</span>;
-<span class="lineNumber">37</span>        <span>while</span> (<span>this</span>.table[index] != <span>null</span> &#x26;&#x26; !<span>this</span>.table[position].isDeleted) {
-<span class="lineNumber">38</span>          index++;
-<span class="lineNumber">39</span>        }
-<span class="lineNumber">40</span>        <span>this</span>.table[index] = <span>new</span> ValuePairLazy(key, value);
-<span class="lineNumber">41</span>      }
-<span class="lineNumber">42</span>      <span>this</span>.size++;
-<span class="lineNumber">43</span>      <span>return</span> <span>true</span>;
-<span class="lineNumber">44</span>    }
-<span class="lineNumber">45</span>    <span>return</span> <span>false</span>;
-<span class="lineNumber">46</span>  }
-<span class="lineNumber">47</span> 
-<span class="lineNumber">48</span>  <span><span>get</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">49</span>    <span>const</span> position = <span>this</span>.hashCode(key);
-<span class="lineNumber">50</span>    <span>const</span> table = <span>this</span>.table;
-<span class="lineNumber">51</span>    <span>if</span> (table[position] != <span>null</span>) {
-<span class="lineNumber">52</span>      <span>if</span> (table[position].key === key &#x26;&#x26; table[position].isDeleted === <span>false</span>) {
-<span class="lineNumber">53</span>        <span>return</span> table[position].value;
-<span class="lineNumber">54</span>      }
-<span class="lineNumber">55</span>      <span>let</span> index = position + <span>1</span>;
-<span class="lineNumber">56</span>      <span>while</span> (
-<span class="lineNumber">57</span>        table[index] != <span>null</span> &#x26;&#x26;
-<span class="lineNumber">58</span>        (table[index].key !== key || table[index].isDeleted)
-<span class="lineNumber">59</span>      ) {
-<span class="lineNumber">60</span>        index++;
-<span class="lineNumber">61</span>      }
-<span class="lineNumber">62</span>      <span>if</span> (
-<span class="lineNumber">63</span>        table[index] != <span>null</span> &#x26;&#x26;
-<span class="lineNumber">64</span>        table[index].key === key &#x26;&#x26;
-<span class="lineNumber">65</span>        !table[index].isDeleted
-<span class="lineNumber">66</span>      ) {
-<span class="lineNumber">67</span>        <span>return</span> table[index].value;
-<span class="lineNumber">68</span>      }
-<span class="lineNumber">69</span>    }
-<span class="lineNumber">70</span>    <span>return</span> <span>undefined</span>;
-<span class="lineNumber">71</span>  }
-<span class="lineNumber">72</span> 
-<span class="lineNumber">73</span>  remove(key: K): <span>boolean</span> {
-<span class="lineNumber">74</span>    <span>let</span> position = <span>this</span>.hashCode(key);
-<span class="lineNumber">75</span>    <span>const</span> { table } = <span>this</span>;
-<span class="lineNumber">76</span>    <span>if</span> (table[position] != <span>null</span>) {
-<span class="lineNumber">77</span>      <span>if</span> (table[position].key === key &#x26;&#x26; !table[position].isDeleted) {
-<span class="lineNumber">78</span>        table[position].isDeleted = <span>true</span>;
-<span class="lineNumber">79</span>        <span>this</span>.size--;
-<span class="lineNumber">80</span>        <span>return</span> <span>true</span>;
-<span class="lineNumber">81</span>      }
-<span class="lineNumber">82</span>      position++;
-<span class="lineNumber">83</span>      <span>while</span> (table[position].key !== key || table[position].isDeleted) {
-<span class="lineNumber">84</span>        position++;
-<span class="lineNumber">85</span>      }
-<span class="lineNumber">86</span>      <span>if</span> (
-<span class="lineNumber">87</span>        table[position] != <span>null</span> &#x26;&#x26;
-<span class="lineNumber">88</span>        table[position].key === key &#x26;&#x26;
-<span class="lineNumber">89</span>        !table[position].isDeleted
-<span class="lineNumber">90</span>      ) {
-<span class="lineNumber">91</span>        table[position].isDeleted = <span>true</span>;
-<span class="lineNumber">92</span>        <span>this</span>.size--;
-<span class="lineNumber">93</span>        <span>return</span> <span>true</span>;
-<span class="lineNumber">94</span>      }
-<span class="lineNumber">95</span>    }
-<span class="lineNumber">96</span>    <span>return</span> <span>false</span>;
-<span class="lineNumber">97</span>  }
-<span class="lineNumber">98</span> 
-<span class="lineNumber">99</span>  <span><span>isEmpty</span>(<span></span>)</span> {
-<span class="lineNumber">100</span>    <span>return</span> <span>this</span>.size === <span>0</span>;
-<span class="lineNumber">101</span>  }
-<span class="lineNumber">102</span> 
-<span class="lineNumber">103</span>  <span><span>clear</span>(<span></span>)</span> {
-<span class="lineNumber">104</span>    <span>this</span>.size = <span>0</span>;
-<span class="lineNumber">105</span>    <span>this</span>.table = {};
-<span class="lineNumber">106</span>  }
-<span class="lineNumber">107</span> 
-<span class="lineNumber">108</span>  <span><span>getTable</span>(<span></span>)</span> {
-<span class="lineNumber">109</span>    <span>return</span> <span>this</span>.table;
-<span class="lineNumber">110</span>  }
-<span class="lineNumber">111</span> 
-<span class="lineNumber">112</span>  toString(): <span>string</span> {
-<span class="lineNumber">113</span>    <span>if</span> (<span>this</span>.isEmpty()) <span>return</span> <span>""</span>;
-<span class="lineNumber">114</span>    <span>const</span> keys = <span>Object</span>.keys(<span>this</span>.table);
-<span class="lineNumber">115</span>    <span>let</span> objStr = <span>`{<span>${keys[<span>0</span>]}</span> => <span>${<span>this</span>.table[keys[<span>0</span>]].toString()}</span>}`</span>;
-<span class="lineNumber">116</span>    <span>for</span> (<span>let</span> i = <span>1</span>; i &#x3C; keys.length; i++) {
-<span class="lineNumber">117</span>      objStr = <span>`<span>${objStr}</span>, {<span>${keys[i]}</span> => <span>${<span>this</span>.table[keys[i]].toString()}</span>}`</span>;
-<span class="lineNumber">118</span>    }
-<span class="lineNumber">119</span>    <span>return</span> objStr;
-<span class="lineNumber">120</span>  }
-<span class="lineNumber">121</span>}
-<span class="lineNumber">122</span></code></pre> 
+  toStrFn: Function;
 
-<p>对于第二种思路,示例代码如下:</p>
-<pre><code><span>import</span> { defaultToString, ValuePair } <span>from</span> <span>"../help"</span>;
-<span class="lineNumber">2</span> 
-<span class="lineNumber">3</span><span>export</span> <span>default</span> <span><span>class</span> <span>HashTableLinearProbing</span>&#x3C;<span>K</span>, <span>V</span>> </span>{
-<span class="lineNumber">4</span>  <span>protected</span> table: { [key: <span>string</span>]: ValuePair&#x3C;K, V> };
-<span class="lineNumber">5</span> 
-<span class="lineNumber">6</span>  <span><span>constructor</span>(<span>
-<span class="lineNumber">7</span>    <span>protected</span> toStrFn: (key: K) => <span>string</span> = defaultToString,
-<span class="lineNumber">8</span>    <span>public</span> size = <span>0</span>
-<span class="lineNumber">9</span>  </span>)</span> {
-<span class="lineNumber">10</span>    <span>this</span>.table = {};
-<span class="lineNumber">11</span>  }
-<span class="lineNumber">12</span> 
-<span class="lineNumber">13</span>  <span>private</span> <span><span>loseloseHashCode</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">14</span>    <span>if</span> (<span>typeof</span> key === <span>"number"</span>) <span>return</span> key;
-<span class="lineNumber">15</span>    <span>const</span> tableHash = <span>this</span>.toStrFn(key);
-<span class="lineNumber">16</span>    <span>console</span>.log(tableHash, <span>"is table hash value"</span>);
-<span class="lineNumber">17</span> 
-<span class="lineNumber">18</span>    <span>let</span> hash = <span>0</span>;
-<span class="lineNumber">19</span>    <span>for</span> (<span>let</span> i = <span>0</span>; i &#x3C; tableHash.length; i++) {
-<span class="lineNumber">20</span>      hash += tableHash.charCodeAt(i);
-<span class="lineNumber">21</span>    }
-<span class="lineNumber">22</span>    <span>return</span> hash % <span>37</span>;
-<span class="lineNumber">23</span>  }
-<span class="lineNumber">24</span> 
-<span class="lineNumber">25</span>  <span><span>hashCode</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">26</span>    <span>return</span> <span>this</span>.loseloseHashCode(key);
-<span class="lineNumber">27</span>  }
-<span class="lineNumber">28</span> 
-<span class="lineNumber">29</span>  <span><span>put</span>(<span>key: K, value: V</span>)</span> {
-<span class="lineNumber">30</span>    <span>// 保证 key 和 value 都不能是 undefined 和 null 之一</span>
-<span class="lineNumber">31</span>    <span>if</span> (key != <span>null</span> &#x26;&#x26; value != <span>null</span>) {
-<span class="lineNumber">32</span>      <span>const</span> position = <span>this</span>.hashCode(key);
-<span class="lineNumber">33</span>      <span>if</span> (<span>this</span>.table[position] == <span>null</span>) {
-<span class="lineNumber">34</span>        <span>this</span>.table[position] = <span>new</span> ValuePair(key, value);
-<span class="lineNumber">35</span>      } <span>else</span> {
-<span class="lineNumber">36</span>        <span>let</span> index = position + <span>1</span>;
-<span class="lineNumber">37</span>        <span>while</span> (<span>this</span>.table[index] != <span>null</span>) {
-<span class="lineNumber">38</span>          index++;
-<span class="lineNumber">39</span>        }
-<span class="lineNumber">40</span>        <span>this</span>.table[index] = <span>new</span> ValuePair(key, value);
-<span class="lineNumber">41</span>      }
-<span class="lineNumber">42</span>      <span>this</span>.size++;
-<span class="lineNumber">43</span>      <span>return</span> <span>true</span>;
-<span class="lineNumber">44</span>    }
-<span class="lineNumber">45</span>    <span>return</span> <span>false</span>;
-<span class="lineNumber">46</span>  }
-<span class="lineNumber">47</span> 
-<span class="lineNumber">48</span>  <span><span>get</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">49</span>    <span>const</span> position = <span>this</span>.hashCode(key);
-<span class="lineNumber">50</span>    <span>if</span> (<span>this</span>.table[position] != <span>null</span>) {
-<span class="lineNumber">51</span>      <span>if</span> (<span>this</span>.table[position].key === key) {
-<span class="lineNumber">52</span>        <span>return</span> <span>this</span>.table[position].value;
-<span class="lineNumber">53</span>      }
-<span class="lineNumber">54</span>      <span>let</span> index = position + <span>1</span>;
-<span class="lineNumber">55</span>      <span>while</span> (<span>this</span>.table[index].key != <span>null</span> &#x26;&#x26; <span>this</span>.table[index].key !== key) {
-<span class="lineNumber">56</span>        index++;
-<span class="lineNumber">57</span>      }
-<span class="lineNumber">58</span>      <span>if</span> (<span>this</span>.table[index] != <span>null</span> &#x26;&#x26; <span>this</span>.table[index].key === key)
-<span class="lineNumber">59</span>        <span>return</span> <span>this</span>.table[index].value;
-<span class="lineNumber">60</span>    }
-<span class="lineNumber">61</span>    <span>return</span> <span>undefined</span>;
-<span class="lineNumber">62</span>  }
-<span class="lineNumber">63</span> 
-<span class="lineNumber">64</span>  <span><span>remove</span>(<span>key: K</span>)</span> {
-<span class="lineNumber">65</span>    <span>const</span> position = <span>this</span>.hashCode(key);
-<span class="lineNumber">66</span>    <span>if</span> (<span>this</span>.table[position] != <span>null</span>) {
-<span class="lineNumber">67</span>      <span>if</span> (<span>this</span>.table[position].key === key) {
-<span class="lineNumber">68</span>        <span>delete</span> <span>this</span>.table[position];
-<span class="lineNumber">69</span>        <span>this</span>.verifyRemoveSideEffect(key, position);
-<span class="lineNumber">70</span>        <span>this</span>.size--;
-<span class="lineNumber">71</span>        <span>return</span> <span>true</span>;
-<span class="lineNumber">72</span>      }
-<span class="lineNumber">73</span>      <span>let</span> index = position + <span>1</span>;
-<span class="lineNumber">74</span>      <span>while</span> (<span>this</span>.table[index] != <span>null</span> &#x26;&#x26; <span>this</span>.table[index].key !== key) {
-<span class="lineNumber">75</span>        index++;
-<span class="lineNumber">76</span>      }
-<span class="lineNumber">77</span>      <span>if</span> (<span>this</span>.table[index] != <span>null</span> &#x26;&#x26; <span>this</span>.table[index].key === key) {
-<span class="lineNumber">78</span>        <span>delete</span> <span>this</span>.table[index];
-<span class="lineNumber">79</span>        <span>this</span>.verifyRemoveSideEffect(key, index);
-<span class="lineNumber">80</span>        <span>this</span>.size--;
-<span class="lineNumber">81</span>        <span>return</span> <span>true</span>;
-<span class="lineNumber">82</span>      }
-<span class="lineNumber">83</span>    }
-<span class="lineNumber">84</span>    <span>return</span> <span>false</span>;
-<span class="lineNumber">85</span>  }
-<span class="lineNumber">86</span> 
-<span class="lineNumber">87</span>  <span>private</span> <span><span>verifyRemoveSideEffect</span>(<span>key: K, removePosition: <span>number</span></span>)</span> {
-<span class="lineNumber">88</span>    <span>const</span> hash = <span>this</span>.hashCode(key);
-<span class="lineNumber">89</span>    <span>let</span> index = removePosition + <span>1</span>;
-<span class="lineNumber">90</span>    <span>while</span> (<span>this</span>.table[index] != <span>null</span>) {
-<span class="lineNumber">91</span>      <span>const</span> posHash = <span>this</span>.hashCode(<span>this</span>.table[index].key);
-<span class="lineNumber">92</span>      <span>if</span> (posHash &#x3C;= hash || posHash &#x3C;= removePosition) {
-<span class="lineNumber">93</span>        <span>this</span>.table[removePosition] = <span>this</span>.table[index];
-<span class="lineNumber">94</span>        <span>delete</span> <span>this</span>.table[index];
-<span class="lineNumber">95</span>        removePosition = index; <span>// eslint-disable-line</span>
-<span class="lineNumber">96</span>      }
-<span class="lineNumber">97</span>      index++;
-<span class="lineNumber">98</span>    }
-<span class="lineNumber">99</span>  }
-<span class="lineNumber">100</span> 
-<span class="lineNumber">101</span>  <span><span>isEmpty</span>(<span></span>)</span> {
-<span class="lineNumber">102</span>    <span>return</span> <span>this</span>.size === <span>0</span>;
-<span class="lineNumber">103</span>  }
-<span class="lineNumber">104</span> 
-<span class="lineNumber">105</span>  <span><span>clear</span>(<span></span>)</span> {
-<span class="lineNumber">106</span>    <span>this</span>.size = <span>0</span>;
-<span class="lineNumber">107</span>    <span>this</span>.table = {};
-<span class="lineNumber">108</span>  }
-<span class="lineNumber">109</span> 
-<span class="lineNumber">110</span>  <span><span>getTable</span>(<span></span>)</span> {
-<span class="lineNumber">111</span>    <span>return</span> <span>this</span>.table;
-<span class="lineNumber">112</span>  }
-<span class="lineNumber">113</span> 
-<span class="lineNumber">114</span>  toString(): <span>string</span> {
-<span class="lineNumber">115</span>    <span>if</span> (<span>this</span>.isEmpty()) <span>return</span> <span>""</span>;
-<span class="lineNumber">116</span>    <span>const</span> keys = <span>Object</span>.keys(<span>this</span>.table);
-<span class="lineNumber">117</span>    <span>let</span> objStr = <span>`<span>${keys[<span>0</span>]}</span> => <span>${<span>this</span>.table[keys[<span>0</span>]].toString()}</span>`</span>;
-<span class="lineNumber">118</span>    <span>for</span> (<span>let</span> i = <span>1</span>; i &#x3C; keys.length; i++) {
-<span class="lineNumber">119</span>      objStr = <span>`<span>${objStr}</span>, <span>${keys[i]}</span> => <span>${<span>this</span>.table[keys[i]].toString()}</span>`</span>;
-<span class="lineNumber">120</span>    }
-<span class="lineNumber">121</span>    <span>return</span> objStr;
-<span class="lineNumber">122</span>  }
-<span class="lineNumber">123</span>}</code></pre> 
+  count: number;
 
-<p>这里的关键在于<code>remove</code>方法,删除数据之后还要对后续由于哈希冲突导致的数据位置异常进行处理,对相应的值的位置进行修复.哈希冲突越多,则<code>remove</code>的开销越大,因此我们需要一个优秀的<code>哈希函数</code>.</p>
-<h3>多重散列法</h3>
-<p>多重散列或者多重哈希,没什么区别.<code>一个</code>哈希函数不够,<code>就用两个</code>.看示例代码:</p>
-<pre><code>(firstHash(key) + i * secondHash(key)) % tableSize </code></pre> 
+  constructor() {
+    this.table = {};
+    this.toStrFn = defaultToString;
+    this.count = 0;
+  }
 
-<h2>3. 参考</h2>
-<ul>
-<li><a href="https://www.educative.io/blog/data-strucutres-hash-table-javascript">Data Structures 101: implement hash tables in JavaScript</a></li>
-</ul>
-</div></div></div></main><style data-emotion-css="1fic0ux">.css-1fic0ux{border:0;opacity:0.6;border-bottom:0.0625rem solid;width:auto;margin-top:0.5rem;margin-bottom:0.5rem;border-color:inherit;}</style><hr class="css-1fic0ux"/><style data-emotion-css="11i96b0">.css-11i96b0{margin:2rem;text-align:center;}</style><div class="css-11i96b0"><p id="msg">谢谢你能看到这里!<span role="img" aria-label="emoji">🤗</span> 如果你有任何想与我讨论的内容,请给我发邮件.<span role="img" aria-label="emoji">🕊</span></p><br/><a style="text-decoration:none" href="mailto:rivenqinyy@gmail.com"><style data-emotion-css="meafa5">.css-meafa5{display:inline-block;padding-left:0.25rem;padding-right:0.25rem;text-transform:uppercase;font-size:0.75rem;border-radius:0.125rem;font-weight:700;white-space:nowrap;vertical-align:middle;background-color:#c6f6d5;color:#22543d;}</style><div class="css-meafa5">我的邮件</div><span role="img" aria-label="my email">📮</span></a><br/><br/><style data-emotion-css="1fb5c92">.css-1fb5c92{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#4A5568;font-size:.7rem;}</style><p class="css-1fb5c92">妙才 © 2020. All rights reserved.</p></div></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"slug":"javascript算法-三种哈希冲突解决方法","contentHtml":"\u003cp\u003e在本文中,我们将学习到如何处理哈希冲突,如何编写健壮和优雅的代码,体会算法之美.\u003c/p\u003e\n\u003ch2\u003e1. 哈希函数\u003c/h2\u003e\n\u003cp\u003e散列表是根据关键码值\u003ccode\u003e(Key value)\u003c/code\u003e而直接进行访问的数据结构.也就是说,它通过把关键码值映射到表中一个位置来访问记录,以加快查找的速度.\u003c/p\u003e\n\u003cp\u003e这个映射函数叫做\u003ccode\u003e哈希(散列)函数\u003c/code\u003e,存放记录的数组叫做散列表.\u003c/p\u003e\n\u003cp\u003e哈希函数不是一个纯函数,函数参数和值是\u003ccode\u003e多对一\u003c/code\u003e的关系.因为这种特性,哈希值理论上是无法逆推的.让我们来看一个在社区中常见的哈希函数:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e\u003cspan\u003eprivate\u003c/span\u003e \u003cspan\u003e\u003cspan\u003eloseloseHashCode\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e2\u003c/span\u003e  \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003etypeof\u003c/span\u003e key === \u003cspan\u003e'number'\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e3\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e key;\n\u003cspan class=\"lineNumber\"\u003e4\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e5\u003c/span\u003e  \u003cspan\u003econst\u003c/span\u003e tableKey = \u003cspan\u003ethis\u003c/span\u003e.toStrFn(key);\n\u003cspan class=\"lineNumber\"\u003e6\u003c/span\u003e  \u003cspan\u003elet\u003c/span\u003e hash = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e7\u003c/span\u003e  \u003cspan\u003efor\u003c/span\u003e (\u003cspan\u003elet\u003c/span\u003e i = \u003cspan\u003e0\u003c/span\u003e; i \u0026#x3C; tableKey.length; i++) {\n\u003cspan class=\"lineNumber\"\u003e8\u003c/span\u003e    hash += tableKey.charCodeAt(i);\n\u003cspan class=\"lineNumber\"\u003e9\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e10\u003c/span\u003e  \u003cspan\u003ereturn\u003c/span\u003e hash % \u003cspan\u003e37\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e11\u003c/span\u003e}\u003c/code\u003e\u003c/pre\u003e \n\n\u003cp\u003e上述代码是从哈希表的实现中摘取出来的,大致效果是通过不同类型的\u003ccode\u003ekey\u003c/code\u003e获取一个数字作为\u003ccode\u003ehashValue\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003e上述哈希函数的取值范围较小,不要让这个哈希函数限制你的\u003ccode\u003e想象\u003c/code\u003e,在后续的\u003ccode\u003e多重散列\u003c/code\u003e学习的时候将会讨论这个话题.\u003c/p\u003e\n\u003ch2\u003e2. 哈希冲突\u003c/h2\u003e\n\u003cp\u003e在创建我们的哈希表的时候,对于不同的键值,依据一个哈希函数生成的键值有可能出现重复的情形\u003ccode\u003e(一对多的关系)\u003c/code\u003e,这种场景我们称之为\u003ccode\u003e哈希冲突\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003e为了应对哈希冲突,开发者们思考出了许多解决方案,今天我们来看看其中比较常用的三个解决方案.\u003c/p\u003e\n\u003ch3\u003e开放定址\u003c/h3\u003e\n\u003cp\u003e开放定址理论中有\u003ccode\u003e分离链接\u003c/code\u003e的说法,指的是为哈希表的每一个位置创建一个\u003ccode\u003e链表\u003c/code\u003e,将元素存在链表里,这是最简单和常见的解决方法,但是在哈希表实例之外,还需要一些\u003ccode\u003e额外的存储空间\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003e如下是图示:\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"https://zhangruochi.com/Hash-Table/2019/08/23/3.png\" alt=\"\"\u003e\u003c/p\u003e\n\u003cp\u003e接下来看代码示例:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e\u003cspan\u003eimport\u003c/span\u003e { defaultToString } \u003cspan\u003efrom\u003c/span\u003e \u003cspan\u003e\"../help\"\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e2\u003c/span\u003e\u003cspan\u003eimport\u003c/span\u003e LinkedList \u003cspan\u003efrom\u003c/span\u003e \u003cspan\u003e\"../linkedList/index\"\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e3\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e4\u003c/span\u003e\u003cspan\u003eexport\u003c/span\u003e \u003cspan\u003edefault\u003c/span\u003e \u003cspan\u003e\u003cspan\u003eclass\u003c/span\u003e \u003cspan\u003eHashTableSeparateChaining\u003c/span\u003e \u003c/span\u003e{\n\u003cspan class=\"lineNumber\"\u003e5\u003c/span\u003e  \u003cspan\u003etable\u003c/span\u003e: { [name: \u003cspan\u003estring\u003c/span\u003e]: LinkedList };\n\u003cspan class=\"lineNumber\"\u003e6\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e7\u003c/span\u003e  toStrFn: \u003cspan\u003eFunction\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e8\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e9\u003c/span\u003e  count: \u003cspan\u003enumber\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e10\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e11\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003econstructor\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e12\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.table = {};\n\u003cspan class=\"lineNumber\"\u003e13\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.toStrFn = defaultToString;\n\u003cspan class=\"lineNumber\"\u003e14\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.count = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e15\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e16\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e17\u003c/span\u003e  put(key: unknown, \u003cspan\u003evalue\u003c/span\u003e: unknown): \u003cspan\u003eboolean\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e18\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (key !== \u003cspan\u003eundefined\u003c/span\u003e \u0026#x26;\u0026#x26; value !== \u003cspan\u003eundefined\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e19\u003c/span\u003e      \u003cspan\u003econst\u003c/span\u003e hashCode = \u003cspan\u003ethis\u003c/span\u003e.getHashCode(key);\n\u003cspan class=\"lineNumber\"\u003e20\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[hashCode] === \u003cspan\u003eundefined\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e21\u003c/span\u003e        \u003cspan\u003econst\u003c/span\u003e linked = \u003cspan\u003enew\u003c/span\u003e LinkedList();\n\u003cspan class=\"lineNumber\"\u003e22\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[hashCode] = linked;\n\u003cspan class=\"lineNumber\"\u003e23\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e24\u003c/span\u003e      \u003cspan\u003ethis\u003c/span\u003e.table[hashCode].push([key, value]);\n\u003cspan class=\"lineNumber\"\u003e25\u003c/span\u003e      \u003cspan\u003ethis\u003c/span\u003e.count++;\n\u003cspan class=\"lineNumber\"\u003e26\u003c/span\u003e      \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e27\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e28\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003efalse\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e29\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e30\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e31\u003c/span\u003e  get(key: unknown): unknown {\n\u003cspan class=\"lineNumber\"\u003e32\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e hashCode = \u003cspan\u003ethis\u003c/span\u003e.getHashCode(key);\n\u003cspan class=\"lineNumber\"\u003e33\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[hashCode] \u0026#x26;\u0026#x26; !\u003cspan\u003ethis\u003c/span\u003e.table[hashCode].isEmpty()) {\n\u003cspan class=\"lineNumber\"\u003e34\u003c/span\u003e      \u003cspan\u003elet\u003c/span\u003e current = \u003cspan\u003ethis\u003c/span\u003e.table[hashCode].head;\n\u003cspan class=\"lineNumber\"\u003e35\u003c/span\u003e      \u003cspan\u003ewhile\u003c/span\u003e (current) {\n\u003cspan class=\"lineNumber\"\u003e36\u003c/span\u003e        \u003cspan\u003eif\u003c/span\u003e (current.val[\u003cspan\u003e0\u003c/span\u003e] === key) {\n\u003cspan class=\"lineNumber\"\u003e37\u003c/span\u003e          \u003cspan\u003ereturn\u003c/span\u003e current.val[\u003cspan\u003e1\u003c/span\u003e];\n\u003cspan class=\"lineNumber\"\u003e38\u003c/span\u003e        }\n\u003cspan class=\"lineNumber\"\u003e39\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e40\u003c/span\u003e      current = current.next;\n\u003cspan class=\"lineNumber\"\u003e41\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e42\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003eundefined\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e43\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e44\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e45\u003c/span\u003e  remove(key: unknown): \u003cspan\u003eboolean\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e46\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e hashCode = \u003cspan\u003ethis\u003c/span\u003e.getHashCode(key);\n\u003cspan class=\"lineNumber\"\u003e47\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e linked = \u003cspan\u003ethis\u003c/span\u003e.table[hashCode];\n\u003cspan class=\"lineNumber\"\u003e48\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (linked \u0026#x26;\u0026#x26; linked.indexOf(key) !== -\u003cspan\u003e1\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e49\u003c/span\u003e      linked.remove(key);\n\u003cspan class=\"lineNumber\"\u003e50\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (linked.isEmpty()) {\n\u003cspan class=\"lineNumber\"\u003e51\u003c/span\u003e        \u003cspan\u003edelete\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table[hashCode];\n\u003cspan class=\"lineNumber\"\u003e52\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e53\u003c/span\u003e      \u003cspan\u003ethis\u003c/span\u003e.count--;\n\u003cspan class=\"lineNumber\"\u003e54\u003c/span\u003e      \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e55\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e56\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003efalse\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e57\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e58\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e59\u003c/span\u003e  getHashCode(key: unknown): \u003cspan\u003enumber\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e60\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003etypeof\u003c/span\u003e key === \u003cspan\u003e\"number\"\u003c/span\u003e) \u003cspan\u003ereturn\u003c/span\u003e key;\n\u003cspan class=\"lineNumber\"\u003e61\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e tableKey: \u003cspan\u003estring\u003c/span\u003e = \u003cspan\u003ethis\u003c/span\u003e.toStrFn(key);\n\u003cspan class=\"lineNumber\"\u003e62\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e hash = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e63\u003c/span\u003e    \u003cspan\u003efor\u003c/span\u003e (\u003cspan\u003elet\u003c/span\u003e i = \u003cspan\u003e0\u003c/span\u003e; i \u0026#x3C; tableKey.length; i++) {\n\u003cspan class=\"lineNumber\"\u003e64\u003c/span\u003e      hash += tableKey.charCodeAt(i);\n\u003cspan class=\"lineNumber\"\u003e65\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e66\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e hash % \u003cspan\u003e37\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e67\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e68\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e69\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003esize\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e70\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.count;\n\u003cspan class=\"lineNumber\"\u003e71\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e72\u003c/span\u003e}\u003c/code\u003e\u003c/pre\u003e \n\n\u003cblockquote\u003e\n\u003cp\u003e\u003cstrong\u003e分离链接法\u003c/strong\u003e关键在于对内部存储对象使用链表来存储\"\u003ccode\u003e哈希碰撞\u003c/code\u003e\"的值.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch3\u003e线性探查法\u003c/h3\u003e\n\u003cp\u003e如果不额外使用链表空间来存储值,依然选择将值存储到表中,则可以选择使用\u003ccode\u003e线性探查法\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003e线性探查的关键在于,\u003ccode\u003e如果一个 position 已经被占用,则尝试 position+1 的位置,依次类推\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/LinearProbing-Add.png\" alt=\"\"\u003e\u003c/p\u003e\n\u003cp\u003e白色区域表示空闲位置，绿色区域表示已经存储数据.\u003c/p\u003e\n\u003cp\u003e在删除的时候,有两种思路去处理收尾的代码逻辑.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e标记法: 标记已删除的位置,并且后续不可再使用,查找的时候也跳过.\u003c/li\u003e\n\u003cli\u003e位置移动修复法: 检验是否需要将后续存在的一个或者多个元素移动到之前的位置,以此来防止出现通过哈希值找到一个被删除的空位置.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e对于第一种思路,也称为\u003ccode\u003e惰性探查\u003c/code\u003e,核心思想在于每个位置都有一个是否已删除的标记,遇到碰撞的时候递增哈希值,在移除碰撞的值的时候,将此标志位设置为\u003ccode\u003etrue\u003c/code\u003e,方便再次插入碰撞的值的时候直接利用,或者在获取值的时候跳过具有已删除标志的位置,示例代码如下:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e\u003cspan\u003eimport\u003c/span\u003e { defaultToString, ValuePairLazy } \u003cspan\u003efrom\u003c/span\u003e \u003cspan\u003e\"../help\"\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e2\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e3\u003c/span\u003e\u003cspan\u003eexport\u003c/span\u003e \u003cspan\u003edefault\u003c/span\u003e \u003cspan\u003e\u003cspan\u003eclass\u003c/span\u003e \u003cspan\u003eHashTableLinearProbingLazy\u003c/span\u003e\u0026#x3C;\u003cspan\u003eK\u003c/span\u003e, \u003cspan\u003eV\u003c/span\u003e\u003e \u003c/span\u003e{\n\u003cspan class=\"lineNumber\"\u003e4\u003c/span\u003e  \u003cspan\u003eprotected\u003c/span\u003e table: { [key: \u003cspan\u003estring\u003c/span\u003e]: ValuePairLazy\u0026#x3C;K, V\u003e };\n\u003cspan class=\"lineNumber\"\u003e5\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e6\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003econstructor\u003c/span\u003e(\u003cspan\u003e\n\u003cspan class=\"lineNumber\"\u003e7\u003c/span\u003e    \u003cspan\u003epublic\u003c/span\u003e size = \u003cspan\u003e0\u003c/span\u003e,\n\u003cspan class=\"lineNumber\"\u003e8\u003c/span\u003e    \u003cspan\u003eprotected\u003c/span\u003e toStrFn: (key: K) =\u003e \u003cspan\u003estring\u003c/span\u003e = defaultToString\n\u003cspan class=\"lineNumber\"\u003e9\u003c/span\u003e  \u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e10\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.table = {};\n\u003cspan class=\"lineNumber\"\u003e11\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e12\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e13\u003c/span\u003e  \u003cspan\u003eprivate\u003c/span\u003e \u003cspan\u003e\u003cspan\u003eloseloseHashCode\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e14\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003etypeof\u003c/span\u003e key === \u003cspan\u003e\"number\"\u003c/span\u003e) \u003cspan\u003ereturn\u003c/span\u003e key;\n\u003cspan class=\"lineNumber\"\u003e15\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e tableKey = \u003cspan\u003ethis\u003c/span\u003e.toStrFn(key);\n\u003cspan class=\"lineNumber\"\u003e16\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e hash = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e17\u003c/span\u003e    \u003cspan\u003efor\u003c/span\u003e (\u003cspan\u003elet\u003c/span\u003e i = \u003cspan\u003e0\u003c/span\u003e; i \u0026#x3C; tableKey.length; i++) {\n\u003cspan class=\"lineNumber\"\u003e18\u003c/span\u003e      hash += tableKey.charCodeAt(i);\n\u003cspan class=\"lineNumber\"\u003e19\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e20\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e hash % \u003cspan\u003e37\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e21\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e22\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e23\u003c/span\u003e  hashCode(key: K): \u003cspan\u003enumber\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e24\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.loseloseHashCode(key);\n\u003cspan class=\"lineNumber\"\u003e25\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e26\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e27\u003c/span\u003e  put(key: K, \u003cspan\u003evalue\u003c/span\u003e: V): \u003cspan\u003eboolean\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e28\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (key != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; value != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e29\u003c/span\u003e      \u003cspan\u003econst\u003c/span\u003e position = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e30\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\n\u003cspan class=\"lineNumber\"\u003e31\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[position] === \u003cspan\u003eundefined\u003c/span\u003e ||\n\u003cspan class=\"lineNumber\"\u003e32\u003c/span\u003e        (\u003cspan\u003ethis\u003c/span\u003e.table[position] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; \u003cspan\u003ethis\u003c/span\u003e.table[position].isDeleted)\n\u003cspan class=\"lineNumber\"\u003e33\u003c/span\u003e      ) {\n\u003cspan class=\"lineNumber\"\u003e34\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[position] = \u003cspan\u003enew\u003c/span\u003e ValuePairLazy(key, value);\n\u003cspan class=\"lineNumber\"\u003e35\u003c/span\u003e      } \u003cspan\u003eelse\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e36\u003c/span\u003e        \u003cspan\u003elet\u003c/span\u003e index = position + \u003cspan\u003e1\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e37\u003c/span\u003e        \u003cspan\u003ewhile\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; !\u003cspan\u003ethis\u003c/span\u003e.table[position].isDeleted) {\n\u003cspan class=\"lineNumber\"\u003e38\u003c/span\u003e          index++;\n\u003cspan class=\"lineNumber\"\u003e39\u003c/span\u003e        }\n\u003cspan class=\"lineNumber\"\u003e40\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[index] = \u003cspan\u003enew\u003c/span\u003e ValuePairLazy(key, value);\n\u003cspan class=\"lineNumber\"\u003e41\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e42\u003c/span\u003e      \u003cspan\u003ethis\u003c/span\u003e.size++;\n\u003cspan class=\"lineNumber\"\u003e43\u003c/span\u003e      \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e44\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e45\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003efalse\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e46\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e47\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e48\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eget\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e49\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e position = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e50\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e table = \u003cspan\u003ethis\u003c/span\u003e.table;\n\u003cspan class=\"lineNumber\"\u003e51\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (table[position] != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e52\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (table[position].key === key \u0026#x26;\u0026#x26; table[position].isDeleted === \u003cspan\u003efalse\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e53\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e table[position].value;\n\u003cspan class=\"lineNumber\"\u003e54\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e55\u003c/span\u003e      \u003cspan\u003elet\u003c/span\u003e index = position + \u003cspan\u003e1\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e56\u003c/span\u003e      \u003cspan\u003ewhile\u003c/span\u003e (\n\u003cspan class=\"lineNumber\"\u003e57\u003c/span\u003e        table[index] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26;\n\u003cspan class=\"lineNumber\"\u003e58\u003c/span\u003e        (table[index].key !== key || table[index].isDeleted)\n\u003cspan class=\"lineNumber\"\u003e59\u003c/span\u003e      ) {\n\u003cspan class=\"lineNumber\"\u003e60\u003c/span\u003e        index++;\n\u003cspan class=\"lineNumber\"\u003e61\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e62\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\n\u003cspan class=\"lineNumber\"\u003e63\u003c/span\u003e        table[index] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26;\n\u003cspan class=\"lineNumber\"\u003e64\u003c/span\u003e        table[index].key === key \u0026#x26;\u0026#x26;\n\u003cspan class=\"lineNumber\"\u003e65\u003c/span\u003e        !table[index].isDeleted\n\u003cspan class=\"lineNumber\"\u003e66\u003c/span\u003e      ) {\n\u003cspan class=\"lineNumber\"\u003e67\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e table[index].value;\n\u003cspan class=\"lineNumber\"\u003e68\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e69\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e70\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003eundefined\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e71\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e72\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e73\u003c/span\u003e  remove(key: K): \u003cspan\u003eboolean\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e74\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e position = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e75\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e { table } = \u003cspan\u003ethis\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e76\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (table[position] != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e77\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (table[position].key === key \u0026#x26;\u0026#x26; !table[position].isDeleted) {\n\u003cspan class=\"lineNumber\"\u003e78\u003c/span\u003e        table[position].isDeleted = \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e79\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.size--;\n\u003cspan class=\"lineNumber\"\u003e80\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e81\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e82\u003c/span\u003e      position++;\n\u003cspan class=\"lineNumber\"\u003e83\u003c/span\u003e      \u003cspan\u003ewhile\u003c/span\u003e (table[position].key !== key || table[position].isDeleted) {\n\u003cspan class=\"lineNumber\"\u003e84\u003c/span\u003e        position++;\n\u003cspan class=\"lineNumber\"\u003e85\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e86\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\n\u003cspan class=\"lineNumber\"\u003e87\u003c/span\u003e        table[position] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26;\n\u003cspan class=\"lineNumber\"\u003e88\u003c/span\u003e        table[position].key === key \u0026#x26;\u0026#x26;\n\u003cspan class=\"lineNumber\"\u003e89\u003c/span\u003e        !table[position].isDeleted\n\u003cspan class=\"lineNumber\"\u003e90\u003c/span\u003e      ) {\n\u003cspan class=\"lineNumber\"\u003e91\u003c/span\u003e        table[position].isDeleted = \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e92\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.size--;\n\u003cspan class=\"lineNumber\"\u003e93\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e94\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e95\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e96\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003efalse\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e97\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e98\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e99\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eisEmpty\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e100\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.size === \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e101\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e102\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e103\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eclear\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e104\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.size = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e105\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.table = {};\n\u003cspan class=\"lineNumber\"\u003e106\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e107\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e108\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003egetTable\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e109\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table;\n\u003cspan class=\"lineNumber\"\u003e110\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e111\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e112\u003c/span\u003e  toString(): \u003cspan\u003estring\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e113\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.isEmpty()) \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003e\"\"\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e114\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e keys = \u003cspan\u003eObject\u003c/span\u003e.keys(\u003cspan\u003ethis\u003c/span\u003e.table);\n\u003cspan class=\"lineNumber\"\u003e115\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e objStr = \u003cspan\u003e`{\u003cspan\u003e${keys[\u003cspan\u003e0\u003c/span\u003e]}\u003c/span\u003e =\u003e \u003cspan\u003e${\u003cspan\u003ethis\u003c/span\u003e.table[keys[\u003cspan\u003e0\u003c/span\u003e]].toString()}\u003c/span\u003e}`\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e116\u003c/span\u003e    \u003cspan\u003efor\u003c/span\u003e (\u003cspan\u003elet\u003c/span\u003e i = \u003cspan\u003e1\u003c/span\u003e; i \u0026#x3C; keys.length; i++) {\n\u003cspan class=\"lineNumber\"\u003e117\u003c/span\u003e      objStr = \u003cspan\u003e`\u003cspan\u003e${objStr}\u003c/span\u003e, {\u003cspan\u003e${keys[i]}\u003c/span\u003e =\u003e \u003cspan\u003e${\u003cspan\u003ethis\u003c/span\u003e.table[keys[i]].toString()}\u003c/span\u003e}`\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e118\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e119\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e objStr;\n\u003cspan class=\"lineNumber\"\u003e120\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e121\u003c/span\u003e}\n\u003cspan class=\"lineNumber\"\u003e122\u003c/span\u003e\u003c/code\u003e\u003c/pre\u003e \n\n\u003cp\u003e对于第二种思路,示例代码如下:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e\u003cspan\u003eimport\u003c/span\u003e { defaultToString, ValuePair } \u003cspan\u003efrom\u003c/span\u003e \u003cspan\u003e\"../help\"\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e2\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e3\u003c/span\u003e\u003cspan\u003eexport\u003c/span\u003e \u003cspan\u003edefault\u003c/span\u003e \u003cspan\u003e\u003cspan\u003eclass\u003c/span\u003e \u003cspan\u003eHashTableLinearProbing\u003c/span\u003e\u0026#x3C;\u003cspan\u003eK\u003c/span\u003e, \u003cspan\u003eV\u003c/span\u003e\u003e \u003c/span\u003e{\n\u003cspan class=\"lineNumber\"\u003e4\u003c/span\u003e  \u003cspan\u003eprotected\u003c/span\u003e table: { [key: \u003cspan\u003estring\u003c/span\u003e]: ValuePair\u0026#x3C;K, V\u003e };\n\u003cspan class=\"lineNumber\"\u003e5\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e6\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003econstructor\u003c/span\u003e(\u003cspan\u003e\n\u003cspan class=\"lineNumber\"\u003e7\u003c/span\u003e    \u003cspan\u003eprotected\u003c/span\u003e toStrFn: (key: K) =\u003e \u003cspan\u003estring\u003c/span\u003e = defaultToString,\n\u003cspan class=\"lineNumber\"\u003e8\u003c/span\u003e    \u003cspan\u003epublic\u003c/span\u003e size = \u003cspan\u003e0\u003c/span\u003e\n\u003cspan class=\"lineNumber\"\u003e9\u003c/span\u003e  \u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e10\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.table = {};\n\u003cspan class=\"lineNumber\"\u003e11\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e12\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e13\u003c/span\u003e  \u003cspan\u003eprivate\u003c/span\u003e \u003cspan\u003e\u003cspan\u003eloseloseHashCode\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e14\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003etypeof\u003c/span\u003e key === \u003cspan\u003e\"number\"\u003c/span\u003e) \u003cspan\u003ereturn\u003c/span\u003e key;\n\u003cspan class=\"lineNumber\"\u003e15\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e tableHash = \u003cspan\u003ethis\u003c/span\u003e.toStrFn(key);\n\u003cspan class=\"lineNumber\"\u003e16\u003c/span\u003e    \u003cspan\u003econsole\u003c/span\u003e.log(tableHash, \u003cspan\u003e\"is table hash value\"\u003c/span\u003e);\n\u003cspan class=\"lineNumber\"\u003e17\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e18\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e hash = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e19\u003c/span\u003e    \u003cspan\u003efor\u003c/span\u003e (\u003cspan\u003elet\u003c/span\u003e i = \u003cspan\u003e0\u003c/span\u003e; i \u0026#x3C; tableHash.length; i++) {\n\u003cspan class=\"lineNumber\"\u003e20\u003c/span\u003e      hash += tableHash.charCodeAt(i);\n\u003cspan class=\"lineNumber\"\u003e21\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e22\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e hash % \u003cspan\u003e37\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e23\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e24\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e25\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003ehashCode\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e26\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.loseloseHashCode(key);\n\u003cspan class=\"lineNumber\"\u003e27\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e28\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e29\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eput\u003c/span\u003e(\u003cspan\u003ekey: K, value: V\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e30\u003c/span\u003e    \u003cspan\u003e// 保证 key 和 value 都不能是 undefined 和 null 之一\u003c/span\u003e\n\u003cspan class=\"lineNumber\"\u003e31\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (key != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; value != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e32\u003c/span\u003e      \u003cspan\u003econst\u003c/span\u003e position = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e33\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[position] == \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e34\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[position] = \u003cspan\u003enew\u003c/span\u003e ValuePair(key, value);\n\u003cspan class=\"lineNumber\"\u003e35\u003c/span\u003e      } \u003cspan\u003eelse\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e36\u003c/span\u003e        \u003cspan\u003elet\u003c/span\u003e index = position + \u003cspan\u003e1\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e37\u003c/span\u003e        \u003cspan\u003ewhile\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index] != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e38\u003c/span\u003e          index++;\n\u003cspan class=\"lineNumber\"\u003e39\u003c/span\u003e        }\n\u003cspan class=\"lineNumber\"\u003e40\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[index] = \u003cspan\u003enew\u003c/span\u003e ValuePair(key, value);\n\u003cspan class=\"lineNumber\"\u003e41\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e42\u003c/span\u003e      \u003cspan\u003ethis\u003c/span\u003e.size++;\n\u003cspan class=\"lineNumber\"\u003e43\u003c/span\u003e      \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e44\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e45\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003efalse\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e46\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e47\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e48\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eget\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e49\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e position = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e50\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[position] != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e51\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[position].key === key) {\n\u003cspan class=\"lineNumber\"\u003e52\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table[position].value;\n\u003cspan class=\"lineNumber\"\u003e53\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e54\u003c/span\u003e      \u003cspan\u003elet\u003c/span\u003e index = position + \u003cspan\u003e1\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e55\u003c/span\u003e      \u003cspan\u003ewhile\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index].key != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; \u003cspan\u003ethis\u003c/span\u003e.table[index].key !== key) {\n\u003cspan class=\"lineNumber\"\u003e56\u003c/span\u003e        index++;\n\u003cspan class=\"lineNumber\"\u003e57\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e58\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; \u003cspan\u003ethis\u003c/span\u003e.table[index].key === key)\n\u003cspan class=\"lineNumber\"\u003e59\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table[index].value;\n\u003cspan class=\"lineNumber\"\u003e60\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e61\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003eundefined\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e62\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e63\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e64\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eremove\u003c/span\u003e(\u003cspan\u003ekey: K\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e65\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e position = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e66\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[position] != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e67\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[position].key === key) {\n\u003cspan class=\"lineNumber\"\u003e68\u003c/span\u003e        \u003cspan\u003edelete\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table[position];\n\u003cspan class=\"lineNumber\"\u003e69\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.verifyRemoveSideEffect(key, position);\n\u003cspan class=\"lineNumber\"\u003e70\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.size--;\n\u003cspan class=\"lineNumber\"\u003e71\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e72\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e73\u003c/span\u003e      \u003cspan\u003elet\u003c/span\u003e index = position + \u003cspan\u003e1\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e74\u003c/span\u003e      \u003cspan\u003ewhile\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; \u003cspan\u003ethis\u003c/span\u003e.table[index].key !== key) {\n\u003cspan class=\"lineNumber\"\u003e75\u003c/span\u003e        index++;\n\u003cspan class=\"lineNumber\"\u003e76\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e77\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index] != \u003cspan\u003enull\u003c/span\u003e \u0026#x26;\u0026#x26; \u003cspan\u003ethis\u003c/span\u003e.table[index].key === key) {\n\u003cspan class=\"lineNumber\"\u003e78\u003c/span\u003e        \u003cspan\u003edelete\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table[index];\n\u003cspan class=\"lineNumber\"\u003e79\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.verifyRemoveSideEffect(key, index);\n\u003cspan class=\"lineNumber\"\u003e80\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.size--;\n\u003cspan class=\"lineNumber\"\u003e81\u003c/span\u003e        \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003etrue\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e82\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e83\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e84\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003efalse\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e85\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e86\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e87\u003c/span\u003e  \u003cspan\u003eprivate\u003c/span\u003e \u003cspan\u003e\u003cspan\u003everifyRemoveSideEffect\u003c/span\u003e(\u003cspan\u003ekey: K, removePosition: \u003cspan\u003enumber\u003c/span\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e88\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e hash = \u003cspan\u003ethis\u003c/span\u003e.hashCode(key);\n\u003cspan class=\"lineNumber\"\u003e89\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e index = removePosition + \u003cspan\u003e1\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e90\u003c/span\u003e    \u003cspan\u003ewhile\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.table[index] != \u003cspan\u003enull\u003c/span\u003e) {\n\u003cspan class=\"lineNumber\"\u003e91\u003c/span\u003e      \u003cspan\u003econst\u003c/span\u003e posHash = \u003cspan\u003ethis\u003c/span\u003e.hashCode(\u003cspan\u003ethis\u003c/span\u003e.table[index].key);\n\u003cspan class=\"lineNumber\"\u003e92\u003c/span\u003e      \u003cspan\u003eif\u003c/span\u003e (posHash \u0026#x3C;= hash || posHash \u0026#x3C;= removePosition) {\n\u003cspan class=\"lineNumber\"\u003e93\u003c/span\u003e        \u003cspan\u003ethis\u003c/span\u003e.table[removePosition] = \u003cspan\u003ethis\u003c/span\u003e.table[index];\n\u003cspan class=\"lineNumber\"\u003e94\u003c/span\u003e        \u003cspan\u003edelete\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table[index];\n\u003cspan class=\"lineNumber\"\u003e95\u003c/span\u003e        removePosition = index; \u003cspan\u003e// eslint-disable-line\u003c/span\u003e\n\u003cspan class=\"lineNumber\"\u003e96\u003c/span\u003e      }\n\u003cspan class=\"lineNumber\"\u003e97\u003c/span\u003e      index++;\n\u003cspan class=\"lineNumber\"\u003e98\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e99\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e100\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e101\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eisEmpty\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e102\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.size === \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e103\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e104\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e105\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003eclear\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e106\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.size = \u003cspan\u003e0\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e107\u003c/span\u003e    \u003cspan\u003ethis\u003c/span\u003e.table = {};\n\u003cspan class=\"lineNumber\"\u003e108\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e109\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e110\u003c/span\u003e  \u003cspan\u003e\u003cspan\u003egetTable\u003c/span\u003e(\u003cspan\u003e\u003c/span\u003e)\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e111\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003ethis\u003c/span\u003e.table;\n\u003cspan class=\"lineNumber\"\u003e112\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e113\u003c/span\u003e \n\u003cspan class=\"lineNumber\"\u003e114\u003c/span\u003e  toString(): \u003cspan\u003estring\u003c/span\u003e {\n\u003cspan class=\"lineNumber\"\u003e115\u003c/span\u003e    \u003cspan\u003eif\u003c/span\u003e (\u003cspan\u003ethis\u003c/span\u003e.isEmpty()) \u003cspan\u003ereturn\u003c/span\u003e \u003cspan\u003e\"\"\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e116\u003c/span\u003e    \u003cspan\u003econst\u003c/span\u003e keys = \u003cspan\u003eObject\u003c/span\u003e.keys(\u003cspan\u003ethis\u003c/span\u003e.table);\n\u003cspan class=\"lineNumber\"\u003e117\u003c/span\u003e    \u003cspan\u003elet\u003c/span\u003e objStr = \u003cspan\u003e`\u003cspan\u003e${keys[\u003cspan\u003e0\u003c/span\u003e]}\u003c/span\u003e =\u003e \u003cspan\u003e${\u003cspan\u003ethis\u003c/span\u003e.table[keys[\u003cspan\u003e0\u003c/span\u003e]].toString()}\u003c/span\u003e`\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e118\u003c/span\u003e    \u003cspan\u003efor\u003c/span\u003e (\u003cspan\u003elet\u003c/span\u003e i = \u003cspan\u003e1\u003c/span\u003e; i \u0026#x3C; keys.length; i++) {\n\u003cspan class=\"lineNumber\"\u003e119\u003c/span\u003e      objStr = \u003cspan\u003e`\u003cspan\u003e${objStr}\u003c/span\u003e, \u003cspan\u003e${keys[i]}\u003c/span\u003e =\u003e \u003cspan\u003e${\u003cspan\u003ethis\u003c/span\u003e.table[keys[i]].toString()}\u003c/span\u003e`\u003c/span\u003e;\n\u003cspan class=\"lineNumber\"\u003e120\u003c/span\u003e    }\n\u003cspan class=\"lineNumber\"\u003e121\u003c/span\u003e    \u003cspan\u003ereturn\u003c/span\u003e objStr;\n\u003cspan class=\"lineNumber\"\u003e122\u003c/span\u003e  }\n\u003cspan class=\"lineNumber\"\u003e123\u003c/span\u003e}\u003c/code\u003e\u003c/pre\u003e \n\n\u003cp\u003e这里的关键在于\u003ccode\u003eremove\u003c/code\u003e方法,删除数据之后还要对后续由于哈希冲突导致的数据位置异常进行处理,对相应的值的位置进行修复.哈希冲突越多,则\u003ccode\u003eremove\u003c/code\u003e的开销越大,因此我们需要一个优秀的\u003ccode\u003e哈希函数\u003c/code\u003e.\u003c/p\u003e\n\u003ch3\u003e多重散列法\u003c/h3\u003e\n\u003cp\u003e多重散列或者多重哈希,没什么区别.\u003ccode\u003e一个\u003c/code\u003e哈希函数不够,\u003ccode\u003e就用两个\u003c/code\u003e.看示例代码:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e(firstHash(key) + i * secondHash(key)) % tableSize \u003c/code\u003e\u003c/pre\u003e \n\n\u003ch2\u003e3. 参考\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://www.educative.io/blog/data-strucutres-hash-table-javascript\"\u003eData Structures 101: implement hash tables in JavaScript\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n","title":"Javascript算法:三种哈希冲突解决方法","date":"2021/3/10","tags":["Javascript","哈希冲突","算法"],"mainImg":"https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy\u0026cs=tinysrgb\u0026fit=max\u0026fm=jpg\u0026ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8\u0026ixlib=rb-1.2.1\u0026q=80\u0026w=1080","coverImg":"https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy\u0026cs=tinysrgb\u0026fit=max\u0026fm=jpg\u0026ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8\u0026ixlib=rb-1.2.1\u0026q=80\u0026w=400","intro":"在学习 JavaScript 数据结构的时候,看到了三种解决哈希冲突的方法,书上记录其二,本文追加之三,聊表慰藉."}},"__N_SSG":true},"page":"/posts/[slug]","query":{"slug":"javascript算法-三种哈希冲突解决方法"},"buildId":"um_LntwflALZeOCqkMM4Y","assetPrefix":"/blog","nextExport":false,"isFallback":false,"gsp":true,"head":[["meta",{"name":"viewport","content":"width=device-width"}],["meta",{"name":"description","content":"javascript node deno linux web developer"}],["meta",{"charSet":"utf-8"}],["link",{"rel":"icon","href":"data:image/svg+xml,\u003csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22\u003e\u003ctext y=%22.9em%22 font-size=%2290%22\u003e🎯\u003c/text\u003e\u003c/svg\u003e"}],["title",{"children":"Javascript算法:三种哈希冲突解决方法"}],["link",{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"}],["link",{"rel":"stylesheet","href":"/blog/post.css"}],["script",{"async":true,"src":"https://www.googletagmanager.com/gtag/js?id=G-J0BNBT8YXG"}],["script",{"dangerouslySetInnerHTML":{"__html":"\u003c!-- Global site tag (gtag.js) - Google Analytics --\u003e\n            window.dataLayer = window.dataLayer || [];\n            function gtag(){dataLayer.push(arguments);}\n            gtag('js', new Date());        \n            gtag('config', 'G-J0BNBT8YXG');"}}]]}</script><script nomodule="" src="/blog/_next/static/chunks/polyfills-86dac49abe0e0232b575.js"></script><script src="/blog/_next/static/chunks/main-c37f7d67026ad75148c3.js" async=""></script><script src="/blog/_next/static/chunks/webpack-eb080e3f091731f228fb.js" async=""></script><script src="/blog/_next/static/chunks/framework.1daf1ec1ecf144ee9147.js" async=""></script><script src="/blog/_next/static/chunks/commons.cb58dfc173e18379cc5b.js" async=""></script><script src="/blog/_next/static/chunks/6335da8543c52d3af527c387f688061357787349.aa32db8a194765817dea.js" async=""></script><script src="/blog/_next/static/chunks/pages/_app-9f98083181fbc24cfd05.js" async=""></script><script src="/blog/_next/static/chunks/2c3b9bffc7150b37a7b3810dfcf1c0b0fac2bd18.7a872eda8469b3325c5d.js" async=""></script><script src="/blog/_next/static/chunks/pages/posts/%5Bslug%5D-3f78a055fbbe14cdff0b.js" async=""></script><script src="/blog/_next/static/um_LntwflALZeOCqkMM4Y/_buildManifest.js" async=""></script><script src="/blog/_next/static/um_LntwflALZeOCqkMM4Y/_ssgManifest.js" async=""></script></body></html>
+  put(key: unknown, value: unknown): boolean {
+    if (key !== undefined &amp;&amp; value !== undefined) {
+      const hashCode = this.getHashCode(key);
+      if (this.table[hashCode] === undefined) {
+        const linked = new LinkedList();
+        this.table[hashCode] = linked;
+      }
+      this.table[hashCode].push([key, value]);
+      this.count++;
+      return true;
+    }
+    return false;
+  }
+
+  get(key: unknown): unknown {
+    const hashCode = this.getHashCode(key);
+    if (this.table[hashCode] &amp;&amp; !this.table[hashCode].isEmpty()) {
+      let current = this.table[hashCode].head;
+      while (current) {
+        if (current.val[0] === key) {
+          return current.val[1];
+        }
+      }
+      current = current.next;
+    }
+    return undefined;
+  }
+
+  remove(key: unknown): boolean {
+    const hashCode = this.getHashCode(key);
+    const linked = this.table[hashCode];
+    if (linked &amp;&amp; linked.indexOf(key) !== -1) {
+      linked.remove(key);
+      if (linked.isEmpty()) {
+        delete this.table[hashCode];
+      }
+      this.count--;
+      return true;
+    }
+    return false;
+  }
+
+  getHashCode(key: unknown): number {
+    if (typeof key === &quot;number&quot;) return key;
+    const tableKey: string = this.toStrFn(key);
+    let hash = 0;
+    for (let i = 0; i &lt; tableKey.length; i++) {
+      hash += tableKey.charCodeAt(i);
+    }
+    return hash % 37;
+  }
+
+  size() {
+    return this.count;
+  }
+}</code></pre></div></div></details><blockquote><p><strong>分离链接法</strong>关键在于对内部存储对象使用链表来存储&quot;<code>哈希碰撞</code>&quot;的值.</p></blockquote><h3 id="">线性探查法</h3><p>如果不额外使用链表空间来存储值,依然选择将值存储到表中,则可以选择使用<code>线性探查法</code>.</p><p>线性探查的关键在于,<code>如果一个 position 已经被占用,则尝试 position+1 的位置,依次类推</code>.</p><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/LinearProbing-Add.png"/></p><p>白色区域表示空闲位置，绿色区域表示已经存储数据.</p><p>在删除的时候,有两种思路去处理收尾的代码逻辑.</p><ul><li>标记法: 标记已删除的位置,并且后续不可再使用,查找的时候也跳过.</li><li>位置移动修复法: 检验是否需要将后续存在的一个或者多个元素移动到之前的位置,以此来防止出现通过哈希值找到一个被删除的空位置.</li></ul><p>对于第一种思路,也称为<code>惰性探查</code>,核心思想在于每个位置都有一个是否已删除的标记,遇到碰撞的时候递增哈希值,在移除碰撞的值的时候,将此标志位设置为<code>true</code>,方便再次插入碰撞的值的时候直接利用,或者在获取值的时候跳过具有已删除标志的位置,示例代码如下:</p><details open=""><summary class="Code_summary__2YXsZ">Details</summary><div class="Code_container__2ip2n"><div class="Code_header__6pHWW"><div class="CopyCode_normal__JylQA"><div style="cursor:pointer"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M11 1.5h2.5v12a1 1 0 01-1 1h-10a1 1 0 01-1-1v-12H4m.5-1h6v2a1 1 0 01-1 1h-4a1 1 0 01-1-1v-2z" stroke="currentColor"></path></svg></div></div></div><div class="Code_code_area__GjtJr"><div class="Code_line_num__3uYIf"><ul></ul></div><pre class="Code_code__1ValO"><code class="lang-typescript">import { defaultToString, ValuePairLazy } from &quot;../help&quot;;
+
+export default class HashTableLinearProbingLazy&lt;K, V&gt; {
+  protected table: { [key: string]: ValuePairLazy&lt;K, V&gt; };
+
+  constructor(
+    public size = 0,
+    protected toStrFn: (key: K) =&gt; string = defaultToString
+  ) {
+    this.table = {};
+  }
+
+  private loseloseHashCode(key: K) {
+    if (typeof key === &quot;number&quot;) return key;
+    const tableKey = this.toStrFn(key);
+    let hash = 0;
+    for (let i = 0; i &lt; tableKey.length; i++) {
+      hash += tableKey.charCodeAt(i);
+    }
+    return hash % 37;
+  }
+
+  hashCode(key: K): number {
+    return this.loseloseHashCode(key);
+  }
+
+  put(key: K, value: V): boolean {
+    if (key != null &amp;&amp; value != null) {
+      const position = this.hashCode(key);
+      if (
+        this.table[position] === undefined ||
+        (this.table[position] != null &amp;&amp; this.table[position].isDeleted)
+      ) {
+        this.table[position] = new ValuePairLazy(key, value);
+      } else {
+        let index = position + 1;
+        while (this.table[index] != null &amp;&amp; !this.table[position].isDeleted) {
+          index++;
+        }
+        this.table[index] = new ValuePairLazy(key, value);
+      }
+      this.size++;
+      return true;
+    }
+    return false;
+  }
+
+  get(key: K) {
+    const position = this.hashCode(key);
+    const table = this.table;
+    if (table[position] != null) {
+      if (table[position].key === key &amp;&amp; table[position].isDeleted === false) {
+        return table[position].value;
+      }
+      let index = position + 1;
+      while (
+        table[index] != null &amp;&amp;
+        (table[index].key !== key || table[index].isDeleted)
+      ) {
+        index++;
+      }
+      if (
+        table[index] != null &amp;&amp;
+        table[index].key === key &amp;&amp;
+        !table[index].isDeleted
+      ) {
+        return table[index].value;
+      }
+    }
+    return undefined;
+  }
+
+  remove(key: K): boolean {
+    let position = this.hashCode(key);
+    const { table } = this;
+    if (table[position] != null) {
+      if (table[position].key === key &amp;&amp; !table[position].isDeleted) {
+        table[position].isDeleted = true;
+        this.size--;
+        return true;
+      }
+      position++;
+      while (table[position].key !== key || table[position].isDeleted) {
+        position++;
+      }
+      if (
+        table[position] != null &amp;&amp;
+        table[position].key === key &amp;&amp;
+        !table[position].isDeleted
+      ) {
+        table[position].isDeleted = true;
+        this.size--;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isEmpty() {
+    return this.size === 0;
+  }
+
+  clear() {
+    this.size = 0;
+    this.table = {};
+  }
+
+  getTable() {
+    return this.table;
+  }
+
+  toString(): string {
+    if (this.isEmpty()) return &quot;&quot;;
+    const keys = Object.keys(this.table);
+    let objStr = `{${keys[0]} =&gt; ${this.table[keys[0]].toString()}}`;
+    for (let i = 1; i &lt; keys.length; i++) {
+      objStr = `${objStr}, {${keys[i]} =&gt; ${this.table[keys[i]].toString()}}`;
+    }
+    return objStr;
+  }
+}</code></pre></div></div></details><p>对于第二种思路,示例代码如下:</p><details open=""><summary class="Code_summary__2YXsZ">Details</summary><div class="Code_container__2ip2n"><div class="Code_header__6pHWW"><div class="CopyCode_normal__JylQA"><div style="cursor:pointer"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M11 1.5h2.5v12a1 1 0 01-1 1h-10a1 1 0 01-1-1v-12H4m.5-1h6v2a1 1 0 01-1 1h-4a1 1 0 01-1-1v-2z" stroke="currentColor"></path></svg></div></div></div><div class="Code_code_area__GjtJr"><div class="Code_line_num__3uYIf"><ul></ul></div><pre class="Code_code__1ValO"><code class="lang-ts">import { defaultToString, ValuePair } from &quot;../help&quot;;
+
+export default class HashTableLinearProbing&lt;K, V&gt; {
+  protected table: { [key: string]: ValuePair&lt;K, V&gt; };
+
+  constructor(
+    protected toStrFn: (key: K) =&gt; string = defaultToString,
+    public size = 0
+  ) {
+    this.table = {};
+  }
+
+  private loseloseHashCode(key: K) {
+    if (typeof key === &quot;number&quot;) return key;
+    const tableHash = this.toStrFn(key);
+    console.log(tableHash, &quot;is table hash value&quot;);
+
+    let hash = 0;
+    for (let i = 0; i &lt; tableHash.length; i++) {
+      hash += tableHash.charCodeAt(i);
+    }
+    return hash % 37;
+  }
+
+  hashCode(key: K) {
+    return this.loseloseHashCode(key);
+  }
+
+  put(key: K, value: V) {
+    // 保证 key 和 value 都不能是 undefined 和 null 之一
+    if (key != null &amp;&amp; value != null) {
+      const position = this.hashCode(key);
+      if (this.table[position] == null) {
+        this.table[position] = new ValuePair(key, value);
+      } else {
+        let index = position + 1;
+        while (this.table[index] != null) {
+          index++;
+        }
+        this.table[index] = new ValuePair(key, value);
+      }
+      this.size++;
+      return true;
+    }
+    return false;
+  }
+
+  get(key: K) {
+    const position = this.hashCode(key);
+    if (this.table[position] != null) {
+      if (this.table[position].key === key) {
+        return this.table[position].value;
+      }
+      let index = position + 1;
+      while (this.table[index].key != null &amp;&amp; this.table[index].key !== key) {
+        index++;
+      }
+      if (this.table[index] != null &amp;&amp; this.table[index].key === key)
+        return this.table[index].value;
+    }
+    return undefined;
+  }
+
+  remove(key: K) {
+    const position = this.hashCode(key);
+    if (this.table[position] != null) {
+      if (this.table[position].key === key) {
+        delete this.table[position];
+        this.verifyRemoveSideEffect(key, position);
+        this.size--;
+        return true;
+      }
+      let index = position + 1;
+      while (this.table[index] != null &amp;&amp; this.table[index].key !== key) {
+        index++;
+      }
+      if (this.table[index] != null &amp;&amp; this.table[index].key === key) {
+        delete this.table[index];
+        this.verifyRemoveSideEffect(key, index);
+        this.size--;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private verifyRemoveSideEffect(key: K, removePosition: number) {
+    const hash = this.hashCode(key);
+    let index = removePosition + 1;
+    while (this.table[index] != null) {
+      const posHash = this.hashCode(this.table[index].key);
+      if (posHash &lt;= hash || posHash &lt;= removePosition) {
+        this.table[removePosition] = this.table[index];
+        delete this.table[index];
+        removePosition = index; // eslint-disable-line
+      }
+      index++;
+    }
+  }
+
+  isEmpty() {
+    return this.size === 0;
+  }
+
+  clear() {
+    this.size = 0;
+    this.table = {};
+  }
+
+  getTable() {
+    return this.table;
+  }
+
+  toString(): string {
+    if (this.isEmpty()) return &quot;&quot;;
+    const keys = Object.keys(this.table);
+    let objStr = `${keys[0]} =&gt; ${this.table[keys[0]].toString()}`;
+    for (let i = 1; i &lt; keys.length; i++) {
+      objStr = `${objStr}, ${keys[i]} =&gt; ${this.table[keys[i]].toString()}`;
+    }
+    return objStr;
+  }
+}</code></pre></div></div></details><p>这里的关键在于<code>remove</code>方法,删除数据之后还要对后续由于哈希冲突导致的数据位置异常进行处理,对相应的值的位置进行修复.哈希冲突越多,则<code>remove</code>的开销越大,因此我们需要一个优秀的<code>哈希函数</code>.</p><h3 id="">多重散列法</h3><p>多重散列或者多重哈希,没什么区别.<code>一个</code>哈希函数不够,<code>就用两个</code>.看示例代码:</p><details open=""><summary class="Code_summary__2YXsZ">Details</summary><div class="Code_container__2ip2n"><div class="Code_header__6pHWW"><div class="CopyCode_normal__JylQA"><div style="cursor:pointer"><svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M11 1.5h2.5v12a1 1 0 01-1 1h-10a1 1 0 01-1-1v-12H4m.5-1h6v2a1 1 0 01-1 1h-4a1 1 0 01-1-1v-2z" stroke="currentColor"></path></svg></div></div></div><div class="Code_code_area__GjtJr"><div class="Code_line_num__3uYIf"><ul></ul></div><pre class="Code_code__1ValO"><code class="lang-JavaScript">(firstHash(key) + i * secondHash(key)) % tableSize</code></pre></div></div></details><h2 id="3-">3. 参考</h2><ul><li><a href="https://www.educative.io/blog/data-strucutres-hash-table-javascript">Data Structures 101: implement hash tables in JavaScript</a></li></ul></div></div></div></main><style data-emotion-css="1fic0ux">.css-1fic0ux{border:0;opacity:0.6;border-bottom:0.0625rem solid;width:auto;margin-top:0.5rem;margin-bottom:0.5rem;border-color:inherit;}</style><hr class="css-1fic0ux"/><style data-emotion-css="11i96b0">.css-11i96b0{margin:2rem;text-align:center;}</style><div class="css-11i96b0"><p id="msg">谢谢你能看到这里!<span role="img" aria-label="emoji">🤗</span> 如果你有任何想与我讨论的内容,请给我发邮件.<span role="img" aria-label="emoji">🕊</span></p><br/><a style="text-decoration:none" href="mailto:rivenqinyy@gmail.com"><style data-emotion-css="meafa5">.css-meafa5{display:inline-block;padding-left:0.25rem;padding-right:0.25rem;text-transform:uppercase;font-size:0.75rem;border-radius:0.125rem;font-weight:700;white-space:nowrap;vertical-align:middle;background-color:#c6f6d5;color:#22543d;}</style><div class="css-meafa5">我的邮件</div><span role="img" aria-label="my email">📮</span></a><br/><br/><style data-emotion-css="1fb5c92">.css-1fb5c92{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#4A5568;font-size:.7rem;}</style><p class="css-1fb5c92">妙才 © 2020. All rights reserved.</p></div></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"slug":"javascript算法-三种哈希冲突解决方法","content":"\n在本文中,我们将学习到如何处理哈希冲突,如何编写健壮和优雅的代码,体会算法之美.\n\n## 1. 哈希函数\n\n散列表是根据关键码值`(Key value)`而直接进行访问的数据结构.也就是说,它通过把关键码值映射到表中一个位置来访问记录,以加快查找的速度.\n\n这个映射函数叫做`哈希(散列)函数`,存放记录的数组叫做散列表.\n\n哈希函数不是一个纯函数,函数参数和值是`多对一`的关系.因为这种特性,哈希值理论上是无法逆推的.让我们来看一个在社区中常见的哈希函数:\n\n```typescript\nprivate loseloseHashCode(key: K) {\n  if (typeof key === 'number') {\n    return key;\n  }\n  const tableKey = this.toStrFn(key);\n  let hash = 0;\n  for (let i = 0; i \u003c tableKey.length; i++) {\n    hash += tableKey.charCodeAt(i);\n  }\n  return hash % 37;\n}\n```\n\n上述代码是从哈希表的实现中摘取出来的,大致效果是通过不同类型的`key`获取一个数字作为`hashValue`.\n\n上述哈希函数的取值范围较小,不要让这个哈希函数限制你的`想象`,在后续的`多重散列`学习的时候将会讨论这个话题.\n\n## 2. 哈希冲突\n\n在创建我们的哈希表的时候,对于不同的键值,依据一个哈希函数生成的键值有可能出现重复的情形`(一对多的关系)`,这种场景我们称之为`哈希冲突`.\n\n为了应对哈希冲突,开发者们思考出了许多解决方案,今天我们来看看其中比较常用的三个解决方案.\n\n\n\n### 开放定址\n\n开放定址理论中有`分离链接`的说法,指的是为哈希表的每一个位置创建一个`链表`,将元素存在链表里,这是最简单和常见的解决方法,但是在哈希表实例之外,还需要一些`额外的存储空间`.\n\n如下是图示:\n\n![](https://zhangruochi.com/Hash-Table/2019/08/23/3.png)\n\n接下来看代码示例:\n\n```typescript\nimport { defaultToString } from \"../help\";\nimport LinkedList from \"../linkedList/index\";\n\nexport default class HashTableSeparateChaining {\n  table: { [name: string]: LinkedList };\n\n  toStrFn: Function;\n\n  count: number;\n\n  constructor() {\n    this.table = {};\n    this.toStrFn = defaultToString;\n    this.count = 0;\n  }\n\n  put(key: unknown, value: unknown): boolean {\n    if (key !== undefined \u0026\u0026 value !== undefined) {\n      const hashCode = this.getHashCode(key);\n      if (this.table[hashCode] === undefined) {\n        const linked = new LinkedList();\n        this.table[hashCode] = linked;\n      }\n      this.table[hashCode].push([key, value]);\n      this.count++;\n      return true;\n    }\n    return false;\n  }\n\n  get(key: unknown): unknown {\n    const hashCode = this.getHashCode(key);\n    if (this.table[hashCode] \u0026\u0026 !this.table[hashCode].isEmpty()) {\n      let current = this.table[hashCode].head;\n      while (current) {\n        if (current.val[0] === key) {\n          return current.val[1];\n        }\n      }\n      current = current.next;\n    }\n    return undefined;\n  }\n\n  remove(key: unknown): boolean {\n    const hashCode = this.getHashCode(key);\n    const linked = this.table[hashCode];\n    if (linked \u0026\u0026 linked.indexOf(key) !== -1) {\n      linked.remove(key);\n      if (linked.isEmpty()) {\n        delete this.table[hashCode];\n      }\n      this.count--;\n      return true;\n    }\n    return false;\n  }\n\n  getHashCode(key: unknown): number {\n    if (typeof key === \"number\") return key;\n    const tableKey: string = this.toStrFn(key);\n    let hash = 0;\n    for (let i = 0; i \u003c tableKey.length; i++) {\n      hash += tableKey.charCodeAt(i);\n    }\n    return hash % 37;\n  }\n\n  size() {\n    return this.count;\n  }\n}\n```\n\n\u003e **分离链接法**关键在于对内部存储对象使用链表来存储\"`哈希碰撞`\"的值.\n\n### 线性探查法\n\n如果不额外使用链表空间来存储值,依然选择将值存储到表中,则可以选择使用`线性探查法`.\n\n线性探查的关键在于,`如果一个 position 已经被占用,则尝试 position+1 的位置,依次类推`.\n\n![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/LinearProbing-Add.png)\n\n白色区域表示空闲位置，绿色区域表示已经存储数据.\n\n在删除的时候,有两种思路去处理收尾的代码逻辑.\n\n- 标记法: 标记已删除的位置,并且后续不可再使用,查找的时候也跳过.\n- 位置移动修复法: 检验是否需要将后续存在的一个或者多个元素移动到之前的位置,以此来防止出现通过哈希值找到一个被删除的空位置.\n\n对于第一种思路,也称为`惰性探查`,核心思想在于每个位置都有一个是否已删除的标记,遇到碰撞的时候递增哈希值,在移除碰撞的值的时候,将此标志位设置为`true`,方便再次插入碰撞的值的时候直接利用,或者在获取值的时候跳过具有已删除标志的位置,示例代码如下:\n\n```typescript\nimport { defaultToString, ValuePairLazy } from \"../help\";\n\nexport default class HashTableLinearProbingLazy\u003cK, V\u003e {\n  protected table: { [key: string]: ValuePairLazy\u003cK, V\u003e };\n\n  constructor(\n    public size = 0,\n    protected toStrFn: (key: K) =\u003e string = defaultToString\n  ) {\n    this.table = {};\n  }\n\n  private loseloseHashCode(key: K) {\n    if (typeof key === \"number\") return key;\n    const tableKey = this.toStrFn(key);\n    let hash = 0;\n    for (let i = 0; i \u003c tableKey.length; i++) {\n      hash += tableKey.charCodeAt(i);\n    }\n    return hash % 37;\n  }\n\n  hashCode(key: K): number {\n    return this.loseloseHashCode(key);\n  }\n\n  put(key: K, value: V): boolean {\n    if (key != null \u0026\u0026 value != null) {\n      const position = this.hashCode(key);\n      if (\n        this.table[position] === undefined ||\n        (this.table[position] != null \u0026\u0026 this.table[position].isDeleted)\n      ) {\n        this.table[position] = new ValuePairLazy(key, value);\n      } else {\n        let index = position + 1;\n        while (this.table[index] != null \u0026\u0026 !this.table[position].isDeleted) {\n          index++;\n        }\n        this.table[index] = new ValuePairLazy(key, value);\n      }\n      this.size++;\n      return true;\n    }\n    return false;\n  }\n\n  get(key: K) {\n    const position = this.hashCode(key);\n    const table = this.table;\n    if (table[position] != null) {\n      if (table[position].key === key \u0026\u0026 table[position].isDeleted === false) {\n        return table[position].value;\n      }\n      let index = position + 1;\n      while (\n        table[index] != null \u0026\u0026\n        (table[index].key !== key || table[index].isDeleted)\n      ) {\n        index++;\n      }\n      if (\n        table[index] != null \u0026\u0026\n        table[index].key === key \u0026\u0026\n        !table[index].isDeleted\n      ) {\n        return table[index].value;\n      }\n    }\n    return undefined;\n  }\n\n  remove(key: K): boolean {\n    let position = this.hashCode(key);\n    const { table } = this;\n    if (table[position] != null) {\n      if (table[position].key === key \u0026\u0026 !table[position].isDeleted) {\n        table[position].isDeleted = true;\n        this.size--;\n        return true;\n      }\n      position++;\n      while (table[position].key !== key || table[position].isDeleted) {\n        position++;\n      }\n      if (\n        table[position] != null \u0026\u0026\n        table[position].key === key \u0026\u0026\n        !table[position].isDeleted\n      ) {\n        table[position].isDeleted = true;\n        this.size--;\n        return true;\n      }\n    }\n    return false;\n  }\n\n  isEmpty() {\n    return this.size === 0;\n  }\n\n  clear() {\n    this.size = 0;\n    this.table = {};\n  }\n\n  getTable() {\n    return this.table;\n  }\n\n  toString(): string {\n    if (this.isEmpty()) return \"\";\n    const keys = Object.keys(this.table);\n    let objStr = `{${keys[0]} =\u003e ${this.table[keys[0]].toString()}}`;\n    for (let i = 1; i \u003c keys.length; i++) {\n      objStr = `${objStr}, {${keys[i]} =\u003e ${this.table[keys[i]].toString()}}`;\n    }\n    return objStr;\n  }\n}\n\n```\n\n\n\n对于第二种思路,示例代码如下:\n\n```ts\nimport { defaultToString, ValuePair } from \"../help\";\n\nexport default class HashTableLinearProbing\u003cK, V\u003e {\n  protected table: { [key: string]: ValuePair\u003cK, V\u003e };\n\n  constructor(\n    protected toStrFn: (key: K) =\u003e string = defaultToString,\n    public size = 0\n  ) {\n    this.table = {};\n  }\n\n  private loseloseHashCode(key: K) {\n    if (typeof key === \"number\") return key;\n    const tableHash = this.toStrFn(key);\n    console.log(tableHash, \"is table hash value\");\n\n    let hash = 0;\n    for (let i = 0; i \u003c tableHash.length; i++) {\n      hash += tableHash.charCodeAt(i);\n    }\n    return hash % 37;\n  }\n\n  hashCode(key: K) {\n    return this.loseloseHashCode(key);\n  }\n\n  put(key: K, value: V) {\n    // 保证 key 和 value 都不能是 undefined 和 null 之一\n    if (key != null \u0026\u0026 value != null) {\n      const position = this.hashCode(key);\n      if (this.table[position] == null) {\n        this.table[position] = new ValuePair(key, value);\n      } else {\n        let index = position + 1;\n        while (this.table[index] != null) {\n          index++;\n        }\n        this.table[index] = new ValuePair(key, value);\n      }\n      this.size++;\n      return true;\n    }\n    return false;\n  }\n\n  get(key: K) {\n    const position = this.hashCode(key);\n    if (this.table[position] != null) {\n      if (this.table[position].key === key) {\n        return this.table[position].value;\n      }\n      let index = position + 1;\n      while (this.table[index].key != null \u0026\u0026 this.table[index].key !== key) {\n        index++;\n      }\n      if (this.table[index] != null \u0026\u0026 this.table[index].key === key)\n        return this.table[index].value;\n    }\n    return undefined;\n  }\n\n  remove(key: K) {\n    const position = this.hashCode(key);\n    if (this.table[position] != null) {\n      if (this.table[position].key === key) {\n        delete this.table[position];\n        this.verifyRemoveSideEffect(key, position);\n        this.size--;\n        return true;\n      }\n      let index = position + 1;\n      while (this.table[index] != null \u0026\u0026 this.table[index].key !== key) {\n        index++;\n      }\n      if (this.table[index] != null \u0026\u0026 this.table[index].key === key) {\n        delete this.table[index];\n        this.verifyRemoveSideEffect(key, index);\n        this.size--;\n        return true;\n      }\n    }\n    return false;\n  }\n\n  private verifyRemoveSideEffect(key: K, removePosition: number) {\n    const hash = this.hashCode(key);\n    let index = removePosition + 1;\n    while (this.table[index] != null) {\n      const posHash = this.hashCode(this.table[index].key);\n      if (posHash \u003c= hash || posHash \u003c= removePosition) {\n        this.table[removePosition] = this.table[index];\n        delete this.table[index];\n        removePosition = index; // eslint-disable-line\n      }\n      index++;\n    }\n  }\n\n  isEmpty() {\n    return this.size === 0;\n  }\n\n  clear() {\n    this.size = 0;\n    this.table = {};\n  }\n\n  getTable() {\n    return this.table;\n  }\n\n  toString(): string {\n    if (this.isEmpty()) return \"\";\n    const keys = Object.keys(this.table);\n    let objStr = `${keys[0]} =\u003e ${this.table[keys[0]].toString()}`;\n    for (let i = 1; i \u003c keys.length; i++) {\n      objStr = `${objStr}, ${keys[i]} =\u003e ${this.table[keys[i]].toString()}`;\n    }\n    return objStr;\n  }\n}\n```\n\n这里的关键在于`remove`方法,删除数据之后还要对后续由于哈希冲突导致的数据位置异常进行处理,对相应的值的位置进行修复.哈希冲突越多,则`remove`的开销越大,因此我们需要一个优秀的`哈希函数`.\n\n### 多重散列法\n\n多重散列或者多重哈希,没什么区别.`一个`哈希函数不够,`就用两个`.看示例代码:\n\n```JavaScript\n(firstHash(key) + i * secondHash(key)) % tableSize \n```\n\n\n\n\n\n\n\n## 3. 参考\n\n- [Data Structures 101: implement hash tables in JavaScript](https://www.educative.io/blog/data-strucutres-hash-table-javascript)","title":"Javascript算法:三种哈希冲突解决方法","date":"2021/3/10","tags":["Javascript","哈希冲突","算法"],"mainImg":"https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy\u0026cs=tinysrgb\u0026fit=max\u0026fm=jpg\u0026ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8\u0026ixlib=rb-1.2.1\u0026q=80\u0026w=1080","coverImg":"https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy\u0026cs=tinysrgb\u0026fit=max\u0026fm=jpg\u0026ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8\u0026ixlib=rb-1.2.1\u0026q=80\u0026w=400","intro":"在学习 JavaScript 数据结构的时候,看到了三种解决哈希冲突的方法,书上记录其二,本文追加之三,聊表慰藉."}},"__N_SSG":true},"page":"/posts/[slug]","query":{"slug":"javascript算法-三种哈希冲突解决方法"},"buildId":"RBVUIEcST_gmPwH6Y1kqz","assetPrefix":"/blog","nextExport":false,"isFallback":false,"gsp":true,"head":[["meta",{"name":"viewport","content":"width=device-width"}],["meta",{"name":"description","content":"javascript node deno linux web developer"}],["meta",{"charSet":"utf-8"}],["link",{"rel":"icon","href":"data:image/svg+xml,\u003csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22\u003e\u003ctext y=%22.9em%22 font-size=%2290%22\u003e🎯\u003c/text\u003e\u003c/svg\u003e"}],["title",{"children":"Javascript算法:三种哈希冲突解决方法"}],["link",{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"}],["link",{"rel":"stylesheet","href":"/blog/post.css"}],["script",{"async":true,"src":"https://www.googletagmanager.com/gtag/js?id=G-J0BNBT8YXG"}],["script",{"dangerouslySetInnerHTML":{"__html":"\u003c!-- Global site tag (gtag.js) - Google Analytics --\u003e\n            window.dataLayer = window.dataLayer || [];\n            function gtag(){dataLayer.push(arguments);}\n            gtag('js', new Date());\n            gtag('config', 'G-J0BNBT8YXG');"}}]]}</script><script nomodule="" src="/blog/_next/static/chunks/polyfills-86dac49abe0e0232b575.js"></script><script src="/blog/_next/static/chunks/main-c37f7d67026ad75148c3.js" async=""></script><script src="/blog/_next/static/chunks/webpack-eb080e3f091731f228fb.js" async=""></script><script src="/blog/_next/static/chunks/framework.1daf1ec1ecf144ee9147.js" async=""></script><script src="/blog/_next/static/chunks/commons.cb58dfc173e18379cc5b.js" async=""></script><script src="/blog/_next/static/chunks/6335da8543c52d3af527c387f688061357787349.aa32db8a194765817dea.js" async=""></script><script src="/blog/_next/static/chunks/pages/_app-ebdd114948c696bf4519.js" async=""></script><script src="/blog/_next/static/chunks/2c3b9bffc7150b37a7b3810dfcf1c0b0fac2bd18.7a872eda8469b3325c5d.js" async=""></script><script src="/blog/_next/static/chunks/pages/posts/%5Bslug%5D-077731781a3ac9bd700e.js" async=""></script><script src="/blog/_next/static/RBVUIEcST_gmPwH6Y1kqz/_buildManifest.js" async=""></script><script src="/blog/_next/static/RBVUIEcST_gmPwH6Y1kqz/_ssgManifest.js" async=""></script></body></html>
