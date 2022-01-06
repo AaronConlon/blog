@@ -26,8 +26,12 @@ const getAllPostData = () => {
       });
     }
   });
-
-  return result.sort((a, b) => b.date - a.date);
+  result.sort((a, b) => {
+    const numA = new Date(a.date).getTime();
+    const numB = new Date(b.date).getTime();
+    return numB - numA;
+  });
+  return result;
 };
 
 // return tags with title and uri target : slug or id,who care.

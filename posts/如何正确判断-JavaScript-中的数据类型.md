@@ -9,3 +9,30 @@ coverImg: 'https://images.unsplash.com/photo-1608759991391-370fb9fbf7b7?crop=ent
 intro: '最近面试被问到好几次，如何判断数据的类型，在此记录一下！'
 ---
 
+### 前言
+
+最近面试被问到好几次，如何判断数据的类型，在此记录一下关于 JavaScript 数据类型的问题！
+
+### 开始
+
+我们知道 `JavaScript` 有以下几种基础数据类型：
+
+- Number
+
+- String
+
+- Null
+
+- Boolean
+
+- Undefined
+
+- BigInt
+
+- Symbol
+
+- Object
+
+
+
+  
