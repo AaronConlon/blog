@@ -1,18 +1,16 @@
 ---
-title: '快速打开或删除当前目录下的github远程仓库'
-date: '12/24/2021'
+title: "快速打开或删除当前目录下的github远程仓库"
+date: "2021/12/24"
 tags:
-- 小技巧
-mainImg: 'https://images.unsplash.com/photo-1590935216109-8d3318de2c1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAyODk1ODM&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1590935216109-8d3318de2c1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAyODk1ODM&ixlib=rb-1.2.1&q=80&w=400'
-intro: '如何通过命令行快速用浏览器打开当前仓库的远程地址？如何快速删除当前目录下的 github 远程仓库？'
+  - 小技巧
+mainImg: "https://images.unsplash.com/photo-1590935216109-8d3318de2c1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAyODk1ODM&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1590935216109-8d3318de2c1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAyODk1ODM&ixlib=rb-1.2.1&q=80&w=400"
+intro: "如何通过命令行快速用浏览器打开当前仓库的远程地址？如何快速删除当前目录下的 github 远程仓库？"
 ---
 
 ### 前言
 
-长话短说，分享两个没用（或许）的 github 小技巧。作为一个命令行爱好者，无论何时都在命令行和其他软件之间切换着，那么问题来了，如何快速用浏览器打开当前仓库的远程地址？如何快速把没用的远程仓库删掉（以免丢人现眼😂）?
-
-
+长话短说，分享两个没用（或许）的 github 小技巧。作为一个命令行爱好者，无论何时都在命令行和其他软件之间切换着，那么问题来了，如何快速用浏览器打开当前仓库的远程地址？如何快速把没用的远程仓库删掉（以免丢人现眼 😂）?
 
 ### Step by step!
 
@@ -50,9 +48,7 @@ $ gh auth login
 $ gh repo view philc/vimium --web
 ```
 
-亦或是当你被朋友推荐用某个`vim`插件时，根据对方提供的配置文件字段就可以直接去这个插件仓库看看了，是不是很没用啊😋！
-
-
+亦或是当你被朋友推荐用某个`vim`插件时，根据对方提供的配置文件字段就可以直接去这个插件仓库看看了，是不是很没用啊 😋！
 
 ### 快速删除某个仓库
 
@@ -82,7 +78,5 @@ gh delete user/myrepo
 ```
 
 首先设置一个别名`delete`，然后更新认证的 token 权限，获取到删除仓库的权限，最后就可以一把梭删除自己的这个没用的仓库了。
-
-
 
 是不是很没用啊！先这样~

@@ -1,11 +1,11 @@
 ---
-title: 'JavaScript拾遗之数据类型'
-date: '12/2/2021'
+title: "JavaScript拾遗之数据类型"
+date: "2021/12/2"
 tags:
-- JavaScript
-mainImg: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzg0NDY2MzY&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzg0NDY2MzY&ixlib=rb-1.2.1&q=80&w=400'
-intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类型，我说完之后感觉不太好，基础知识掌握得还是不够牢靠，今天来巩固一下 JavaScript 中的数据类型！'
+  - JavaScript
+mainImg: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzg0NDY2MzY&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzg0NDY2MzY&ixlib=rb-1.2.1&q=80&w=400"
+intro: "上次面试的时候，面试官让我说一说 JavaScript 的数据类型，我说完之后感觉不太好，基础知识掌握得还是不够牢靠，今天来巩固一下 JavaScript 中的数据类型！"
 ---
 
 # 前言提要
@@ -16,20 +16,20 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 
 在脑海里构建一个图谱，JavaScript 标准至今的数据类型包括：
 
-* [Primitive values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#primitive_values) (immutable datum represented directly at the lowest level of the language)
-  
-  * [Boolean type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#boolean_type)
-  * [Null type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#null_type)
-  * [Undefined type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#undefined_type)
-  * [Number type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type)
-  * [BigInt type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#bigint_type)
-  * [String type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#string_type)
-  * [Symbol type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#symbol_type)
+- [Primitive values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#primitive_values) (immutable datum represented directly at the lowest level of the language)
 
-* [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#objects) (collections of properties)
-  
+  - [Boolean type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#boolean_type)
+  - [Null type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#null_type)
+  - [Undefined type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#undefined_type)
+  - [Number type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type)
+  - [BigInt type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#bigint_type)
+  - [String type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#string_type)
+  - [Symbol type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#symbol_type)
+
+- [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#objects) (collections of properties)
+
   `7 种原始数据类型和一种引用类型`！复杂的数据结构都是由基础类型的数据构成的，对基础数据理解和熟悉程度越高，越有助于我们编写高效代码，提高效率和代码可读性。
-  
+
   每一年**TC39**都会出现一些提案，每一年都有新的方法添加到标准中来，对这些方法了解越深，我们处理问题的思路越广，效率越高。
 
 # 详解类型
@@ -47,13 +47,13 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 顾名思义，无穷大和不是一个数(NaN)都是 number ！在类型转换为 number 的时候可能会出现 NaN!
 当我们需要使用一个始终是最大的数时，`Infinity`会非常有用，正负无穷都可以保证能够覆盖我们设置的某个正常值的表示范围。
 
-> JavaScript 中的数学运算，使用`0`作为分母是不会报错的，例如正数除以 0 等于正无穷，负数则为负无穷，0除以 0 等于 NaN
+> JavaScript 中的数学运算，使用`0`作为分母是不会报错的，例如正数除以 0 等于正无穷，负数则为负无穷，0 除以 0 等于 NaN
 
 举个例子：
 在某些算法题中需要寻找数组中的最小值，我们可以初始化一个用于比较的值为`Infinity`，然后使用`Math.min()`函数来比较数据，利用的就是这个值是正无穷的特性，让代码可读性更好。
 
 还有什么地方用到这个知识点吗？
-有，还真有！例如我们在通过 JSON 序列化数据的时候，无穷大将序列化为`null`，注意这个问题📢，别让 bug 出现！另外，如果想通过字符串解析到无穷大的数，可以使用`parseFloat('Infinity')`或`Number('Infinity')`来处理，使用`parseInt`将会得到`NaN`!
+有，还真有！例如我们在通过 JSON 序列化数据的时候，无穷大将序列化为`null`，注意这个问题 📢，别让 bug 出现！另外，如果想通过字符串解析到无穷大的数，可以使用`parseFloat('Infinity')`或`Number('Infinity')`来处理，使用`parseInt`将会得到`NaN`!
 
 > new Number() vs Number() ?
 
@@ -68,11 +68,9 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 > 你可以在很多地方轻松查看文档，因此我将挑重点来学习。
 
 - EPSILON: 数之间的最小间隔，可以用于检查 0.1 + 0.2 等于 0.3 的相等性，IE11 不支持，可以用 Math.pow(2, -52)来模拟！
-- MAX_SAFE_INTEGER 和 MIN_SAFE_INTEGER: JavaScript Number使用IEEE754 标准的 64 位来表示一个数，因此为了方便获取最大的安全数 Math.pow(2, 53) - 1 和最小的安全数，为 Number 增加了这两个属性。这个属性可以用于判断某些传递的数是否可以安全地计算而不丢失精读，多用于前后端数据传递的处理，对超过安全范围的数进行判断。
+- MAX_SAFE_INTEGER 和 MIN_SAFE_INTEGER: JavaScript Number 使用 IEEE754 标准的 64 位来表示一个数，因此为了方便获取最大的安全数 Math.pow(2, 53) - 1 和最小的安全数，为 Number 增加了这两个属性。这个属性可以用于判断某些传递的数是否可以安全地计算而不丢失精读，多用于前后端数据传递的处理，对超过安全范围的数进行判断。
 - MAX_VALUE 和 MIN_VALUE: JavaScript 中能呈现的最大的正数和最小的正数，为这些数设置专属的具名属性有利于语言底层操作这些数，提升可读性。当我们发现某些数过大的时候，还是得了解原因，选择针对性的库去处理这些问题。
 - POSITIVE_INFINITY 和 NEGATIVE_INFINITY 分别为正负无穷大，这一块唯一需要注意的是`这些特殊的值之间的逻辑运算`。
-
-
 
 ### Number 方法
 
@@ -112,7 +110,7 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 
 #### toLocaleString
 
- 在需要将数字显示国际化的时候可查。
+在需要将数字显示国际化的时候可查。
 
 #### toPrecision
 
@@ -156,8 +154,6 @@ intro: '上次面试的时候，面试官让我说一说 JavaScript 的数据类
 在很多时候，我们需要对某些字符串进行比较，其原理是将其字符转化为`ASCII码`进行再比较，并且`String`具有好几个很方便获取码值的方法提供给开发者使用。
 
 另外，几乎所有数据都有`toString`方法，除了`null`和`undefield`，当你不确定调用此方法的变量是否是二者时，可以使用`String(target)`将`null`或`undefield`转化为字符串`"null"`和`"undefield"`。
-
-
 
 ### String 方法
 
@@ -223,8 +219,6 @@ ES6 新增了此方法以弥补 fromCharCode 在处理 Unicode 字符方面的�
 - trimLeft
 - trimRight
 
-
-
 #### 正则表达式匹配
 
 - match: 通过匹配正则表达式，返回一个结果数组，默认返回空数组
@@ -244,20 +238,14 @@ ES6 新增了此方法以弥补 fromCharCode 在处理 Unicode 字符方面的�
   - replace
   - replaceAll
 
-  
-
 #### split([separator[, limit]])
 
-  不指定分隔符时，返回一个包含此字符串的数组。分隔符为空字符串时，切割整个字符串，每一个字符作为一个元素返回此数组，指定`limit`时，限定返回数组的长度。
-
-
+不指定分隔符时，返回一个包含此字符串的数组。分隔符为空字符串时，切割整个字符串，每一个字符作为一个元素返回此数组，指定`limit`时，限定返回数组的长度。
 
 #### 大小写转换
 
 - toLowerCase
 - toUpperCase
-
-
 
 ## Boolean
 
@@ -286,12 +274,10 @@ ES6 新增了此方法以弥补 fromCharCode 在处理 Unicode 字符方面的�
 ```js
 const x = new Boolean(false);
 // x 在条件判断时视为 true
-if(x) {
+if (x) {
   // code will exec
 }
 ```
-
-
 
 ## Null 和 Undefined
 
@@ -312,7 +298,7 @@ if(x) {
 
 其他都是`truthy`的值。
 
-> 在 JSON 数据转换中，对象值为 undefined  的将会被忽略
+> 在 JSON 数据转换中，对象值为 undefined 的将会被忽略
 
 另外，二者都是原始数据类型。
 
@@ -321,8 +307,6 @@ if(x) {
 再谈二者区别，在作为参数传递时，`null`是一个值传递，而`undefield`将被忽略。
 
 > 更多比较请点击查看[`undefined` vs. `null` revisited](https://2ality.com/2021/01/undefined-null-revisited.html)
-
-
 
 ## Symbol
 
@@ -408,14 +392,12 @@ const obj = {
   foo: 1,
   get bar() {
     return 2;
-  }
+  },
 };
 
 let copy = Object.assign({}, obj);
 console.log(copy); // { foo: 1, bar: 2 } copy.bar的值来自obj.bar的getter函数的返回值
 ```
-
-
 
 在出现错误的情况下，例如，如果属性不可写，会引发[`TypeError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError)，如果在引发错误之前添加了任何属性，则可以更改`target`对象。
 
@@ -423,22 +405,20 @@ console.log(copy); // { foo: 1, bar: 2 } copy.bar的值来自obj.bar的getter函
 
 ```js
 const target = Object.defineProperty({}, "foo", {
-    value: 1,
-    writable: false
+  value: 1,
+  writable: false,
 }); // target 的 foo 属性是个只读属性。
 
-Object.assign(target, {bar: 2}, {foo2: 3, foo: 3, foo3: 3}, {baz: 4});
+Object.assign(target, { bar: 2 }, { foo2: 3, foo: 3, foo3: 3 }, { baz: 4 });
 // TypeError: "foo" is read-only
 // 注意这个异常是在拷贝第二个源对象的第二个属性时发生的。
 
-console.log(target.bar);  // 2，说明第一个源对象拷贝成功了。
+console.log(target.bar); // 2，说明第一个源对象拷贝成功了。
 console.log(target.foo2); // 3，说明第二个源对象的第一个属性也拷贝成功了。
-console.log(target.foo);  // 1，只读属性不能被覆盖，所以第二个源对象的第二个属性拷贝失败了。
+console.log(target.foo); // 1，只读属性不能被覆盖，所以第二个源对象的第二个属性拷贝失败了。
 console.log(target.foo3); // undefined，异常之后 assign 方法就退出了，第三个属性是不会被拷贝到的。
-console.log(target.baz);  // undefined，第三个源对象更是不会被拷贝到的。
+console.log(target.baz); // undefined，第三个源对象更是不会被拷贝到的。
 ```
-
-
 
 > `Object.assign` 会尝试将`target`转换为对象，例如传入`null`或`undefined`，将会报错。如若 sources 中包含 `null`或`undefined`，则忽略这两个源。
 
@@ -458,15 +438,13 @@ console.log(target.baz);  // undefined，第三个源对象更是不会被拷贝
 const v1 = "abc";
 const v2 = true;
 const v3 = 10;
-const v4 = Symbol("foo")
+const v4 = Symbol("foo");
 
 const obj = Object.assign({}, v1, null, v2, undefined, v3, v4);
 // 原始类型会被包装，null 和 undefined 会被忽略。
 // 注意，只有字符串的包装对象才可能有自身可枚举属性。
 console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 ```
-
-
 
 #### Object.create
 
@@ -519,10 +497,10 @@ console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 
 描述符可以拥有的键值如下表所示：
 
-|| `configurable` | `enumerable` | `value` | `writable` | `get`  | `set`  |
-| -------------- | ------------ | ------- | ---------- | ------ | ------ | ------ |
-| 数据描述符     | 可以         | 可以    | 可以       | 可以   | 不可以 | 不可以 |
-| 存取描述符     | 可以         | 可以    | 不可以     | 不可以 | 可以   | 可以   |
+|            | `configurable` | `enumerable` | `value` | `writable` | `get`  | `set`  |
+| ---------- | -------------- | ------------ | ------- | ---------- | ------ | ------ |
+| 数据描述符 | 可以           | 可以         | 可以    | 可以       | 不可以 | 不可以 |
+| 存取描述符 | 可以           | 可以         | 不可以  | 不可以     | 可以   | 可以   |
 
 各键的含义如字面所示，用于控制属性的操作性。
 
@@ -559,23 +537,21 @@ console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 借助此方法和`Map`构造函数接受一个可迭代的`entries`的特征，我们可以轻松将对象转化为`Map`：
 
 ```js
-const obj = { name: 'yo', age: 100};
-const map = new Map(Object.entries(obj))
+const obj = { name: "yo", age: 100 };
+const map = new Map(Object.entries(obj));
 ```
 
 另外，也支持使用此可迭代的`entries`数组创建对象：
 
 ```js
 const entries = new Map([
-  ['name', 'yo'],
-  ['age', 100]
+  ["name", "yo"],
+  ["age", 100],
 ]);
 
 const obj = Object.fromEntries(entries);
 // obj is { name: "yo", age: 100 }
 ```
-
-
 
 #### 冻结对象
 
@@ -594,19 +570,17 @@ const obj = Object.fromEntries(entries);
 ```js
 function deepFreeze(obj) {
   const propNames = Object.getOwnPropertyNames(obj);
-  propNames.forEach(name => {
+  propNames.forEach((name) => {
     const prop = obj[name];
-    if(typeof prop == 'object' && prop !== null) {
+    if (typeof prop == "object" && prop !== null) {
       deepFreeze(prop);
-    };
+    }
   });
-  
+
   // 冻结自身
   return Object.freeze(obj);
 }
 ```
-
-
 
 #### 密封对象
 
@@ -625,20 +599,14 @@ function deepFreeze(obj) {
 - getOwnPropertyDescriptor
 - getOwnPropertyDescriptors
 
-
-
 获取属性相关：
 
 - getOwnPropertyNames: 获取字符串属性数组
 - getOwnPropertySymbols: 获取符号属性数组
 
-
-
 获取对象原型：
 
 - getPrototypeOf
-
-
 
 # 参考
 

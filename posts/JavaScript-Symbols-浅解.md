@@ -1,11 +1,11 @@
 ---
-title: 'JavaScript Symbol 浅解'
-date: '12/25/2021'
+title: "JavaScript Symbol 浅解"
+date: "2021/12/25"
 tags:
-- JavaScript
-mainImg: 'https://images.unsplash.com/photo-1576836165612-8bc9b07e7778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzODA0MDg&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1576836165612-8bc9b07e7778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzODA0MDg&ixlib=rb-1.2.1&q=80&w=400'
-intro: '在 JavaScript 世界里，Symbol 的两个问题：是什么和为什么'
+  - JavaScript
+mainImg: "https://images.unsplash.com/photo-1576836165612-8bc9b07e7778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzODA0MDg&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1576836165612-8bc9b07e7778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzODA0MDg&ixlib=rb-1.2.1&q=80&w=400"
+intro: "在 JavaScript 世界里，Symbol 的两个问题：是什么和为什么"
 ---
 
 ### 前言
@@ -46,14 +46,14 @@ JavaScript 中的数据类型可以分为两类：
 ```js
 const foo = (val) => {
   val += 1;
-}
+};
 let x = 1;
 foo(x);
 console.log(x); // 1
 
 const bar = (val) => {
   val.age += 1;
-}
+};
 const obj = { age: 1 };
 bar(obj);
 console.log(obj.age); // 2
@@ -61,13 +61,12 @@ console.log(obj.age); // 2
 
 原始值始终严格等于另一个具有相同值的原始值，因此无论何时我们都可以进行如下比较：
 
-
 > NaN 除外，`NaN !== NaN`
 
 ```js
-const name = 'Aarom';
+const name = "Aarom";
 const obj = {
-  name: "Aaron"
+  name: "Aaron",
 };
 console.log(name === obj.name); // true
 ```
@@ -121,7 +120,7 @@ console.log(s1 === s2); // false
 上述示例中可以这样添加一个调试信息：
 
 ```js
-const s = Symbol('debug info!');
+const s = Symbol("debug info!");
 console.log(s); // Symbol(debug info)
 ```
 
@@ -132,32 +131,33 @@ console.log(s); // Symbol(debug info)
 ```js
 const obj = {};
 const s1 = Symbol();
-obj[s1] = 's1';
+obj[s1] = "s1";
 obj.age = 100;
 
 console.log(obj); // { age: 100 }
 console.log(s1 in obj); // true
 console.log(obj[s1]); // s1
-console.log(Object.keys(obj)); ['age']
+console.log(Object.keys(obj));
+["age"];
 ```
 
 注意，对象所有的符号属性都不会在`Object.keys()`的返回结果中，之所以如此是因为：`向后兼容`，旧代码不应该处理新的符号属性，因此不在此方法中返回任何的符号属性。
 
 乍一看绝对可以使用符号属性作为对象的私有属性！许多其他语言都支持类对象中具有隐藏的私有属性，这一特性在 JavaScript 中没有原生的解决方案，因此长久以来被诟病。
 
-> [tc39/proposal-class-fields: Orthogonally-informed combination of public and private fields proposals](https://github.com/tc39/proposal-class-fields) ES2020 草案中增加了私有实例字段的支持🎉🎉🎉，现已进入 stage 3
+> [tc39/proposal-class-fields: Orthogonally-informed combination of public and private fields proposals](https://github.com/tc39/proposal-class-fields) ES2020 草案中增加了私有实例字段的支持 🎉🎉🎉，现已进入 stage 3
 
 不幸的是，我们依然无法使用符号属性实现私有属性，`Reflect.ownKeys()`方法可以获取到对象上的所有`key`值，包括`symbol`类型的`key`!
 
 ```js
 function tryToAddPrivate(o) {
-  o[Symbol('Pseudo Private')] = 42;
+  o[Symbol("Pseudo Private")] = 42;
 }
-const obj = { prop: 'hello' };
+const obj = { prop: "hello" };
 tryToAddPrivate(obj);
 
 console.log(Reflect.ownKeys(obj));
-	// [ 'prop', Symbol(Pseudo Private) ]
+// [ 'prop', Symbol(Pseudo Private) ]
 console.log(obj[Reflect.ownKeys(obj)[1]]); // 42
 ```
 
@@ -166,12 +166,12 @@ console.log(obj[Reflect.ownKeys(obj)[1]]); // 42
 试想如果有两个库都想对某个对象进行修改，并且在无意识之下都修改了此对象的某个字符串属性`id`，那么势必会有一方发现此对象的数据与预料中不同。但是，如果库的作者在操作目标对象时使用了符号属性，举个例子：
 
 ```js
-const library1property = Symbol('lib1');
+const library1property = Symbol("lib1");
 function lib1tag(obj) {
   obj[library1property] = 42;
 }
 
-const library2property = Symbol('lib2');
+const library2property = Symbol("lib2");
 function lib2tag(obj) {
   obj[library2property] = 369;
 }
@@ -215,9 +215,9 @@ console.log(user[library2property]); // 369
 ```js
 const obj = {};
 obj[Symbol()] = 1;
-Object.defineProperty(obj, 'foo', {
+Object.defineProperty(obj, "foo", {
   enumberable: false,
-  value: 2
+  value: 2,
 });
 console.log(Object.keys(obj)); // []
 console.log(Reflect.ownKeys(obj)); // [ 'foo', Symbol() ]
@@ -240,13 +240,11 @@ JavaScript 运行时会创建 symbol `全局注册表`，我们可以通过`Symb
 
 ```js
 const s = Symbol();
-const obj = {[s]: 1}
+const obj = { [s]: 1 };
 console.log(obj[Object(s)]); // 1
 ```
-
-
 
 ### 参考
 
 - [JavaScript Symbols: But Why?. Symbols, the newest JavaScript… | by Thomas Hunter II | intrinsic | Medium](https://medium.com/intrinsic-blog/javascript-symbols-but-why-6b02768f4a5c)
-- [简单了解ES6/ES2015 Symbol() 方法 - 张鑫旭](https://www.zhangxinxu.com/wordpress/2018/04/known-es6-symbol-function/)
+- [简单了解 ES6/ES2015 Symbol() 方法 - 张鑫旭](https://www.zhangxinxu.com/wordpress/2018/04/known-es6-symbol-function/)

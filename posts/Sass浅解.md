@@ -1,11 +1,11 @@
 ---
-title: 'Sass浅解'
-date: '12/16/2021'
+title: "Sass浅解"
+date: "2021/12/16"
 tags:
-- Sass
-mainImg: 'https://images.unsplash.com/photo-1569748130764-3fed0c102c59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzk2NDQzMjM&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1569748130764-3fed0c102c59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzk2NDQzMjM&ixlib=rb-1.2.1&q=80&w=400'
-intro: '目前对 sass 编写样式表一知半解，在写手头的项目时十分不顺，效率低下，因此打算花两个小时重学 sass'
+  - Sass
+mainImg: "https://images.unsplash.com/photo-1569748130764-3fed0c102c59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzk2NDQzMjM&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1569748130764-3fed0c102c59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mzk2NDQzMjM&ixlib=rb-1.2.1&q=80&w=400"
+intro: "目前对 sass 编写样式表一知半解，在写手头的项目时十分不顺，效率低下，因此打算花两个小时重学 sass"
 ---
 
 # 前言
@@ -136,11 +136,10 @@ sass 支持两种语法，二者可以互相载入，分别是：
 
 p /* 多行注释可以写在任何允许 */
   /* 使用空格的地方。 */ .sans {
-  font: Helvetica, // 单行注释也是
-        sans-serif;
+  font: Helvetica,
+    // 单行注释也是
+    sans-serif;
 }
-
-
 ```
 
 回到正题，在`sass`中更简洁：
@@ -321,14 +320,9 @@ $accent-color: #6a1b9a !default;
 我们可以在任何地方使用插值，插值就像表达式替换。`sass`以一种直白的方式来让插值生效，举个例子：
 
 ```scss
-@mixin corner-icon($name, $top-or-bottom, $left-or-right)
-  .icon-#{$name}
-    background-image: url("/icons/#{$name}.svg")
-    position: absolute
-    #{$top-or-bottom}: 0
-    #{$left-or-right}: 0
-
-@include corner-icon("mail", top, right)
+@mixin corner-icon($name, $top-or-bottom, $left-or-right) .icon-#{$name} background-image:
+  url("/icons/#{$name}.svg") position: absolute #{$top-or-bottom}: 0 #{$left-or-right}:
+  0 @include corner-icon("mail", top, right);
 ```
 
 先不论`mixin`和`include`是什么，无论你传入什么值过去，编译后将直接在原位置进行替换：
@@ -344,8 +338,6 @@ $accent-color: #6a1b9a !default;
 
 > 需要注意的是，当插值花括号中包含引号时，带引号的字符串周围的引号会被删除。
 
-
-
 ## 样式规则
 
 进入正题。
@@ -356,7 +348,7 @@ $accent-color: #6a1b9a !default;
 
 选择器列表支持和组合选择器可以直接使用`css`语法。
 
-举个例子🌰：
+举个例子 🌰：
 
 ```scss
 .enlarge
@@ -396,8 +388,6 @@ ul, ol
 ```
 
 上述父选择器按顺序进行编译，不必担心`ul`和`ol`在使用父选择器时出现顺序异常。
-
-
 
 `&`父选择器可以作为判断条件，例如：
 
@@ -450,7 +440,7 @@ $warn: #dfa612
   font-weight: bold
 
 
-%strong-alert:hover 
+%strong-alert:hover
   color: red
 ```
 
@@ -486,13 +476,15 @@ $warn: #dfa612
 如上所示，`.action-buttons`和`.reset-button`都被扩展了，最后的编译结果为：
 
 ```css
-.action-buttons, .reset-buttons {
+.action-buttons,
+.reset-buttons {
   box-sizing: border-box;
   border-top: 1px rgba(0, 0, 0, 0.12) solid;
   padding: 16px 0;
   width: 100%;
 }
-.action-buttons:hover, .reset-buttons:hover {
+.action-buttons:hover,
+.reset-buttons:hover {
   border: 2px rgba(0, 0, 0, 0.5) solid;
 }
 
@@ -523,7 +515,7 @@ $warn: #dfa612
 
 ## 规则
 
-Sass的大部分额外功能都是在CSS之上添加新[@规则](https://developer.mozilla.org/zh-CN/docs/Web/CSS/At-rule)
+Sass 的大部分额外功能都是在 CSS 之上添加新[@规则](https://developer.mozilla.org/zh-CN/docs/Web/CSS/At-rule)
 
 以下是我们可以在日常开发中使用起来的规则：
 
@@ -554,20 +546,13 @@ Sass的大部分额外功能都是在CSS之上添加新[@规则](https://develop
 
 > 从笔者个人层面来看，`mixin`就是`sass`这门语言的"函数"
 
- `mixin`能够让我们轻松通过`复用`机制减少非语义类的使用，并且`mixin`非常灵活。
+`mixin`能够让我们轻松通过`复用`机制减少非语义类的使用，并且`mixin`非常灵活。
 
 接下来我直接看几个`mixin`及其用法：
 
 ```scss
-@mixin square($size, $radius: 0)
-  width: $size
-  height: $size
-
-  @if $radius != 0
-    border-radius: $radius
-
-.avatar
-  @include square(100px, $radius: 4px)
+@mixin square($size, $radius: 0) width: $size height: $size @if $radius != 0 border-radius:
+  $radius .avatar @include square(100px, $radius: 4px);
 ```
 
 如上所示，可以预定义一个`mixin`，参数支持具有默认值的可选参数，这一点跟`JS`很像。
@@ -575,15 +560,8 @@ Sass的大部分额外功能都是在CSS之上添加新[@规则](https://develop
 再看一个示例：
 
 ```scss
-@mixin square($size, $radius: 0, $n: 1)
-  width: $size
-  height: $size
-
-  @if $n != 1
-    border: #{$n}px
-
-.avatar
-  @include square(100px, $n: 4)
+@mixin square($size, $radius: 0, $n: 1) width: $size height: $size @if $n != 1 border:
+  #{$n}px .avatar @include square(100px, $n: 4);
 ```
 
 可以传递具名的参数，这样可以忽略传参的顺序。
@@ -591,14 +569,10 @@ Sass的大部分额外功能都是在CSS之上添加新[@规则](https://develop
 再看：
 
 ```scss
-@mixin order($height, $selectors...)
-  @for $i from 0 to length($selectors)
-    #{nth($selectors, $i + 1)}
-      position: absolute
-      height: $height
-      margin-top: $i * $height
-
-@include order(150px, "input.name", "input.address", "input.zip")
+@mixin order($height, $selectors...) @for $i from 0 to length($selectors) #{nth(
+    $selectors,
+    $i + 1
+  )} position: absolute height: $height margin-top: $i * $height @include order(150px, "input.name", "input.address", "input.zip");
 ```
 
 如果最后一个参数以`...`结尾，即可将传入的额外参数视为一个可以迭代的列表。
@@ -640,11 +614,7 @@ input.zip {
   }
 }
 
-@include syntax-colors(
-  $string: #080,
-  $comment: #800,
-  $variable: #60b,
-)
+@include syntax-colors($string: #080, $comment: #800, $variable: #60b);
 ```
 
 传递多个参数，`mixin`的定义参数位不定键名参数，最终可以使用内建的函数获取到键值对。
@@ -663,19 +633,11 @@ input.zip {
 另外，`mixin`还支持内容块，只需要在`mixin`中添加一行`@content`即可，举个例子：
 
 ```scss
-@mixin hover
-  &:not([disabled]):hover
-    @content
-
-.button
-  border: 1px solid black
-  @include hover
-    border-width: 2px
+@mixin hover &: not([disabled]): hover @content .button border: 1px solid black
+  @include hover border-width: 2px;
 ```
 
 到这里我已经觉得复杂了，还可以支持多个`@content`和给内容块传参，善用`sass`真不容易，需要大量的使用场景和解决问题的经验。
-
-
 
 ### @function
 
@@ -686,16 +648,8 @@ input.zip {
 来看一个基础函数`pow`：
 
 ```scss
-@function pow($base, $exponent)
-  $result: 1
-  @for $_ from 1 through $exponent
-    $result: $result * $base
-
-  @return $result
-
-.sidebar
-  float: left
-  margin-left: pow(4, 3) * 1px
+@function pow($base, $exponent) $result: 1 @for $_ from 1 through $exponent $result:
+  $result * $base @return $result .sidebar float: left margin-left: pow(4, 3) * 1px;
 ```
 
 如其名，计算乘方。关注函数的标识、参数、结构控制、返回值，这部分跟`mixin`是一样的。
@@ -718,7 +672,7 @@ color.adjust($color,
   $hue: null, $saturation: null, $lightness: null,
   $whiteness: null, $blackness: null,
   $alpha: null)
-adjust-color(...) //=> color 
+adjust-color(...) //=> color
 
 @debug color.adjust(#6b717f, $red: 15); // #7a717f
 @debug color.adjust(#d2e1dd, $red: -10, $blue: 10); // #c8e1e7
@@ -727,9 +681,67 @@ adjust-color(...) //=> color
 
 这个内建函数实在是强大而方便，此刻笔者不必赘述，我也非常欠缺使用经验。
 
+### @extend
 
+`sass`继承指的是让某个选择器继承另一个选择器的样式。关键在于扩展的目标类是否有效，其中的扩展机制能够保证以下几点：
+
+- 不会生成匹配不到任何元素的选择器
+- 它确保复杂的选择器是交错的，这样无论嵌套 HTML 元素的顺序如何，它们都可以工作。
+- 它尽可能地减少冗余选择器，同时仍然确保选择器的特性大于或等于被扩展的选择器的特性。
+- 它知道一个选择器何时匹配另一个选择器所做的一切，并可以将它们组合在一起。
+- 它智能地处理[组合选择器](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Selectors#Combinators)、[通用选择器](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Universal_selectors)和[:not 选择器](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not)。
+
+举个例子：
+
+```scss
+.content nav.sidebar
+  @extend .info
+
+// 不会扩展，因为“p”与“nav”不兼容。
+p.info
+  background-color: #dee9fc
+
+// 没有办法知道.guide和.content的层级关系，因此Sass安全起见会生成两种选择器。
+.guide .info
+  border: 1px solid rgba(#000, 0.8)
+  border-radius: 2px
+
+// Sass知道每个匹配“main”的元素。也匹配“.content”。并避免生成不必要的交错选择器。
+main.content .info
+  font-size: 0.8em
+```
+
+最后的结果为：
+
+```css
+p.info {
+  background-color: #dee9fc;
+}
+
+.guide .info,
+.guide .content nav.sidebar,
+.content .guide nav.sidebar {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 2px;
+}
+
+main.content .info,
+main.content nav.sidebar {
+  font-size: 0.8em;
+}
+```
+
+最后扩展的结果非常难以理解（对于我来说），在有必要的时候尽可能写让大多数人易于理解的扩展吧。
+
+### 调试和信息
+
+- @error
+- @warn
+- @debug
+
+如上所示，都用于在编译时输出信息或者在调试时检查数据。
 
 # 参考
 
-- [Sass中文文档](http://www.sass-china.com/)
+- [Sass 中文文档](http://www.sass-china.com/)
 - [SassMeister | The Sass Playground!](https://www.sassmeister.com/)

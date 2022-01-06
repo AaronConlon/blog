@@ -1,13 +1,13 @@
 ---
-title: '基于GitHub的评论组件(React+Next.js)'
-date: '12/21/2021'
+title: "基于GitHub的评论组件(React+Next.js)"
+date: "2021/12/21"
 tags:
-- React
-- Next.js
-- Github
-mainImg: 'https://images.unsplash.com/photo-1507149214576-19e2f76d09ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAwMzIzMDI&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1507149214576-19e2f76d09ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAwMzIzMDI&ixlib=rb-1.2.1&q=80&w=400'
-intro: '早之前使用 hexo 搭建博客的时候，评论系统用过 Gitalk 和 Gitment，现在有需要为我的某个应用写一个评论组件，于是基于 Next.js 写了一个。'
+  - React
+  - Next.js
+  - Github
+mainImg: "https://images.unsplash.com/photo-1551302602-838bcb66b6d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAwMzQzMDM&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1551302602-838bcb66b6d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAwMzQzMDM&ixlib=rb-1.2.1&q=80&w=400"
+intro: "早之前使用 hexo 搭建博客的时候，评论系统用过 Gitalk 和 Gitment，现在有需要为我的某个应用写一个评论组件，于是基于 Next.js 写了一个。"
 ---
 
 ### 前言
@@ -17,10 +17,6 @@ intro: '早之前使用 hexo 搭建博客的时候，评论系统用过 Gitalk �
 > ps: 已有大神开发成品[utterances](https://utteranc.es/),简单易用，本文和笔者开发的组件处于基础阶段，仅供学习。
 
 ### OAuth 浅解
-
-
-
-
 
 ### 过程
 
@@ -33,7 +29,7 @@ intro: '早之前使用 hexo 搭建博客的时候，评论系统用过 Gitalk �
 
 登录 `GitHub`账户后前往设置 - 开发者设置 - OAuth Apps 选项处，右上角添加新的应用。
 
-逐一填写应用名、主页（开发时填写 http://localhost:port即可）、认证回调地址。
+逐一填写应用名、主页（开发时填写 http://localhost:port 即可）、认证回调地址。
 
 由于笔者使用`Next.js+Next-auth`，按`Next-auth`文档指引这里填写：`http://localhost:3000/api/auth/callback/github`。
 

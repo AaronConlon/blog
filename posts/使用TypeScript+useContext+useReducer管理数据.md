@@ -1,19 +1,17 @@
 ---
-title: '使用TypeScript+useContext+useReducer管理数据'
-date: '12/24/2021'
+title: "使用TypeScript+useContext+useReducer管理数据"
+date: "2021/12/24"
 tags:
-- TypeScript
-- 状态管理
-mainImg: 'https://images.unsplash.com/photo-1607970669494-309137683be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzNjExNjM&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1607970669494-309137683be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzNjExNjM&ixlib=rb-1.2.1&q=80&w=400'
-intro: '这是一篇学习使用 TypeScript 去写 React Context 的学习心得。'
+  - TypeScript
+  - 状态管理
+mainImg: "https://images.unsplash.com/photo-1607970669494-309137683be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzNjExNjM&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1607970669494-309137683be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDAzNjExNjM&ixlib=rb-1.2.1&q=80&w=400"
+intro: "这是一篇学习使用 TypeScript 去写 React Context 的学习心得。"
 ---
 
 ### 前言
 
 在不引入第三方库的情况下，React Context 可以使用内置的`useContext`和`useReducer`两个钩子来创建状态管理模块。
-
-
 
 ### 代码
 
@@ -49,7 +47,7 @@ export const RootContext = createContext<{
   dispatch: () => null,
 });
 
-// 导出 context 的 provider，用于放置 context 
+// 导出 context 的 provider，用于放置 context
 export const RootContextProvider = RootContext.Provider;
 // 导出 hooks ，便于获取 state 和 dispatch 函数
 export const useRootContext = () => useContext(RootContext);
@@ -110,7 +108,6 @@ export interface IRootAction {
         age: number;
       };
 }
-
 ```
 
 ### 用法和解析
@@ -149,7 +146,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 关键在于使用 `useReducer`传入`reducer`和默认数据，得到包含`state`和`dispatch`的数组，将二者传给`Provider`的`value`参数即可。
@@ -180,7 +176,6 @@ export default function Total() {
     </div>
   );
 }
-
 ```
 
 通过`useRootContext`钩子获取到`state`，同时也可以获取到`dispatch`，有需要就可以修改数据了。
@@ -198,12 +193,9 @@ export default function Total() {
 
 当然还有更好的方案，比如：
 
-- 拆分 Context ，构造一套更精细的数据更新控制机制，例如《[如何避免useContext重渲染](https://juejin.cn/post/6869340244954513421)》中提及的思路
+- 拆分 Context ，构造一套更精细的数据更新控制机制，例如《[如何避免 useContext 重渲染](https://juejin.cn/post/6869340244954513421)》中提及的思路
 - 使用第三方库，如[Recoil](https://recoiljs.org/zh-hans/)、[concent · power your react](https://concentjs.github.io/concent-site/)
-
-
 
 ### 总结
 
 没啥好总结的，用`Recoil`或者`concent`吧。
-

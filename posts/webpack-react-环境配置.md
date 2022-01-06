@@ -1,11 +1,11 @@
 ---
-title: 'webpack-react-环境配置'
-date: '8/8/2021'
+title: "webpack-react-环境配置"
+date: "2021/8/8"
 tags:
-- 工程化
-mainImg: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mjg0MTc2NjE&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mjg0MTc2NjE&ixlib=rb-1.2.1&q=80&w=400'
-intro: '一份手动配置的 react 开发环境配置记录📝。'
+  - 工程化
+mainImg: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mjg0MTc2NjE&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Mjg0MTc2NjE&ixlib=rb-1.2.1&q=80&w=400"
+intro: "一份手动配置的 react 开发环境配置记录📝。"
 ---
 
 这份配置包括以下几点：
@@ -91,7 +91,6 @@ module.exports = () => {
   }
   return config;
 };
-
 ```
 
 顺利安装后，我们就实现了需求，来分析分析这份配置文件：
@@ -196,18 +195,18 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+  extends: ["plugin:react/recommended", "airbnb", "prettier"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
     ecmaVersion: 12,
-    sourceType: 'module',
+    sourceType: "module",
   },
-  plugins: ['react'],
+  plugins: ["react"],
   rules: {
-    'no-console': 'off',
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    "no-console": "off",
+    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
   },
 };
 ```
@@ -263,4 +262,3 @@ yarn husky add .husky/commit-msg 'yarn commitlint --edit $1'
 - Friendly-errors-webpack-plugin 优化输出信息
 - [gitignore.io - 为你的项目创建必要的 .gitignore 文件](https://www.toptal.com/developers/gitignore)
 - 其他
-
