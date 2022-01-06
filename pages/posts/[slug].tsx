@@ -25,6 +25,7 @@ export default function Post({
     content: string;
   };
 }) {
+  // console.log(post);
   return (
     <Layout>
       <Head>
