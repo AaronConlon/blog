@@ -2,13 +2,16 @@
 /* eslint-disable react/no-danger */
 import Head from "next/head";
 import { GetStaticProps, GetStaticPaths } from "next";
-import {
-  Box, Heading, Image, Badge, Stack, Tag
-} from "@chakra-ui/core";
+import Markdown from "markdown-to-jsx";
+// eslint-disable-next-line
+import { Box, Heading, Image, Badge, Stack, Tag } from "@chakra-ui/core";
 // @ts-ignore
 import Layout from "../../components/layout.tsx";
 // @ts-ignore
 import { getAllPostIds, getPost } from "../../lib/posts.ts";
+import sd from "../../styles/Code.module.sass";
+// @ts-ignore
+import Code from "../../components/Code.tsx";
 
 const assertPrefix = "/blog";
 export default function Post({
@@ -19,7 +22,7 @@ export default function Post({
     date: Date;
     tags: string[];
     mainImg: string;
-    contentHtml: string;
+    content: string;
   };
 }) {
   return (
@@ -32,15 +35,19 @@ export default function Post({
         />
         <link rel="stylesheet" href={`${assertPrefix}/post.css`} />
         {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0BNBT8YXG"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `<!-- Global site tag (gtag.js) - Google Analytics -->
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-J0BNBT8YXG"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `<!-- Global site tag (gtag.js) - Google Analytics -->
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());        
-            gtag('config', 'G-J0BNBT8YXG');`
-        }}>          
-        </script>
+            gtag('js', new Date());
+            gtag('config', 'G-J0BNBT8YXG');`,
+          }}
+        />
       </Head>
       <Box>
         <Box width="100%" margin="0 auto" paddingBottom="2rem" maxW="960px">
@@ -85,10 +92,22 @@ export default function Post({
           <Tag mb="2rem" variantColor="green" fontSize="0.6rem" ml="0.4rem">
             最后更新: {post.date}
           </Tag>
-          <div
+          {/* <div
             dangerouslySetInnerHTML={{ __html: post.contentHtml }}
             style={{ margin: "0 1rem" }}
-          />
+          /> */}
+          <Markdown
+            className={sd.content}
+            options={{
+              overrides: {
+                pre: {
+                  component: Code,
+                },
+              },
+            }}
+          >
+            {post.content}
+          </Markdown>
         </Box>
       </Box>
     </Layout>

@@ -1,18 +1,16 @@
 ---
-title: 'HTML浅解'
-date: '2021/5/24'
+title: "HTML浅解"
+date: "2021/5/24"
 tags:
-- HTML
-mainImg: 'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjIzNzk4NTM&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjIzNzk4NTM&ixlib=rb-1.2.1&q=80&w=400'
-intro: '作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？'
+  - HTML
+mainImg: "https://images.unsplash.com/photo-1446057032654-9d8885db76c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjIzNzk4NTM&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1446057032654-9d8885db76c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjIzNzk4NTM&ixlib=rb-1.2.1&q=80&w=400"
+intro: "作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？"
 ---
 
-​		作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？
+​ 作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？
 
-​		带着这些疑问，我决定重新学习`HTML`知识，如何学习？本文将带着疑问去学习`HTML`相关的知识，并且做出一定的总结。
-
-
+​ 带着这些疑问，我决定重新学习`HTML`知识，如何学习？本文将带着疑问去学习`HTML`相关的知识，并且做出一定的总结。
 
 ## 前言
 
@@ -44,8 +42,6 @@ HTML（超文本标记语言）和 XML（可扩展标记语言）结构类似，
 
 - 在浏览器中，HTML 文件的媒体类型是`text/html`，而 XML 的媒体类型则是`application/xhtml+xml`，不同的`MIME`类型在浏览器中将会以不同的解析器去解析文档。
 
-
-
 ### 2. 简单快速介绍一下 HTML 的知识
 
 从最简单的一份`html`文档说起：
@@ -53,15 +49,15 @@ HTML（超文本标记语言）和 XML（可扩展标记语言）结构类似，
 ```html
 <!DOCTYPE html>
 <html lang="en">
- <head>
-  <title>Sample page</title>
- </head>
- <body>
-  <h1>Sample page</h1>
-  <br />
-  <p>This is a <a href="demo.html">simple</a> sample.</p>
-  <!-- this is a comment -->
- </body>
+  <head>
+    <title>Sample page</title>
+  </head>
+  <body>
+    <h1>Sample page</h1>
+    <br />
+    <p>This is a <a href="demo.html">simple</a> sample.</p>
+    <!-- this is a comment -->
+  </body>
 </html>
 ```
 
@@ -81,14 +77,14 @@ HTML（超文本标记语言）和 XML（可扩展标记语言）结构类似，
 
 上图是上述简单文档的`DOM`树状图形式，`DOM`提供了诸多`API`可以让开发者控制和修改`DOM`的结构。
 
-> 我们可以通过：` caniuse.com `对标签和属性的兼容性进行查询
+> 我们可以通过：`caniuse.com`对标签和属性的兼容性进行查询
 
 又绕回来说上述代码，最基础的上述结构中，可以继续延伸了解一下大部分标签。
 
 - `<html>` 为根元素，页面唯一
-- `<head>` 为头部信息标签，页面唯一，内部常嵌套一些补充信息和标题 
+- `<head>` 为头部信息标签，页面唯一，内部常嵌套一些补充信息和标题
   - `<meta>` 元数据，常用于设置字符集，添加相关名字和描述性内容，常用于提高`SEO`
-  - `<script>` 引入 JavaScript 
+  - `<script>` 引入 JavaScript
   - `<title>` 标题设置
   - `<style>` 嵌入 Css
   - `<link>` 外部资源链接
@@ -165,22 +161,20 @@ HTML（超文本标记语言）和 XML（可扩展标记语言）结构类似，
 
 所有`HTML`短语标签如下：
 
-| <em>     | 呈现为被强调的文本。                                         |
-| -------- | ------------------------------------------------------------ |
-| <strong> | 定义重要的文本。                                             |
-| <dfn>    | 定义一个定义项目。                                           |
-| <code>   | 定义计算机代码文本。                                         |
-| <samp>   | 定义样本文本。                                               |
+| <em>     | 呈现为被强调的文本。                                                             |
+| -------- | -------------------------------------------------------------------------------- |
+| <strong> | 定义重要的文本。                                                                 |
+| <dfn>    | 定义一个定义项目。                                                               |
+| <code>   | 定义计算机代码文本。                                                             |
+| <samp>   | 定义样本文本。                                                                   |
 | <kbd>    | 定义键盘文本。它表示文本是从键盘上键入的。它经常用在与计算机相关的文档或手册中。 |
-| <var>    | 定义变量。您可以将此标签与 <pre> 及 <code> 标签配合使用。    |
+| <var>    | 定义变量。您可以将此标签与 <pre> 及 <code> 标签配合使用。                        |
 
 ### 3. HTML 和语义化有何意义
 
 我们知道，`HTML`标签都具有独特的语义，使用合适的标签来组织整体的结构却不是开发者“必须”去做的一件事，在很多情况下，开发者混用不适宜的标签去达到相同的效果屡见不鲜。
 
 清晰的语义能带来良好的页面结构，并且非常有利于搜索引擎和网络爬虫解析页面内容，大大提高页面内容的识别准确性，优化`SEO`让页面得到更好的传播和搜索权重。
-
-
 
 ### 4. 谈谈 HTML 中的语法错误问题
 
@@ -191,10 +185,22 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 来看看如下语法结构：
 
 ```html
-<p><i>She dreamt.
-<p><i>She dreamt that she ate breakfast.
-<p><i>Then lunch.
-<p><i>And finally dinner.
+<p>
+  <i
+    >She dreamt.
+    <p>
+      <i
+        >She dreamt that she ate breakfast.
+        <p>
+          <i
+            >Then lunch.
+            <p><i>And finally dinner.</i></p></i
+          >
+        </p></i
+      >
+    </p></i
+  >
+</p>
 ```
 
 浏览器通过解析器解析此结构最终在 DOM 语法树中的结果如下：
@@ -205,8 +211,6 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 
 - HTML 的语法非常宽松，语法错误是可以被允许和正常解析的
 - 错误的语法将在解析后产生意想不到的 DOM 结构，并且很有可能降低性能
-
-
 
 ### 5. 简单谈谈你对于 HTML 元标签的理解
 
@@ -226,16 +230,14 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 
 ```html
 <head>
-<meta name="description" content="博客">
-<meta name="keywords" content="HTML,CSS,XML,JavaScript">
-<meta name="author" content="someone">
-<meta name = "revised" content = "Tutorialspoint, 5/27/2021" />
-<meta charset="UTF-8">
-<meta http-equiv = "refresh" content = "5; url = https://www.google.com" />
+  <meta name="description" content="博客" />
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript" />
+  <meta name="author" content="someone" />
+  <meta name="revised" content="Tutorialspoint, 5/27/2021" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="5; url = https://www.google.com" />
 </head>
 ```
-
-
 
 ### 6. HTML 无障碍方面有何了解
 
@@ -247,11 +249,9 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 
 在开发的时候，可以采用可读性高的设计方案，甚至是对比度高的字体和图片等。另外，编写语义化的`HTML`将会对屏幕阅读器非常友好。
 
-在时间充分的情况下，建议遵循`WAI-ARIA`规范或者[IBM无障碍化网站开发检查项(IBM Web accessibility checklist – Version 5.2 )](http://www-03.ibm.com/able/guidelines/web/accessweb.html)进行开发。
+在时间充分的情况下，建议遵循`WAI-ARIA`规范或者[IBM 无障碍化网站开发检查项(IBM Web accessibility checklist – Version 5.2 )](http://www-03.ibm.com/able/guidelines/web/accessweb.html)进行开发。
 
 在测试的时候，可以使用`webking`静态检测工具进行测试。
-
-
 
 ### 7. 关于 HTML 注释的知识点
 
@@ -268,32 +268,28 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 ```html
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>Commenting Style Sheets</title>      
-      <style>
-         <!--
-            .example {
-               border:1px solid #4a7d49;
-            }
-         //-->
-      </style>
-      <script>
-        <!-- 
-        document.write("Hello World!")
-        //-->
-      </script>
-   </head>
-	
-   <body>
-      <div class = "example">Hello , World!</div>
-   </body>
-	
+  <head>
+    <title>Commenting Style Sheets</title>
+    <style>
+      <!-- .example {
+        border: 1px solid #4a7d49;
+      }
+      //-->
+    </style>
+    <script>
+      <!--
+      document.write("Hello World!");
+      //-->
+    </script>
+  </head>
+
+  <body>
+    <div class="example">Hello , World!</div>
+  </body>
 </html>
 ```
 
 但是在现代浏览器中，上述`JS`和`CSS`部分注释都无效。
-
-
 
 ### 8. 对于 img 标签的理解
 
@@ -323,7 +319,7 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
   - 自动关闭标签
   - 避免过渡注释
   - 组织`DOM`，尽量减少元素
-- 尽量不使用内联样式和内联脚本，内联的样式必须是关键样式（渲染页面顶部所需的最小CSS集）
+- 尽量不使用内联样式和内联脚本，内联的样式必须是关键样式（渲染页面顶部所需的最小 CSS 集）
 - 将脚本标签放在 body 底部
 - 照顾无障碍用户，使用意义明确的标签和描述性属性值
 - 正确使用 title 和 meta 标签，增强`SEO`
@@ -414,7 +410,7 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 另外，我们在使用邮件类型的地址的时候，需要为`href`属性值之前添加协议类型：`mailto:`，例如：
 
 ```html
-<a href = "mailto: abc@example.com">Send Email</a>
+<a href="mailto: abc@example.com">Send Email</a>
 ```
 
 浏览器对此链接的点击行为做出反应，调用默认的邮件处理程序预置目标邮件地址，并且可以在`mail`地址后添加参数，邮件处理程序会解析类似`主题`或`body`的预置内容。
@@ -438,20 +434,21 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 ```html
 <!DOCTYPE html>
 <html>
-   
-   <head>
-      <title>HTML Frames</title>
-   </head>
-   
-   <frameset cols = "25%,50%,25%">
-      <frame name = "left" src = "https://www.baidu.com" />
-      <frame name = "center" src = "https://www.baidu.com" />
-      <frame name = "right" src = "https://www.baidu.com" />
-      
-      <noframes>
-         <body>Your browser does not support frames.</body>
-      </noframes>
-   </frameset>   
+  <head>
+    <title>HTML Frames</title>
+  </head>
+
+  <frameset cols="25%,50%,25%">
+    <frame name="left" src="https://www.baidu.com" />
+    <frame name="center" src="https://www.baidu.com" />
+    <frame name="right" src="https://www.baidu.com" />
+
+    <noframes>
+      <body>
+        Your browser does not support frames.
+      </body>
+    </noframes>
+  </frameset>
 </html>
 ```
 
@@ -462,8 +459,6 @@ HTML 的语法错误的处理措施非常宽松，某种程度上 HTML 语法的
 ### 14. 字体滚动
 
 `marquee`的兼容性良好，但是此元素已经不再推荐使用，规范随时可能删除此标签，开发者们更应该通过`CSS`动画来实现文字滚动。
-
-
 
 ### 15. HTML 通用属性
 
@@ -492,7 +487,7 @@ H5 之前有五个除了上述几个元素外其他所有元素共有的可用�
 
 ![image-20210616060934949](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/image-20210616060934949.png)
 
-> [HTML accesskey属性与web自定义键盘快捷访问 « 张鑫旭-鑫空间-鑫生活](https://www.zhangxinxu.com/wordpress/2017/05/html-accesskey/comment-page-1/#comment-414139)
+> [HTML accesskey 属性与 web 自定义键盘快捷访问 « 张鑫旭-鑫空间-鑫生活](https://www.zhangxinxu.com/wordpress/2017/05/html-accesskey/comment-page-1/#comment-414139)
 
 如果你喜欢`vimium`的功能，我猜这个属性的功能能够让你很开心。但是很多应用都没有使用到这个属性，这是无障碍访问功能的一部分，常常被人忽视，使其看起来犹如屠龙之技。
 
@@ -505,19 +500,17 @@ H5 之前有五个除了上述几个元素外其他所有元素共有的可用�
 `HTML5`版本出来之后，新增了部分全局属性：
 
 - contenteditable：是否可编辑
-- Data-*：自定义的元素数据存储，可以配合`JavaScript`或者`CSS`属性选择器使用
+- Data-\*：自定义的元素数据存储，可以配合`JavaScript`或者`CSS`属性选择器使用
 - draggable：实验中的属性，是否可以拖动
 - dropzone：较为少见的属性，不如使用此名第三方库（[dropzone/dropzone: Dropzone is an easy to use drag'n'drop library. It supports image previews and shows nice progress bars.](https://github.com/dropzone/dropzone)）
 - hidden：常用
 - spellcheck：拼写检查，也是实验中的功能
 
-
-
 ### 16. 字体知识
 
 字体是相对于操作系统而言的，不同操作系统默认支持某些特定的字体，因此在样式表中我们可以指定多种字体以支持不同的操作系统，如果没有指定字体，则使用系统默认的字体。
 
-CSS 定义了 5 个常用的字体名称: `serif, ``sans-serif, ``monospace`, `cursive,`和 `fantasy. `这些都是非常通用的，当使用这些通用名称时，使用的字体完全取决于每个浏览器，而且它们所运行的每个操作系统也会有所不同。
+CSS 定义了 5 个常用的字体名称: ` serif, ``sans-serif, ``monospace `, `cursive,`和 `fantasy. `这些都是非常通用的，当使用这些通用名称时，使用的字体完全取决于每个浏览器，而且它们所运行的每个操作系统也会有所不同。
 
 示例样式如下：
 
@@ -535,7 +528,7 @@ p {
 @font-face {
     font-family: <fontFamily>; /* 自定义的字体名称; */
     src: <source> [<format>][,<source> [<format>]]*;  /* 自定义的字体的存放路径、格式; */
-    [font-weight: <weight>]; /*  是否为粗体 */ 
+    [font-weight: <weight>]; /*  是否为粗体 */
     [font-style: <style>]; /*  定义字体样式，如斜体 */
 }
 ```
@@ -554,10 +547,10 @@ p {
 
 ```css
 @font-face {
-    font-family: 'myFont';
-    src: url('myFont.eot'); /* IE9 Compat Modes */
-    src: url('myFont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('myFont.woff') format('woff'), /* Modern Browsers */
+  font-family: "myFont";
+  src: url("myFont.eot"); /* IE9 Compat Modes */
+  src: url("myFont.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+      url("myFont.woff") format("woff"); /* Modern Browsers */
 }
 ```
 
@@ -572,4 +565,3 @@ p {
 - 轻松替换
 - 不会失真
 - 便捷，可压缩
-

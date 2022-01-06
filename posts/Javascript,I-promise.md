@@ -1,11 +1,11 @@
 ---
-title: 'Javascript,I promise - 异步编程'
-date: '2021/4/9'
+title: "Javascript,I promise - 异步编程"
+date: "2021/4/9"
 tags:
-- JavaScript
-mainImg: 'https://images.unsplash.com/photo-1611923973164-e0e5f7f69872?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MTc5NzU1MTI&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1611923973164-e0e5f7f69872?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MTc5NzU1MTI&ixlib=rb-1.2.1&q=80&w=400'
-intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 前辈的电子书,充满感激.'
+  - JavaScript
+mainImg: "https://images.unsplash.com/photo-1611923973164-e0e5f7f69872?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MTc5NzU1MTI&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1611923973164-e0e5f7f69872?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MTc5NzU1MTI&ixlib=rb-1.2.1&q=80&w=400"
+intro: "Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 前辈的电子书,充满感激."
 ---
 
 大家好，今天我们要分享的知识点是`Promise`与异步编程。
@@ -19,8 +19,6 @@ intro: 'Promise, JavaScript 世界中的异步处理对象.我阅读了 Dr.Axel 
 - Async / await
 - Promisify
 
-
-
 # 1. 回调
 
 JavaScript 语言为了让部分任务按异步的方式进行，提供了编写`回调函数`的方法，让某些任务在达成一些条件之后再执行开发者指定的`回调函数`。
@@ -30,18 +28,18 @@ JavaScript 语言为了让部分任务按异步的方式进行，提供了编写
 ```js
 const callbackFn = () => {
   // balabala
-}
+};
 // browser
-setTimeout(callbackFn, 1000)
+setTimeout(callbackFn, 1000);
 
 // nodejs
-const fs = require('fs')
-fs.readFile('filename', (err, data) => {
-  if(err) throw err;
+const fs = require("fs");
+fs.readFile("filename", (err, data) => {
+  if (err) throw err;
   // balabala
-})
+});
 // more
-console.log(1)
+console.log(1);
 ```
 
 如上所示，要么延迟执行回调，要么读取文件后执行回调，二者都不会立即执行从而阻塞主线程，而是各自具有自己的执行条件，满足条件后放入任务循环队列中等待主线程空闲才得以取出并执行。
@@ -49,23 +47,22 @@ console.log(1)
 上述回调函数在某些场景下曾让开发者写出如下类型的代码：
 
 ```js
-
-fs.readFile('file1.txt', function(err, data){
-  if(err) throw err;
+fs.readFile("file1.txt", function (err, data) {
+  if (err) throw err;
   // ...一些操作
-  fs.readFile('file2.txt', function (err, data) {
-    if(err) throw err;
+  fs.readFile("file2.txt", function (err, data) {
+    if (err) throw err;
     // ...一些操作
-    fs.readFile('file3.txt', function (err, data) {
-      if(err) throw err;
+    fs.readFile("file3.txt", function (err, data) {
+      if (err) throw err;
       // ...一些操作
-      fs.readFile('file4.txt', function (err, data) {
-        if(err) throw err;
+      fs.readFile("file4.txt", function (err, data) {
+        if (err) throw err;
         // ...一些操作
       });
     });
   });
-})
+});
 ```
 
 为什么会这样？因为某些场景下需要对异步操作进行排序，需要保证运行逻辑具有一定的顺序，并且还需要对每一个回调进行错误处理。
@@ -77,25 +74,25 @@ fs.readFile('file1.txt', function(err, data){
 即使我们将之摊开，为每一个回调函数都编写一个具名的独立函数来调用，依然可读性不佳：
 
 ```js
-fs.readFile('file1.txt', step1);
+fs.readFile("file1.txt", step1);
 
 function step1(err, data) {
-  if(err) throw err;
+  if (err) throw err;
   // ...
-  fs.readFile('file2.txt', step2)
+  fs.readFile("file2.txt", step2);
 }
 function step2(err, data) {
-  if(err) throw err;
+  if (err) throw err;
   // ...
-  fs.readFile('file3.txt', step3)
+  fs.readFile("file3.txt", step3);
 }
 function step3(err, data) {
-  if(err) throw err;
+  if (err) throw err;
   // ...
-  fs.readFile('file4.txt', step4)
+  fs.readFile("file4.txt", step4);
 }
 function step4(err, data) {
-  if(err) throw err;
+  if (err) throw err;
   // ...
 }
 ```
@@ -114,10 +111,9 @@ function step4(err, data) {
 
 使用`new`实例化的`Promise`对象具有三种状态:
 
-
 - `Fulfilled` - `has resolution`: resolve 成功,调用 `onFulfilled`函数
--  `Rejected` - `has rejection`: reject, 调用`onRejected`函数
--  `Pending` - `unresolved`: 初始化状态
+- `Rejected` - `has rejection`: reject, 调用`onRejected`函数
+- `Pending` - `unresolved`: 初始化状态
 
 > 短横线左边是`Promise/A+`术语,而右边则是`ES6 Promise`术语.
 
@@ -382,9 +378,9 @@ finally
 `Promise.resolve(value)`可以视为以下代码的简写:
 
 ```js
-new Promise(resolve => {
-  resolve(value)
-})
+new Promise((resolve) => {
+  resolve(value);
+});
 ```
 
 `Promise.reject(reason)`亦类似。
@@ -418,8 +414,6 @@ this is then [Arguments] {
 reject 1
 ```
 
-
-
 此外,`Promise`类还有如下几个静态方法:
 
 - `Promise.all(iterable)`
@@ -440,10 +434,7 @@ reject 1
 我们通过示例代码来理解规范:
 
 ```js
-let p1 = Promise.all([
-  1,
-  Promise.resolve(2)
-])
+let p1 = Promise.all([1, Promise.resolve(2)]);
 ```
 
 合成的`Promise`将在所有内部`Promise`实例转化为`Fulfilled`状态后转换为`Fulfilled`状态，其值是一个可迭代对象转化为`Promise`解决之后的值的数组。
@@ -459,21 +450,19 @@ let p1 = Promise.all([
 ```js
 // 有一个返回 promise 对象的 asyncApi 函数
 // 每一个 test 函数都是一个异步的测试
-const test = (value) => asyncApi(value)
-Promise.all([
-  test('xxx'),
-  test('xx'),
-  test('x')
-]).then(results => {
-  results.forEach(result => {
-    // balabala 你的代码逻辑
-    // 都通过了
+const test = (value) => asyncApi(value);
+Promise.all([test("xxx"), test("xx"), test("x")])
+  .then((results) => {
+    results.forEach((result) => {
+      // balabala 你的代码逻辑
+      // 都通过了
+    });
+    // do more...
   })
-  // do more...
-}).catch(error => {
-  // 失败的值, balabala
-  console.log(error)
-})
+  .catch((error) => {
+    // 失败的值, balabala
+    console.log(error);
+  });
 ```
 
 ### 2.2.2 race
@@ -489,19 +478,18 @@ Promise.all([
 function timeout(ms) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(`timeout: ${ms} ms`)
-    }, ms)
-  })
+      reject(`timeout: ${ms} ms`);
+    }, ms);
+  });
 }
 
-Promise.race([
-  asyncApi('xx'),
-  timeout(5000)
-]).then(res => {
-  // success
-}).catch(error => {
-  // timeout or error
-})
+Promise.race([asyncApi("xx"), timeout(5000)])
+  .then((res) => {
+    // success
+  })
+  .catch((error) => {
+    // timeout or error
+  });
 ```
 
 ### 2.2.3 any
@@ -522,11 +510,14 @@ Promise.race([
 
 ```js
 const promise1 = Promise.resolve(3);
-const promise2 = new Promise((resolve, reject) => setTimeout(reject, 100, 'foo'));
+const promise2 = new Promise((resolve, reject) =>
+  setTimeout(reject, 100, "foo")
+);
 const promises = [promise1, promise2];
 
-Promise.allSettled(promises).
-  then((results) => results.forEach((result) => console.log(result)));
+Promise.allSettled(promises).then((results) =>
+  results.forEach((result) => console.log(result))
+);
 ```
 
 输出是:
@@ -600,13 +591,13 @@ async function foo() {
 
 ```js
 async function foo() {
-  console.log(1)
+  console.log(1);
 }
-foo()
-console.log(2)
+foo();
+console.log(2);
 // output
-1
-2
+1;
+2;
 ```
 
 > 异步函数具有暂停和恢复执行的功能是十分必要的。
@@ -617,7 +608,7 @@ console.log(2)
 
 ```js
 async function foo() {
-  const res = await axios.get('your url')
+  const res = await axios.get("your url");
 }
 ```
 
@@ -649,12 +640,12 @@ const res = await Promise.all([
 ```js
 const makeRequest = async () => {
   try {
-    const data = JSON.parse(await getJSON())
-    console.log(data)
+    const data = JSON.parse(await getJSON());
+    console.log(data);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+};
 ```
 
 无论是异步函数`getJSON()`还是同步函数`JSON.parse()`都能被同一个`try...catch...`结构对异常进行处理，代码逻辑相对使用`Promise.then / catch`的方式来说会更清晰，可读性更强。
@@ -670,15 +661,15 @@ const makeRequest = async () => {
 
 ```js
 const makeRequest = () => {
-   return callAPromise()
-     .then(() => callAPromise())
-     .then(() => callAPromise())
-}
+  return callAPromise()
+    .then(() => callAPromise())
+    .then(() => callAPromise());
+};
 // async / await
-const makeRequest = async() => {
-   await callAPromise()
-   await callAPromise()
-}
+const makeRequest = async () => {
+  await callAPromise();
+  await callAPromise();
+};
 ```
 
 在调试过程中由于`await`的特殊性，我们可以像调试同步代码这么方便自然。
@@ -691,24 +682,24 @@ const makeRequest = async() => {
 async function delay(id) {
   return new Promise((res) => {
     setTimeout(() => {
-      console.log(`task ${id} finished.`)
-    }, 1000)
-  })
+      console.log(`task ${id} finished.`);
+    }, 1000);
+  });
 }
 async function demo1() {
-  await delay(1)
-  await delay(2)
-  await delay(3)
+  await delay(1);
+  await delay(2);
+  await delay(3);
 }
-demo1()
+demo1();
 // 另一个 demo
 async function demo2() {
-  const p1 = delay(1)
-  const p2 = delay(2)
-  const p3 = delay(3)
-  await p1
-  await p2
-  await p3
+  const p1 = delay(1);
+  const p2 = delay(2);
+  const p3 = delay(3);
+  await p1;
+  await p2;
+  await p3;
 }
 ```
 
@@ -722,13 +713,13 @@ async function demo2() {
 
 ```js
 function fooPromiseExecutor(resolve, reject) {
-  setTimeout(reject, 1000, 'bar')
+  setTimeout(reject, 1000, "bar");
 }
 
 async function foo() {
-  await new Promise(fooPromiseExecutor)
+  await new Promise(fooPromiseExecutor);
 }
-foo()
+foo();
 /// Uncaught (in promise) bar
 // foo
 // async function (async)
@@ -739,9 +730,7 @@ foo()
 
 `Javascript`运行时可以简单地在嵌套函数中存储指向包含函数的指针，就如同对待同步函数一样，指针时机存储在内存中，用于在出错的时候生成错误信息，如此一来便省去了这“微小”的消耗。
 
-最后我想说，相对于使用`Promise`的实例方法来编写异步代码，使用`async/await`的语法，显然代码量将会减少🐶，何乐而不为？
-
-
+最后我想说，相对于使用`Promise`的实例方法来编写异步代码，使用`async/await`的语法，显然代码量将会减少 🐶，何乐而不为？
 
 # 4. Promisify
 
@@ -752,36 +741,34 @@ foo()
 我们可以构建一个将`callback`风格的函数转换为`Promise`风格的函数的工具函数。
 
 ```js
-function promisify(f, multiArgs = false){
-  return function(...args) {
+function promisify(f, multiArgs = false) {
+  return function (...args) {
     return new Promise((resolve, reject) => {
       function callback(err, ...results) {
-        err ? reject(err) : resolve(multiArgs ? results : results[0])
+        err ? reject(err) : resolve(multiArgs ? results : results[0]);
       }
-      args.push(callback)
-      f.call(this, ...args)
-    })
-  }
+      args.push(callback);
+      f.call(this, ...args);
+    });
+  };
 }
 
-const fs = require('fs')
-const fsPromise = promisify(fs.readdir)
-fsPromise('.').then(r => {
-  console.log('resolve', r);
-}).catch(r => {
-  console.log('reject', r);
-})
+const fs = require("fs");
+const fsPromise = promisify(fs.readdir);
+fsPromise(".")
+  .then((r) => {
+    console.log("resolve", r);
+  })
+  .catch((r) => {
+    console.log("reject", r);
+  });
 // output
-resolve [
-  'index.js'
-]
+resolve["index.js"];
 ```
 
 在这个转换过程中，我们将原来的函数包裹进去，并且返回一个可执行的函数，这个函数接收的参数跟原来的`回调风格`函数一致，只是将之转换为`Promise`风格的函数后，传参可以省略`回调函数`，我们在内部构建了一个回调函数，并且将之作为原函数的回调部分作为参数传给了返回函数。
 
 现在，我们将传统回调风格的函数转化为返回`Promise`的函数了，我们可以放心使用`Promise`的新特性了。
-
-
 
 # 参考
 
@@ -795,4 +782,3 @@ resolve [
 - [Error handling with Async/Await in JS | by Ian Segers | ITNEXT](https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a)
 - [Understanding JavaScript Promises](https://nodejs.dev/learn/understanding-javascript-promises)
 - [util.promisify(original) | Node.js API 文档](http://nodejs.cn/api/util/util_promisify_original.html)
-

@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
-const remark = require("remark");
-const html = require("remark-html");
+// const remark = require("remark");
+// const html = require("remark-html");
 
 const postsDir = path.join(process.cwd(), "posts");
 
@@ -61,10 +61,10 @@ const getAllPostTitleAndSlug = () => {
   }));
 };
 
-const getPostContentWithHtml = async (content: string) => {
-  const processdContent = await remark().use(html).process(content);
-  return processdContent.toString();
-};
+// const getPostContentWithHtml = async (content: string) => {
+//   const processdContent = await remark().use(html).process(content);
+//   return processdContent.toString();
+// };
 
 const getPostSlugByTitle = (title: string) => {
   const allPostData = getAllPostData();
@@ -82,6 +82,6 @@ export {
   getPostsData,
   getAllPostTitleAndSlug,
   getPostData,
-  getPostContentWithHtml,
+  // getPostContentWithHtml,
   getPostSlugByTitle,
 };

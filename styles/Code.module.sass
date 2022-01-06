@@ -1,0 +1,71 @@
+@import include-media
+
+.container
+  @include media("<=480px")
+    padding: 0
+    border-radius: 0
+  display: flex
+  flex-direction: column
+  align-items: stretch
+  margin: 1rem 0
+    bottom: 2rem
+  padding: 0.5rem 0
+    left: 0.3rem
+    bottom: 0.2rem
+  border-radius: 12px
+  background-color: #2c2b57
+  overflow: hidden
+  max-width: min(100vw, 860px)
+
+  .header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    color: #fff
+    padding: 0 1rem
+    @include media("<=480px")
+      padding-top: 8px
+    &>span
+      cursor: pointer
+    .copy
+      margin-left: auto
+      padding: 4px 10px
+  .code_area
+    display: flex
+    .code
+      margin: 0!important
+      flex-grow: 1
+      // font-size: unset!important
+      // line-height: unset!important
+      font-size: 12px!important
+      line-height: 24.05px!important
+      @include media("<=480px")
+        overflow-x: scroll!important
+      code
+        font-family: "Fira Code",-apple-system, BlinkMacSystemFont, sans-serif!important
+        @include media("<=460px")
+          padding-left: -1rem!important
+
+    .line_num
+      user-select: none
+      background-color: #2c2b57
+      color: #ffffff4d
+      padding: 0 2px
+      ul
+        padding: 1rem 0!important
+        margin: 0!important
+      ul li
+        list-style: none
+        text-align: right
+        padding-right: 6px
+        z-index: 2
+        box-shadow: 2px 0 purple
+        font-size: 12px!important
+        line-height: 24px!important
+        // font-size: unset!important
+        // line-height: unset!important
+
+.summary
+  margin: 12px
+  color: var(--color-text-1)
+  font-size: 1.1rem
