@@ -83,6 +83,10 @@ Function.prototype.bind = function(context) {
 
 > 笔者依然不懂为何需要在使用 new 实例化的时候，检查 context 的值！不过已经直接去提问作者了😂。
 
+最后，补充一个网上传的`mdn bind polyfill`:
+
+![](https://miro.medium.com/max/1400/1*moB8J7pRUSd4YCgRg6uWVA.png)
+
 ### call 和 apply
 
 > Call 和 apply 将会以显式指定的 this 作为函数 this 来调用函数，`call()` 方法接受的是**一个参数列表**，而 `apply()` 方法接受的是**一个包含多个参数的数组**。
@@ -122,3 +126,4 @@ Function.prototype.myApply = function (context) {
 ### 结语
 
 上述三个方法在日常工作中或许不常用到，尤其是在函数式组件越发流行的今天，但是对于 JavaScript 开发者来说，温习和理解它们依然非常有意义，就这样。
+
