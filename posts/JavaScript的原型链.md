@@ -129,8 +129,10 @@ p1.sayAge === p2.sayAge; // true
 
 > 箭头函数不存在原型对象，不能使用`new`去尝试实例化！
 
-
+希望本文对大家以后在涉及这方面的问题上能够有所帮助！
 
 ### 参考
 
-- [彻底弄懂prototype, __proto__, constructor, instanceof的渊源](https://mp.weixin.qq.com/s/5Pc7tuAyUGeMn7-ws0wBcA)
+- JavaScript 高级程序设计
+
+- [彻底弄懂prototype, __proto__, constructor, instanceof的渊源 ---- 黯羽轻扬](https://mp.weixin.qq.com/s/5Pc7tuAyUGeMn7-ws0wBcA)
