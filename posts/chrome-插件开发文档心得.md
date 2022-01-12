@@ -75,6 +75,40 @@ chrome 扩展是基于 web 技术的软件应用，它可以让用户能够定�
 
 `background`字段可以添加背景脚本，内部指定通过`service_worker`的形式单独运行一个`background.js`的脚本。
 
-> 什么是 service_worker ?
+> 什么是 service_worker 脚本?
 >
-> Service workers 本质上充当 web 应用程序、浏览器和网络之间的代理服务器，它是一个注册在指定源和路径下的事件驱动`worker`，它不能访问`DOM`，相对于驱动应用的主`JavaScript`线程，它运行在浏览器其他线程中，因此避免了堵塞。
+> Service workers 本质上充当 web 应用程序、浏览器和网络之间的代理服务器，它是一个注册在指定源和路径下的事件驱动`worker`，它不能直接访问`DOM`而是通过响应`postMessage`接口发送的消息来与其控制的页面通信，相对于驱动应用的主`JavaScript`线程，它运行在浏览器其他线程中，因此避免了堵塞，在 chrome 扩展开发中使用此技术主要是为了处理不需要页面和用户交互的功能。需要注意的是，`service worker`将在不需要的时候终止，在需要的时候重新运行。
+
+此时，刷新一下浏览器扩展这里刚安装的扩展，即可看到其`ID`下面有一行`Inspect views`检查视图可以点击`service worker`进入一个单独的`DevTools`去调试我们指定的`background.js`脚本。
+
+在这个脚本文件中，我们就可以为一些特殊的事件添加回调函数去实现一些功能，举个例子：
+
+```js
+let color = '#3aa757';
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.sync.set({ color });
+  console.log('Default background color set to %cgreen', `color: ${color}`);
+});
+```
+
+如字面意思，在 chrome 运行后并且安装成功此扩展后执行回调函数，调用 chrome 此扩展的`storage`存储同步保存颜色对象，再在控制台打印一条信息。
+
+如果只是这样，我们会遇到一个问题，并且非常有意义。
+
+控制台会告诉我们`TypeError: Cannot read properties of undefined (reading 'sync')`!
+
+在扩展开发中，浏览器许多功能需要申请`权限`，申请方法就是在`manifest.json`文件中提前指定权限字段，这些信息也会在发布到 chrome 商店后提供给用户看，告知用户此扩展需要哪些权限。
+
+╰(*°▽°*)╯
+
+编辑`manifest.json`吧，告诉浏览器：嘿，请给我`storage`权限！
+
+```json
+{
+  ...
+  "permissions": ["storage"]
+  ...
+}
+```
+
