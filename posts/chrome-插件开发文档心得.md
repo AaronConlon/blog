@@ -176,7 +176,7 @@ chrome.runtime.onInstalled.addListener(() => {
     <style>
       button {
         height: 30px;
-        width: 30px;
+        min-width: 30px;
         outline: none;
         margin: 10px;
         border: none;
@@ -235,6 +235,7 @@ const btn = document.querySelector("#btn");
 const setBtnBgColor = () => {
   chrome.storage.sync.get("color", ({ color }) => {
     btn.style.backgroundColor = color;
+    btn.textContent = color;
   });
 };
 setBtnBgColor();
@@ -315,3 +316,4 @@ function setPageBgColor() {
 └── popup.js
 ```
 
+≈
