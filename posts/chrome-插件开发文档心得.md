@@ -1,5 +1,5 @@
 ---
-title: 'chrome-插件开发文档心得'
+title: 'chrome:插件开发文档心得 v1'
 date: '2022/1/12'
 tags:
 - Chrome Extensions
@@ -14,7 +14,7 @@ chrome 扩展是基于 web 技术的软件应用，它可以让用户能够定�
 
 在入手浏览器开发之前，请务必把文档看几遍。
 
-本文将通过开发一个修改当前页面背景色的简单扩展为大家提供一个 chrome 扩展开发的体验机会。
+本文将通过开发一个修改当前页面背景色的简单扩展为例为大家揭开 chrome 扩展开发的面纱。
 
 ### 起步
 
@@ -316,4 +316,72 @@ function setPageBgColor() {
 └── popup.js
 ```
 
-≈
+当然，还需要更新`manifest.json`:
+
+```json
+{
+  ...
+  "options_page": "options.html"
+  ...
+}
+```
+
+然后重新载入此扩展！此时，右键浏览器右上角扩展图标即可看到`选项`这一行已经不是灰色不可用状态了，点击即可打开我们定义的`options.html`页面。
+
+我们能在选项设置页面提供一些关于扩展的可选设置，然后保存到`localstorage`中去。
+
+举个笔者的翻译扩展的例子：
+
+![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/20220114154937.png)
+
+当然，这并不是每一个扩展都需要的方案。个中取舍，全部由开发者决定。
+
+至此，我们这个简单 Demo 就完成了，任何复杂的扩展都是基于 chrome 官方提供的接口和 API 来实现的，你想做的扩展是怎么样的呢？
+
+或许 chrome 扩展开发真的没有普适的最佳实践，如果没有充足的时间，就在灵光一闪之后对官方文档的探索浅尝辄止即可，找到满足条件的 API 和文档，然后动手去做吧，在实践中才能成长。
+
+### 方向性
+
+> chrome 扩展可以用于增强用户哪些方向的体验？
+
+笔者总结了一下，可以分为以下几个方向：
+
+- 页面功能
+  - 翻译：各种翻译软件
+  - 笔记：页面笔记
+  - 广告：ADBlock
+  - 文本提取：纯文本，去除多余 JavaScript 添加的内容
+  - 密码管理和自动填充：lastpast
+  - 资源抓取：CoCoCut
+  - 共享：云盘密码共享
+- chrome 自带功能增强
+  - 历史记录
+  - 书签🔖
+  - 下载器
+  - 通知
+  - omnibox
+  - Override 标签页
+- 用户增强功能
+  - 时钟
+  - 截图
+  - 代码格式化
+  - RSS
+  - 商业化功能：匿名邮箱、Gmail插件等等
+
+
+
+### 最后
+
+后续笔者在完成自己的扩展之后，预计会继续写几篇新的学习心得，涉及如何使用前端库`React`配合`webpack`或`vite`去优化咱们的开发体验，以及如何使用 chrome 提供的接口做数据通信等等。
+
+### 参考
+
+- [官方文档](https://developer.chrome.com/)
+
+### 推荐阅读
+
+- [Chrome扩展开发极客 - 博客园](https://www.cnblogs.com/champagne/)
+- [sxei/chrome-plugin-demo: 《Chrome插件开发全攻略》配套完整Demo，欢迎clone体验](https://github.com/sxei/chrome-plugin-demo)
+
+
+
