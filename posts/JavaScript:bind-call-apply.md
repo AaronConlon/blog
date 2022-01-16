@@ -47,7 +47,7 @@ Function.prototype.bind = function(context) {
       var ctx = this instanceof noop && context ? this : context;
       return fn.apply(ctx, args.concat(slice(arguments)))
     }
-  
+
   noop.prototype = fn.prototype;
   bound.prototype = new noop();
   return bound;
@@ -78,10 +78,12 @@ Function.prototype.bind = function(context) {
 我们创建一个`bound`函数，最后返回此函数，这个函数需要关注以下几点：
 
 - 保存原型链
-- 检查返回后的函数，被使用的类型，区分为是否使用`new`来创建实例，如果是则不使用`bind`提供的`thisArg`，核心代码是：`this instanceof noop && context ? this : context`。如果使用者将`bind`返回的函数通过`new`去实例化对象，则不应该使用`bind`显式绑定的`thisArg`作为`this`! 
+- 检查返回后的函数，被使用的类型，区分为是否使用`new`来创建实例，如果是则不使用`bind`提供的`thisArg`，核心代码是：`this instanceof noop && context ? this : context`。如果使用者将`bind`返回的函数通过`new`去实例化对象，则不应该使用`bind`显式绑定的`thisArg`作为`this`!
 - 处理好`bind`时预置的参数和最后调用时的参数顺序
 
 > 笔者依然不懂为何需要在使用 new 实例化的时候，检查 context 的值！不过已经直接去提问作者了😂。
+
+另外,链式调用`bind`的结果,`this`始终是第一个调用时提供的对象.
 
 最后，补充一个网上传的`mdn bind polyfill`:
 
@@ -96,7 +98,7 @@ Function.prototype.bind = function(context) {
 #### Call
 
 ```js
-Function.prototype.myCall = function (context) {  
+Function.prototype.myCall = function (context) {
   if (typeof this !== "function") {
     throw new TypeError("what is tring to be called is not function");
   }
