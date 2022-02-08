@@ -1,6 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
-import { Box, Divider, Badge, Text, Heading } from "@chakra-ui/core";
+import {
+  Box,
+  Divider,
+  Badge,
+  Text,
+  Heading,
+  Flex,
+  Avatar,
+} from "@chakra-ui/core";
 import styles from "../styles/layout.module.sass";
 
 type Props = {
@@ -46,32 +54,55 @@ export default function Layout({ children }: Props) {
         </header>
         <main>{children}</main>
         <Divider />
-        <Box m="2rem" textAlign="center">
-          <p id="msg">
-            谢谢你能看到这里!
-            <span role="img" aria-label="emoji">
-              🤗
-            </span>
-            &nbsp;如果你有任何想与我讨论的内容,请给我发邮件.
-            <span role="img" aria-label="emoji">
-              🕊
-            </span>
-          </p>
-          <br />
-          <Link href="mailto:rivenqinyy@gmail.com">
-            <a style={{ textDecoration: "none" }}>
-              <Badge variantColor="green">我的邮件</Badge>
-              <span role="img" aria-label="my email">
-                📮
+        <Flex
+          flexDir={["column", "row", "row", "row"]}
+          maxW="1100px"
+          m="0 auto"
+        >
+          <Flex
+            maxW="440px"
+            m="2rem auto"
+            // justify="center"
+            align="center"
+            flexDir="column"
+          >
+            <Text marginBottom={2}>友链</Text>
+            <Flex flexWrap="wrap">
+              <Link href="https://submara.com/">
+                <Avatar
+                  src="https://avatars.githubusercontent.com/u/30927318?v=4"
+                  style={{ cursor: "pointer" }}
+                />
+              </Link>
+            </Flex>
+          </Flex>
+          <Box m="2rem" textAlign="center" marginLeft="auto">
+            <p id="msg">
+              谢谢你能看到这里!
+              <span role="img" aria-label="emoji">
+                🤗
               </span>
-            </a>
-          </Link>
-          <br />
-          <br />
-          <Text color="gray.600" fontSize=".7rem">
-            妙才 © 2020. All rights reserved.
-          </Text>
-        </Box>
+              &nbsp;如果你有任何想与我讨论的内容,请给我发邮件.
+              <span role="img" aria-label="emoji">
+                🕊
+              </span>
+            </p>
+            <br />
+            <Link href="mailto:rivenqinyy@gmail.com">
+              <a style={{ textDecoration: "none" }}>
+                <Badge variantColor="green">我的邮件</Badge>
+                <span role="img" aria-label="my email">
+                  📮
+                </span>
+              </a>
+            </Link>
+            <br />
+            <br />
+            <Text color="gray.600" fontSize=".7rem">
+              妙才 © 2020. All rights reserved.
+            </Text>
+          </Box>
+        </Flex>
       </Box>
     </div>
   );
