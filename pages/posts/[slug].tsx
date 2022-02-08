@@ -12,6 +12,7 @@ import { getAllPostIds, getPost } from "../../lib/posts.ts";
 import sd from "../../styles/Code.module.sass";
 // @ts-ignore
 import Code from "../../components/Code.tsx";
+import CustomBlockquote from "../../components/CustomBlockquote.tsx";
 
 const assertPrefix = "/blog";
 export default function Post({
@@ -102,6 +103,9 @@ export default function Post({
               overrides: {
                 pre: {
                   component: Code,
+                },
+                blockquote: {
+                  component: CustomBlockquote,
                 },
               },
             }}
