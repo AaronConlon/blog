@@ -224,6 +224,10 @@ intro: 'Git 日常操作须知！'
 
 ### 杂项
 
+#### 提交的技巧
+
+##### 场景 1
+
 有这么一个场景，代码出现了某个棘手的`BUG`，为了方便调试而在代码中添加了一些调试命令并向控制台打印了这些信息，当问题解决之后代码提交之前，我们如何更快地排除那些调试代码呢？
 
 当我们发现`bug`出现在文件`a.js`，但是调试信息遍布整个目录，这时候我们可以让`git`复制解决问题的那一个提交记录即可。
@@ -247,3 +251,167 @@ $ git cherry-pick C4
 ```
 
 <img src="/Users/yi/Library/Application Support/typora-user-images/image-20220210181703119.png" alt="image-20220210181703119" style="zoom:50%;" />
+
+##### 场景 2
+
+我在`newImage`分支上提交了一些更新，然后又基于此节点创建了`caption`分支，然后又提交了一次。
+
+但是由于某些原因，我得在原来的提交记录上(`newImage分支`)做一些更新(我不希望这些更新记录在当前的位置)。
+
+我们可以这样实现这个需求：
+
+- 用`git rebase -i`重新排序之前的提交，将目标记录挪到最前面
+- 用`git commit --amend` 进行小修改
+- 再用`git rebase -i`恢复原来的顺序
+- 最后把`main`移动到最前端
+
+最初的状态图如下：
+
+<img src="/Users/yi/Library/Application Support/typora-user-images/image-20220210212704433.png" alt="image-20220210212704433" style="zoom: 67%;" />
+
+命令如下：
+
+```bash
+$ git rebase -i c1
+# 更换 c2 和 c3 的顺序
+$ git commit --amend
+# 此时，更新头部
+$ git rebase -i c1
+# 恢复 c2 和 c3 的顺序
+$ git rebase caption main
+# 合并分支 main 和 caption
+```
+
+![image-20220210214641095](/Users/yi/Library/Application Support/typora-user-images/image-20220210214641095.png)
+
+##### 场景 3
+
+当我们将想要的提交记录移动到最前端时，可以用`--amend`修改它，但是这样可能会造成由`rebase`产生的冲突。
+
+除了使用上述方案，还可以选择`cherry-pick`来实现。
+
+> 牢记`cherry-pick`可以将树上的提交记录追加到`HEAD`上来。
+
+![image-20220210215346574](/Users/yi/Library/Application Support/typora-user-images/image-20220210215346574.png)
+
+现在，我们需要在`newImage`分支节点`C2`上做一些修改，首先让我们切换到`main`上。
+
+```bash
+# 切换到 main
+$ git switch main
+# 将 C2 挪到 main 的下一步
+$ git cherry-pick C2
+# 提交修改
+$ git commit --amend
+# 将 C3 移动到当前节点末尾
+$ git cherry-pick C3
+```
+
+现在，我们实现了针对性修改中间节点记录。
+
+![image-20220210215752988](/Users/yi/Library/Application Support/typora-user-images/image-20220210215752988.png)
+
+#### Tag
+
+分支易变，为了便于定位到记录，我们可以创建标签（`Tag`），每一个标签都可以视为一个里程碑，我们可以像用分支一样用标签，并且它不会移动，标签页是一个锚点。
+
+让我们为提交记录`C1`创建一个标签`v1`:
+
+![image-20220210224729142](/Users/yi/Library/Application Support/typora-user-images/image-20220210224729142.png)
+
+执行命令：
+
+```bash
+$ git tag v1 C1
+```
+
+![image-20220210224814517](/Users/yi/Library/Application Support/typora-user-images/image-20220210224814517.png)
+
+如果我们再想快速切换到具有特殊意义的地方，就可以通过`checkout tagName`快速完成切换。
+
+此外，`git describe <ref>`可以展示最近的一个标签信息。`ref`是可选的记录引用，你可以写哈希值、标签、分支，甚至什么都不写，默认为当前`HEAD`位置。
+
+输出的结果如下：
+
+`<标签名>_<ref和标签之间的提交记录数>_g<ref的哈希特征值>`
+
+如果我们有这样一个场景：
+
+![image-20220210225857113](/Users/yi/Library/Application Support/typora-user-images/image-20220210225857113.png)
+
+那么会有以下输入和输出：
+
+```bash
+$ git describe main
+# 输出 v1_2_gC2
+$ git describe side
+# 输出 v2_1_gC4
+```
+
+#### 多分支 rebase
+
+我们为了开发某些功能，每一个功能都创建了单独的分支，现在要将这些分支全部合并到`main`分支上去。
+
+![image-20220210231612410](/Users/yi/Library/Application Support/typora-user-images/image-20220210231612410.png)
+
+现在，我们有主分支`main`，其他任务分支：
+
+- `bugFix`
+- `side`
+- `another`
+
+为了将任务分支合并到主分支下，可以逐步`rebase`：
+
+```bash
+$ git rebase main bugFix # 将 bugFix rebase 到 main 下
+$ git rebase bugFix side # 将 side rebase 到 bugFix 下
+$ git rebase side another # 类似
+$ git rebase HEAD main # 可以使用 HEAD 代替分支名，这时候 HEAD 总是在当前适宜的位置
+```
+
+#### 多上层记录
+
+看看这个场景：
+
+![image-20220210233314336](/Users/yi/Library/Application Support/typora-user-images/image-20220210233314336.png)
+
+如果我们执行:`git checkout main^`，那么`HEAD`将会分离到`C1`，如果想分离到`C2`该怎么做？
+
+答案很简单：`git checkout main^2`
+
+继续看示例：
+
+![image-20220210233534390](/Users/yi/Library/Application Support/typora-user-images/image-20220210233534390.png)
+
+如果想快速切换到 `C3`，我们可以：
+
+```bash
+$ git checkout HEAD^
+$ git chekcout HEAD^2 # 选择第二个方向
+$ git checkout HEAD~2 # 继续向上 2 个记录
+# 甚至可以将这些操作连起来
+$ git checkout HEAD~^2~2
+```
+
+#### 最终试炼
+
+现在是最后一关，前方是复杂且纠缠不清的分支。
+
+现在我们的 `main` 分支是比 `one`、`two` 和 `three` 要多几个提交。出于某种原因，我们需要把 `main` 分支上最近的几次提交做不同的调整后，分别添加到各个的分支上。
+
+`one` 需要重新排序并删除 `C5`，`two` 仅需要重排排序，而 `three` 只需要提交一次。
+
+![image-20220210235203491](/Users/yi/Library/Application Support/typora-user-images/image-20220210235203491.png)
+
+为了实现目的，我们得单独处理这些分支，一步步来：
+
+```bash
+$ git rebase -i one c5 # 然后删除 c5，再重新排序
+$ git rebase -i two c5 # 重排序
+$ git rebase c2'' two # 处理好分支的位置
+$ git rebase c2 three # 同上
+```
+
+结果是：
+
+![image-20220210235444896](/Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png)
