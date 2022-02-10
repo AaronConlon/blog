@@ -9,7 +9,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "export": "next export",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "echo": "echo okkk"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
@@ -48,6 +49,6 @@
     "next-sitemap": "^1.6.203"
   },
   "lint-staged": {
-    "*.md": "node articleImageCopy.js"
+    "*.md": "echo"
   }
 }
