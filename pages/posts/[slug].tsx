@@ -12,6 +12,7 @@ import { getAllPostIds, getPost } from "../../lib/posts.ts";
 import sd from "../../styles/Code.module.sass";
 // @ts-ignore
 import Code from "../../components/Code.tsx";
+// @ts-ignore
 import CustomBlockquote from "../../components/CustomBlockquote.tsx";
 
 const assertPrefix = "/blog";
