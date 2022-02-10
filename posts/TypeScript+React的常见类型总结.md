@@ -43,3 +43,11 @@ const Search = React.forwardRef<HTMLInputElement>((props, ref) => {
 });
 ```
 
+### Input
+
+```tsx
+onChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const newValue = e.currentTarget.value;
+}
+```
+
