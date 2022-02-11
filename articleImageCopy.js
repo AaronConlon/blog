@@ -15,19 +15,19 @@ try {
       .filter((line) => /^!\[.*?\]\(/.test(line));
     targetLines.forEach((line) => {
       // test
-      logError(`line is:\n${line}\n}`);
+      logError(`line is:\n${line}\n`);
       const relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
       logError(`relative path is: \n${relativePath}\n`);
       const fileName = relativePath.replace(path.dirname(relativePath), "");
       logError(`fileName path is: \n${fileName}\n`);
 
-      // // copy file
-      // exec(
-      //   `cp ${relativePath} ${path.join(__dirname, "articleImgs")}`,
-      //   logError
-      // );
-      // // replace local relative path ro current repo relative path
-      // exec(`sed -i s/${relativePath}/../articleImgs${fileName}`, logError);
+      // copy file
+      exec(
+        `cp "${relativePath}" "${path.join(__dirname, "articleImgs")}"`,
+        logError
+      );
+      // replace local relative path ro current repo relative path
+      exec(`sed -i "s~${relativePath}~../articleImgs${fileName}"`, logError);
     });
   });
 } catch (error) {
