@@ -14,17 +14,21 @@ try {
       .split("\n")
       .filter((line) => /^!\[.*?\]\(/.test(line));
     targetLines.forEach((line) => {
-      const relativePath = line.replace(/^.*\]\(/, "").replace(/\]$/, "");
+      // test
+      logError(`line is:\n${line}\n}`);
+      const relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
+      logError(`relative path is: \n${relativePath}\n`);
       const fileName = relativePath.replace(path.dirname(relativePath), "");
-      // copy file
-      exec(
-        `cp ${relativePath} ${path.join(__dirname, "articleImgs")}`,
-        logError
-      );
-      // replace local relative path ro current repo relative path
-      exec(`sed -i s/${relativePath}/../articleImgs${fileName}`, logError);
+      logError(`fileName path is: \n${fileName}\n`);
+
+      // // copy file
+      // exec(
+      //   `cp ${relativePath} ${path.join(__dirname, "articleImgs")}`,
+      //   logError
+      // );
+      // // replace local relative path ro current repo relative path
+      // exec(`sed -i s/${relativePath}/../articleImgs${fileName}`, logError);
     });
-    fs.appendFileSync("aaa", targetLines.join("\n"), "utf-8");
   });
 } catch (error) {
   logError(`${error}\n`);

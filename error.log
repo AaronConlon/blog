@@ -1,0 +1,96 @@
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png)/../articleImgs/image-20220210235444896.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png)/../articleImgs/image-20220210235444896.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210235203491.png)/../articleImgs/image-20220210235203491.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210235203491.png)/../articleImgs/image-20220210235203491.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210235203491.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210235203491.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210233534390.png)/../articleImgs/image-20220210233534390.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210233534390.png)/../articleImgs/image-20220210233534390.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210233534390.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210233534390.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210233314336.png)/../articleImgs/image-20220210233314336.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210233314336.png)/../articleImgs/image-20220210233314336.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210233314336.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210233314336.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210231612410.png)/../articleImgs/image-20220210231612410.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210231612410.png)/../articleImgs/image-20220210231612410.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210231612410.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210231612410.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210225857113.png)/../articleImgs/image-20220210225857113.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210225857113.png)/../articleImgs/image-20220210225857113.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210225857113.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210225857113.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210224814517.png)/../articleImgs/image-20220210224814517.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210224814517.png)/../articleImgs/image-20220210224814517.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210224814517.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210224814517.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210224729142.png)/../articleImgs/image-20220210224729142.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210224729142.png)/../articleImgs/image-20220210224729142.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210224729142.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210224729142.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210215752988.png)/../articleImgs/image-20220210215752988.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210215752988.png)/../articleImgs/image-20220210215752988.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210215752988.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210215752988.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210215346574.png)/../articleImgs/image-20220210215346574.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210215346574.png)/../articleImgs/image-20220210215346574.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210215346574.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210215346574.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210214641095.png)/../articleImgs/image-20220210214641095.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210214641095.png)/../articleImgs/image-20220210214641095.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210214641095.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210214641095.png) /Users/yi/repos/blog/articleImgs'
+
+Command failed: sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210174950934.png)/../articleImgs/image-20220210174950934.png)
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `sed -i s//Users/yi/Library/Application Support/typora-user-images/image-20220210174950934.png)/../articleImgs/image-20220210174950934.png)'
+
+Command failed: cp /Users/yi/Library/Application Support/typora-user-images/image-20220210174950934.png) /Users/yi/repos/blog/articleImgs
+/bin/sh: -c: line 0: syntax error near unexpected token `)'
+/bin/sh: -c: line 0: `cp /Users/yi/Library/Application Support/typora-user-images/image-20220210174950934.png) /Users/yi/repos/blog/articleImgs'
+
