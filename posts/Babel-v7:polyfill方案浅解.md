@@ -1,16 +1,17 @@
 ---
-title: 'Babel 7: polyfill方案浅解 '
-date: '2021/7/11'
+title: "Babel 7: polyfill方案浅解 "
+date: "2021/7/11"
 tags:
-- Babel
-mainImg: 'https://images.unsplash.com/photo-1550482781-48d477e61c72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYwMTE2Mzg&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1550482781-48d477e61c72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYwMTE2Mzg&ixlib=rb-1.2.1&q=80&w=400'
-intro: '前端工程化中，使用 babel 对新语法和 API 预置 polyfill 是非常流行的做法之一，但之前笔者对这个过程和其中使用到的插件不够了解，因此在网上搜寻了一些博客和知识分享，学习一番，再次总结一下。'
+  - Babel
+mainImg: "https://images.unsplash.com/photo-1550482781-48d477e61c72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYwMTE2Mzg&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1550482781-48d477e61c72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYwMTE2Mzg&ixlib=rb-1.2.1&q=80&w=400"
+intro: "前端工程化中，使用 babel 对新语法和 API 预置 polyfill 是非常流行的做法之一，但之前笔者对这个过程和其中使用到的插件不够了解，因此在网上搜寻了一些博客和知识分享，学习一番，再次总结一下。"
 ---
 
 ## 前言
 
-本文将对`babel7`的语法转换和`polyfill`的相关知识进行分析，主要内容为`@babel/preset-env`和`plugin-transform-runtime`，Babel 7.4之后不再推荐使用`@babel/polyfill`。
+ddd
+本文将对`babel7`的语法转换和`polyfill`的相关知识进行分析，主要内容为`@babel/preset-env`和`plugin-transform-runtime`，Babel 7.4 之后不再推荐使用`@babel/polyfill`。
 
 ## Preset-env
 
@@ -18,7 +19,7 @@ intro: '前端工程化中，使用 babel 对新语法和 API 预置 polyfill �
 
 babel 7 版本推荐使用`@babel/preset-env`代替以往的诸多`polyfill`方案，现今我们可以使用`preset-env`简单地实现语法和功能特性的需求。
 
-> @babel/preset-env is a smart preset that allows you to use the latest JavaScript without needing to micromanage which syntax transforms (and optionally, browser polyfills) are needed by your target environment(s). 
+> @babel/preset-env is a smart preset that allows you to use the latest JavaScript without needing to micromanage which syntax transforms (and optionally, browser polyfills) are needed by your target environment(s).
 
 可知，`preset-env`可以转换新语法，甚至可以配置转换新的`API`，通过配置其可选项来实现功能支持。
 
@@ -59,8 +60,8 @@ yarn add core-js@3 regenerator-runtime
 我们需要做的就是在入口处引入`polyfill`（或者在 webpack 配置文件中新增这两个包作为额外的入口）:
 
 ```js
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 ```
 
 对于项目开发来说，这种方案较为稳妥。尽管将浏览器暂不支持的模块全部引入可能会让某些项目中未使用的模块占据一定的额外体积，但是可以避免项目中引入的第三方库`polyfill`处理不当，导致引用异常。
@@ -71,7 +72,7 @@ import 'regenerator-runtime/runtime'
 
 ### corejs
 
-core-js是完全模块化的javascript标准库。
+core-js 是完全模块化的 javascript 标准库。
 
 推荐让浏览器的`polyfill`统一由`corejs`来管理。
 
@@ -106,8 +107,8 @@ core-js是完全模块化的javascript标准库。
 之后再在入口文件手动引入`polyfill`:
 
 ```js
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 // other code
 ```
 
@@ -205,6 +206,3 @@ yarn add -D babel-plugin-transform-runtime
 - [@babel/plugin-transform-runtime · Babel](https://babeljs.io/docs/en/babel-plugin-transform-runtime#docsNav)
 
 - [吃一堑长一智系列: 99% 开发者没弄明白的 babel 知识](https://zhuanlan.zhihu.com/p/361874935)
-
-  
-

@@ -1,8 +1,10 @@
 const path = require("path");
 const fs = require("fs");
 
-fs.writeFileSync(
-  path.join(__dirname, "aaaa"),
-  process.argv.join("-"),
-  "utf-8"
-);
+const articleFilePath = process.argv[1];
+try {
+  fs.appendFileSync(path.resolve(articleFilePath), articleFilePath, "utf-8");
+} catch (error) {
+  console.log(error);
+  throw new Error(error);
+}
