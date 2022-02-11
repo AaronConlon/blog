@@ -10,7 +10,6 @@ intro: "前端工程化中，使用 babel 对新语法和 API 预置 polyfill �
 
 ## 前言
 
-ddd
 本文将对`babel7`的语法转换和`polyfill`的相关知识进行分析，主要内容为`@babel/preset-env`和`plugin-transform-runtime`，Babel 7.4 之后不再推荐使用`@babel/polyfill`。
 
 ## Preset-env
