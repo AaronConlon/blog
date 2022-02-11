@@ -49,6 +49,6 @@
     "next-sitemap": "^1.6.203"
   },
   "lint-staged": {
-    "*.md": "npm run ok"
+    "*.md": "npm run ok --"
   }
 }
