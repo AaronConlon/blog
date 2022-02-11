@@ -10,7 +10,7 @@
     "start": "next start",
     "export": "next export",
     "prepare": "husky install",
-    "ok": "touch a.js"
+    "ok": "node articleImageCopy.js"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
