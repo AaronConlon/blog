@@ -23,7 +23,7 @@ try {
 
       // copy file
       exec(
-        `cp "${relativePath}" "${path.join(__dirname, "articleImgs")}"`,
+        `cp -n "${relativePath}" "${path.join(__dirname, "articleImgs")}"`,
         logError
       );
       // replace local relative path ro current repo relative path
