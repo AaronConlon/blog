@@ -3,7 +3,7 @@ const fs = require("fs");
 const { exec } = require("child_process");
 
 const logError = (err) => {
-  fs.appendFileSync("error.log", `${err.message}\n`, "utf-8");
+  fs.appendFileSync("error.log", `${err}\n`, "utf-8");
 };
 const articleFilePathArr = [...process.argv.slice(2)];
 try {
