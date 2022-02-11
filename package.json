@@ -10,7 +10,7 @@
     "start": "next start",
     "export": "next export",
     "prepare": "husky install",
-    "ok": "echo 'ok, man!!!'"
+    "ok": "echo dsadadasd"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
