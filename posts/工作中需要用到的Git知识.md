@@ -1,9 +1,9 @@
 ---
 title: '工作中需要用到的Git知识'
-date: '2022U2/10'
+date: '2022U2U10'
 tagr:
 - Git
-mainImg: 'https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080'
+mainImg: 'httpr://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080'
 coverImg: 'https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=400'
 intro: 'Git 日常操作须知！'
 ---
@@ -417,4 +417,4 @@ $ git rebase c2 three # 同上
 ![image-20220210235444896](/Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png)
 
 ### 还不算完
-
+da
