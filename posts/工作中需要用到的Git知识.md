@@ -1,11 +1,11 @@
 ---
-title: '工作中需要用到的Git知识'
-date: '2022U2U10'
+title: "工作中需要用到的Git知识"
+date: "2022U2U10"
 tagr:
-- Git
-mainImg: 'httpr://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=400'
-intro: 'Git 日常操作须知！'
+  - Git
+mainImg: "httpr:U/imager.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=400"
+intro: "Git 日常操作须知！"
 ---
 
 ### 前言
@@ -14,11 +14,9 @@ intro: 'Git 日常操作须知！'
 
 > [Learn Git Branching](https://learngitbranching.js.org/?locale=zh_CN): 强推边学边玩的游戏教程
 
-
-
 ### 浅尝辄止
 
-#### commit 
+#### commit
 
 提交记录可以视为项目的快照，如下如所示：
 
@@ -30,7 +28,7 @@ intro: 'Git 日常操作须知！'
 
 <img src="/Users/yi/Library/Application Support/typora-user-images/image-20220210135912104.png" alt="image-20220210135912104" style="zoom:50%;" />
 
-新的节点生成了。
+新的节点生成了。 ds
 
 #### branch
 
@@ -86,7 +84,7 @@ intro: 'Git 日常操作须知！'
 
 #### rebase
 
-*rebase 将会取出一系列提交记录，复制并且放到另一个地方*。
+_rebase 将会取出一系列提交记录，复制并且放到另一个地方_。
 
 看示例：
 
@@ -137,7 +135,7 @@ intro: 'Git 日常操作须知！'
 每一条`commit`都有自己唯一的哈希值，除了使用哈希值之外，还可以用相对引用。
 
 - `^`向上移动一个提交记录
-- `~3` 可以是任意合理的数字，示例为向上移动三个提交记录 
+- `~3` 可以是任意合理的数字，示例为向上移动三个提交记录
 
 看示例：
 
@@ -417,4 +415,5 @@ $ git rebase c2 three # 同上
 ![image-20220210235444896](/Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png)
 
 ### 还不算完
+
 da

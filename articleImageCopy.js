@@ -45,6 +45,7 @@ try {
         fileName = relativePath.replace(path.dirname(relativePath), "");
         // logError(`fileName path is: \n${fileName}\n`);
       }
+      logError(`${relativePath}\n${fileName}\n`);
 
       // copy file
       exec(`cp -n "${relativePath}" "${path.join(__dirname, "articleImgs")}"`);
