@@ -17,27 +17,43 @@ const logError = (error, stdout, stderr) => {
 const articleFilePathArr = [...process.argv.slice(2)];
 try {
   articleFilePathArr.forEach((pathStr) => {
-    // fs.appendFileSync("aaa", pathStr, "utf-8");
     let content = fs.readFileSync(path.resolve(pathStr), "utf-8");
     const targetLines = content
       .split("\n")
-      .filter((line) => /^!\[.*?\]\(/.test(line));
-    const replaceKeywordMapArr = [];
+      .filter(
+        (line) => /^!\[.*?\]\(/.test(line) || /img src="\/User.*?"/.test(line)
+      );
+    const replaceKeywordMap = new Map();
     targetLines.forEach((line) => {
       // test
       // logError(`line is:\n${line}\n`);
-      const relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
-      // logError(`relative path is: \n${relativePath}\n`);
-      const fileName = relativePath.replace(path.dirname(relativePath), "");
-      // logError(`fileName path is: \n${fileName}\n`);
+      let relativePath;
+      let fileName;
+      if (line.includes("img src=")) {
+        // 使用了 img 标签的本地截图
+        // relativePath
+        const matchArr = line.match(/src=".*?"/);
+        if (matchArr) {
+          [relativePath] = matchArr;
+          fileName = `/${path.basename(relativePath)}`;
+        } else {
+          return;
+        }
+      } else {
+        relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
+        // logError(`relative path is: \n${relativePath}\n`);
+        fileName = relativePath.replace(path.dirname(relativePath), "");
+        // logError(`fileName path is: \n${fileName}\n`);
+      }
 
       // copy file
       exec(`cp -n "${relativePath}" "${path.join(__dirname, "articleImgs")}"`);
       // replace local relative path ro current repo relative path
       // exec(`sed 's#${relativePath}#../articleImgs${fileName}#g'`, logError);
-      replaceKeywordMapArr.push([relativePath, `../articcleImgs${fileName}`]);
+      const localPath = relativePath.replace(fileName, "");
+      replaceKeywordMap.set(localPath, true);
     });
-    replaceKeywordMapArr.forEach(([source, target]) => {
+    [...replaceKeywordMap.keys()].forEach(([source, target]) => {
       content = content.replace(source, target);
     });
     // save content to file

@@ -1,7 +1,7 @@
 ---
 title: '工作中需要用到的Git知识'
-date: '2022/2/10'
-tags:
+date: '2022U2/10'
+tagr:
 - Git
 mainImg: 'https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080'
 coverImg: 'https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=400'
@@ -218,7 +218,7 @@ intro: 'Git 日常操作须知！'
 
 `git`会选择默认的编辑器去处理顺序。
 
-![image-20220210174950934](../articcleImgs/image-20220210174950934.png)
+![image-20220210174950934](/Users/yi/Library/Application Support/typora-user-images/image-20220210174950934.png)
 
 我们可以删除某些`pick`行，也可以修改行为，更换顺序来处理`rebase`的问题。
 
@@ -282,7 +282,7 @@ $ git rebase caption main
 # 合并分支 main 和 caption
 ```
 
-![image-20220210214641095](../articcleImgs/image-20220210214641095.png)
+![image-20220210214641095](/Users/yi/Library/Application Support/typora-user-images/image-20220210214641095.png)
 
 ##### 场景 3
 
@@ -292,7 +292,7 @@ $ git rebase caption main
 
 > 牢记`cherry-pick`可以将树上的提交记录追加到`HEAD`上来。
 
-![image-20220210215346574](../articcleImgs/image-20220210215346574.png)
+![image-20220210215346574](/Users/yi/Library/Application Support/typora-user-images/image-20220210215346574.png)
 
 现在，我们需要在`newImage`分支节点`C2`上做一些修改，首先让我们切换到`main`上。
 
@@ -309,7 +309,7 @@ $ git cherry-pick C3
 
 现在，我们实现了针对性修改中间节点记录。
 
-![image-20220210215752988](../articcleImgs/image-20220210215752988.png)
+![image-20220210215752988](/Users/yi/Library/Application Support/typora-user-images/image-20220210215752988.png)
 
 #### Tag
 
@@ -317,7 +317,7 @@ $ git cherry-pick C3
 
 让我们为提交记录`C1`创建一个标签`v1`:
 
-![image-20220210224729142](../articcleImgs/image-20220210224729142.png)
+![image-20220210224729142](/Users/yi/Library/Application Support/typora-user-images/image-20220210224729142.png)
 
 执行命令：
 
@@ -325,7 +325,7 @@ $ git cherry-pick C3
 $ git tag v1 C1
 ```
 
-![image-20220210224814517](../articcleImgs/image-20220210224814517.png)
+![image-20220210224814517](/Users/yi/Library/Application Support/typora-user-images/image-20220210224814517.png)
 
 如果我们再想快速切换到具有特殊意义的地方，就可以通过`checkout tagName`快速完成切换。
 
@@ -337,7 +337,7 @@ $ git tag v1 C1
 
 如果我们有这样一个场景：
 
-![image-20220210225857113](../articcleImgs/image-20220210225857113.png)
+![image-20220210225857113](/Users/yi/Library/Application Support/typora-user-images/image-20220210225857113.png)
 
 那么会有以下输入和输出：
 
@@ -352,7 +352,7 @@ $ git describe side
 
 我们为了开发某些功能，每一个功能都创建了单独的分支，现在要将这些分支全部合并到`main`分支上去。
 
-![image-20220210231612410](../articcleImgs/image-20220210231612410.png)
+![image-20220210231612410](/Users/yi/Library/Application Support/typora-user-images/image-20220210231612410.png)
 
 现在，我们有主分支`main`，其他任务分支：
 
@@ -373,7 +373,7 @@ $ git rebase HEAD main # 可以使用 HEAD 代替分支名，这时候 HEAD 总�
 
 看看这个场景：
 
-![image-20220210233314336](../articcleImgs/image-20220210233314336.png)
+![image-20220210233314336](/Users/yi/Library/Application Support/typora-user-images/image-20220210233314336.png)
 
 如果我们执行:`git checkout main^`，那么`HEAD`将会分离到`C1`，如果想分离到`C2`该怎么做？
 
@@ -381,7 +381,7 @@ $ git rebase HEAD main # 可以使用 HEAD 代替分支名，这时候 HEAD 总�
 
 继续看示例：
 
-![image-20220210233534390](../articcleImgs/image-20220210233534390.png)
+![image-20220210233534390](/Users/yi/Library/Application Support/typora-user-images/image-20220210233534390.png)
 
 如果想快速切换到 `C3`，我们可以：
 
@@ -401,7 +401,7 @@ $ git checkout HEAD~^2~2
 
 `one` 需要重新排序并删除 `C5`，`two` 仅需要重排排序，而 `three` 只需要提交一次。
 
-![image-20220210235203491](../articcleImgs/image-20220210235203491.png)
+![image-20220210235203491](/Users/yi/Library/Application Support/typora-user-images/image-20220210235203491.png)
 
 为了实现目的，我们得单独处理这些分支，一步步来：
 
@@ -414,9 +414,7 @@ $ git rebase c2 three # 同上
 
 结果是：
 
-![image-20220210235444896](../articcleImgs/image-20220210235444896.png)
+![image-20220210235444896](/Users/yi/Library/Application Support/typora-user-images/image-20220210235444896.png)
 
 ### 还不算完
 
-dsaddsada  sdadasdadsadasdasddadsd
-dasdasddasdadasd大萨达大dds dsaddasd
