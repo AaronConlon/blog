@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const { exec } = require("child_process");
 
-const articleImgDir = "public/mdImgs";
+const articleImgDir = "mdImgs";
 const logError = (error, stdout, stderr) => {
   if (error) {
     fs.appendFileSync("error.log", `error 7: ${error}\n`, "utf-8");
@@ -15,7 +15,10 @@ const logError = (error, stdout, stderr) => {
   fs.appendFileSync("error.log", `error 14: ${error || stdout}\n`, "utf-8");
 };
 
-if (!fs.existsSync(path.join(__dirname, articleImgDir))) {
+if (!fs.existsSync(path.join(__dirname, "public", articleImgDir))) {
+  fs.mkdirSync(articleImgDir);
+}
+if (!fs.existsSync(path.join(__dirname, "posts", articleImgDir))) {
   fs.mkdirSync(articleImgDir);
 }
 
@@ -45,7 +48,13 @@ try {
         relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
       }
       // copy file
-      exec(`cp -n "${relativePath}" "${path.join(__dirname, articleImgDir)}"`);
+      exec(
+        `cp -n "${relativePath}" "${path.join(
+          __dirname,
+          "public",
+          articleImgDir
+        )}"`
+      );
       exec(
         `cp -n "${relativePath}" "${path.join(
           __dirname,
