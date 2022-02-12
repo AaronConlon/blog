@@ -46,17 +46,17 @@ try {
         fileName = relativePath.replace(path.dirname(relativePath), "");
         // logError(`fileName path is: \n${fileName}\n`);
       }
-      logError(`${relativePath}\n${fileName}\n`);
+      logError(`49:${relativePath}\n${fileName}\n`);
 
       // copy file
       exec(`cp -n "${relativePath}" "${path.join(__dirname, "articleImgs")}"`);
       // replace local relative path ro current repo relative path
       // exec(`sed 's#${relativePath}#../articleImgs${fileName}#g'`, logError);
-      const localPath = relativePath.replace(fileName, "");
+      const localPath = path.dirname(relativePath);
       replaceKeywordMap.set(localPath, true);
     });
-    [...replaceKeywordMap.keys()].forEach(([source, target]) => {
-      content = content.replace(source, target);
+    [...replaceKeywordMap.keys()].forEach((localPath) => {
+      content = content.replace(localPath, "../articleImgs");
     });
     // save content to file
     fs.writeFileSync(path.resolve(pathStr), content, "utf-8");
