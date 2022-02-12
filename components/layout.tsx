@@ -29,6 +29,10 @@ export default function Layout({ children }: Props) {
           rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
+        />
       </Head>
       <Box className={styles.container}>
         <header>
@@ -52,6 +56,14 @@ export default function Layout({ children }: Props) {
             </Heading>
           </Box>
         </header>
+        <a
+          className="github-fork-ribbon"
+          href="https://github.com/youyiqin/blog"
+          data-ribbon="Fork me on GitHub"
+          title="Fork me on GitHub"
+        >
+          Fork me on GitHub
+        </a>
         <main>{children}</main>
         <Divider />
         <Flex
