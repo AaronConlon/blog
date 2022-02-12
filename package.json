@@ -10,7 +10,7 @@
     "start": "next start",
     "export": "next export",
     "prepare": "husky install",
-    "ok": "node articleImageCopy.js"
+    "mdImgCheck": "node articleImageCopy.js"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
@@ -49,6 +49,6 @@
     "next-sitemap": "^1.6.203"
   },
   "lint-staged": {
-    "*.md": "npm run ok --"
+    "*.md": "npm run mdImgCheck --"
   }
 }
