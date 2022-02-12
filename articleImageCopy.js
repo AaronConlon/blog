@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const { exec } = require("child_process");
 
+const articleImgDir = "articleImgs";
 const logError = (error, stdout, stderr) => {
   if (error) {
     fs.appendFileSync("error.log", `error 7: ${error}\n`, "utf-8");
@@ -14,6 +15,10 @@ const logError = (error, stdout, stderr) => {
   fs.appendFileSync("error.log", `error 14: ${error || stdout}\n`, "utf-8");
 };
 
+if (!fs.existsSync(path.join(__dirname, articleImgDir))) {
+  fs.mkdirSync(articleImgDir);
+}
+
 const articleFilePathArr = [...process.argv.slice(2)];
 try {
   articleFilePathArr.forEach((pathStr) => {
@@ -25,10 +30,7 @@ try {
       );
     const replaceKeywordMap = new Map();
     targetLines.forEach((line) => {
-      // test
-      // logError(`line is:\n${line}\n`);
       let relativePath;
-      // let fileName;
       if (line.includes("img src=")) {
         // 使用了 img 标签的本地截图
         // relativePath
@@ -36,28 +38,20 @@ try {
         if (matchArr) {
           [relativePath] = matchArr;
           relativePath = relativePath.replace(/(src=|")/g, "");
-          // fileName = `/${path.basename(relativePath)}`;
         } else {
           return;
         }
       } else {
         relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
-        // logError(`relative path is: \n${relativePath}\n`);
-        // fileName = relativePath.replace(path.dirname(relativePath), "");
-        // logError(`fileName path is: \n${fileName}\n`);
       }
-      // logError(`49:${relativePath}\n${fileName}\n`);
-
       // copy file
-      exec(`cp -n "${relativePath}" "${path.join(__dirname, "articleImgs")}"`);
+      exec(`cp -n "${relativePath}" "${path.join(__dirname, articleImgDir)}"`);
       // replace local relative path ro current repo relative path
-      // exec(`sed 's#${relativePath}#../articleImgs${fileName}#g'`, logError);
       const localPath = path.dirname(relativePath);
       replaceKeywordMap.set(localPath, true);
     });
     [...replaceKeywordMap.keys()].forEach((localPath) => {
-      // logError(`59: ${localPath}`);
-      content = content.replaceAll(localPath, "../articleImgs");
+      content = content.replaceAll(localPath, `../${articleImgDir}`);
     });
     // save content to file
     fs.writeFileSync(path.resolve(pathStr), content, "utf-8");
