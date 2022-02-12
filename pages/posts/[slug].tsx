@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/no-danger */
 import Head from "next/head";
+
 import { GetStaticProps, GetStaticPaths } from "next";
 import Markdown from "markdown-to-jsx";
 // eslint-disable-next-line
@@ -14,6 +15,8 @@ import sd from "../../styles/Code.module.sass";
 import Code from "../../components/Code.tsx";
 // @ts-ignore
 import CustomBlockquote from "../../components/CustomBlockquote.tsx";
+// @ts-ignore
+import CustomImg from "../../components/CustomImg.tsx";
 
 const assertPrefix = "/blog";
 export default function Post({
@@ -107,6 +110,9 @@ export default function Post({
                 },
                 blockquote: {
                   component: CustomBlockquote,
+                },
+                img: {
+                  component: CustomImg,
                 },
               },
             }}

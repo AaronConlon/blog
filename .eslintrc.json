@@ -31,7 +31,8 @@
         "exports": "ignore",
         "functions": "ignore"
       }
-    ]
+    ],
+    "object-curly-newline": "off"
   },
   "settings": {
     "import/resolver": {
