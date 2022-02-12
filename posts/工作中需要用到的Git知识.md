@@ -26,7 +26,7 @@ intro: "Git 日常操作须知！"
 
 增加了新的内容，再次使用`git commit`任务提交新内容之后：
 
-<img src="/Users/yi/Library/Application Support/typora-user-images/image-20220210135912104.png" alt="image-20220210135912104" style="zoom:50%;" />
+<img src="../articleImgs/image-20220210135912104.png" alt="image-20220210135912104" style="zoom:50%;" />
 
 新的节点生成了。
 
@@ -416,4 +416,4 @@ $ git rebase c2 three # 同上
 
 ### 还不算完
 
-dadasdasdadad
+dadasdasdadadsds

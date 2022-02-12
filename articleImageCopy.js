@@ -28,7 +28,7 @@ try {
       // test
       // logError(`line is:\n${line}\n`);
       let relativePath;
-      let fileName;
+      // let fileName;
       if (line.includes("img src=")) {
         // 使用了 img 标签的本地截图
         // relativePath
@@ -36,17 +36,17 @@ try {
         if (matchArr) {
           [relativePath] = matchArr;
           relativePath = relativePath.replace(/(src=|")/g, "");
-          fileName = `/${path.basename(relativePath)}`;
+          // fileName = `/${path.basename(relativePath)}`;
         } else {
           return;
         }
       } else {
         relativePath = line.replace(/^.*\]\(/, "").replace(/\)$/, "");
         // logError(`relative path is: \n${relativePath}\n`);
-        fileName = relativePath.replace(path.dirname(relativePath), "");
+        // fileName = relativePath.replace(path.dirname(relativePath), "");
         // logError(`fileName path is: \n${fileName}\n`);
       }
-      logError(`49:${relativePath}\n${fileName}\n`);
+      // logError(`49:${relativePath}\n${fileName}\n`);
 
       // copy file
       exec(`cp -n "${relativePath}" "${path.join(__dirname, "articleImgs")}"`);
@@ -56,6 +56,7 @@ try {
       replaceKeywordMap.set(localPath, true);
     });
     [...replaceKeywordMap.keys()].forEach((localPath) => {
+      logError(`59: ${localPath}`);
       content = content.replace(localPath, "../articleImgs");
     });
     // save content to file
