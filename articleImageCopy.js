@@ -63,6 +63,6 @@ try {
     fs.writeFileSync(path.resolve(pathStr), content, "utf-8");
   });
 } catch (error) {
-  logError(`${error}\n`);
-  // throw new Error(error);
+  logError(`66: ${error}\n`);
+  throw new Error(error);
 }

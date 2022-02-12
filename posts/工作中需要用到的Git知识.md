@@ -29,12 +29,11 @@ intro: "Git 日常操作须知！"
 <img src="../articleImgs/image-20220210135912104.png" alt="image-20220210135912104" style="zoom:50%;" />
 
 新的节点生成了。
-
 #### branch
 
 开发新的需求时，创建新的分支去提交此需求的代码是一个非常好的办法。继续看示例，如下是默认情况：
 
-<img src="/Users/yi/Library/Application Support/typora-user-images/image-20220210140153996.png" alt="image-20220210140153996" style="zoom:50%;" />
+<img src="../articleImgs/image-20220210140153996.png" alt="image-20220210140153996" style="zoom:50%;" />
 
 现在，我们要新增一个功能，为此我们想创建一个名为`newImage`的新分支：
 
@@ -416,4 +415,4 @@ $ git rebase c2 three # 同上
 
 ### 还不算完
 
-dadasdasdadadsds
+dadasdasdadadsdsdasdad
