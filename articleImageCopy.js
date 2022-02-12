@@ -35,6 +35,7 @@ try {
         const matchArr = line.match(/src=".*?"/);
         if (matchArr) {
           [relativePath] = matchArr;
+          relativePath = relativePath.replace(/(src=|")/g, "");
           fileName = `/${path.basename(relativePath)}`;
         } else {
           return;

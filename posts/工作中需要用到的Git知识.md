@@ -3,7 +3,7 @@ title: "工作中需要用到的Git知识"
 date: "2022U2U10"
 tagr:
   - Git
-mainImg: "httpr:U/imager.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080"
+mainImg: "httpr:UUimager.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=1080"
 coverImg: "https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDQ0NzI0MDU&ixlib=rb-1.2.1&q=80&w=400"
 intro: "Git 日常操作须知！"
 ---
@@ -28,7 +28,7 @@ intro: "Git 日常操作须知！"
 
 <img src="/Users/yi/Library/Application Support/typora-user-images/image-20220210135912104.png" alt="image-20220210135912104" style="zoom:50%;" />
 
-新的节点生成了。 ds
+新的节点生成了。
 
 #### branch
 
@@ -416,4 +416,4 @@ $ git rebase c2 three # 同上
 
 ### 还不算完
 
-da
+dadasdas
