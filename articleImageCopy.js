@@ -28,7 +28,7 @@ try {
       );
       // replace local relative path ro current repo relative path
       exec(
-        `sed -i '' 's#${relativePath}#../articleImgs${fileName}#g'`,
+        `sed -i '' -e 's#${relativePath}#../articleImgs${fileName}#g'`,
         logError
       );
     });
