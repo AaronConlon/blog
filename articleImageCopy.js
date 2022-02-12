@@ -56,8 +56,8 @@ try {
       replaceKeywordMap.set(localPath, true);
     });
     [...replaceKeywordMap.keys()].forEach((localPath) => {
-      logError(`59: ${localPath}`);
-      content = content.replace(localPath, "../articleImgs");
+      // logError(`59: ${localPath}`);
+      content = content.replaceAll(localPath, "../articleImgs");
     });
     // save content to file
     fs.writeFileSync(path.resolve(pathStr), content, "utf-8");
