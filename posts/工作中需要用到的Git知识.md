@@ -525,3 +525,116 @@ $ git push
 
 如果我们直接一把梭，强行`push`，那么本地的分支就会卡住，我们需要新建一个分支`feature`，推送到服务器，并且`reset`本地的`main`分支和远程服务器保持一致。
 
+继续看示例：
+
+<img src="mdImgs/image-20220213145918251.png" alt="image-20220213145918251" style="zoom:67%;" />
+
+现在，本地有所更新，且远程仓库的`main`分支是被锁定的。
+
+为了将本地的内容提交一个合并请求，需要单独将本地当前内容用一个分支去处理。
+
+```bash
+# 先创建并且切换到 feature 分支上
+$ git checkout -b feature
+# 推送此分支
+$ git push origin feature
+$ git switch main
+# 恢复到 origin/main 分支
+$ git reset main^
+```
+
+
+
+### 合并分支
+
+在大型项目中，开发人员通常会在`main`上分出来的任务分支上开发，完成后做一次集成。
+
+继续看场景：
+
+![image-20220213150626046](mdImgs/image-20220213150626046.png)
+
+现在，我们需要逐一将本地特征分支上传到远程仓库，并且完成合并同步。
+
+```bash
+# 首先，将远程数据 fetch 下来
+$ git fetch
+# 将 side1 分支 rebase 到当前远程主分支后面
+$ git rebase o/main side1
+# 逐一 rebase 分支和本地 main 分支
+$ git rebase side1 side2
+$ git rebase side2 side3
+$ git rebase side3 main
+# 推送本地成果到远程
+$ git push
+```
+
+![image-20220213155038688](mdImgs/image-20220213155038688.png)
+
+除了使用`rebase`来解决这个问题，还可以用`merge`去合并。
+
+> merge 和 rebase 都可以，但是 rebase 构建的关系图谱更简洁，而 merge 则可以保存分支之间的记录独立性，没有最佳的方式，只有最适合你的方式。
+
+```bash
+$ git fetch
+$ git switch main
+$ git pull
+$ git merge side1
+$ git merge side2
+$ git merge side3
+$ git push
+```
+
+![image-20220213154831567](mdImgs/image-20220213154831567.png)
+
+> 笔者更喜欢显式的 merge 方案
+
+### push 参数
+
+`push`命令的参数格式如下：`git push remote place `!
+
+看一条命令：`git push origin main`!
+
+这条命令或许会让你感到熟悉，其意义是切到本地的`main`分支，获取提交。再到远程仓库`origin`中找到`main`分支，将远程仓库中没有的提交记录传上去。
+
+![image-20220213161534631](mdImgs/image-20220213161534631.png)
+
+此时，如果我们需要将本地的两个分支分别推送到远程仓库，则可以:
+
+```bash
+$ git push origin main
+$ git push origin foo
+```
+
+![image-20220213161523557](mdImgs/image-20220213161523557.png)
+
+当`place`参数为`main`时，我们同时指定了提交记录的来源和去向。
+
+### Q&A
+
+- 如何方便地添加`.gitignore`？
+  - [gitignore.io - 为你的项目创建必要的 .gitignore 文件](https://www.toptal.com/developers/gitignore)
+  - 手动编辑，更新一些独特的配置
+- 本地已经存在的项目如何和远程仓库关联？
+  - `git remote add origin <your-repo-git-url>`
+- 查看提交的内容？
+  - `git show <hash_id>`
+- 查看提交的日志和 ID 列表？
+  - `git reflog`
+- 修改刚刚提交的`commit message`？
+  - `git commit --amend -m 'new log'`
+- 想把当前工作区的内容重置到上一个记录版本？
+  - `git reset --hard HEAD`
+  - `git checkout --targetFileName`
+- 撤销被添加到暂存区的文件？
+  - `git reset --mixed HEAD`
+- 如何撤销已经提交到远程主机的文件？
+  - `git revert <commit_id>`
+  - `git revert HEAD`
+- 如何在不 commit 的情况下保存现场？
+  - `git stash` 保存，`git stash pop`恢复
+
+
+
+### 最后
+
+这玩意没这么简单，想增强应用能力多吃点亏吧！（对自己说的
