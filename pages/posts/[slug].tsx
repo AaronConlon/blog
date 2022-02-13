@@ -17,6 +17,7 @@ import Code from "../../components/Code.tsx";
 import CustomBlockquote from "../../components/CustomBlockquote.tsx";
 // @ts-ignore
 import CustomImg from "../../components/CustomImg.tsx";
+// @ts-ignore
 
 const assertPrefix = "/blog";
 export default function Post({
@@ -53,8 +54,10 @@ export default function Post({
             gtag('config', 'G-J0BNBT8YXG');`,
           }}
         />
+        <style />
       </Head>
       <Box>
+        {/* <ArticleProgressStatus /> */}
         <Box width="100%" margin="0 auto" paddingBottom="2rem" maxW="960px">
           <Image src={post.mainImg} alt="" width="100%" />
         </Box>

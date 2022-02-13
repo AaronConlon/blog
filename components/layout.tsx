@@ -17,7 +17,7 @@ type Props = {
 };
 export default function Layout({ children }: Props) {
   return (
-    <div>
+    <Box>
       <Head>
         <title>妙才的博客</title>
         <meta
@@ -116,6 +116,6 @@ export default function Layout({ children }: Props) {
           </Box>
         </Flex>
       </Box>
-    </div>
+    </Box>
   );
 }

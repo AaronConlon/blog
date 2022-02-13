@@ -10,6 +10,10 @@ a:hover {
   color: purple;
 }
 
+p {
+  color: rgba(51, 51, 51, 0.8);
+}
+
 hr {
   border-color: #e2e8f0 !important;
   padding-top: 2rem;
@@ -19,6 +23,25 @@ hr {
   p {
     font-size: 14px;
   }
+}
+
+/* progress status */
+body {
+  /* background-image: linear-gradient(to left down, #ffcc00 50%, #eee 50%);
+  background-repeat: no-repeat; */
+  background-image: linear-gradient(to right top, #4fd487 50%,#eee 50%);
+  background-repeat: no-repeat;
+  background-size: 100% calc(100% - 100vh + 5px);
+}
+body::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  top: 5px;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: -1
 }
 
 /* Dracula Theme v1.2.5
