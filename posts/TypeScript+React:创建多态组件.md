@@ -16,7 +16,9 @@ intro: '值得你花一分钟阅读的短文，简介如何创建多态组件。
 
 > [Use Typescript to Build React Polymorphic Components - YouTube](https://www.youtube.com/watch?v=2QmsueWGL1c&list=PLMLZt4pr7Aq5BiAXhNXexzH6UYLtGKhnr&index=6)
 
-今天，在这里把学到的东西分享给大家。
+这个视频考虑的还是比较少的，于是我又找了一篇文章去学习，链接我放在末尾参考处。
+
+👌🏻！今天，在这里把学到的东西分享给大家。
 
 ### 抛砖引玉
 
@@ -121,3 +123,23 @@ export const Text = <C extends React.ElementType = 'p'>({
 
 这个`as`就像是一个参数，我们灵活地利用了`TypeScript`的泛型来保证类型正确。
 
+但是，下面这部分可能会让`TypeScript`掌握得不太好的朋友有点头大(没错，正是在下~）
+
+> 遇到不会的，去学习就行了！
+
+```tsx
+type TextProps<C extends React.ElementType> = Props<C> &
+	Omit<React.ComponentPropsWithoutRef<C>, keyof Props<C>>
+```
+
+让我们逐一拆解这段代码！
+
+首先，泛型`C`继承了`React.ElementType`让泛型具备了它的属性类型，但是这是有条件的。
+
+注意`Omit`在`TypeScript`中的语法形式为：`Omit<Type, Keys>`，其从 Type 中选择所有的属性类型，再排除`Keys`指定的类型。
+
+此外，`React.ComponentPropsWithoutRef<C>`将得到泛型`C`上的所有属性，再排除掉
+
+### 参考
+
+- [Polymorphic React Components in TypeScript | Ben Ilegbodu](https://www.benmvp.com/blog/polymorphic-react-components-typescript/)
