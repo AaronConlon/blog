@@ -1,0 +1,16 @@
+---
+title: 'TypeScript-上卷'
+date: '2022/2/26'
+tags:
+- 
+mainImg: 'https://images.unsplash.com/photo-1592609931095-54a2168ae893?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDU4NzEzMDI&ixlib=rb-1.2.1&q=80&w=1080'
+coverImg: 'https://images.unsplash.com/photo-1592609931095-54a2168ae893?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDU4NzEzMDI&ixlib=rb-1.2.1&q=80&w=400'
+intro: '工作中日常用到 TypeScript，故在此学习并记录备忘。此为上卷，亦有中下两卷。'
+---
+
+### *.d.ts*
+
+TypeScript Declaration File: 用于存放类型声明，便于编辑器的智能提示。
+
+> 类型声明具有一个原则：`不冲突即合法`
+
