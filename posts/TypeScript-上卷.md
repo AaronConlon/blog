@@ -14,5 +14,55 @@ TypeScript Declaration File: 用于存放类型声明，便于编辑器的智能
 
 > 类型声明具有一个原则：`不冲突即合法`
 
-不同的声明文件有所区别
+不同的声明文件有所区别，诸如`Jquery`之类的库可以通过`global`的方式引用，也可以通过模块的方式引用。
+
+不同的场景，可以将类库声明分为以下几类：
+
+- global 暴露为全局变量的类库
+- module 通过加载机制引用的类库
+- plugin 会影响其他类库功能的插件
+
+基于这些场景，最佳实践是将声明文件分为以下几种并统一归类：
+
+- global.d.ts: 全局类库声明
+- module-function.d.ts: 暴露为函数的 module 类库声明
+- module-class.d.ts: 暴露出一个 class 的类库声明
+- module.d.ts: 一般的类库（暴露的内容既不是函数也不是 class）
+- module-plugin.d.ts: 模块插件类库声明
+- global-plugin.d.ts: 全局插件
+- global-modifying-module.d.ts: 适用于 module 形式的全局插件类库
+
+为不同功能或类型的类库按以上分类方式进行分类声明，有利于编写整洁的代码和提升可读性。
+
+##### 语法格式
+
+接下来看一下各种类型声明的语法格式：
+
+首先是全局变量声明：
+
+```typescript
+declare var foo: number;
+```
+
+如此便声明了一个全局变量`foo`，编译器就会在遇到这个变量的时候得到其类型声明，就不会出现错误提示提及此变量未定义。
+
+> 当然也可以用`declare let`或`delare fconst`来声明只读和块级作用域
+
+其次，来看看全局函数声明和全局对象声明：
+
+```typescript
+// 函数声明
+declare function greet(name: string): void;
+// 对象声明
+declare namespace myLib {
+  function makeGreeting(s: string): string;
+  const age: number;
+}
+```
+
+函数声明还很好理解，全局对象声明这里有一个`namespace`命名空间关键字，在`TypeScript Handbook`里是这么形容的：
+
+> 命名空间是位于全局命名空间下的一个普通的带有名字的JavaScript对象。
+
+在声明过后，就可以在全局直接使用`myLib.age`。
 
