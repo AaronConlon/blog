@@ -304,3 +304,72 @@ interface Square extends Shape, PenStroke {
 
 #### 类
 
+> ES3 不支持 getter/setter
+>
+> 只有`getter`，没有`setter`则推断为`readonly`
+
+示例：
+
+```typescript
+class Employee {
+  // 公有属性，默认
+  public like: string;
+  // 私有属性
+  private _fullName: string;
+  // 静态属性
+  static ok: boolean;
+  // 访问器
+  get fullName(): string {
+    return this._fullName;
+  }
+  set fullName(name: string) {
+    this._fullName = name;
+  }
+}
+// 接口继承类
+interface More extends Employee {
+  age: number;
+}
+// 继承
+class B {
+  // 抽象方法，子类继承则必须实现
+  abstract makeSound(): void;
+}
+class A extends B {
+  makeSound() {}
+}
+```
+
+#### 函数
+
+函数类型的组成：
+
+- 参数
+- 返回值
+
+示例：
+
+```typescript
+// 具名函数
+function add(x: number, y: number): number {
+  return x + y;
+}
+// 匿名函数
+const add = function(x:number,y:number):number {
+  return x + y;
+}
+```
+
+有时候，我们想复用特定函数的类型，可以使用类型描述：
+
+`(x: number, y: number) => number`即函数类型描述
+
+```typescript
+const add: (x: number, y: number) => number = function(x: number, y: number): number {
+  return x + y;
+}
+```
+
+> 箭头（`=>`）左侧是参数及其类型，右侧是返回值类型
+
+参数有些是可选的，可选参数只需要在参数名后加`?`号，可选参数必须在必选参数之后，默认参数则不必在乎顺序，但是在调用时需要传`undefined`作为值。
