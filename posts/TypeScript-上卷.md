@@ -224,3 +224,83 @@ let value: unknown; // 未知类型，更安全更严格的 any，但却不可�
 - `never`可以用做类型保护，例如声明`declare const name: never`可以避免隐式访问`window.name`
 
 > 开启`--strictNullChecks`时，`null/undefined`只可以赋值给`void`和各自对应的类型
+
+#### 类型断言
+
+类型断言可以理解成编译时的强制类型转换，意在告诉编译器：“我你比懂类型，这就是个`type`”。
+
+类型断言具有两种类型：
+
+- `variable as type`: 通用
+- `<type>variable`: jsx 中有语法冲突，故一般用前者
+
+#### Interface
+
+`TypeScript`中的接口不必显示实现，而只表示一种类型的约束。
+
+```typescript
+interface Demo {
+  // 索引签名，适用于无法确定属性名的场合
+  [x: string]: string
+  // 只读属性
+  readonly x: number;
+  // 只读数组
+  list: ReadonlyArray<number>;
+  // 只读索引签名
+  readonly [propName: string]: string
+}
+```
+
+接口还可以用来表示函数类型：
+
+```typescript
+interface SearchFc {
+  (source: string, subStr: string): string;
+}
+let mySearchFc = (source: string, subStr: string) => {
+  let res = source.search(subStr);
+  return res.toString();
+}
+```
+
+> 函数参数检查会按顺序检查，但是不必严格限制参数名
+
+此外，接口和类之间还有`implements`的关系：
+
+```typescript
+interface ClockInterface {
+  currentTime: Date;
+  setTime: (d: Date) => void
+}
+class Clock implements ClockInterface {
+  currentTime: Date;
+  setTime(d: Date) {
+    this.currentTime = d;
+  }
+  constructor(h: number, m: number) {}
+}
+```
+
+> 接口即协议，接口即契约
+
+接口可以`继承`：
+
+```typescript
+// 单继承
+interface Shape {
+  color: string;
+}
+interface Square extends Shape {
+  sideLength: number;
+}
+// 多继承
+interface PenStroke {
+  penWidth: number;
+}
+interface Square extends Shape, PenStroke {
+  sideLength: number;
+}
+```
+
+#### 类
+
