@@ -373,3 +373,32 @@ const add: (x: number, y: number) => number = function(x: number, y: number): nu
 > 箭头（`=>`）左侧是参数及其类型，右侧是返回值类型
 
 参数有些是可选的，可选参数只需要在参数名后加`?`号，可选参数必须在必选参数之后，默认参数则不必在乎顺序，但是在调用时需要传`undefined`作为值。
+
+### 泛型
+
+#### 基础
+
+场景如下：
+
+```typescript
+function demo(arg) {
+  return arg;
+}
+```
+
+泛型相当于具名`any`!
+
+```typescript
+function demo<T>(arg: T): T {
+  return arg;
+}
+```
+
+用尖括号声明泛型，在函数参数和返回值的地方就可以用此泛型参数。
+
+上述示例表达了函数传值和返回值类型的关系：`T => T`。
+
+> 变量分为普通变量和类型变量，普通变量代表值，传递值。
+>
+> 类型变量则`搬运`类型信息。
+
