@@ -402,3 +402,67 @@ function demo<T>(arg: T): T {
 >
 > 类型变量则`搬运`类型信息。
 
+#### 类型描述
+
+泛型函数的类型描述和普通类型类似：
+
+```typescript
+// 普通函数
+const demo: (arg: string) => string = function(arg: string): string {
+  return arg;
+}
+
+// 泛型函数
+const demo: <T>(arg: T) => T = function<T>(arg: T): T {
+  return arg;
+}
+```
+
+> 在实际开发中，依靠类型推断即可，不必要写如此多的显示类型声明
+
+此外，还可以写成对象字面量的形式去声明类型（不够简洁）
+
+```typescript
+// 泛型函数
+let myIdentity: { <T>(arg: T): T };
+// 普通函数
+let myIdentity: { (arg: string): string };
+```
+
+#### 泛型接口
+
+带类型参数的接口即泛型接口。
+
+```typescript
+interface GenericIdentityFn<T> {
+  isArr(...args: T[]): T[];
+  id(arg: T): T;interface GenericIdentity<T> {
+  id(arg: T): T;
+  idArray(...args: T[]): T[];
+}
+let id: GenericIdentity<string> = {
+    id: (s: string) => s,
+    // 报错 Types of parameters 's' and 'args' are incompatible.
+    idArray: (...s: number[]) => s,
+  };
+}
+```
+
+#### 泛型类
+
+```typescript
+class GenericNumber<T> {
+  zeroValue: T;
+  add:(x: T, y: T): T;
+}
+```
+
+`静态成员无法使用泛型！`
+
+```typescript
+class GenericNumber<T> {
+  // 报错 Static members cannot reference class type parameters.
+  static zeroValue: T;
+}
+```
+
