@@ -466,3 +466,113 @@ class GenericNumber<T> {
 }
 ```
 
+#### 泛型的约束
+
+泛型需要约束，泛型的约束也有很多方式。
+
+较为常见的是通过`extends`继承接口去限制泛型。
+
+```typescript
+interface Lengthwise {
+  length: number;
+}
+function logginIdentity<T extends Lengthwise>(arg: T):T {
+  console.log(arg.length);
+  return arg;
+}
+```
+
+另外，还可以在泛型约束中使用类型参数，即用一个类型参数的特征去约束另一个类型参数。
+
+```typescript
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
+}
+
+let x = { a: 1, b: 2, c: 3, d: 4 };
+
+getProperty(x, "a"); // okay
+getProperty(x, "m"); // error: Argument of type 'm' isn't assignable to 'a' | 'b' | 'c' | 'd'.
+```
+
+> 泛型能作用于一系列类型，是具体类型之上的`抽象`
+
+### 枚举
+
+常用枚举可以按值的类型分为三种：
+
+- 数值枚举
+- 字符串枚举
+- 异构枚举
+
+> 此外还有特殊的联合枚举、常量枚举、环境枚举
+
+#### 数值枚举
+
+示例如下：
+
+> initializer 机制适合在不关心值的情况下
+
+```typescript
+enum Direction {
+  up, // default is 0
+  down,
+  left,
+  right,
+}
+// 指定开始值然后自动递增
+enum Direction {
+  up = 1, // default is 1
+  down,
+  left,
+  right, // 4
+}
+```
+
+此时，可以通过反向映射机制取到常量名：
+
+> 反向映射仅限于数值枚举
+
+```typescript
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+// 正向 按名取值
+console.log(Direction.Down);  // 1
+// 反向 按值取名
+console.log(Direction[1]);    // 'Down'
+```
+
+#### 字符串枚举
+
+字符串枚举必须要求成员具有显式的初始化值，并且不支持反向映射，其优势在于保留了值的含义。
+
+```typescript
+enum Direction {
+  Up = "UP",
+  Down = "DOWN",
+  Left = "LEFT",
+  Right = "RIGHT",
+}
+```
+
+#### 异构枚举
+
+枚举值中同时包含数值和字符串，但我们很少这样做。
+
+```typescript
+enum mixEnum {
+  S = 'S',
+  A = 1,
+  B,
+  C = 'C'
+}
+```
+
+其他几种枚举，工作中接触不多而网上说明也足够，故不再赘述。
+
+### 类型推断
+
