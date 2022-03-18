@@ -576,3 +576,85 @@ enum mixEnum {
 
 ### 类型推断
 
+#### 赋值推断
+
+编译器提供了强大的类型推断支持，帮了我们大忙。编译器可以根据目标值来确定类型，具体如下：
+
+- 变量或成员初始值
+- 参数默认值
+- 函数返回值
+
+还有以下一些隐式的类型推断示例：
+
+```typescript
+let x = [1, null];
+```
+
+数组元素中包含`number`和`null`，而`null/undefined/never`是其他任何类型的子类型，可以赋值给其他类型变量。
+
+因此，`x`被推断为`number[]`。
+
+> 要确定数组类型的话，先要确定每个元素的类型，再考虑其兼容关系，最终确定一个最“宽”的类型（包容数组中所有其它类型，称为best common type）作为数组类型
+>
+> ------黯羽轻扬
+
+#### 上下文推断
+
+根据已知的类型，推断变量的类型。
+
+```typescript
+window.onmousedown = function(mouseEvent) {}
+```
+
+右侧匿名函数作为`mousedown`事件处理器，其参数类型按`DOM API`的规范来推断即可得出类型，如果脱离了事件处理器上下文，则参数是`any`类型。
+
+还有一些场景会根据上下文进行类型推断：
+
+- 类型断言
+- return 语句
+- 对象成员和数组字面量
+
+> 补充一下子类型兼容性图
+
+![](mdImgs/ts-subtype-1024x438.jpg)
+
+如上所示：
+
+- `any`兼容所有类型。
+
+- `never`不兼容任何类型。
+- `void`兼容`undefined`和`null`
+
+> 我们说的兼容，指的是被兼容的类型可以赋值给兼容者类型的变量。
+
+```typescript
+let x: any;
+let y: number;
+let z: null;
+
+// Any兼容Number
+x = y;
+// Number兼容Null
+y = z;
+// Null不兼容Number
+// 错误 Type 'number' is not assignable to type 'null'.
+z = y;
+```
+
+但是，有些时候类型推断并不如人意。
+
+```typescript
+enum Status { Ready, Waiting };
+enum Color { Red, Blue, Green };
+
+let s = Status.Ready;
+// Type 'Color.Green' is not assignable to type 'Status'.
+s = Color.Green;  // Error 不同枚举类型的枚举值不兼容
+```
+
+但是，如果你认为数值枚举和数字类型不兼容，那就错了。
+
+而字符串枚举却又不兼容字符串类型。
+
+我们致力于写清晰的代码，因此不推荐过渡依赖于类型上下文推断。
+
