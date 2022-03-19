@@ -10,6 +10,8 @@ intro: '工作中日常用到 TypeScript，故在此学习并记录备忘。此�
 
 ### *.d.ts*
 
+> [TypeScript | 黯羽轻扬](http://www.ayqy.net/blog/category/typescript/)
+
 #### 总领
 
 TypeScript Declaration File: 用于存放类型声明，便于编辑器的智能提示。
@@ -302,6 +304,19 @@ interface Square extends Shape, PenStroke {
 }
 ```
 
+此外，还支持`!后缀类型断言`：
+
+```typescript
+let x: string | undefined | null;
+x!.toUpperCase();
+// 相当于
+(<string>x).toUpperCase();
+// 或者
+(x as string).toUpperCase();
+// Object is possibly 'null' or 'undefined'.
+x.toUpperCase();
+```
+
 #### 类
 
 > ES3 不支持 getter/setter
@@ -373,6 +388,8 @@ const add: (x: number, y: number) => number = function(x: number, y: number): nu
 > 箭头（`=>`）左侧是参数及其类型，右侧是返回值类型
 
 参数有些是可选的，可选参数只需要在参数名后加`?`号，可选参数必须在必选参数之后，默认参数则不必在乎顺序，但是在调用时需要传`undefined`作为值。
+
+
 
 ### 泛型
 
@@ -616,7 +633,7 @@ window.onmousedown = function(mouseEvent) {}
 
 > 补充一下子类型兼容性图
 
-![](mdImgs/ts-subtype-1024x438.jpg)
+![](mdImgs/ts-subtype-1024x438.png)
 
 如上所示：
 
@@ -625,7 +642,7 @@ window.onmousedown = function(mouseEvent) {}
 - `never`不兼容任何类型。
 - `void`兼容`undefined`和`null`
 
-> 我们说的兼容，指的是被兼容的类型可以赋值给兼容者类型的变量。
+> 我们说的兼容，指的是被兼容的类型可以赋值给兼容者类型的变量。如果不希望如此，则需要开启`--strictNullChecks`选项来严格限制。
 
 ```typescript
 let x: any;
@@ -657,4 +674,350 @@ s = Color.Green;  // Error 不同枚举类型的枚举值不兼容
 而字符串枚举却又不兼容字符串类型。
 
 我们致力于写清晰的代码，因此不推荐过渡依赖于类型上下文推断。
+
+### 组合类型
+
+#### 交叉类型
+
+```typescript
+interface A {
+  a: string;
+}
+interface B {
+  b: number
+}
+
+let x: A & B;
+// 都是合法的
+x.a;
+x.b;
+```
+
+#### 联合类型
+
+```typescript
+// 示例 1
+interface DateConstructor {
+  new (value: number | string | Date): Date;
+}
+// 示例 2
+interface A {
+  id: 'a';
+  a: string;
+}
+interface B {
+  id: 'b';
+  b: number
+}
+
+let x: A | B;
+// 只能访问公共成员
+x.id; // ok
+// 错误 Property 'a' does not exist on type 'A | B'.
+x.a;
+// 错误 Property 'b' does not exist on type 'A | B'.
+x.b;
+```
+
+正因为想要访问某些可能存在的成员，有时候需要用`类型保护`机制。
+
+举个例子：
+
+```typescript
+let x: number | string;
+if (typeof x === 'string') {
+  // 正确 typeof类型保护，自动缩窄到string
+  x.toUpperCase();
+}
+```
+
+使用类型判断去确定其拥有的方法即可，此之谓类型缩紧。与`typeof`相对的，也常用`instanceof`来检查实例和类的所属关系。
+
+### 类型别名
+
+`type`关键字可以为现有类型创建一个具有更好的可读性的`别名`。
+
+举个例子:
+
+```typescript
+// demo 1
+type TStringArray = string[];
+// demo 2
+type PersonName = string;
+type PhoneNumber = string;
+type PhoneBookItem = [PersonName, PhoneNumber];
+type PhoneBook = PhoneBookItem[];
+
+let book: PhoneBook = [
+  ['Lily', '1234'],
+  ['Jean', '1234']
+];
+```
+
+并且，类型形式与接口类似，都支持类型参数，且可以引用自身：
+
+```typescript
+type Tree<T> = {
+    value: T;
+    left: Tree<T>;
+    right: Tree<T>;
+}
+
+interface ITree<T> { 
+  value: T;
+  left: ITree<T>;
+  right: ITree<T>;
+}
+```
+
+### 索引类型
+
+索引类型能让静态检查覆盖到类型不确定的动态场景。
+
+```typescript
+interface pluck {
+  <T, K extends keyof T>(o: T, names: K[]): T[K][]
+}
+
+let obj = { a: 1, b: '2', c: false };
+// 参数检查
+// 错误 Type 'string' is not assignable to type '"a" | "b" | "c"'.
+pluck(obj, ['n']);
+// 返回类型推断
+let xs: (string | number)[] = pluck(obj, ['a', 'b']);
+```
+
+上述内容中有两个点：
+
+- `keyof`：索引类型`查询`操作符
+- `T[K]`：索引`访问`操作符
+
+永远记住，`keyof`是针对类型的，如果`obj`是一个值，则使用`keyof obj`是不合法的。
+
+`T[K]`则属于类型层面的属性访问操作。举个例子，如果`t`和`k`是变量，其类型分别是`T`和`K`，那么`t[k]`可用时，其类型为`T[K]`。
+
+### 映射类型
+
+想从现有类型衍生出新类型，可以使用映射类型。
+
+```typescript
+// 找一个“类型集”
+type Keys = 'a' | 'b';
+// 通过类型映射得到新类型 { a: boolean, b: boolean }
+type Flags = { [K in Keys]: boolean };
+```
+
+关键字：`[K in Keys]` 在形式上类似于索引签名，也能得到新的类型。
+
+### 模板
+
+`TypeScript`兼容`ES Module`规范，文件即模块。在文件中包含合法的`import/export`语句即可视为模块，否则将运行在全局作用域下。
+
+```typescript
+let x = 1
+function f() { }
+// 会被编译成
+var x = 1;
+function f() { }
+
+// 而
+let x = 1
+export function f() { }
+// 会被编译成（以 AMD 形式为例）
+define(["require", "exports"], function (require, exports) {
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  var x = 1;
+  function f() { }
+  exports.f = f;
+});
+```
+
+有时，我们可能会看到这样的代码：
+
+```typescript
+export = something;
+```
+
+这是为了支持`CommonJS`和`AMD`模块而提供的特殊语法，类似于：
+
+```typescript
+// NodeJS CommonJS
+let x = {a: 1};
+export.x = x;
+module.exports = x;
+```
+
+这种特殊语法，其模块引入语法也比较特殊：
+
+```typescript
+import module = require('myModule')
+```
+
+在编译的时候，可以指定`-m`来选择需要的模块格式：
+
+```bash
+ // tsc -m xxx
+ 'commonjs' # NodeJS模块定义
+ 'amd'      # AMD
+ 'system'   # SystemJS
+ 'umd'      # UMD
+ 'es6'      # ES Module
+ 'es2015'   # 等价于es6
+ 'esnext'   # 尚未收入ES规范的前沿模块定义，如`import(), import.meta`等
+ 'none'     # 禁用所有模块定义，如import, export等（用到的话会报错）
+```
+
+默认为`--target`选项有关，`target === "ES3" or "ES5" ? "CommonJS" : "ES6"`!
+
+> `-lib`表示源代码特性，指定`ES 版本`可以让我们在写代码的时候使用更多新特性。
+
+#### 模块声明
+
+对于缺少类型的第三方模块，可以通过声明文件`(d.ts)`为其补充类型声明。
+
+```typescript
+// types.d.ts
+declare module "my-module";
+
+// index.ts
+import x, {y} from "my-module";
+x(y);
+```
+
+如此可以快速使用第三方模块，所有成员都具有`any`类型。
+
+#### 模块解析
+
+当我们将代码拆分为多个模块之后并且引入，在编译时编译器需要知道依赖的模块的确切信息。即建立模块名到模块文件路径的映射。
+
+在`TypeScript`里，一个模块可以是`.ts/.tsx/.d.ts`文件，开启`--allowJs`的话，还可以对应`.js/.jsx`文件。
+
+在寻找模块的时候，先找模块对应的文件（`.ts/.tsx`），没找到且不是相对模块则寻找外部声明（`.d.ts`），再没找到则报错`Can not find module 'xxx'`。
+
+在引入代码中，相对和非相对模块的区别非常明显：
+
+```typescript
+// 相对
+import Entry from "./components/Entry";
+import { DefaultHeaders } from "../constants/http";
+import "/mod";
+// 非相对
+import * as $ from "jquery";
+import { Component } from "@angular/core";
+```
+
+模块的解析分为两种策略：
+
+- `Classic`
+- `Node`
+
+在`--mooduleResolution`编译选项为`AMD/System/ES6`时为前者，否则采用和`NodeJS`模块机制一致的解析策略。
+
+
+
+##### Classic
+
+在 Classic 策略下，相对模块引入会相对于要引入的文件来解析，例如：
+
+```typescript
+// 源码文件 /root/src/folder/A.ts
+import { b } from "./moduleB"
+```
+
+会尝试查找：
+
+```typescript
+/root/src/folder/moduleB.ts
+/root/src/folder/moduleB.d.ts
+```
+
+而对于非相对模块引入，从包含要引入的文件的目录开始向上遍历目录树，试图找到匹配的定义文件，例如：
+
+```typescript
+// 源码文件 /root/src/folder/A.ts
+import { b } from "moduleB"
+```
+
+会尝试查找以下文件：
+
+```typescript
+/root/src/folder/moduleB.ts
+/root/src/folder/moduleB.d.ts
+/root/src/moduleB.ts
+/root/src/moduleB.d.ts
+/root/moduleB.ts
+/root/moduleB.d.ts
+/moduleB.ts
+/moduleB.d.ts
+```
+
+##### NodeJS 模块解析
+
+NodeJS 中通过`require`来引入模块，模块解析的具体行为取决于参数是相对路径还是非相对路径
+
+相对路径的处理策略相当简单，对于：
+
+```typescript
+// 源码文件 /root/src/moduleA.js
+var x = require("./moduleB");
+```
+
+匹配顺序如下：
+
+1. 尝试匹配`/root/src/moduleB.js`
+2. 再尝试匹配`/root/src/moduleB/package.json`，接着寻找主模块（例如指定了`{ "main": "lib/mainModule.js" }`的话，就引入`/root/src/moduleB/lib/mainModule.js`）
+3. 否则尝试匹配`/root/src/moduleB/index.js`，因为`index.js`会被隐式地当作该目录下的主模块
+
+非相对模块引入会从`node_modules`里找（`node_modules`可能位于当前文件的平级目录，也可能在祖先目录），NodeJS 会向上查找每个`node_modules`，寻找要引入的模块，例如：
+
+```typescript
+// 源码文件 /root/src/moduleA.js
+var x = require("moduleB");
+```
+
+NodeJS 会依次尝试匹配：
+
+```typescript
+/root/src/node_modules/moduleB.js
+/root/src/node_modules/moduleB/package.json
+/root/src/node_modules/moduleB/index.js
+
+/root/node_modules/moduleB.js
+/root/node_modules/moduleB/package.json
+/root/node_modules/moduleB/index.js
+
+/node_modules/moduleB.js
+/node_modules/moduleB/package.json
+/node_modules/moduleB/index.js
+```
+
+P.S.对于`package.json`，实际上是加载其`main`字段指向的模块。
+
+`TypeScript`使用`NodeJS`策略时，会额外查找`.d.ts`声明。
+
+> `exclude`配置项能排除一系列文件，以免将不需要的文件加入到编译过程中来。
+
+### 命名空间
+
+源自`JavaScript`中的模块模式，不建议使用此旧时代产物。
+
+### 声明合并
+
+类似于`CSS`中的同类样式的合并，`TypeScript`也会合并同类声明。
+
+```typescript
+interface IPerson {
+  name: string;
+}
+interface IPerson {
+  age: number;
+}
+
+// 等价于
+interface IPerson {
+  name: string;
+  age: number;
+}
+```
 
