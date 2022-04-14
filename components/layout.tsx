@@ -86,6 +86,12 @@ export default function Layout({ children }: Props) {
                   style={{ cursor: "pointer" }}
                 />
               </Link>
+              <Link href="https://gujiwuqing.top">
+                <Avatar
+                  src="https://avatars.githubusercontent.com/u/44566835?v=4"
+                  style={{ cursor: "pointer" }}
+                />
+              </Link>
             </Flex>
           </Flex>
           <Box m="2rem" textAlign="center" marginLeft="auto">
