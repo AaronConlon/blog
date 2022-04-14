@@ -92,6 +92,12 @@ export default function Layout({ children }: Props) {
                   style={{ cursor: "pointer" }}
                 />
               </Link>
+              <Link href="https://www.wangmiaozero.cn/">
+                <Avatar
+                  src="https://avatars.githubusercontent.com/u/45121589?v=4"
+                  style={{ cursor: "pointer" }}
+                />
+              </Link>
             </Flex>
           </Flex>
           <Box m="2rem" textAlign="center" marginLeft="auto">
