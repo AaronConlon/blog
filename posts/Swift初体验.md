@@ -60,6 +60,55 @@ let 🐶🐮 = "dogcow"
 
 > 值不会隐式转换！
 
+#### 布尔值
+
+```swift
+let isOk = false
+let isAlone = true
+```
+
+错误的布尔值用法示例：
+
+```swift
+let i = 1
+if i {
+    // this example will not compile, and will report an error
+}
+```
+
+#### 元组
+
+```swift
+let http404Error = (404, 'Not Found')
+// http404Error is of type (Int, String), and equals (404, "Not Found")
+
+// read
+let (statusCode, statusMessage) = http404Error
+print("The status code is \(statusCode)")
+// Prints "The status code is 404"
+print("The status message is \(statusMessage)")
+// Prints "The status message is Not Found"
+
+// ignore something
+let (justTheStatusCode, _) = http404Error
+print("The status code is \(justTheStatusCode)")
+// Prints "The status code is 404"
+
+// access by index
+print("The status code is \(http404Error.0)")
+// Prints "The status code is 404"
+print("The status message is \(http404Error.1)")
+// Prints "The status message is Not Found"
+
+// 定义元组名
+let http200Status = (statusCode: 200, description: "OK")
+// 使用属性字段读取
+print("The status code is \(http200Status.statusCode)")
+// Prints "The status code is 200"
+print("The status message is \(http200Status.description)")
+// Prints "The status message is OK"
+```
+
 #### 整数
 
 如下整数类型：
@@ -100,6 +149,8 @@ let hexadecimalInteger = 0x11     // 17 in hexadecimal notation
 
 #### 数字的显式转换
 
+使用类创建新数据的实例来转换。
+
 ```swift
 let cannotBeNegative: UInt8 = -1
 // UInt8 can't store negative numbers, and so this will report an error
@@ -110,9 +161,20 @@ let tooBig: Int8 = Int8.max + 1
 let twoThousand: UInt16 = 2_000
 let one: UInt8 = 1
 let twoThousandAndOne = twoThousand + UInt16(one)
+
+let three = 3
+let pointOneFourOneFiveNine = 0.14159
+let pi = Double(three) + pointOneFourOneFiveNine
+// pi equals 3.14159, and is inferred to be of type Double
 ```
 
+#### 类型别名
 
+```swift
+typealias AudioSample = UInt16
+var maxAmplitudeFound = AudioSample.min
+// maxAmplitudeFound is now 0
+```
 
 #### 显式转换值
 
