@@ -12,6 +12,29 @@ intro: '想要开发原生的 macOS 桌面程序，学习 Swift 是我的第一�
 
 ### 基础
 
+#### 注释
+
+```swift
+// something
+
+/* 首行
+/* 内部嵌套 */
+尾行*/
+
+/*多行
+注释*/
+
+```
+
+#### 分号
+
+期望在一行中执行多段代码，可以添加分号。分号不是必须的，跟`JavaScript`一样
+
+```swift
+let cat = "🐱";print(cat)
+// Prints "🐱"
+```
+
 #### 简单值
 
 ```swift
@@ -27,9 +50,69 @@ let explicitDouble: Double = 70
 // 可选值
 let name: String? = 'Aaron' 
 let sex: String? = nil
+// 同类型变量，同时声明
+var red, green, blue: Double
+// 变量名几乎支持所有字符
+let π = 3.14159
+let 你好 = "你好世界"
+let 🐶🐮 = "dogcow"
 ```
 
 > 值不会隐式转换！
+
+#### 整数
+
+如下整数类型：
+
+- UInt8
+- UInt32
+- ...
+
+无符号：`unsigned`整数类型具有显式的范围。
+
+```swift
+let minValue = UInt8.min  // minValue is equal to 0, and is of type UInt8
+let maxValue = UInt8.max  // maxValue is equal to 255, and is of type UInt8
+```
+
+显式的`Int/UInt`在不同位数的机器上能标识的数字范围取决于机器的位数。
+
+在`32-bit`平台，`Int`等同于`Int32`，在`64-bit`平台，则等同于`Int64`。
+
+#### 浮点数
+
+- `Double` represents a 64-bit floating-point number.
+- `Float` represents a 32-bit floating-point number.
+
+#### 进制
+
+```swift
+let decimalInteger = 17
+let binaryInteger = 0b10001       // 17 in binary notation
+let octalInteger = 0o21           // 17 in octal notation
+let hexadecimalInteger = 0x11     // 17 in hexadecimal notation
+```
+
+#### 指数
+
+- `1.25e2` means 1.25 x 102, or `125.0`.
+- `1.25e-2` means 1.25 x 10-2, or `0.0125`.
+
+#### 数字的显式转换
+
+```swift
+let cannotBeNegative: UInt8 = -1
+// UInt8 can't store negative numbers, and so this will report an error
+let tooBig: Int8 = Int8.max + 1
+// Int8 can't store a number larger than its maximum value,
+// and so this will also report an error
+
+let twoThousand: UInt16 = 2_000
+let one: UInt8 = 1
+let twoThousandAndOne = twoThousand + UInt16(one)
+```
+
+
 
 #### 显式转换值
 
@@ -280,4 +363,6 @@ func lessThanTen(number: Int) -> Bool {
 var numbers = [20, 19, 7, 12]
 hasAnyMatches(list: numbers, condition: lessThanTen)
 ```
+
+> 函数可以无返回值，此时不必声明返回值类型
 
