@@ -78,3 +78,62 @@ Why?Beacuse my request url is wrong.It was a 404 page.
 
 You can display the `error` message in your app.
 
+
+
+## Devtools
+
+If you use react to build your web application with react-qeury,you can use `reactQueryDevTools` in your queryClientProvidr.
+
+Example:
+
+```jsx
+<QeuryClientProvider client={client}>
+  <ReactQueryDevTools initialIsOpen={false} position='bottom-right' />
+</QeuryClientProvider>
+```
+
+And then,you can see a react-query logo at the position of bottom-right.
+
+Use this devtools, you can see the network process and action result.Also, you can refetch,invalidate,reset or remove your action.
+
+
+
+## Query cache
+
+Sometimes,we just want to see one time about our loading status or loading tip.
+
+When our query action is fetching,the `isFetch` flag is true:
+
+> default cache time is 5 minutes!
+
+```jsx
+const fetchTodos = async () => {
+  return axios.get("https://localhost:4000/todossss")
+}
+const options = {
+  cacheTime: 5000
+}
+const {isLoading, data, isError, error, isFetching} = useQuery('todo-list', fetchTodos, options);
+```
+
+Now we add a options object to control our query action.We can add cacheTime to control query data cache.After 5s ,the query will refetch api and update data and other properties.
+
+
+
+## Stale time
+
+If we hope our query data is stale.We can config a stale time.
+
+> default stale time is zero second!
+
+```js
+const fetchTodos = async () => {
+  return axios.get("https://localhost:4000/todossss")
+}
+const options = {
+  staleTime: 30000
+}
+const {isLoading, data, isError, error, isFetching} = useQuery('todo-list', fetchTodos, options);
+```
+
+> staleTime is 30s,we will not refetch data in 30s.If your config a cashe time also,the cashe time will be ignore.
