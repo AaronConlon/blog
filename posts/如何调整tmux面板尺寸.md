@@ -40,4 +40,28 @@ intro: 'Tmux 是一个知名的开源终端复用工具，本文记录了一个�
 
 ### 进阶
 
-利用命令控制或许有些繁琐，我们可以利用`tmux`的配置文件来实现同一效果。
+利用命令控制或许有些繁琐，我们可以利用`tmux`的配置文件来实现同一效果。首先，`tmux`支持用户家目录下创建`.tmux.conf`配置文件，`tmux`在运行时会读取此配置文件的配置。
+
+以下是我的相关配置:
+
+```bash
+# mosue mode
+set -g mouse on
+
+# resize-pane
+bind -r h resize-pane -L 5
+bind -r j resize-pane -D 5
+bind -r k resize-pane -U 5
+bind -r l resize-pane -R 5
+```
+
+> `-r`可以让我们不必每次都反复按组合键，而是先按引导组合键`ctrl+b`，再在较短的时间内连续按`h`这几个自定义的方向功能键即可每次修改`5`行空间。
+
+上述配置开启了鼠标控制，如此一来既可以鼠标拖动修改面板大小，也可以利用绑定组合键的方式来修改面板大小了。
+
+
+
+### 参考
+
+- [tmux/tmux: tmux source code](https://github.com/tmux/tmux)
+
