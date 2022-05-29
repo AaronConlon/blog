@@ -44,7 +44,13 @@ export default function CustomBlockquote({ children }: Props) {
           />
         </svg>
       </Box>
-      <Flex bg="#fff2f2" borderRadius="8px" flexGrow={1} align="center">
+      <Flex
+        bg="#fff2f2"
+        borderRadius="8px"
+        flexGrow={1}
+        align="center"
+        p="1rem"
+      >
         {children}
       </Flex>
     </Flex>
