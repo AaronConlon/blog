@@ -48,7 +48,7 @@ app.component('CustomButton', CustomButton);
 
 #### 模板语法
 
-```vue
+```html
 <template>
 	<!-- 插值 -->
   <span>Message: {{ msg }}</span>
@@ -121,7 +121,7 @@ app.component('CustomButton', CustomButton);
 
 修饰符图示：
 
-![](mdImgs/directive.69c37117.png)
+![img](mdImgs/directive.69c37117.png)
 
 #### 响应式基础
 
@@ -133,7 +133,7 @@ app.component('CustomButton', CustomButton);
 
 重用的组件内部函数可能会共享状态，多个实例同时访问将会导致状态不可预测，要保持组件实例某些状态独立性，可以在`created`生命周期中创建某些限制。
 
-```vue
+```html
 <script setup>
 import { reactive } from 'vue'
 
@@ -186,7 +186,7 @@ const count = ref(0)
 
 使用`computed()`缓存基于响应式数据依赖的计算结果，例如：
 
-```vue
+```html
 <script setup>
 import { reactive, computed } from 'vue'
 
@@ -219,7 +219,7 @@ const publishedBooksMessage = computed(() => {
 
 基于`isActive`的真假来设置以`key`为类名的方案，并且和原有`class`进行合并。
 
-```vue
+```html
 <div
   class="static"
   :class="{ active: isActive, 'text-danger': hasError }"
@@ -228,7 +228,7 @@ const publishedBooksMessage = computed(() => {
 
 > 在复杂情况下可以将内联的绑定对象单独抽出来。
 
-```vue
+```html
 <script setup>
 	const isActive = ref(true)
   const error = ref(null)
@@ -268,7 +268,7 @@ const publishedBooksMessage = computed(() => {
 
 有一个特殊的内联场景，需要访问原生的`DOM`：
 
-```vue
+```html
 <template>
 	<!-- 使用特殊的 $event 变量 -->
   <button @click="warn('Form cannot be submitted yet.', $event)">
@@ -369,7 +369,7 @@ const publishedBooksMessage = computed(() => {
 
 `react`需要为`input`设置值和`onChange`监听以改变值，`vue`做了优化：
 
-```vue
+```html
 <template>
 	<input v-model="text" />
 </template>
@@ -383,7 +383,7 @@ const publishedBooksMessage = computed(() => {
 
 `textarea`不支持插值，务必使用`v-model`，如下复选框需要注意值：
 
-```vue
+```html
 <template>
 	<input
   type="checkbox"
@@ -436,7 +436,7 @@ const publishedBooksMessage = computed(() => {
 
 组件的生命周期如下图所示：
 
-![](mdImgs/lifecycle.16e4c08e.png)
+![img](mdImgs/lifecycle.16e4c08e.png)
 
 #### 侦听器
 
@@ -473,7 +473,7 @@ watch([x, () => y.value], ([newX, newY]) => {
 >
 > ```js
 > {
->   deep: true
+>   	deep: true
 > }
 > ```
 
@@ -498,7 +498,7 @@ watchEffect(async () => {
 
 `template`中元素可以通过`ref`属性获取到`DOM`。
 
-```vue
+```html
 <script setup>
 import { ref, onMounted } from 'vue'
 
@@ -520,7 +520,7 @@ onMounted(() => {
 
 > ref 可以是函数，ref 可以给组件属性赋值，此时可以取得组件实例（不推荐使用此方法实现父子组件的交互），并且`<secript setup>`语法糖的组件默认不支持此特性，使用此语法糖将默认设置组件为私有状态，除非子组件通过`defineExpose`这主动暴露自己的数据。
 
-```vue
+```html
 <script setup>
 import { ref, onMounted } from 'vue'
 
@@ -554,7 +554,7 @@ onMounted(() => console.log(itemRefs.value))
 
 组件可以通过自定义事件监听来实现父组件交互。
 
-```vue
+```html
 // 父组件
 <template>
 	<BlogPost
@@ -577,7 +577,7 @@ onMounted(() => console.log(itemRefs.value))
 
 `$emit`是内置的方法，这些事件也可以显示地声明，在`setup`语法糖中，使用`defineEmits`来声明。
 
-```vue
+```html
 <script setup>
 	const emit = defineEmits(['enlarge-text'])
 </script>
@@ -588,7 +588,41 @@ onMounted(() => console.log(itemRefs.value))
 </template>
 ```
 
-##### 插槽
+#### 动态组件
+
+```html
+<!-- currentTab 改变时组件也改变 -->
+<component :is="tabs[currentTab]"></component>
+```
+
+给`:is`传值的类型如下：
+
+- 被注册的组件名
+- 导入的组件对象
+
+组件会在被切换掉后卸载，可以使用`KeepAlive`保持状态。
+
+#### 元素位置限制
+
+某些 HTML 元素对于放在其中的元素类型有限制，例如 `<ul>`，`<ol>`，`<table>` 和 `<select>`，相应的，某些元素仅在放置于特定元素中时才会显示，例如 `<li>`，`<tr>` 和 `<option>`。
+
+这将导致在使用带有此类限制元素的组件时出现问题。例如：
+
+```html
+<table>
+  <blog-post-row></blog-post-row>
+</table>
+```
+
+自定义的组件 `<blog-post-row>` 将作为无效的内容被忽略，因而在最终呈现的输出中造成错误。我们可以使用特殊的 [`is` attribute](https://staging-cn.vuejs.org/api/built-in-special-attributes.html#is) 作为一种解决方案：
+
+```html
+<table>
+  <tr is="vue:blog-post-row"></tr>
+</table>
+```
+
+#### 插槽
 
 组件中可以传递 HTML 内容或其他组件：
 
@@ -692,4 +726,645 @@ defineProps({
 ```
 
 通常我们只需要用到最简单的几个类型，如果过于复杂，或许可以想想有没有什么可以优化的。
+
+
+
+#### 组件事件
+
+组件的自定义事件的关键在于：
+
+- 组件内声明自定义事件 `emits`，返回的函数可以直接用于组件模板，省去`$emit`语句
+- 组件模板内使用`$emit('eventName', params)`调用自定义事件
+- 父组件引用组件时传参，提供自定义事件的源
+
+事件是可以校验的，只需要将事件赋值为函数，函数返回布尔值表示是否合法：
+
+```js
+<script setup>
+const emit = defineEmits({
+  // 没有校验
+  click: null,
+
+  // 校验 submit 事件
+  submit: ({ email, password }) => {
+    if (email && password) {
+      return true
+    } else {
+      console.warn('Invalid submit event payload!')
+      return false
+    }
+  }
+})
+
+function submitForm(email, password) {
+  emit('submit', { email, password })
+}
+</script>
+```
+
+双向绑定`v-model`支持在组件上工作：
+
+```js
+<!-- CustomInput.vue -->
+<script setup>
+defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
+</script>
+
+<template>
+  <input
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+  />
+</template>
+```
+
+关键在于模板内的表单需要绑定`value`，触发`update:modelValue`事件。
+
+还有一种方法：
+
+```js
+<!-- CustomInput.vue -->
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
+
+const value = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  }
+})
+</script>
+
+<template>
+  <input v-model="value" />
+</template>
+```
+
+如果需要多个绑定：
+
+```html
+<UserName
+  v-model:first-name="firstName"
+  v-model:last-name="lastName"
+/>
+```
+
+```react
+<script setup>
+defineProps({
+  firstName: String,
+  lastName: String
+})
+
+defineEmits(['update:firstName', 'update:lastName'])
+</script>
+
+<template>
+  <input
+    type="text"
+    :value="firstName"
+    @input="$emit('update:firstName', $event.target.value)"
+  />
+  <input
+    type="text"
+    :value="lastName"
+    @input="$emit('update:lastName', $event.target.value)"
+  />
+</template>
+```
+
+自定义事件支持自定义修饰符，例如创建一个自定义的`capitalize`修饰符，自动将`v-model`绑定输入的字符串的首字母大写：
+
+```html
+<MyComponent v-model.capitalize="myText" />
+```
+
+接着，自定义处理过的监听函数：
+
+```js
+<script setup>
+const props = defineProps({
+  modelValue: String,
+  modelModifiers: { default: () => ({}) }
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+function emitValue(e) {
+  let value = e.target.value
+  if (props.modelModifiers.capitalize) {
+    value = value.charAt(0).toUpperCase() + value.slice(1)
+  }
+  emit('update:modelValue', value)
+}
+</script>
+
+<template>
+  <input type="text" :value="modelValue" @input="emitValue" />
+</template>
+```
+
+给组件的`v-model`添加修饰符，都可以通过`modelModifiers` prop 在组件内访问到，如果我们需要自定义修饰符，则需要提供一个`nodelModifiers`的`prop`。
+
+
+
+#### 透传属性
+
+常见的透传属性的例子是透传`class`/`id`、`style`等，属性会合并到子组件的模板的根元素上，甚至是事件监听系统也一样。
+
+如果根组件也是组件，则会将部分属性继续透传下去。
+
+但是透传的`props`和`v-on`事件监听不会深层透传。
+
+属性继承是可控的，使用`setup`语法糖时，可以额外提供一个`script`:
+
+```js
+<script>
+// 使用一个简单的 <script> to declare options
+export default {
+  inheritAttrs: false
+}
+</script>
+
+<script setup>
+// ...setup 部分逻辑
+</script>
+```
+
+这个额外的声明可以禁用属性继承，通常在需要自己控制透传的属性应用到什么位置上时使用。
+
+透传的属性可以直接使用插值访问：
+
+```html
+<span>Fallthrough attribute: {{ $attrs }}</span>
+```
+
+>这个 `$attrs` 对象包含了除组件的 `props` 和 `emits` 属性外的所有其他 attribute，例如 `class`，`style`，`v-on` 监听器等等。
+
+也可以使用`hooks`访问：
+
+```js
+const attrs = useAttrs()
+```
+
+> attrs 不是响应式数据，不要用于侦听
+
+
+
+#### 插槽
+
+插槽可以让我们灵活控制组件的结构！需要注意的是，组件内的`style scope`不会作用于插槽。
+
+![img](mdImgs/slots.dbdaf1e8.png)
+
+> 插槽内容可以访问父组件的数据
+
+组件内使用`slot`渲染插槽的默认内容，控制默认插槽的位置。
+
+插槽`slot`可以提供`name`属性（默认是 `default`），如此一来我们可以显式控制插槽内容：
+
+组件：
+
+```html
+<div class="container">
+  <header>
+    <slot name="header"></slot>
+  </header>
+  <main>
+    <slot></slot>
+  </main>
+  <footer>
+    <slot name="footer"></slot>
+  </footer>
+</div>
+```
+
+父组件：
+
+```jsx
+<BaseLayout>
+  <!-- v-slot 简写 # -->
+  <template v-slot:header>
+    <!-- header 插槽的内容放这里 -->
+  </template>
+</BaseLayout>
+```
+
+如图所示：
+
+![img](mdImgs/named-slots.ebb7b207.png)
+
+如下所示是控制完整的插槽：
+
+```html
+<BaseLayout>
+  <template #header>
+    <h1>Here might be a page title</h1>
+  </template>
+
+  <template #default>
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+  </template>
+
+  <template #footer>
+    <p>Here's some contact info</p>
+  </template>
+</BaseLayout>
+```
+
+等同于：
+
+```html
+<BaseLayout>
+  <template #header>
+    <h1>Here might be a page title</h1>
+  </template>
+
+  <!-- 隐式的默认插槽，顶级非 template 节点被隐式设为默认插槽 -->
+  <p>A paragraph for the main content.</p>
+  <p>And another one.</p>
+
+  <template #footer>
+    <p>Here's some contact info</p>
+  </template>
+</BaseLayout>
+```
+
+> 减少隐式代码，多写显式逻辑
+
+另外如果需要，插槽不仅可以访问父组件的数据，还可以访问子组件的数据。
+
+
+
+#### 依赖注入
+
+在多级组件传递数据的时候，可以使用状态管理库，也就可以使用`依赖注入机制`。
+
+> vue 创建的 app 实例也可以`provider`注入依赖，便于开发插件和在创建实例的地方初始化插件需要的数据。
+
+父组件提供数据依赖，子组件提取注入的依赖。
+
+![img](mdImgs/provide-inject.3e0505e4.png)
+
+举个例子：
+
+> 注入名推荐使用 `Symbol`，并且使用单独的文件管理这些名字。
+
+```js
+<script setup>
+import { provide } from 'vue'
+
+provide(/* 注入名 */ 'message', /* 值 */ 'hello!')
+</script>
+```
+
+子组件使用`inject`注入祖先组件的数据：
+
+```js
+<script setup>
+import { inject } from 'vue'
+
+const message = inject('message', 'default value...')
+</script>
+```
+
+> 如果注入的是 ref，不会自动解包
+
+为了避免在不适用可选值的情况下进行不必要的计算，可以提供一个工厂函数来创建默认值。
+
+```js
+const value = inject('key', () => new ExpensiveClass())
+```
+
+为了配合响应性，推荐`provider`一个需要用到的修改`provider`响应式数据的方法，将数据修改逻辑保持在`provider`内部。
+
+
+
+#### 异步组件
+
+动态导入组件，最后的`AsyncComp`是包装组件， 配合[<Suspense>](https://staging-cn.vuejs.org/guide/built-ins/suspense.html)使用。
+
+```js
+import { defineAsyncComponent } from 'vue'
+
+const AsyncComp = defineAsyncComponent(() =>
+  import('./components/MyComponent.vue')
+)
+```
+
+亦或是增强其配置：
+
+```js
+const AsyncComp = defineAsyncComponent({
+  // 加载函数
+  loader: () => import('./Foo.vue'),
+
+  // 加载异步组件时使用的组件
+  loadingComponent: LoadingComponent,
+  // 展示加载组件前的延迟时间，默认为 200ms
+  delay: 200,
+
+  // 加载失败后展示的组件
+  errorComponent: ErrorComponent,
+  // 如果提供了一个 timeout 时间限制，并超时了
+  // 也会显示这里配置的报错组件，默认值是：Infinity
+  timeout: 3000
+})
+```
+
+
+
+### 可重用性
+
+#### 组合式函数
+
+> [VueUse](https://vueuse.org/)提供了一系列高效的`hooks`!
+
+组合式函数即`Vue`的“`自定义Hooks`”。
+
+这是一个典型的网络请求`hooks`:[Vue SFC Playground](https://sfc.vuejs.org/#eyJBcHAudnVlIjoiPHNjcmlwdCBzZXR1cD5cbmltcG9ydCB7IHJlZiwgY29tcHV0ZWQgfSBmcm9tICd2dWUnXG5pbXBvcnQgeyB1c2VGZXRjaCB9IGZyb20gJy4vdXNlRmV0Y2guanMnXG5cbmNvbnN0IGJhc2VVcmwgPSAnaHR0cHM6Ly9qc29ucGxhY2Vob2xkZXIudHlwaWNvZGUuY29tL3RvZG9zLydcbmNvbnN0IGlkID0gcmVmKCcxJylcbmNvbnN0IHVybCA9IGNvbXB1dGVkKCgpID0+IGJhc2VVcmwgKyBpZC52YWx1ZSlcblxuY29uc3QgeyBkYXRhLCBlcnJvciwgcmV0cnkgfSA9IHVzZUZldGNoKHVybClcbjwvc2NyaXB0PlxuXG48dGVtcGxhdGU+XG4gIExvYWQgcG9zdCBpZDpcbiAgPGJ1dHRvbiB2LWZvcj1cImkgaW4gNVwiIEBjbGljaz1cImlkID0gaVwiPnt7IGkgfX08L2J1dHRvbj5cblxuXHQ8ZGl2IHYtaWY9XCJlcnJvclwiPlxuICAgIDxwPk9vcHMhIEVycm9yIGVuY291bnRlcmVkOiB7eyBlcnJvci5tZXNzYWdlIH19PC9wPlxuICAgIDxidXR0b24gQGNsaWNrPVwicmV0cnlcIj5SZXRyeTwvYnV0dG9uPlxuICA8L2Rpdj5cbiAgPGRpdiB2LWVsc2UtaWY9XCJkYXRhXCI+RGF0YSBsb2FkZWQ6IDxwcmU+e3sgZGF0YSB9fTwvcHJlPjwvZGl2PlxuICA8ZGl2IHYtZWxzZT5Mb2FkaW5nLi4uPC9kaXY+XG48L3RlbXBsYXRlPiIsImltcG9ydC1tYXAuanNvbiI6IntcbiAgXCJpbXBvcnRzXCI6IHtcbiAgICBcInZ1ZVwiOiBcImh0dHBzOi8vc2ZjLnZ1ZWpzLm9yZy92dWUucnVudGltZS5lc20tYnJvd3Nlci5qc1wiLFxuICAgIFwidnVlL3NlcnZlci1yZW5kZXJlclwiOiBcImh0dHBzOi8vc2ZjLnZ1ZWpzLm9yZy9zZXJ2ZXItcmVuZGVyZXIuZXNtLWJyb3dzZXIuanNcIlxuICB9XG59IiwidXNlRmV0Y2guanMiOiJpbXBvcnQgeyByZWYsIGlzUmVmLCB1bnJlZiwgd2F0Y2hFZmZlY3QgfSBmcm9tICd2dWUnXG5cbmV4cG9ydCBmdW5jdGlvbiB1c2VGZXRjaCh1cmwpIHtcbiAgY29uc3QgZGF0YSA9IHJlZihudWxsKVxuICBjb25zdCBlcnJvciA9IHJlZihudWxsKVxuXG4gIGFzeW5jIGZ1bmN0aW9uIGRvRmV0Y2goKSB7XG4gICAgLy8gcmVzZXQgc3RhdGUgYmVmb3JlIGZldGNoaW5nLi5cbiAgICBkYXRhLnZhbHVlID0gbnVsbFxuICAgIGVycm9yLnZhbHVlID0gbnVsbFxuICAgIFxuICAgIC8vIHJlc29sdmUgdGhlIHVybCB2YWx1ZSBzeW5jaHJvbm91c2x5IHNvIGl0J3MgdHJhY2tlZCBhcyBhXG4gICAgLy8gZGVwZW5kZW5jeSBieSB3YXRjaEVmZmVjdCgpXG4gICAgY29uc3QgdXJsVmFsdWUgPSB1bnJlZih1cmwpXG4gICAgXG4gICAgdHJ5IHtcbiAgICAgIC8vIGFydGlmaWNpYWwgZGVsYXkgLyByYW5kb20gZXJyb3JcbiAgXHQgIGF3YWl0IHRpbWVvdXQoKVxuICBcdCAgLy8gdW5yZWYoKSB3aWxsIHJldHVybiB0aGUgcmVmIHZhbHVlIGlmIGl0J3MgYSByZWZcblx0ICAgIC8vIG90aGVyd2lzZSB0aGUgdmFsdWUgd2lsbCBiZSByZXR1cm5lZCBhcy1pc1xuICAgIFx0Y29uc3QgcmVzID0gYXdhaXQgZmV0Y2godXJsVmFsdWUpXG5cdCAgICBkYXRhLnZhbHVlID0gYXdhaXQgcmVzLmpzb24oKVxuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIGVycm9yLnZhbHVlID0gZVxuICAgIH1cbiAgfVxuXG4gIGlmIChpc1JlZih1cmwpKSB7XG4gICAgLy8gc2V0dXAgcmVhY3RpdmUgcmUtZmV0Y2ggaWYgaW5wdXQgVVJMIGlzIGEgcmVmXG4gICAgd2F0Y2hFZmZlY3QoZG9GZXRjaClcbiAgfSBlbHNlIHtcbiAgICAvLyBvdGhlcndpc2UsIGp1c3QgZmV0Y2ggb25jZVxuICAgIGRvRmV0Y2goKVxuICB9XG5cbiAgcmV0dXJuIHsgZGF0YSwgZXJyb3IsIHJldHJ5OiBkb0ZldGNoIH1cbn1cblxuLy8gYXJ0aWZpY2lhbCBkZWxheVxuZnVuY3Rpb24gdGltZW91dCgpIHtcbiAgcmV0dXJuIG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHtcbiAgICBzZXRUaW1lb3V0KCgpID0+IHtcbiAgICAgIGlmIChNYXRoLnJhbmRvbSgpID4gMC4zKSB7XG4gICAgICAgIHJlc29sdmUoKVxuICAgICAgfSBlbHNlIHtcbiAgICAgICAgcmVqZWN0KG5ldyBFcnJvcignUmFuZG9tIEVycm9yJykpXG4gICAgICB9XG4gICAgfSwgMzAwKVxuICB9KVxufSJ9)。
+
+务必阅读其源码理解其实现。
+
+以下是几个约定和最佳实践：
+
+- 组合式函数约定用驼峰命名法命名，并以“use”作为开头。
+- 兼容输入参数的响应性（如果组合式函数是共享的，他人使用时可能会传入`ref`，别忘了兼容响应式数据）
+- 返回值保持为`ref`类型，以免结构过程丢失响应性状态连接
+- 处理好副作用
+  - 服务端渲染时确保其在浏览器端执行（将副作用添加到 onMounted 内）
+  - 确保其在 `onUnmounted`时清理副作用，防止内存泄漏
+- 在组合式`setup`语法糖中，保持同步调用，可以在`onMounted`生命周期中使用
+- 可以在`hooks`中注册生命周期钩子
+
+
+
+#### 自定义指令
+
+`Vue`最常用的内置指令：`v-model`、`v-show`、`v-if`等等，另外支持自定义指令。
+
+只有当所需功能只能通过直接的 DOM 操作来实现时，才应该使用自定义指令。
+
+> 在 `<script setup>` 中，任何以 `v` 开头的驼峰式命名的变量都可以被用作一个自定义指令。
+
+一个自定义指令对象，所有钩子函数都是可选的：
+
+```js
+const myDirective = {
+  // 在绑定元素的 attribute 前
+  // 或事件监听器应用前调用
+  created(el, binding, vnode, prevVnode) {
+    // 下面会介绍各个参数的细节
+  },
+  // 在元素被插入到 DOM 前调用
+  beforeMount() {},
+  // 在绑定元素的父组件
+  // 及他自己的所有子节点都挂载完成后调用
+  mounted() {},
+  // 绑定元素的父组件更新前调用
+  beforeUpdate() {},
+  // 在绑定元素的父组件
+  // 及他自己的所有子节点都更新后调用
+  updated() {},
+  // 绑定元素的父组件卸载前调用
+  beforeUnmount() {},
+  // 绑定元素的父组件卸载后调用
+  unmounted() {}
+}
+```
+
+来实现一个通用的`v-focus`指令，控制输入框自动聚焦：
+
+```js
+<script setup>
+// 在模板中启用 v-focus
+const vFocus = {
+  mounted: (el) => el.focus()
+}
+</script>
+
+<template>
+  <input v-focus />
+</template>
+```
+
+通常，通用自定义指令可以注册到应用实例全局：
+
+```js
+const app = createApp({})
+
+// 使 v-focus 在所有组件中都可用
+app.directive('focus', {
+  /* ... */
+})
+```
+
+##### 简化形式
+
+在仅需`mounted`和`updated`钩子下实现相同的行为且不关心其他钩子时，可以简化写法：
+
+```html
+<div v-color="color"></div>
+```
+
+```js
+app.directive('color', (el, binding) => {
+  // 这会在 `mounted` 和 `updated` 时都调用
+  el.style.color = binding.value
+})
+```
+
+如果需要组件上使用自定义指令，则指令始终应用于组件的根节点。
+
+所有钩子的参数格式都是一致的：
+
+- `el`：指令绑定到的元素。这可以用于直接操作 DOM。
+- `binding`：一个对象，包含以下 property。
+  - `value`：传递给指令的值。例如在 `v-my-directive="1 + 1"` 中，值是 `2`。
+  - `oldValue`：之前的值，仅在 `beforeUpdate` 和 `updated` 中可用。无论值是否更改，它都可用。
+  - `arg`：传递给指令的参数 (如果有的话)。例如在 `v-my-directive:foo` 中，参数是 `"foo"`。
+  - `modifiers`：一个包含修饰符的对象 (如果有的话)。例如在 `v-my-directive.foo.bar` 中，修饰符对象是 `{ foo: true, bar: true }`。
+  - `instance`：使用该指令的组件实例。
+  - `dir`：指令的定义对象。
+- `vnode`：代表绑定元素的底层 VNode。
+- `prevNode`：之前的渲染中代表指令所绑定元素的 VNode。仅在 `beforeUpdate` 和 `updated` 钩子中可用。
+
+如果需要复杂的自定义指令，则需要关注这个问题。
+
+
+
+
+
+### 五个实用的内置组件
+
+内置组件可以在任意别的组件里使用，跟宏定义一样无需显式注册。
+
+#### Transition
+
+进入和离开可以由以下三个条件之一触发动画：
+
+- `v-if`条件渲染
+- `v-show`条件显式
+- `<component>`组件的切换
+
+需要注意的是，`<Transition>`仅仅支持单个元素或组件作为其插槽内容，要确保组件仅有一个根元素。
+
+> `transform`和`opacity`切换动画不会影响`DOM`结构，不会导致昂贵的布局重新计算，而`height`、`width`则刚好相反，因此需要谨慎选择动画属性。
+
+`<Transition>`支持在动画过程周期挂上钩子函数：
+
+```jsx
+<Transition
+  @before-enter="onBeforeEnter"
+  @enter="onEnter"
+  @after-enter="onAfterEnter"
+  @enter-cancelled="onEnterCancelled"
+  @before-leave="onBeforeLeave"
+  @leave="onLeave"
+  @after-leave="onAfterLeave"
+  @leave-cancelled="onLeaveCancelled"
+>
+  <!-- ... -->
+</Transition>
+```
+
+手动传入`mode="out-in"`可以控制过渡效果，控制动画执行次序稳定。`CSS`真的很难。
+
+
+
+#### TransitionGroup
+
+控制和设计一个列表中的元素或组件的插入、移除、顺序改变的动画效果。
+
+[TransitionGroup·过渡组 | Vue.js](https://staging-cn.vuejs.org/guide/built-ins/transition-group.html#enter-leave-transitions)
+
+
+
+#### KeepAlive
+
+组件的缓存，防止切换卸载时丢失组件状态，来看看其`props`的实现：
+
+```tsx
+interface KeepAliveProps {
+  /**
+   * 如果指定，则只有与 `include` 名称
+   * 匹配的组件才会被缓存。
+   */
+  include?: MatchPattern
+  /**
+   * 任何名称与 `exclude`
+   * 匹配的组件都不会被缓存。
+   */
+  exclude?: MatchPattern
+  /**
+   * 最多可以缓存多少组件实例。
+   */
+  max?: number | string
+}
+
+type MatchPattern = string | RegExp | (string | RegExp)[]
+```
+
+举个例子：
+
+```html
+<!-- 非活跃的组件将会被缓存！ -->
+<KeepAlive include="demo">
+  <component :is="activeComponent" />
+</KeepAlive>
+```
+
+仅仅缓存组件名为`demo`的组件（区分大小写）。
+
+
+
+#### Teleport
+
+`Teleport`简称`TP`，适用于将组件的一部分模板传送到此组件的`DOM`层次结构之外的节点中。
+
+应用场景有全局的模态框、信息提示等。
+
+`Teleport`仅改变了渲染的`DOM`结构，不会影响组件间的逻辑关系，开发者可以正常使用组件和子组件的交互的数据（props/reject/provider）等。
+
+`Teleport`支持`disabled`属性将其特性禁用，从而视为行内组件。
+
+当在一个目标上挂载多个`Teleport`时，将会按顺序挂载。
+
+```html
+<Teleport to="#modals">
+  <div>A</div>
+</Teleport>
+<Teleport to="#modals">
+  <div>B</div>
+</Teleport>
+```
+
+将渲染成：
+
+```html
+<div id="modals">
+  <div>A</div>
+  <div>B</div>
+</div>
+```
+
+
+
+#### Suspense
+
+2022-06-17 `Suspense`依然是实验性功能。
+
+`Suspense`组件可以等待整个内部多层级组件树的各个异步依赖获取结果时，在顶层展示加载中或加载失败的状态。
+
+`Suspense`可以等待的异步依赖如下：
+
+- 带有异步 `setup`钩子的组件（使用setup语法糖，顶层具有await表达式的组件）
+- 异步组件（默认本身加载状态被忽略，由`Suspense`接管依赖，也可以在选项中制定`suspensible: false`表达不受`Suspense`控制的特性）
+
+
+
+来看一个实例：
+
+```jsx
+<Suspense>
+  <!-- 具有深层异步依赖的组件 -->
+  <Dashboard />
+
+  <!-- 在 #fallback 插槽中显示 “正在加载中” -->
+  <template #fallback>
+    Loading...
+  </template>
+</Suspense>
+```
+
+和一个配合复杂的实例：
+
+```jsx
+<RouterView v-slot="{ Component }">
+  <template v-if="Component">
+    <Transition mode="out-in">
+      <KeepAlive>
+        <Suspense>
+          <!-- 主要内容 -->
+          <component :is="Component"></component>
+
+          <!-- 加载中状态 -->
+          <template #fallback>
+            正在加载...
+          </template>
+        </Suspense>
+      </KeepAlive>
+    </Transition>
+  </template>
+</RouterView>
+```
+
+
 
