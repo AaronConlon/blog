@@ -1,16 +1,24 @@
-import { ThemeProvider, CSSReset } from "@chakra-ui/core";
-import "../styles/global.css";
-import { AppProps } from "next/app";
+import "windi.css";
+import "@/styles/globals.css";
 
-export default function App({
-  Component,
-  pageProps,
-}: // eslint-disable-next-line no-undef
-AppProps): React.ReactNode {
+import type { AppProps } from "next/app";
+import Layout from "@/layout";
+import { useEffect } from "react";
+
+function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.add("light");
+    }
+  }, []);
+
   return (
-    <ThemeProvider>
-      <CSSReset />
+    <Layout>
       <Component {...pageProps} />
-    </ThemeProvider>
+    </Layout>
   );
 }
+
+export default MyApp;
