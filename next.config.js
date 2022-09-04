@@ -9,6 +9,9 @@ const nextConfig = {
     config.plugins.push(new WindiCSSWebpackPlugin());
     return config;
   },
+  images: {
+    domains: ["images.unsplash.com"],
+  },
 };
 
 module.exports = nextConfig;

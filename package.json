@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "clsx": "^1.2.1",
+    "date-fns": "^2.29.2",
     "framer-motion": "^7.2.1",
+    "gray-matter": "^4.0.3",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
