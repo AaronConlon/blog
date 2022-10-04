@@ -1,7 +1,9 @@
+import * as matter from "gray-matter";
+
+import path, { basename, dirname, join } from "path";
+
 import { IDirRecord } from "@/interfaces/article";
 import fs from "fs/promises";
-import path, { basename, dirname, join } from "path";
-import * as matter from "gray-matter";
 
 function createRecord(dirName: string): IDirRecord {
   return {
@@ -25,7 +27,7 @@ export const getArticleList = async () => {};
  * @returns {any}
  */
 export const scanArticleDir = async (dirName: string) => {
-  console.log("scan dir:", dirName);
+  // console.log("scan dir:", dirName);
 
   const record = createRecord(basename(dirName));
   const dirInfo = await fs.readdir(dirName);
@@ -35,7 +37,7 @@ export const scanArticleDir = async (dirName: string) => {
       // read file
       if (stat.isFile() && item.endsWith(".md")) {
         const rawContent = await fs.readFile(join(dirName, item), "utf-8");
-        console.log(rawContent);
+        // console.log(rawContent);
 
         const { data, content } = matter(rawContent);
 
@@ -49,8 +51,8 @@ export const scanArticleDir = async (dirName: string) => {
       }
     })
   );
-  console.log("record:");
-  console.log(record);
+  // console.log("record:");
+  // console.log(record);
 
   return record;
 };

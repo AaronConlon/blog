@@ -1,14 +1,19 @@
-import Head from "next/head";
-import Image from "next/image";
-import type { NextPage } from "next";
-import { GetStaticProps, GetServerSideProps } from "next";
-import { scanArticleDir } from "@/utils";
+import { GetServerSideProps, GetStaticProps } from "next";
+
 import { BLOG_ARTICLE_DIR } from "@/configs/index";
+import Head from "next/head";
 import { IDirRecord } from "@/interfaces/article";
+import { IUserInfo } from "@/interfaces/userInfo";
+import Image from "next/image";
 import MiniArticle from "@/components/MiniArticle";
+import type { NextPage } from "next";
+import axios from "axios";
+import { request } from "@/utils/request";
+import { scanArticleDir } from "@/utils";
+import styles from "@/styles/masonry.module.scss";
 
 const Home: NextPage = ({ dirInfo }: { dirInfo: IDirRecord }) => {
-  console.log("dirInfo:", dirInfo);
+  const tagRecord = {};
 
   return (
     <>
@@ -18,22 +23,25 @@ const Home: NextPage = ({ dirInfo }: { dirInfo: IDirRecord }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex px-4">
-        <section className="flex-grow ">
-          <ul>
-            {dirInfo.articleList.map((i, idx) => (
-              <li key={idx} className=" my-8 rounded-md ">
-                <MiniArticle {...i} />
-              </li>
-            ))}
-          </ul>
-        </section>
-        <aside className="w-36 bg-purple-50 p-4">
-          <ul>
+        <aside className="bg-purple-50 p-4">
+          <ul className="w-[240px]">
             {dirInfo.children.map((i, idx) => (
               <li key={idx}>{i.dirName}</li>
             ))}
           </ul>
         </aside>
+        <section className="flex-grow p-8">
+          <ul className={styles.masonry}>
+            {dirInfo.articleList.map((i, idx) => (
+              <li
+                key={idx}
+                className="rounded-md block bg-gray-50 mb-8 break-inside-avoid"
+              >
+                <MiniArticle {...i} />
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
     </>
   );
@@ -44,10 +52,26 @@ export default Home;
 // return props to current page component as props
 export const getStaticProps: GetStaticProps = async (context) => {
   const dirInfo = await scanArticleDir(BLOG_ARTICLE_DIR);
+  // console.log("dirInfo:", dirInfo.children);
+  const tagRecord = { ALL: [] };
+  dirInfo.articleList.forEach((item) => {
+    const { tags } = item;
+    tags.forEach((tag) => {
+      if (tagRecord[tag] === undefined) {
+        tagRecord[tag] = [item];
+      } else {
+        tagRecord[tag].push(item);
+      }
+    });
+    tagRecord["ALL"].push(item);
+  });
+  // await fetch("http://localhost:3000/api/post");
+  const userInfo = await request.get<IUserInfo>("/api/about");
 
   return {
     props: {
       dirInfo,
+      userInfo,
     },
   };
 };

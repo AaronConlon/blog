@@ -1,8 +1,10 @@
+import { useEffect, useRef, useState } from "react";
+
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { TbFaceIdError } from "react-icons/tb";
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
-import { TbFaceIdError } from "react-icons/tb";
 
 interface IProps {
   src: string;
@@ -18,9 +20,7 @@ function CustomImage({ src, width, height, alt = "cover image" }: IProps) {
   const [isError, setIsError] = useState(false);
 
   const imageLoaded = () => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1 * 600);
+    setIsLoading(false);
   };
 
   const imageError = () => {
@@ -54,20 +54,14 @@ function CustomImage({ src, width, height, alt = "cover image" }: IProps) {
       className="flex items-center justify-center"
     >
       {/* loading */}
-      {isLoading && (
-        <div className="lds-ellipsis">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      )}
-      {isError ? (
+      {isLoading && <AiOutlineLoading3Quarters className="animate-spin" />}
+      {isError && (
         <div className="flex gap-2 justify-center items-center">
           <TbFaceIdError />
           <p>图片迷路了</p>
         </div>
-      ) : (
+      )}
+      {!isError && (
         <img
           style={{
             display: isLoading ? "none" : "unset",

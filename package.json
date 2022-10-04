@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@octokit/request": "^6.2.1",
+    "axios": "^0.27.2",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.2",
     "framer-motion": "^7.2.1",
