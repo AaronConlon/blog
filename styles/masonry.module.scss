@@ -9,3 +9,8 @@
 /* .masonry .item img {
   width: 100%;
 } */
+.hidden_text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

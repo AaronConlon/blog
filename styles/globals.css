@@ -25,3 +25,16 @@ a {
     background: black;
   }
 }
+
+#main-div {
+  padding: 1rem;
+}
+#main-div.calendar {
+  min-height: auto;
+}
+
+@media (max-width: 480px) {
+  #main_container__alanmontgomery {
+    padding: 0;
+  }
+}

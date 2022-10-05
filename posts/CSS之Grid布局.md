@@ -1,11 +1,11 @@
 ---
-title: 'CSS之Grid布局'
-date: '2021/6/10'
+title: "CSS之Grid布局"
+date: "2021/6/10"
 tags:
-- CSS
-mainImg: 'https://images.unsplash.com/photo-1494322296366-b46227baa318?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjMyNTUyMjM&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1494322296366-b46227baa318?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjMyNTUyMjM&ixlib=rb-1.2.1&q=80&w=400'
-intro: '我打算使用 Grid 布局来设计我的音乐网站《岚》，所以这是一篇学习总结类的文章。'
+  - CSS
+mainImg: "https://images.unsplash.com/photo-1494322296366-b46227baa318?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjMyNTUyMjM&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1494322296366-b46227baa318?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjMyNTUyMjM&ixlib=rb-1.2.1&q=80&w=400"
+intro: "我打算使用 Grid 布局来设计我的音乐网站《岚》，所以这是一篇学习总结类的文章。"
 ---
 
 网格布局`(Grid)`被视为当前最强大的`CSS`布局方案。
@@ -30,8 +30,8 @@ intro: '我打算使用 Grid 布局来设计我的音乐网站《岚》，所以
 
 ```html
 <main>
-	<section>a</section>
- 	<section>b</section>
+  <section>a</section>
+  <section>b</section>
   <section>c</section>
 </main>
 ```
@@ -107,8 +107,6 @@ div {
 我们可以得到一个九宫格布局：
 
 ![](https://i.loli.net/2021/06/10/ACZfnmovTdDsiwk.png)
-
-
 
 除了使用`px`这样的绝对单位，也可以使用百分数，甚至可以使用`repeat`类函数简化赋值：
 
@@ -205,14 +203,15 @@ grid-template-columns: 100px auto 100px;
   display: grid;
   grid-template-columns: 100px 100px 100px;
   grid-template-rows: 100px 100px 100px;
-  grid-template-areas: 'a b c'
-                       'd e f'
-                       'g h i';
+  grid-template-areas:
+    "a b c"
+    "d e f"
+    "g h i";
 }
 
 .area-a {
   grid-area: a;
-  ....
+  ....;
 }
 ```
 
@@ -221,9 +220,10 @@ grid-template-columns: 100px auto 100px;
 不使用的区域可以使用`.`占位，可以不同`cell`具有相同的`area`名，以便于指定样式，例如：
 
 ```css
-grid-template-areas: 'a . a'
-                     'b . b'
-                     'c . d';
+grid-template-areas:
+  "a . a"
+  "b . b"
+  "c . d";
 ```
 
 > `grip-template-rows`可以定义子项高度，同时也可以为网格线命名，而网格线可以有多个名字。`grid-template-areas`指定区域名的时候，也默认生成了`areaName-start`和`areaName-end`这样的网格线别名。
@@ -284,7 +284,7 @@ grid-auto-flow: row dense;
   display: grid;
   grid-template-columns: 100px 100px 100px;
   grid-template-rows: 100px 100px 100px;
-  grid-auto-rows: 50px; 
+  grid-auto-rows: 50px;
 }
 ```
 
@@ -333,8 +333,6 @@ grid-auto-flow: row dense;
 
 ![](https://raw.githubusercontent.com/youyiqin/markdown_imgs/master/bg2019032528.png)
 
-
-
 #### 3.1.8 属性简写
 
 此前我有翻译过`google html & css guide`文档风格指南，其中有一条建议是尽量在`css`中使用简写，我认为这是一个很好的准则。
@@ -369,8 +367,6 @@ grid-auto-flow: row dense;
   grid-row-end: 2;
 }
 ```
-
-
 
 上面代码中，项目`item-1`占据第一行，从第一根列线到第三根列线。
 
@@ -443,13 +439,9 @@ place-self: center center;
 
 ```css
 .container {
-  
 }
 ```
-
-
 
 ## 参考
 
 - [CSS Grid 网格布局教程 - 阮一峰的网络日志](http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
-

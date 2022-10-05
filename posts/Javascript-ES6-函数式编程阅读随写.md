@@ -1,11 +1,11 @@
 ---
-title: 'Javascript-ES6-函数式编程阅读随写'
-date: '2020/12/16'
+title: "Javascript-ES6-函数式编程阅读随写"
+date: "2020/12/16"
 tags:
-- Javascript
-mainImg: 'https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=1080'
-coverImg: 'https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=400'
-intro: '第一次看到这本书的时候,记得是几年前在桂电图书馆里,断断续续看了六章,后来便离开了学校.现在买了纸质书打算重新看一遍,这里记录下阅读随想.'
+  - Javascript
+mainImg: "https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1569585723035-0e9e6ff87cbf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=400"
+intro: "第一次看到这本书的时候,记得是几年前在桂电图书馆里,断断续续看了六章,后来便离开了学校.现在买了纸质书打算重新看一遍,这里记录下阅读随想."
 ---
 
 # 函数式编程简介
@@ -18,7 +18,7 @@ intro: '第一次看到这本书的时候,记得是几年前在桂电图书馆�
 
 `JavaScript函数式编程`基于数学函数及其思想进行发展.运用函数式的范式进行开发能创造可缓存和可测试的代码库.
 
-> 简单分辨函数与方法 - JS,不必深究 window和 global 对象.
+> 简单分辨函数与方法 - JS,不必深究 window 和 global 对象.
 
 - 函数: 一段通过名称可调用的代码
 - 方法: 通过名称且关联对象的名称被调用的代码
@@ -30,21 +30,18 @@ intro: '第一次看到这本书的时候,记得是几年前在桂电图书馆�
 **命令式?声明式?**
 
 ```js
-const arr = [1,2,3]
-for(i=0;i<arr.length;i++) 
-  console.log(i)
+const arr = [1, 2, 3];
+for (i = 0; i < arr.length; i++) console.log(i);
 ```
 
 上述代码示例,我们告诉编译器如何去做,这就是`命令式`.
 
 ```js
-const arr = [1,2,3]
-arr.forEach(i => console.log(i))
+const arr = [1, 2, 3];
+arr.forEach((i) => console.log(i));
 ```
 
 `forEach`是一个高阶函数,意在告知编译器`做什么`,`如何做`的部分则在高阶函数内的普通函数中实现.这便是`声明式`.
-
-
 
 **纯函数**:对给定的输入,返回相同的输出的函数.纯函数不依赖于外部环境.也不会改变外部环境.易于对函数进行`测试`.
 
@@ -87,8 +84,8 @@ cat package.json | grep axios
 
 ```js
 const forEach = (arr, Fn) => {
-  for(let i=0;i<arr.length;i++) Fn(arr[i])
-}
+  for (let i = 0; i < arr.length; i++) Fn(arr[i]);
+};
 ```
 
 这是一个简单的高阶函数,抽象了`遍历数组`的问题,如果你使用这个函数,你并不需要关注内部代码是如何实现的.上述例子是一个简单逻辑,同理也可以是更为复杂的逻辑,这样一来就将复杂问题`抽象`出来了.
@@ -99,22 +96,22 @@ const forEach = (arr, Fn) => {
 
 ```js
 const every = (arr, fn) => {
-  let result = true
-  for(const i=0;i<arr.length;i++) {
-    result = result && fn(arr[i])
+  let result = true;
+  for (const i = 0; i < arr.length; i++) {
+    result = result && fn(arr[i]);
   }
-  return result
-}
+  return result;
+};
 
 // for..of.. 版本
 // for...of..是 es6 的函数,可以方便遍历数组
 const every = (arr, fn) => {
-  let result = true
-  for(const value of arr) {
-    result = result && fn(arr[value])
+  let result = true;
+  for (const value of arr) {
+    result = result && fn(arr[value]);
   }
-  return result
-}
+  return result;
+};
 ```
 
 如此一来,我们抽象了对数组遍历的操作.
@@ -123,12 +120,12 @@ const every = (arr, fn) => {
 
 ```js
 const every = (arr, fn) => {
-  let result = true
-  for(const value of arr) {
-    result = result || fn(arr[value])
+  let result = true;
+  for (const value of arr) {
+    result = result || fn(arr[value]);
   }
-  return result
-}
+  return result;
+};
 ```
 
 > some 函数和 every 函数都不算高效,这里只是作为对高阶函数的展示.
@@ -137,16 +134,16 @@ const every = (arr, fn) => {
 
 ```js
 function compare(a, b) {
-  if(条件) {
+  if (条件) {
     // a 小于 b
-    return -1
+    return -1;
   }
-  if(条件) {
+  if (条件) {
     // a 大于 b
-    return 1
+    return 1;
   }
   // a 等于 b
-  return 0
+  return 0;
 }
 ```
 
@@ -155,22 +152,22 @@ function compare(a, b) {
 ```js
 const people = [
   {
-    name: 'Aaron',
-    age: 10
+    name: "Aaron",
+    age: 10,
   },
   {
-    name: 'Rose',
-    age: 11
-  }
-]
+    name: "Rose",
+    age: 11,
+  },
+];
 ```
 
 而需求则是,通过姓名排序或者通过年龄排序.根据前置知识,可以写出如下代码:
 
 ```js
 // 简化逻辑,忽略相等的情况
-people.sort((a, b) => a.name > b.name ? 1 : -1)
-people.sort((a, b) => a.age > b.age ? 1: -1)
+people.sort((a, b) => (a.name > b.name ? 1 : -1));
+people.sort((a, b) => (a.age > b.age ? 1 : -1));
 ```
 
 上述代码,我们将雷同的部分写了两遍.现在我们来设计一个函数,接收一个参数,返回一个函数.是的,将要设计的这个函数是一个`高阶函数`.
@@ -178,25 +175,25 @@ people.sort((a, b) => a.age > b.age ? 1: -1)
 ```js
 const sortBy = (property) => {
   return (a, b) => {
-    return a[property] > b[property] ? 1 : -1
-  }
-}
+    return a[property] > b[property] ? 1 : -1;
+  };
+};
 // 简化版
-const sortBy = property => (a, b) => a[property] > b[property] ? 1 : -1
+const sortBy = (property) => (a, b) => a[property] > b[property] ? 1 : -1;
 ```
 
 现在,我们可以重写按`name`或者`age`的排序代码了.
 
 ```js
-people.sort(sortBy('name'))
-people.sort(sortBy('age'))
+people.sort(sortBy("name"));
+people.sort(sortBy("age"));
 ```
 
 这就是`高阶函数`的魅力.运用高阶函数,提高代码质量,降低代码数量.
 
 # 闭包与高阶函数
 
- 简而言之,闭包就是一个内部函数.在一个函数内部的函数,可以称为`闭包函数`.
+简而言之,闭包就是一个内部函数.在一个函数内部的函数,可以称为`闭包函数`.
 
 从`技术上`来讲,上述闭包函数的闭包场景存在三个可访问的作用域:
 
@@ -209,7 +206,7 @@ people.sort(sortBy('age'))
 举个例子,一个字符串数组,想要解析成整数数组,如下代码会有问题:
 
 ```js
-['1', '2'].map(parseInt)
+["1", "2"].map(parseInt);
 ```
 
 `map`函数用三个参数调用了`parseInt`,分别是:
@@ -226,10 +223,10 @@ parseInt(string, radix);
 
 `radix`是可选的基数,如果提供 10,则转换为十进制的整数.
 
-如果 `radix` 是 `undefined`、`0`或未指定的，JavaScript会假定以下情况：
+如果 `radix` 是 `undefined`、`0`或未指定的，JavaScript 会假定以下情况：
 
-1. 如果输入的 `string`以 "`0x`"或 "`0x`"（一个0，后面是小写或大写的X）开头，那么radix被假定为16，字符串的其余部分被当做十六进制数去解析。
-2. 如果输入的 `string`以 "`0`"（0）开头， `radix`被假定为`8`（八进制）或`10`（十进制）。具体选择哪一个radix取决于实现。ECMAScript 5 澄清了应该使用 10 (十进制)，但不是所有的浏览器都支持。**因此，在使用 `parseInt` 时，一定要指定一个 radix**。
+1. 如果输入的 `string`以 "`0x`"或 "`0x`"（一个 0，后面是小写或大写的 X）开头，那么 radix 被假定为 16，字符串的其余部分被当做十六进制数去解析。
+2. 如果输入的 `string`以 "`0`"（0）开头， `radix`被假定为`8`（八进制）或`10`（十进制）。具体选择哪一个 radix 取决于实现。ECMAScript 5 澄清了应该使用 10 (十进制)，但不是所有的浏览器都支持。**因此，在使用 `parseInt` 时，一定要指定一个 radix**。
 3. 如果输入的 `string` 以任何其他值开头， `radix` 是 `10` (十进制)。
 
 如果第一个字符不能转换为数字，`parseInt`会返回 `NaN`。
@@ -239,8 +236,8 @@ parseInt(string, radix);
 如何用函数式的思维,创建一个高阶函数,对`parseInt`进行抽象.
 
 ```js
-const unary = (fn) => fn.length === 1 ? fn : (arg) => fn(arg)
-['1','2','3'].map(unary(parseInt))
+const unary = (fn) =>
+  fn.length === 1 ? fn : (arg) => fn(arg)[("1", "2", "3")].map(unary(parseInt));
 ```
 
 现在,即使`map`以三个参数调用`unary`函数执行后返回的函数,都只会让`element`参数生效.
@@ -251,29 +248,29 @@ const unary = (fn) => fn.length === 1 ? fn : (arg) => fn(arg)
 
 ```js
 const once = (fn) => {
-  let done = false
-  return () => done ? undefined : ((done = true), fn.apply(this, arguments))
-}
+  let done = false;
+  return () => (done ? undefined : ((done = true), fn.apply(this, arguments)));
+};
 ```
 
 现在用一个变量`done`保存函数的执行状态.
 
 ```js
 const demoFn = (a, b) => {
-  console.log(a, b, 'just called once.')
-}
-const newDemoFn = once(demoFn)
-newDemoFn(1, 2) // output: 1 2 just called once.
-newDemoFn(3, 4) // no output
+  console.log(a, b, "just called once.");
+};
+const newDemoFn = once(demoFn);
+newDemoFn(1, 2); // output: 1 2 just called once.
+newDemoFn(3, 4); // no output
 ```
 
 继续,创建下一个函数`memoized`,使函数记住其计算结果:
 
 ```js
 const memoized = (fn) => {
-  const lookupTable = {}
-  return (arg) => lookupTable[arg] || (lookupTable[arg] = fn(arg))
-}
+  const lookupTable = {};
+  return (arg) => lookupTable[arg] || (lookupTable[arg] = fn(arg));
+};
 ```
 
 一个速查`table`保存了函数解构,如果不存在则执行此函数,保存到速查表中并且返回此结果.
@@ -290,24 +287,24 @@ const memoized = (fn) => {
 
 ```js
 const map = (arr, fn) => {
-  const result = []
-  for(const v of arr) {
-    result.push(fn(v))
+  const result = [];
+  for (const v of arr) {
+    result.push(fn(v));
   }
-	return result
-}
+  return result;
+};
 ```
 
 一个`filter`函数,对数组内容进行过滤.
 
 ```js
 const filter = (arr, fn) => {
-  const result = []
-  for(const v of arr) {
-    if(fn(v)) result.push(v)
+  const result = [];
+  for (const v of arr) {
+    if (fn(v)) result.push(v);
   }
-  return result
-}
+  return result;
+};
 ```
 
 一个`reduce`函数,对数组的所有值进行`归约`操作.
@@ -315,31 +312,32 @@ const filter = (arr, fn) => {
 ```js
 var reduce = (arr, fn, defaultAccumlator) => {
   let accumlator;
-  if(defaultAccumlator !== undefined) {
-    accumlator = defaultAccumlator
-    for(const v of arr) {
-      accumlator = fn(accumlator, v)
+  if (defaultAccumlator !== undefined) {
+    accumlator = defaultAccumlator;
+    for (const v of arr) {
+      accumlator = fn(accumlator, v);
     }
   } else {
-    accumlator = arr[0]
-    for(let i=1;i<arr.length;i++) {    
-      accumlator = fn(accumlator, arr[i])
+    accumlator = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+      accumlator = fn(accumlator, arr[i]);
     }
   }
-  return [accumlator]
-}
+  return [accumlator];
+};
 ```
 
 **继续**,上`zip`函数,用于合并两个单独的数组,返回一个处理过的新数组.这个函数可以对给定的两个数组的限定对象进行结对处理,如何处理取决于具体的函数逻辑.结对的结果就是返回一个新的数组.
 
 ```js
 const zip = (arr1, arr2, fn) => {
-  let index, result = []
-  for(index = 0;index < Math.min(arr1.length, arr2.length);index++) {
-    result.push(fn(arr1[index], arr2[index]))
+  let index,
+    result = [];
+  for (index = 0; index < Math.min(arr1.length, arr2.length); index++) {
+    result.push(fn(arr1[index], arr2[index]));
   }
-  return result
-}
+  return result;
+};
 ```
 
 # currying 和偏应用
@@ -354,15 +352,16 @@ const zip = (arr1, arr2, fn) => {
 上代码:
 
 ```js
- const curry = binaryFn => {
-  return firstArg => {
-    return secondArg => {
+const curry = (binaryFn) => {
+  return (firstArg) => {
+    return (secondArg) => {
       return binaryFn(firstArg, secondArg);
-    }
-  }
-}
+    };
+  };
+};
 // 简化
-const curry = binaryFn => firstArg => secondArg => binaryFn(firstArg, secondArg)
+const curry = (binaryFn) => (firstArg) => (secondArg) =>
+  binaryFn(firstArg, secondArg);
 ```
 
 完美利用了闭包的特性,也许对于一些深谙此道的 coder 而言,这不算什么.但是对于此刻的我来说,从未如此清晰体会到闭包和 currying.如此之美.
@@ -371,16 +370,16 @@ const curry = binaryFn => firstArg => secondArg => binaryFn(firstArg, secondArg)
 
 ```js
 const loggerHelper = (mode, msg, errorMsg, lineNo) => {
-  if(mode === 'DEBUG') {
-    console.debug(msg, errorMsg + 'at line:' + lineNo)
-  } else if(mode === 'WARN') {
-    console.warn(msg, errorMsg + 'at line:' + lineNo)
-  } else if(mode === 'ERROR') {
-    console.error(msg, errorMsg + 'at line:' + lineNo)
+  if (mode === "DEBUG") {
+    console.debug(msg, errorMsg + "at line:" + lineNo);
+  } else if (mode === "WARN") {
+    console.warn(msg, errorMsg + "at line:" + lineNo);
+  } else if (mode === "ERROR") {
+    console.error(msg, errorMsg + "at line:" + lineNo);
   } else {
-    throw "WRONG MODE"
+    throw "WRONG MODE";
   }
-}
+};
 ```
 
 上述代码不是良好的设计,多次重用了部分代码,让整体不够简洁.之前创建的`curry`函数也无法处理这个日志函数.我们需要**更进一步**.我们需要把多参数函数转化为`unary function`.
@@ -403,14 +402,14 @@ const curry = (fn) => {
 }
 ```
 
-> `arguments`对象是所有（非箭头）函数中都可用的**局部变量**。你可以使用`arguments`对象在函数中引用函数的参数。此对象包含传递给函数的每个参数，第一个参数在索引0处。
+> `arguments`对象是所有（非箭头）函数中都可用的**局部变量**。你可以使用`arguments`对象在函数中引用函数的参数。此对象包含传递给函数的每个参数，第一个参数在索引 0 处。
 
 回到`日志函数`:
 
 ```js
-const errorDebugLog = curry(loggerHelper)('ERROR')('ERROR:')
-const warnDebugLog = curry(loggerHelper)('WARN')('WARN:')
-errorDebugLog('balabala..', 21) // output: 'ERROR: balabala at line 21'
+const errorDebugLog = curry(loggerHelper)("ERROR")("ERROR:");
+const warnDebugLog = curry(loggerHelper)("WARN")("WARN:");
+errorDebugLog("balabala..", 21); // output: 'ERROR: balabala at line 21'
 ```
 
 这就是闭包的魅力,在首次传入`loggerHelper`的时候,闭包生成了可访问变量作用域,记住了函数信息.
@@ -423,22 +422,22 @@ errorDebugLog('balabala..', 21) // output: 'ERROR: balabala at line 21'
 首先,创建一个检查函数:`findNumberInArr`
 
 ```js
-const match = curry((expr, str) => str.match(expr))
-const hasNumber = curry(match(/[0-9]+/))
-const filter = curry((fn, arr) => arr.filter(fn))
+const match = curry((expr, str) => str.match(expr));
+const hasNumber = curry(match(/[0-9]+/));
+const filter = curry((fn, arr) => arr.filter(fn));
 // create fn
-const findNumberInArr = filter(hasNumber)
+const findNumberInArr = filter(hasNumber);
 // test
-findNumberInArr(['demo', 'demo1']) // output: ['demo1']
+findNumberInArr(["demo", "demo1"]); // output: ['demo1']
 ```
 
 现在求数组的平方,我们通过`curry`函数进行处理,这次不要直接通过`map`函数传入一个平方函数解决这个问题.换一个视角.
 
 ```js
-const map = curry((fn, arr) => arr.map(f))
-const squareAll = map(x => x*x)
+const map = curry((fn, arr) => arr.map(f));
+const squareAll = map((x) => x * x);
 // 现在,squareAll 是一个unary 函数
-squareAll([1,2,3]) // output: [1, 4, 9]
+squareAll([1, 2, 3]); // output: [1, 4, 9]
 ```
 
 我们可以很多地方直接使用`squareAll`函数了.如果需要在多个地方求数组的平方,这个函数可以简化降低代码量,当然,我们还可以配合`memoized`函数进行缓存处理!
@@ -450,15 +449,15 @@ squareAll([1,2,3]) // output: [1, 4, 9]
 ```js
 setTimeout(() => {
   // some code
-}, 10000)
+}, 10000);
 ```
 
 一旦需要在另一个地方使用这个逻辑,就需要重写一遍这些代码.而且无法使用`curry`函数进行处理,因为时间参数是最后一个参数.解决这个问题的方案之一就是创建一个封装函数:
 
 ```js
 const setTimeoutWrapper = (time, fn) => {
-  setTimeout(fn, time)
-}
+  setTimeout(fn, time);
+};
 ```
 
 然后使用`curry`函数进行优化.然而,我们可以进一步减少创建此类函数的开销.
@@ -488,8 +487,6 @@ delayTenMs(demoFn)
 
 再次使用了闭包,记住了`setTimeout`需要的参数列表长度,暂未提供的参数用 undefined 代替.后续返回一个函数,提供参数的同时,补全之前用 undefined 代替的部分参数,最终执行函数.
 
-
-
 例如,我们需要美化一个`json`对象的输出.先看看 json stringify 函数的定义.
 
 ```js
@@ -508,15 +505,15 @@ JSON.stringify(value[, replacer [, space]])
 
 - `space` 可选
 
-  指定缩进用的空白字符串，用于美化输出（pretty-print）；如果参数是个数字，它代表有多少的空格；上限为10。该值若小于1，则意味着没有空格；如果该参数为字符串（当字符串长度超过10个字母，取其前10个字母），该字符串将被作为空格；如果该参数没有提供（或者为 null），将没有空格。
+  指定缩进用的空白字符串，用于美化输出（pretty-print）；如果参数是个数字，它代表有多少的空格；上限为 10。该值若小于 1，则意味着没有空格；如果该参数为字符串（当字符串长度超过 10 个字母，取其前 10 个字母），该字符串将被作为空格；如果该参数没有提供（或者为 null），将没有空格。
 
 ```js
-const obj = {foo: "bar", bar: "foo"}
+const obj = { foo: "bar", bar: "foo" };
 // 第二参数
-JSON.stringify(obj, null, 2)
+JSON.stringify(obj, null, 2);
 // 想办法移除样板代码 null 和 2
-const prettyJson = partial(JSON.stringify, undefined, null, 2)
-prettyJson(obj)
+const prettyJson = partial(JSON.stringify, undefined, null, 2);
+prettyJson(obj);
 ```
 
 啊!`partial`函数有 bug.`partialArgs`传递的是数组,数组传递的是引用.如果不创建一个新的数组,并且在最后重置数组的话,执行一次`partial`化后的函数`delayTenMs`,内部 args 就固定了,闭包变量保存了首次执行的时候提供的参数去替换`undefined`,这里的`undefined`就像占位符.
@@ -524,25 +521,29 @@ prettyJson(obj)
 书上并没有给出一个示例代码来解决问题,只是提出存在 bug 的观点,我写下了如下代码,使用扩展运算符重置占位符效果的`undefined`变量.
 
 ```js
-const partial = (fn, ...partialArgs) => {  
-  let args = [...partialArgs]
+const partial = (fn, ...partialArgs) => {
+  let args = [...partialArgs];
   return (...fullArgs) => {
-    let argIndex = 0
-    for (let index = 0; index < args.length && argIndex < fullArgs.length; index++) {
-      if(args[index] === undefined) {
-        args[index] = fullArgs[argIndex++]
+    let argIndex = 0;
+    for (
+      let index = 0;
+      index < args.length && argIndex < fullArgs.length;
+      index++
+    ) {
+      if (args[index] === undefined) {
+        args[index] = fullArgs[argIndex++];
       }
     }
-    const result = fn.apply(null, args)
-    args = [...partialArgs]
-    return result
-  }
-}
+    const result = fn.apply(null, args);
+    args = [...partialArgs];
+    return result;
+  };
+};
 ```
 
 晚安.
 
-2020年12月21日01:41:11
+2020 年 12 月 21 日 01:41:11
 
 # 管道和组合
 
@@ -555,7 +556,7 @@ const partial = (fn, ...partialArgs) => {
 我们将要创建`compose`函数,例如:
 
 ```js
-const compose = (a, b) => c => a(b(c))
+const compose = (a, b) => (c) => a(b(c));
 ```
 
 依然是熟悉的高阶函数,接收函数作为参数,返回函数.返回的函数的`参数`是关键.
@@ -563,14 +564,14 @@ const compose = (a, b) => c => a(b(c))
 `compose`函数能解决我们常见的一些问题.你是否写过类似如下代码:
 
 ```js
-const data = someFn('this')
-const result = otherFn(data)
+const data = someFn("this");
+const result = otherFn(data);
 ```
 
 一个函数的输出,作为另一个函数的输入.`compose`函数为此而生.
 
 ```js
-const getResult = compose(otherFn, someFn)
+const getResult = compose(otherFn, someFn);
 ```
 
 `getResult`是一个函数,接收的参数跟`someFn`函数一致.我们创建了一个函数`getResult`.这是一种优雅而简单的实现方式.
@@ -584,7 +585,10 @@ const getResult = compose(otherFn, someFn)
 但是,上述`compose`函数无法处理更多函数作为参数.仅仅支持两个函数作为参数是不够的,让我们来优化一下.
 
 ```js
-const compose = (...fns) => (value) => reduce(fns.reverse(), (acc, fn) => fn(acc), value)
+const compose =
+  (...fns) =>
+  (value) =>
+    reduce(fns.reverse(), (acc, fn) => fn(acc), value);
 ```
 
 竟然如此简单桥面,接收一个入口参数`value`,首先设置为初始的`acc`值,依次执行并且返回作为下一个函数的入口.
@@ -592,7 +596,10 @@ const compose = (...fns) => (value) => reduce(fns.reverse(), (acc, fn) => fn(acc
 组合是从右到左执行的,而管道则从左到右.接下来创建`pipe`管道函数.
 
 ```js
-const pipe = (...fns) => value => reduce(fns, (acc,fn) => fn(acc), value)
+const pipe =
+  (...fns) =>
+  (value) =>
+    reduce(fns, (acc, fn) => fn(acc), value);
 ```
 
 只是执行方向不同而已,因此参数列表不必反向.
@@ -604,7 +611,7 @@ const pipe = (...fns) => value => reduce(fns, (acc,fn) => fn(acc), value)
 组合支持结合律.书上并没有详细的介绍和案例分析.只是单纯举例:
 
 ```js
-compose(f, compose(g, h)) == compose(compose(f,g), h)
+compose(f, compose(g, h)) == compose(compose(f, g), h);
 ```
 
 通过组合小函数的方式,让函数的组合更加灵活.
@@ -612,10 +619,10 @@ compose(f, compose(g, h)) == compose(compose(f,g), h)
 下面,我们来创建一个`identity`函数,用于分析调试.接收一个参数,打印并且返回.
 
 ```js
-const identity = it => {
-  console.log(it)
-  return it
-}
+const identity = (it) => {
+  console.log(it);
+  return it;
+};
 ```
 
 由于组合和管道数据是流动的关系,可以在其间插入`identity`函数,输出数据用于调试.这确实非常简单有效.
@@ -629,9 +636,9 @@ const identity = it => {
 函子是`容器`,其持有值.
 
 ```js
-const Container = function(val) {
-  this.value = val
-}
+const Container = function (val) {
+  this.value = val;
+};
 ```
 
 > 不使用箭头函数,箭头函数没有`[[construct]]`和`prototype`属性,无法用`new`实例化.
@@ -648,9 +655,9 @@ let bObj = new Container({a: 1})
 继续,创建一个`of`静态方法.
 
 ```js
-Container.of = function(value) {
-  return new Container(value)
-}
+Container.of = function (value) {
+  return new Container(value);
+};
 ```
 
 于是,我们可以使用`static`函数创建对象了.
@@ -667,9 +674,9 @@ const testObj = Container.of(3)
 看代码:
 
 ```js
-Container.prototype.map = function(fn) {
-  return Container.of(fn(this.value))
-}
+Container.prototype.map = function (fn) {
+  return Container.of(fn(this.value));
+};
 ```
 
 经过`map`函数处理,会返回一个新的 container 对象.于是,我们可以进行如下编码:
@@ -690,17 +697,17 @@ Container.of(3).map(double).map(double)
 
 ```js
 const MayBe = function (val) {
-  this.value = val
-}
-MayBe.of = function(v) {
-  return new MayBe(v)
-}
-MayBe.prototype.isNothing = function() {
-  return (this.value === null || this.value === undefined) 
-}
-MayBe.prototype.map = function(fn) {
-  return this.isNothing() ? MayBe.of(null) : MayBe.of(this.value)
-}
+  this.value = val;
+};
+MayBe.of = function (v) {
+  return new MayBe(v);
+};
+MayBe.prototype.isNothing = function () {
+  return this.value === null || this.value === undefined;
+};
+MayBe.prototype.map = function (fn) {
+  return this.isNothing() ? MayBe.of(null) : MayBe.of(this.value);
+};
 ```
 
 :construction_worker:
@@ -715,9 +722,9 @@ MayBe.of('string').map(x => x.toUpperCase())
 即使不是`typescript`,无法避免`of`方法传入`null`或者`undefined`,内部的`map`方法也会做一次检查,逻辑抽象出来避免了错误.代码没有在`null`或者`undefined`下崩溃.这是一种声明式的方式去编程,这也是一个安全的容器.
 
 ```js
-MayBe.of('pg')
-	.map(x => x.toUpperCase())
-	.map(x => `Mr. ${x}`)
+MayBe.of("pg")
+  .map((x) => x.toUpperCase())
+  .map((x) => `Mr. ${x}`);
 ```
 
 链式调用,优美简洁.
@@ -725,50 +732,50 @@ MayBe.of('pg')
 **另一个函子**`Either`,上述`MayBe`函子在传入`null`或者`undefined`后,最后的结果是`null`.可是我们很难分析出问题出在哪里.我们需要一个更强大的函子,解决分支拓展的问题.
 
 ```js
-const Nothing = function(val) {
-  this.value = val
-}
-Nothing.of = function(v) {
-  return new Nothing(v)
-}
-Nothing.prototype.map = function(f) {
-  return this
-}
-const Some = function(val) {
-  this.value = val
-}
-Some.of = function(v) {
-  return new Some(v)
-}
-Some.prototype.map = function(f) {
-  return Some.of(f(this.value))
-}
+const Nothing = function (val) {
+  this.value = val;
+};
+Nothing.of = function (v) {
+  return new Nothing(v);
+};
+Nothing.prototype.map = function (f) {
+  return this;
+};
+const Some = function (val) {
+  this.value = val;
+};
+Some.of = function (v) {
+  return new Some(v);
+};
+Some.prototype.map = function (f) {
+  return Some.of(f(this.value));
+};
 ```
 
 `Nothing`的 map 函数,返回自身,而不是运行函数`f`.
 
-2020年12月25日12:57:10	:100:
+2020 年 12 月 25 日 12:57:10 :100:
 
 能在`Some`上运行函数,而`Nothing`不行.来吧,实现`Either`.
 
 ```js
 const Either = {
   Some,
-  Nothing
-}
+  Nothing,
+};
 ```
 
 如果我们有一个`web`请求,返回数据可能是正常数据,或者一条错误信息.
 
 ```js
-const getData =(type) => {
+const getData = (type) => {
   let resp;
   try {
-    resp = Some.of(data)
+    resp = Some.of(data);
   } catch {
-    resp = Nothing.of(error)
+    resp = Nothing.of(error);
   }
-}
+};
 ```
 
 后续返回的 response 对象依然是函子,可以使用链式调用的 map 函数.但是,错误信息能保存下去,`Nothing`从头到尾都不会变,直接返回`this`使得后续的 map 函数`失效`.
@@ -802,48 +809,62 @@ const getData =(type) => {
 我们如何按搜索的结果,获取文章的评论,最后返回一个数组,每个元素是一个对象,对象内是`title`和`comments`.
 
 ```js
-const request = require('sync-request')
+const request = require("sync-request");
 const searchReddit = (search) => {
-  let response
+  let response;
   try {
-    response = JSON.parse(request('GET','https://www.reddit.com/saerch.json?q=' + encodeURI(search)).getBody('utf8'))    
-  } catch(err) {
-    response = { msg: 'something wrong', errorCode: err['statusCode']}
+    response = JSON.parse(
+      request(
+        "GET",
+        "https://www.reddit.com/saerch.json?q=" + encodeURI(search)
+      ).getBody("utf8")
+    );
+  } catch (err) {
+    response = { msg: "something wrong", errorCode: err["statusCode"] };
   }
-  return response
-}
+  return response;
+};
 
 const getComments = (link) => {
   let resp;
   try {
-    resp = JSON.parse(request('GET', 'https://www.reddit.com/' + link).getBody('utf8'))
+    resp = JSON.parse(
+      request("GET", "https://www.reddit.com/" + link).getBody("utf8")
+    );
   } catch (err) {
     resp = {
-      msg: 'get comment failed', errorCode: err['statusCode']
-    }    
+      msg: "get comment failed",
+      errorCode: err["statusCode"],
+    };
   }
-  return resp
-}
+  return resp;
+};
 
 // 合并两个函数
 const mergeViaMayBe = (searchText) => {
-  let redditMayBe = MayBe.of(searchReddit(searchText))
+  let redditMayBe = MayBe.of(searchReddit(searchText));
   let ans = redditMayBe
-  	.map(arr => arr['data'])
-  	.map(arr => arr['children'])
-  	.map(arr => map(arr, x => {
-      return {
-        title: x['data'].title,
-        permalink: x['data'].permalink
-      }
-    }))
-  .map(obj => map(obj, x => {
-    return {
-      title: x.title,
-      comments: MayBe.of(getComments(x.permalink.replace('?ref=search_posts', '.json')))
-    }
-  }))
-}
+    .map((arr) => arr["data"])
+    .map((arr) => arr["children"])
+    .map((arr) =>
+      map(arr, (x) => {
+        return {
+          title: x["data"].title,
+          permalink: x["data"].permalink,
+        };
+      })
+    )
+    .map((obj) =>
+      map(obj, (x) => {
+        return {
+          title: x.title,
+          comments: MayBe.of(
+            getComments(x.permalink.replace("?ref=search_posts", ".json"))
+          ),
+        };
+      })
+    );
+};
 ```
 
 运用函子,可以使用链式方法解决问题,非常优雅.
@@ -866,14 +887,14 @@ joinExample.join()
 如果我们想要对内部的值进行操作,也许可以先展开层级,再执行`map`函数,以减少`map`的调用.那么既然当我们需要展开一层的时候都需要在后面跟一个`join`方法,我们可以再封装一个`chain`函数来做这件事.
 
 ```js
-MayBe.prototype.chain = function(f){
-  return this.map(f).join()
-}
+MayBe.prototype.chain = function (f) {
+  return this.map(f).join();
+};
 ```
 
 `Monad`就是包含`chain`方法的特殊函子.或者说,一个函子拥有`chain`方法,就可以称为`Monad`
 
-2020年12月26日01:34:57
+2020 年 12 月 26 日 01:34:57
 
 # 使用 Generator
 
@@ -888,15 +909,15 @@ MayBe.prototype.chain = function(f){
 让我们来创建`Generator`,注意观察这个特殊语法.
 
 ```js
-function * gen() {
-  return 'first generator'
+function* gen() {
+  return "first generator";
 }
 ```
 
 我们在函数前面用一个星号 **\*** 来表示这是一个`Generator`函数.
 
 ```js
-let genResult = gen()
+let genResult = gen();
 ```
 
 此刻,`genResult`并不是`first generator`,而是:
@@ -910,19 +931,19 @@ let genResult = gen()
 `Generator`实例如同序列,一旦使用`next`消费,则不能再次得到上次消费的值.也就是说,如果你继续执行`next()`方法,结果的`vaue`将是`undefined`.
 
 ```js
-function * gen() {
-  yield 1
-  yield 2
-  yield 3
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
 }
 ```
 
 有趣的是,实例执行`next`将会返回`yield`后的结果,并且下次执行`next`会从当前`yield`后继续执行.当所有`yield`结果都消费之后,`done`属性变成`true`.
 
 ```js
-let genResult = gen()
-for(let v of genResult()) {
-  console.log(v)
+let genResult = gen();
+for (let v of genResult()) {
+  console.log(v);
 }
 // 1
 // 2
@@ -959,15 +980,15 @@ fullName.next('Sname')
 ```js
 let getDataOne = (cb) => {
   setTimeout(() => {
-    cb('dummy data one')
-  }, 1000)
-}
+    cb("dummy data one");
+  }, 1000);
+};
 
 let getDataTwo = (cb) => {
   setTimeout(() => {
-    cb('dummy data two')
-  }, 1000)
-}
+    cb("dummy data two");
+  }, 1000);
+};
 ```
 
 一旦时间过去,就执行传入的回调函数`cb`.如果要用`generator`来解决回调函数可能导致的函数回调地狱的问题?
@@ -980,14 +1001,14 @@ let getDataOne = () => {
   setTimeout(() => {
     // 调用 Generator
     // 使用 next 加参数传送数据
-    generator.next('fake data one')
-  }, 1000)
-}
+    generator.next("fake data one");
+  }, 1000);
+};
 ```
 
 然而,我并不是很理解这段代码,`generator`是`undefined`,为何调用`next`.
 
-2020年12月26日22:56:50
+2020 年 12 月 26 日 22:56:50
 
 2020 年即将结束,在异步编程的问题上让我们拥抱`async`和`await`吧.
 

@@ -1,3 +1,5 @@
+import { IUserInfo } from "./userInfo";
+
 export interface ICoverImg {
   mainImg: string;
   coverImg: string;
@@ -17,4 +19,8 @@ export interface IDirRecord {
   dirName: string;
   articleList: IArticle[];
   children: IDirRecord[];
+}
+
+export interface ITagRecord {
+  [k: string]: IUserInfo[];
 }

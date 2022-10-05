@@ -1,29 +1,27 @@
 ---
-title: 'Windows终端优化浅解'
-date: '6/12/2022'
+title: "Windows终端优化浅解"
+date: "6/12/2022"
 tags:
-- Windows
-mainImg: 'https://imagesmdImgsunsplashmdImgscom/photo-1571171637578-41bc2dd41cd2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTUwMTQyMDI&ixlib=rb-1mdImgs2mdImgs1&q=80&w=1080'
-coverImg: 'https://imagesmdImgsunsplashmdImgscom/photo-1571171637578-41bc2dd41cd2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTUwMTQyMDI&ixlib=rb-1mdImgs2mdImgs1&q=80&w=400'
-intro: '即使我们使用Windows系统作为日常开发环境，也可以拥有不错的命令行终端功能！'
+  - Windows
+mainImg: "https://images.unsplash.com/photo-1617042375876-a13e36732a04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTc0NDI0Njc&ixlib=rb-1.2.1&q=80&w=1080"
+coverImg: "https://images.unsplash.com/photo-1617042375876-a13e36732a04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNjUyNjZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTc0NDI0Njc&ixlib=rb-1.2.1&q=80&w=400"
+intro: "即使我们使用Windows系统作为日常开发环境，也可以拥有不错的命令行终端功能！"
 ---
 
 我日常用过`linux`、`Windows`、`MacOS`系统作为开发环境，其中`Windows`对命令行终端的支持度让我最不满意。于是，我转向了`MacOS`阵营，真香。
 
 前几天，前同事从公司跳槽去了甲方公司，用起了公司配的`Windows`笔记本并且吐槽命令行环境难用，于是我决定写这一篇文章分享出来，让我们花一点点时间优化一下`Windows`环境下的命令行终端的使用体验。
 
-
-
 主要内容如下
 
-- 升级核心shell:`powershell v7`
+- 升级核心 shell:`powershell v7`
 - 更换默认终端软件:`tabby`
 - 选择字体
 - 主题优化
 - `Fish-like`命令推断
 - 支持`autojump`
 
-### 核心Shell
+### 核心 Shell
 
 不同的操作系统平台都有自己的默认`shell`支持，如`linux`常用`bash`，而`MacOS`支持`zsh`，`windows`下起初使用`CMD`，随着版本升级和终端发展，微软开始推广`Powershell`。
 
@@ -31,7 +29,7 @@ intro: '即使我们使用Windows系统作为日常开发环境，也可以拥�
 
 [Installing PowerShell on Windows - PowerShell | Microsoft Docs](https://docsmdImgsmicrosoftmdImgscom/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7mdImgs2#msi)
 
-> 5mdImgs1版本的 powershell 基于 mdImgsNET Framework，而 7mdImgsx 则基于 mdImgsNET Core，后者具有跨平台的优势和一些新特性
+> 5mdImgs1 版本的 powershell 基于 mdImgsNET Framework，而 7mdImgsx 则基于 mdImgsNET Core，后者具有跨平台的优势和一些新特性
 
 下载之后安装即可。
 
@@ -41,7 +39,7 @@ intro: '即使我们使用Windows系统作为日常开发环境，也可以拥�
 
 终端软件方面，其实有很多选择。我个人比较喜欢`Tabby`！其官网主页链接：[Tabby - a terminal for a more modern age](https://tabbymdImgssh/) ！
 
-> windows的老用户或许用过许多其他终端，但是还是推荐大家体验一下新出现的一些应用，新应用在UI设计/功能设计上都或多或少弥补了老应用的一些不足。
+> windows 的老用户或许用过许多其他终端，但是还是推荐大家体验一下新出现的一些应用，新应用在 UI 设计/功能设计上都或多或少弥补了老应用的一些不足。
 
 下载`x64`版本的可执行程序，安装之。
 
@@ -49,7 +47,7 @@ intro: '即使我们使用Windows系统作为日常开发环境，也可以拥�
 
 ![image-20220612144620868](C:\Users\Zz\Desktop\image-20220612144620868mdImgspng)
 
-选择`Powershell v7`作为默认shell即可。
+选择`Powershell v7`作为默认 shell 即可。
 
 ### 字体优化
 
@@ -57,11 +55,9 @@ intro: '即使我们使用Windows系统作为日常开发环境，也可以拥�
 
 > [source-foundry/Hack: A typeface designed for source code](https://githubmdImgscom/source-foundry/Hack) 如果你喜欢`hack`的风格，也可以下载使用。
 
-
-
 ### 终端主题优化 - Oh-my-posh
 
-`oh my zsh`大名鼎鼎，但是在windows下我们选择`Powershell`作为核心`shell`，社区里也有[Home | Oh My Posh](https://ohmyposhmdImgsdev/)可用。
+`oh my zsh`大名鼎鼎，但是在 windows 下我们选择`Powershell`作为核心`shell`，社区里也有[Home | Oh My Posh](https://ohmyposhmdImgsdev/)可用。
 
 我们打开`tabby`，输入安装命令：
 
@@ -71,7 +67,7 @@ intro: '即使我们使用Windows系统作为日常开发环境，也可以拥�
 
 即可通过`winget`安装`ohMyPosh`。
 
-> 如果终端提示权限不足，则可以尝试使用管理员权限打开powershell，执行`Set-ExecutionPolicy bypass`命令修改执行策略。
+> 如果终端提示权限不足，则可以尝试使用管理员权限打开 powershell，执行`Set-ExecutionPolicy bypass`命令修改执行策略。
 
 接下来，我们要了解一些预置知识：`powershell `的配置文件的路径为：`$PROFILE`，其地位可以视为`bash`的`mdImgsbashrc`。
 
