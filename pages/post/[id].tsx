@@ -4,6 +4,7 @@ import { labelsAtom, userInfoAtom } from "@/store";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { IUserInfo } from "@/interfaces/userInfo";
+import Label from "@/components/Label";
 import Markdown from "markdown-to-jsx";
 import PreBlock from "@/components/PreBlock";
 import clsx from "clsx";
@@ -33,9 +34,9 @@ function Article({ labels, info, post }: IProps) {
   return (
     <>
       <h1 className="text-[36px] text-center py-24">{title}</h1>
-      <div className="flex gap-4 justify-center items-center">
-        {_labels.map(({ name }) => (
-          <span key={name}>{name}</span>
+      <div className="flex gap-4 justify-center items-center mb-12">
+        {_labels.map((label) => (
+          <Label label={label} key={label.id} />
         ))}
       </div>
       <Markdown
