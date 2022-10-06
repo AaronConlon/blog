@@ -65,7 +65,7 @@ function Introduction() {
         </div>
         <div className="sm:mx-0 md:lg-24 relative">
           {/* <SubscriptionMe /> */}
-          <img src="study.svg" alt="" className="w-128" />
+          <img src="/study.svg" alt="" className="w-128" />
           <div className="w-96 h-96 bg-purple-100 rounded-full absolute bottom-24 -z-1"></div>
         </div>
       </div>

@@ -55,7 +55,7 @@ function Footer() {
           </div>
           <FriendLinks />
         </div>
-        <img src="work.svg" alt="" className="w-128 md:block sm:hidden" />
+        <img src="/work.svg" alt="" className="w-128 md:block sm:hidden" />
       </div>
       <div className="pb-8">
         <GithubContributions

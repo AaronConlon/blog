@@ -1,9 +1,9 @@
 .markdown {
-  max-width: 960px;
+  max-width: 720px;
   margin: 0 auto;
   /* 下面是博客页面的Markdown样式 */
   p {
-    text-indent: 2rem;
+    // text-indent: 2rem;
     line-height: 2rem;
     word-spacing: 2px;
   }
@@ -81,12 +81,13 @@
     display: inline-block;
     margin: 0 6px;
     padding: 0 4px;
-    border-bottom: 3px solid #34cd65;
+    // border-bottom: 2px solid #661a8a6b;
     height: 1.6rem;
     line-height: 1.6rem;
-    color: rgb(21, 27, 203);
-    background-color: #c0e6c2;
+    color: purple;
+    background-color: #e9ccffaa;
     text-indent: 0 !important;
+    border-radius: 2px;
   }
 
   input[type="checkbox"]:checked:after {
@@ -126,18 +127,19 @@
   li li {
     list-style-type: circle;
   }
-
+  blockquote {
+    border-left: 4px solid #762aa7b8;
+    margin: 40px 0;
+  }
   blockquote p {
     background-color: #eef8f1;
     text-indent: 0;
-    padding-left: 0.4rem;
-    border-left: 3px solid rgb(11, 215, 59);
-    margin: 1rem 0;
-    margin-left: 2rem;
-    border-top: 0.5rem solid #eef8f1;
-    border-bottom: 0.5rem solid #eef8f1;
+    padding: 1rem;
+    margin: 1.5rem 0;
     color: #676a67;
+    word-break: break-all;
   }
+
 
   table {
     margin: 10px 0 15px 0;

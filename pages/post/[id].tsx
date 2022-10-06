@@ -5,6 +5,8 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { IUserInfo } from "@/interfaces/userInfo";
 import Markdown from "markdown-to-jsx";
+import PreBlock from "@/components/PreBlock";
+import clsx from "clsx";
 import { getAllIssue } from "@/utils/github";
 import { request } from "@/utils/request";
 import styles from "@/styles/post.module.scss";
@@ -22,9 +24,8 @@ function Article({ labels, info, post }: IProps) {
   const setLabelStore = useSetAtom(labelsAtom);
   const setUserInfoStore = useSetAtom(userInfoAtom);
   const { body, title, labels: _labels } = post;
-  useEffect(() => {
-    console.log("post::::::", post);
 
+  useEffect(() => {
     setLabelStore({ isShow: false, list: labels });
     setUserInfoStore(info);
   }, []);
@@ -37,7 +38,16 @@ function Article({ labels, info, post }: IProps) {
           <span key={name}>{name}</span>
         ))}
       </div>
-      <Markdown className={styles.markdown}>{body}</Markdown>
+      <Markdown
+        className={clsx(styles.markdown, "pb-12")}
+        options={{
+          overrides: {
+            pre: PreBlock,
+          },
+        }}
+      >
+        {body}
+      </Markdown>
     </>
   );
 }

@@ -150,7 +150,7 @@ const Home: NextPage = ({ info, labels, posts }: IProps) => {
             </ul>
           ) : (
             <div className="flex flex-col gap-4 py-10 items-center">
-              <img src="empty.svg" className="w-128 block" alt="" />
+              <img src="/empty.svg" className="w-128 block" alt="" />
               <p className="text-center text-purple-200 text-2xl block">
                 暂无内容
               </p>
