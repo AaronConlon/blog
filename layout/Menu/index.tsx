@@ -2,24 +2,33 @@ import { AiFillCode, AiOutlineFundProjectionScreen } from "react-icons/ai";
 import { SITE_NAME, routePathRecord } from "@/configs";
 
 import DateAndTime from "./DateComponent";
+import { HiMenuAlt1 } from "react-icons/hi";
+import LabelList from "@/components/LabelList";
 import Link from "next/link";
 import SubscriptionMe from "./Subscription";
 import clsx from "clsx";
+import { labelsAtom } from "@/store";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 function Menu() {
   const route = useRouter();
+  const [labelStore, setLabelStore] = useAtom(labelsAtom);
 
   return (
-    <div className="bg-[#eaf1fd] relative overflow-hidden xl:h-screen">
-      <video
+    <div
+      className="bg-white sticky top-0"
+      style={{ zIndex: labelStore.isShow ? 10 : 999 }}
+    >
+      {/* <video
         src="sea3.mp4"
         muted={true}
         autoPlay={true}
         loop={true}
         className="absolute top-0 left-0 right-0 w-full bottom-0"
-      />
+      /> */}
       <motion.header
         className="relative sticky top-0 max-w-[1200px] mx-auto py-8 md:px-12"
         initial={{ left: 30 }}
@@ -40,7 +49,7 @@ function Menu() {
                 </a>
               </Link>
               <motion.span
-                className="w-1 h-6 bg-purple-600 dark:bg-white relative top-[2px]"
+                className="w-1 h-6 bg-purple-600 dark:bg-white"
                 initial={{ opacity: 1 }}
                 animate={{ opacity: 0 }}
                 transition={{
@@ -53,6 +62,16 @@ function Menu() {
           </div>
           {/* 时间和日期 */}
           {/* <DateAndTime /> */}
+          {/* 标签 */}
+          <div
+            className="text-purple-900 flex items-center gap-2 mr-6 cursor-pointer"
+            onClick={() =>
+              setLabelStore((prev) => ({ ...prev, isShow: !prev.isShow }))
+            }
+          >
+            <HiMenuAlt1 />
+            <span>分类</span>
+          </div>
           {/* nav list */}
           <ul className="flex gap-8 overflow-hidden">
             {Object.keys(routePathRecord)
@@ -83,39 +102,24 @@ function Menu() {
               })}
           </ul>
         </div>
-        <div className="py-32 xl:py-96 flex items-center justify-between">
-          <div className="flex-col gap-12 text-white font-bold flex text-4xl">
-            <p>
-              Hi, 我是妙才，一个{" "}
-              <span className="bg-orange-500 text-light-600 px-2 py-1 rounded-md">
-                web
-              </span>{" "}
-              开发者。
-            </p>
-            <p>在此记录自己的职业生涯。</p>
-          </div>
-          <div className="sm:mx-0 md:lg-24">
-            <SubscriptionMe />
-          </div>
-        </div>
 
-        <p className="text-gray-900 opacity-40 text-sm italic text-right">
+        {/* <p className="text-gray-900 opacity-40 text-sm italic text-right">
           该视频由
           <a
             href="https://pixabay.com/zh/users/engin_akyurt-3656355/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=video&amp;utm_content=20223"
-            className="px-2 text-white"
+            className="px-2 text-purple-900"
           >
             Engin Akyurt
           </a>
           在
           <a
             href="https://pixabay.com/zh//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=video&amp;utm_content=20223"
-            className="px-2 text-white"
+            className="px-2 text-purple-900"
           >
             Pixabay
           </a>
           上发布
-        </p>
+        </p> */}
       </motion.header>
     </div>
   );

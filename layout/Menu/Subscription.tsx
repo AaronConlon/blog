@@ -1,3 +1,7 @@
+import "react-toastify/dist/ReactToastify.css";
+
+import { ToastContainer, toast } from "react-toastify";
+
 import { AiOutlineMail } from "react-icons/ai";
 import { useState } from "react";
 

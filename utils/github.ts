@@ -1,5 +1,6 @@
 import { OWNER, REPO } from "@/utils/consts";
 
+import generateRssFeed from "./generateRssFeed";
 import { request } from "@octokit/request";
 import { uniqWith } from "lodash-es";
 
@@ -21,7 +22,6 @@ export const requestWithAuth = request.defaults({
 
 export const getAllIssue = async (pageNum = 1) => {
   console.log("获取所有issue");
-
   if (globalThis.postList === undefined) {
     globalThis.postList = [];
   }
@@ -32,8 +32,6 @@ export const getAllIssue = async (pageNum = 1) => {
     per_page: 100,
     creator: OWNER,
   });
-  console.log(data.data);
-
   data.data.forEach(
     ({
       id,
@@ -45,6 +43,7 @@ export const getAllIssue = async (pageNum = 1) => {
       updated_at,
       comments,
       comments_url,
+      number,
     }) => {
       globalThis.postList = uniqWith(
         [
@@ -54,6 +53,7 @@ export const getAllIssue = async (pageNum = 1) => {
             content: body,
             labels,
             id,
+            number,
             title,
             created_at,
             updated_at,
@@ -72,5 +72,9 @@ export const getAllIssue = async (pageNum = 1) => {
   if (data.data.length === 100) {
     // 可能存在下一页
     await getAllIssue(pageNum + 1);
+  }
+  // 等一切结束，更新RSS
+  if (pageNum === 1) {
+    generateRssFeed();
   }
 };

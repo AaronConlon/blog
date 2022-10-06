@@ -13,6 +13,9 @@ export interface IGithubIssue {
   description: string;
   comments: number;
   comments_url: string;
+  number: number;
+  description: string;
+  cover: string;
 }
 
 export interface IRepoLabel {
@@ -22,8 +25,6 @@ export interface IRepoLabel {
   name: string;
   color: string;
   default: false;
-  description: string;
-  cover: string;
 }
 
 export enum ESort {

@@ -2,6 +2,12 @@
   column-count: 2;
   column-gap: 20px;
 }
+@media screen and (min-width: 1600px){
+  .masonry {
+    column-count: 3;
+    column-gap: 20px;
+  }
+}
 // .masonry .item {
 //   border: 1px solid #999;
 //   margin-bottom: 10px;

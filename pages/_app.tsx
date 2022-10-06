@@ -2,6 +2,7 @@ import "windi.css";
 import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
+import LabelList from "@/components/LabelList";
 import Layout from "@/layout";
 import { useEffect } from "react";
 
@@ -15,9 +16,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <>
+      <LabelList />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </>
   );
 }
 

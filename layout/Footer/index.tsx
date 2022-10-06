@@ -22,7 +22,7 @@ function Footer() {
             />
             <div>
               <section className="text-xl">{userInfo.name}</section>
-              <p className="text-purple-800 py-2">{userInfo.bio}</p>
+              <p className="text-gray-500 py-2">{userInfo.bio}</p>
             </div>
           </div>
           <div className="text-gray-500">
@@ -47,7 +47,9 @@ function Footer() {
               </div>
               <div className="flex gap-4 items-center">
                 <FcVoicemail />
-                <div>{userInfo.email}</div>
+                <div>
+                  <a href={`mailto:${userInfo.email}`}>{userInfo.email}</a>
+                </div>
               </div>
             </div>
           </div>
@@ -63,9 +65,7 @@ function Footer() {
           showTitle={false}
         />
       </div>
-      <p className="text-center p-8 text-gray-400">
-        Power By ❤️ and create by NextJS.
-      </p>
+      <p className="text-center p-8 text-gray-400">Power By ❤️ and NextJS.</p>
     </footer>
   );
 }
