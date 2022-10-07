@@ -80,7 +80,6 @@ const Home = ({ info, labels, posts }: IProps) => {
       <Head>
         <title>{info.name}的博客 - web developer</title>
         <meta name="description" content={BLOG_DESCRIPTION} />
-        <link rel="icon" href={info.avatar_url} />
       </Head>
       <Introduction />
       <div className="flex sm:px-4 py-16 md:py-20">

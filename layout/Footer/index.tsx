@@ -18,7 +18,7 @@ function Footer() {
       animate={{ opacity: 1, top: 0 }}
       className="bg-[#f9f9fa] relative pb-[44px] sm:pb-0"
     >
-      <div className="flex gap-12 justify-center pt-12 sm:flex-row flex-col px-4 md:px-12">
+      <div className="flex gap-12 justify-center pt-12 sm:flex-row flex-col px-4 md:px-12 max-w-screen lg:max-w-[1200px] mx-auto">
         <div className="flex flex-col gap-4 justify-evenly items-center sm:items-start">
           <div className="flex gap-4">
             <img
@@ -63,7 +63,7 @@ function Footer() {
         </div>
         <img src="/work.svg" alt="" className="w-96 sm:w-128 mx-auto my-4" />
       </div>
-      <div className="pb-8">
+      <div className="pb-8 max-w-screen lg:max-w-[1200px] mx-auto">
         <GithubContributions
           username="Developer27149"
           color="#8B40CC"

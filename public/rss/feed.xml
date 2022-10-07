@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
         <title>妙才Dev</title>
-        <link>http://localhost:3000</link>
+        <link></link>
         <description>web developer blog.</description>
-        <lastBuildDate>Fri, 07 Oct 2022 14:28:57 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 07 Oct 2022 14:44:45 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Feed for Node.js</generator>
         <image>
             <title>妙才Dev</title>
-            <url>http://localhost:3000/code.png</url>
-            <link>http://localhost:3000</link>
+            <url>/code.png</url>
+            <link></link>
         </image>
         <copyright>All rights reserved 2022, 妙才</copyright>
         <item>
             <title><![CDATA[用fish-shell创建一个快速打开当前仓库主页的函数]]></title>
-            <link>http://localhost:3000/blog/1397551248</link>
-            <guid>http://localhost:3000/blog/1397551248</guid>
+            <link>/blog/1397551248</link>
+            <guid>/blog/1397551248</guid>
             <pubDate>Wed, 05 Oct 2022 10:06:01 GMT</pubDate>
             <description><![CDATA[## 前言]]></description>
             <content:encoded><![CDATA[<h2 id="前言">前言</h2>
@@ -73,8 +73,8 @@ end
         </item>
         <item>
             <title><![CDATA[谈谈JWT(Json web token) 技术]]></title>
-            <link>http://localhost:3000/blog/1397548261</link>
-            <guid>http://localhost:3000/blog/1397548261</guid>
+            <link>/blog/1397548261</link>
+            <guid>/blog/1397548261</guid>
             <pubDate>Wed, 05 Oct 2022 13:57:02 GMT</pubDate>
             <description><![CDATA[今天记录一下学习到的后端接口认证的知识，JWT 技术。]]></description>
             <content:encoded><![CDATA[<p>今天记录一下学习到的后端接口认证的知识，JWT 技术。
@@ -150,8 +150,8 @@ SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
         </item>
         <item>
             <title><![CDATA[Sass 浅解]]></title>
-            <link>http://localhost:3000/blog/1397546849</link>
-            <guid>http://localhost:3000/blog/1397546849</guid>
+            <link>/blog/1397546849</link>
+            <guid>/blog/1397546849</guid>
             <pubDate>Wed, 05 Oct 2022 10:02:23 GMT</pubDate>
             <description><![CDATA[目前对 sass 编写样式表一知半解，在写手头的项目时十分不顺，效率低下，因此打算花两个小时重学 sass]]></description>
             <content:encoded><![CDATA[<p>目前对 sass 编写样式表一知半解，在写手头的项目时十分不顺，效率低下，因此打算花两个小时重学 sass</p>
@@ -737,8 +737,8 @@ main.content nav.sidebar {
         </item>
         <item>
             <title><![CDATA[HTML浅解]]></title>
-            <link>http://localhost:3000/blog/1397545704</link>
-            <guid>http://localhost:3000/blog/1397545704</guid>
+            <link>/blog/1397545704</link>
+            <guid>/blog/1397545704</guid>
             <pubDate>Wed, 05 Oct 2022 10:01:26 GMT</pubDate>
             <description><![CDATA[​ 作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？]]></description>
             <content:encoded><![CDATA[<p>​ 作为一个 web 开发者，我们需要掌握的 HTML 知识到底应该有多少？HTML 真的如此简单吗，我们是否应该给与其更多的重视？</p>
@@ -1247,8 +1247,8 @@ main.content nav.sidebar {
         </item>
         <item>
             <title><![CDATA[ECMAScript 2022新规范]]></title>
-            <link>http://localhost:3000/blog/1397544441</link>
-            <guid>http://localhost:3000/blog/1397544441</guid>
+            <link>/blog/1397544441</link>
+            <guid>/blog/1397544441</guid>
             <pubDate>Wed, 05 Oct 2022 10:00:52 GMT</pubDate>
             <description><![CDATA[一年一度的ECMAScript规范发布，看看今年有什么新内容！]]></description>
             <content:encoded><![CDATA[<p>一年一度的ECMAScript规范发布，看看今年有什么新内容！</p>
@@ -1443,8 +1443,8 @@ assert.equal(Object.hasOwn(proto, &#39;protoProp&#39;), true); // (C)
         </item>
         <item>
             <title><![CDATA[Babel 7: polyfill方案浅解 ]]></title>
-            <link>http://localhost:3000/blog/1397543780</link>
-            <guid>http://localhost:3000/blog/1397543780</guid>
+            <link>/blog/1397543780</link>
+            <guid>/blog/1397543780</guid>
             <pubDate>Wed, 05 Oct 2022 09:59:52 GMT</pubDate>
             <description><![CDATA[前端工程化中，使用 babel 对新语法和 API 预置 polyfill 是非常流行的做法之一，但之前笔者对这个过程和其中使用到的插件不够了解，因此在网上搜寻了一些博客和知识分享，学习一番，再次总结一下。]]></description>
             <content:encoded><![CDATA[<p>前端工程化中，使用 babel 对新语法和 API 预置 polyfill 是非常流行的做法之一，但之前笔者对这个过程和其中使用到的插件不够了解，因此在网上搜寻了一些博客和知识分享，学习一番，再次总结一下。</p>
@@ -1613,8 +1613,8 @@ yarn add -D babel-plugin-transform-runtime
         </item>
         <item>
             <title><![CDATA[CSS之Grid布局]]></title>
-            <link>http://localhost:3000/blog/1397542082</link>
-            <guid>http://localhost:3000/blog/1397542082</guid>
+            <link>/blog/1397542082</link>
+            <guid>/blog/1397542082</guid>
             <pubDate>Wed, 05 Oct 2022 09:58:26 GMT</pubDate>
             <description><![CDATA[网格布局`(Grid)`被视为当前最强大的`CSS`布局方案。]]></description>
             <content:encoded><![CDATA[<p>网格布局<code>(Grid)</code>被视为当前最强大的<code>CSS</code>布局方案。</p>
@@ -1917,8 +1917,8 @@ yarn add -D babel-plugin-transform-runtime
         </item>
         <item>
             <title><![CDATA[Javascript-ES6-函数式编程阅读随写]]></title>
-            <link>http://localhost:3000/blog/1397540450</link>
-            <guid>http://localhost:3000/blog/1397540450</guid>
+            <link>/blog/1397540450</link>
+            <guid>/blog/1397540450</guid>
             <pubDate>Wed, 05 Oct 2022 09:57:04 GMT</pubDate>
             <description><![CDATA[第一次看到这本书的时候,记得是几年前在桂电图书馆里,断断续续看了六章,后来便离开了学校.现在买了纸质书打算重新看一遍,这里记录下阅读随想.]]></description>
             <content:encoded><![CDATA[<p>第一次看到这本书的时候,记得是几年前在桂电图书馆里,断断续续看了六章,后来便离开了学校.现在买了纸质书打算重新看一遍,这里记录下阅读随想.</p>

@@ -12,7 +12,6 @@ export default function generateRssFeed() {
     console.log(`${date.toLocaleTimeString()} - 开始创建RSS！`);
 
     const posts = globalThis.postList as IGithubIssue[];
-    const siteURL = process.env.WEBSITE!;
 
     const author = {
       name: "妙才",
@@ -25,20 +24,20 @@ export default function generateRssFeed() {
       description: "web developer blog.",
       id: siteURL,
       link: siteURL,
-      image: `${siteURL}/code.png`,
-      favicon: `${siteURL}/code.png`,
+      image: `/code.png`,
+      favicon: `/code.png`,
       copyright: `All rights reserved ${date.getFullYear()}, 妙才`,
       updated: date,
       generator: "Feed for Node.js",
       feedLinks: {
-        rss2: `${siteURL}/rss/feed.xml`, // xml format
-        json: `${siteURL}/rss/feed.json`, // json fromat
+        rss2: `/rss/feed.xml`, // xml format
+        json: `/rss/feed.json`, // json fromat
       },
       author,
     });
 
     posts.forEach((post) => {
-      const url = `${siteURL}/blog/${post.id}`;
+      const url = `/blog/${post.id}`;
       feed.addItem({
         title: post.title,
         id: url,
