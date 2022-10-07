@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-const instance = axios.create({ baseURL: "http://localhost:3000" });
+const instance = axios.create({ baseURL: process.env.WEBSITE });
 
 instance.interceptors.response.use((resp) => {
   return resp?.data;

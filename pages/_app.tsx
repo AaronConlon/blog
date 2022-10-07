@@ -2,6 +2,7 @@ import "windi.css";
 import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import LabelList from "@/components/LabelList";
 import Layout from "@/layout";
 import { useEffect } from "react";
@@ -17,6 +18,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      </Head>
       <LabelList />
       <Layout>
         <Component {...pageProps} />

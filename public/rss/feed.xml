@@ -2,15 +2,15 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
         <title>妙才Dev</title>
-        <link></link>
+        <link>http://localhost:3000</link>
         <description>web developer blog.</description>
-        <lastBuildDate>Fri, 07 Oct 2022 14:44:45 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 07 Oct 2022 15:10:15 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Feed for Node.js</generator>
         <image>
             <title>妙才Dev</title>
             <url>/code.png</url>
-            <link></link>
+            <link>http://localhost:3000</link>
         </image>
         <copyright>All rights reserved 2022, 妙才</copyright>
         <item>

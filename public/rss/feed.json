@@ -1,6 +1,7 @@
 {
     "version": "https://jsonfeed.org/version/1",
     "title": "妙才Dev",
+    "home_page_url": "http://localhost:3000",
     "feed_url": "/rss/feed.json",
     "description": "web developer blog.",
     "icon": "/code.png",
