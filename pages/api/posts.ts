@@ -11,6 +11,8 @@ export default async function handler(
 ) {
   //
   const label = req.query?.label;
+  console.log("访问posts");
+
   await cycleTimeCheck(getAllIssue);
 
   res.status(200).json({

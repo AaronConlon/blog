@@ -5,7 +5,7 @@ import { getAllIssue } from "./github";
 import { marked } from "marked";
 
 export default function generateRssFeed() {
-  // 没一个小时更新一次
+  // 每次获取所有文章的时候都重新生成
   try {
     const date = new Date();
     const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
