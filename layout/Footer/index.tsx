@@ -3,17 +3,23 @@ import { FcGraduationCap, FcOrganization, FcVoicemail } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
 import FriendLinks from "./Friends";
 import { GithubContributions } from "github-contributions-react";
+import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { userInfoAtom } from "@/store";
 
 function Footer() {
   const [userInfo] = useAtom(userInfoAtom);
-  console.log(userInfo);
+  // 未初始化时不显示
+  if (userInfo?.avatar_url === undefined) return null;
 
   return (
-    <footer className="bg-[#f9f9fa]">
-      <div className="flex gap-12 justify-center pt-12">
-        <div className="flex flex-col gap-4 justify-evenly">
+    <motion.footer
+      initial={{ opacity: 0, top: 100 }}
+      animate={{ opacity: 1, top: 0 }}
+      className="bg-[#f9f9fa] relative pb-[44px] sm:pb-0"
+    >
+      <div className="flex gap-12 justify-center pt-12 sm:flex-row flex-col px-4 md:px-12">
+        <div className="flex flex-col gap-4 justify-evenly items-center sm:items-start">
           <div className="flex gap-4">
             <img
               src={userInfo.avatar_url}
@@ -55,7 +61,7 @@ function Footer() {
           </div>
           <FriendLinks />
         </div>
-        <img src="/work.svg" alt="" className="w-128 md:block sm:hidden" />
+        <img src="/work.svg" alt="" className="w-96 sm:w-128 mx-auto my-4" />
       </div>
       <div className="pb-8">
         <GithubContributions
@@ -66,7 +72,7 @@ function Footer() {
         />
       </div>
       <p className="text-center p-8 text-gray-400">Power By ❤️ and NextJS.</p>
-    </footer>
+    </motion.footer>
   );
 }
 

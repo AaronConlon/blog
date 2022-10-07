@@ -20,16 +20,21 @@ function FriendLinks() {
     },
   ];
   return (
-    <div className="flex flex-wrap gap-2 items-center cursor-pointer">
-      {friendList.map(({ href, avatar }) => (
-        <Link href={href} target={"_blank"} key={href}>
-          <img
-            alt=""
-            src={avatar}
-            className="w-10 h-10 rounded-full shadow-purple-200 shadow-sm"
-          />
-        </Link>
-      ))}
+    <div>
+      <p className="text-gray-400 italic pt-12 text-center pb-8 sm:pb-4 sm:text-left">
+        Friends:
+      </p>
+      <div className="flex flex-wrap gap-2 items-center cursor-pointer">
+        {friendList.map(({ href, avatar }) => (
+          <Link href={href} target={"_blank"} key={href}>
+            <img
+              alt=""
+              src={avatar}
+              className="w-10 h-10 rounded-full shadow-purple-200 shadow-sm"
+            />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

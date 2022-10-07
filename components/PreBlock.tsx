@@ -74,7 +74,7 @@ const CodeBlock = ({ className, children }) => {
           margin: "0 0 2rem 0",
         }}
       >
-        <div className="bg-[#222b5c] flex items-center p-2 text-white select-none gap-2 overflow-hidden">
+        <div className="bg-[#222b5c] flex items-center p-2 text-white select-none gap-2 overflow-hidden rounded-t-sm">
           <AiFillMinusCircle />
           <BsFillCircleFill />
           <AiFillCloseCircle className="mr-auto scale-110 transform" />
@@ -88,7 +88,7 @@ const CodeBlock = ({ className, children }) => {
                 top: 0,
                 opacity: 1,
               }}
-              className="flex items-center gap-2 flex-grow justify-end relative h-4"
+              className="flex items-center gap-2  justify-end relative h-4"
             >
               <p className="m-0 p-0 text-[12px] leading-[12px]">复制成功</p>
               <AiOutlineSmile />
@@ -104,39 +104,19 @@ const CodeBlock = ({ className, children }) => {
                 top: 0,
                 opacity: 1,
               }}
-              className="flex items-center gap-2 flex-grow justify-end relative h-4 cursor-pointer"
+              className="flex items-center gap-2  justify-end relative h-4 cursor-pointer"
             >
               <TbCopy />
             </MotionDiv>
           )}
           {langMap[lang.toLowerCase()] ?? <BsTextCenter />}
         </div>
-        <SyntaxHighlighter language={lang} style={codeStyle}>
-          {children}
-        </SyntaxHighlighter>
+        <SyntaxHighlighter language={lang}>{children}</SyntaxHighlighter>
       </div>
     </details>
   );
 };
 
-const PreBlock = ({ children }) => {
-  return CodeBlock(children["props"]);
-  // if ("type" in children && children["type"] === "code") {
-
-  // }
-
-  // return (
-  //   <div
-  //     style={{
-  //       boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-  //       margin: "2rem 0",
-  //     }}
-  //   >
-  //     <SyntaxHighlighter language="text" style={codeStyle}>
-  //       {codeString}
-  //     </SyntaxHighlighter>
-  //   </div>
-  // );
-};
+const PreBlock = ({ children }) => CodeBlock(children["props"]);
 
 export default PreBlock;

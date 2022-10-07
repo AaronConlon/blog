@@ -22,15 +22,8 @@ function Menu() {
       className="bg-white sticky top-0"
       style={{ zIndex: labelStore.isShow ? 10 : 999 }}
     >
-      {/* <video
-        src="sea3.mp4"
-        muted={true}
-        autoPlay={true}
-        loop={true}
-        className="absolute top-0 left-0 right-0 w-full bottom-0"
-      /> */}
       <motion.header
-        className="relative sticky top-0 max-w-[1200px] mx-auto py-8 md:px-12"
+        className="relative sticky top-0 max-w-[1200px] mx-auto py-8 px-4 "
         initial={{ left: 30 }}
         animate={{ left: 0 }}
         transition={{
@@ -39,8 +32,8 @@ function Menu() {
           damping: 20,
         }}
       >
-        <div className="flex items-center gap-2 ">
-          <div className="flex items-center gap-2 mr-auto">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-start w-full gap-2 sm:mr-auto">
             <AiFillCode className="w-6 h-6  dark:text-purple-600" />
             <div className="flex items-center gap-1 w-40">
               <Link href={"/"} className="h-4">
@@ -60,66 +53,48 @@ function Menu() {
               ></motion.span>
             </div>
           </div>
-          {/* 时间和日期 */}
-          {/* <DateAndTime /> */}
           {/* 标签 */}
-          <div
-            className="text-purple-900 flex items-center gap-2 mr-6 cursor-pointer"
-            onClick={() =>
-              setLabelStore((prev) => ({ ...prev, isShow: !prev.isShow }))
-            }
-          >
-            <HiMenuAlt1 />
-            <span>分类</span>
+          <div className="flex fixed items-center bottom-0 bg-[#a865bb]-500 p-4 sm:p-0 sm:bg-white left-0 right-0 justify-between flex-row-reverse sm:flex-row sm:relative">
+            <div
+              className="text-white sm:text-purple-900 flex items-center gap-2 sm:mr-6 cursor-pointer w-16"
+              onClick={() =>
+                setLabelStore((prev) => ({ ...prev, isShow: !prev.isShow }))
+              }
+            >
+              <HiMenuAlt1 />
+              <span>分类</span>
+            </div>
+            {/* nav list */}
+            <ul className="flex gap-8 overflow-hidden">
+              {Object.keys(routePathRecord)
+                .filter((i) => i !== "index")
+                .map((key) => {
+                  const { path, text, icon } = routePathRecord[key];
+                  return (
+                    <li
+                      key={path}
+                      className={clsx(
+                        "transform-all",
+                        route.pathname === path
+                          ? "sm:text-purple-500 text-white"
+                          : "sm:text-purple-900 sm:opacity-80 text-white",
+                        "sm:hover:text-purple-500 sm:hover:opacity-100"
+                      )}
+                    >
+                      <Link href={path}>
+                        <a className="flex items-center gap-2">
+                          {icon}
+                          <span className="flex-grow overflow-ellipsis whitespace-nowrap overflow-hidden">
+                            {text}
+                          </span>
+                        </a>
+                      </Link>
+                    </li>
+                  );
+                })}
+            </ul>
           </div>
-          {/* nav list */}
-          <ul className="flex gap-8 overflow-hidden">
-            {Object.keys(routePathRecord)
-              .filter((i) => i !== "index")
-              .map((key) => {
-                const { path, text, icon } = routePathRecord[key];
-                return (
-                  <li
-                    key={path}
-                    className={clsx(
-                      "transform-all",
-                      route.pathname === path
-                        ? "text-purple-500"
-                        : "text-purple-900 opacity-80",
-                      "hover:text-purple-500 hover:opacity-100"
-                    )}
-                  >
-                    <Link href={path}>
-                      <a className="flex items-center gap-2">
-                        {icon}
-                        <span className="flex-grow overflow-ellipsis whitespace-nowrap overflow-hidden">
-                          {text}
-                        </span>
-                      </a>
-                    </Link>
-                  </li>
-                );
-              })}
-          </ul>
         </div>
-
-        {/* <p className="text-gray-900 opacity-40 text-sm italic text-right">
-          该视频由
-          <a
-            href="https://pixabay.com/zh/users/engin_akyurt-3656355/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=video&amp;utm_content=20223"
-            className="px-2 text-purple-900"
-          >
-            Engin Akyurt
-          </a>
-          在
-          <a
-            href="https://pixabay.com/zh//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=video&amp;utm_content=20223"
-            className="px-2 text-purple-900"
-          >
-            Pixabay
-          </a>
-          上发布
-        </p> */}
       </motion.header>
     </div>
   );

@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 function Introduction() {
   return (
     <>
-      <div className="py-12 flex items-center justify-evenly max-w-[1200px] mx-auto">
-        <div className="flex-col gap-12 text-purple-800 font-bold flex text-4xl">
+      <div className="py-12 flex items-center justify-evenly max-w-[90vw] mx-auto">
+        <div className="flex-col gap-8 md:gap-12 text-purple-800 font-bold flex text-2xl md:text-4xl text-center">
           <motion.p
-            className="relative"
+            className="relative leading-10"
             initial={{
               left: 30,
               opacity: 0,
@@ -21,13 +21,13 @@ function Introduction() {
             }}
           >
             Hi, 我是妙才，一个{" "}
-            <span className="bg-purple-500 text-light-600 px-2 py-1 rounded-md">
+            <span className="bg-purple-500 text-light-600 p-1 sm:px-2 py-0.5 sm:py-1 rounded-sm md:rounded-md">
               web
             </span>{" "}
             开发者。
           </motion.p>
           <motion.p
-            className="relative"
+            className="relative hidden sm:inline-block"
             initial={{
               top: 30,
               opacity: 0,
@@ -65,8 +65,8 @@ function Introduction() {
         </div>
         <div className="sm:mx-0 md:lg-24 relative">
           {/* <SubscriptionMe /> */}
-          <img src="/study.svg" alt="" className="w-128" />
-          <div className="w-96 h-96 bg-purple-100 rounded-full absolute bottom-24 -z-1"></div>
+          <img src="/study.svg" alt="" className="sm:w-128 w-96" />
+          <div className="sm:w-96 sm:h-96 w-64 h-64 bg-purple-100 rounded-full absolute bottom-6 -left-2 sm:left-0 -z-1"></div>
         </div>
       </div>
     </>

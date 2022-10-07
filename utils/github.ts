@@ -4,16 +4,6 @@ import generateRssFeed from "./generateRssFeed";
 import { request } from "@octokit/request";
 import { uniqWith } from "lodash-es";
 
-export const createGithubInstance = () => {
-  console.log("env:", process.env.TOKEN);
-
-  return request.defaults({
-    headers: {
-      authorization: `token ${process.env.TOKEN}`,
-    },
-  });
-};
-
 export const requestWithAuth = request.defaults({
   headers: {
     authorization: `token ${process.env.TOKEN}`,
@@ -69,6 +59,8 @@ export const getAllIssue = async (pageNum = 1) => {
       );
     }
   );
+
+  
   if (data.data.length === 100) {
     // 可能存在下一页
     await getAllIssue(pageNum + 1);

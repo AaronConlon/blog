@@ -16,6 +16,7 @@ export interface IGithubIssue {
   number: number;
   description: string;
   cover: string;
+  body: string;
 }
 
 export interface IRepoLabel {

@@ -23,7 +23,7 @@ function MiniArticle({
         <a>
           <div className="p-4 flex flex-col flex-grow rounded-md cursor-pointer">
             <h3 className="font-bold text-xl">{title}</h3>
-            <Markdown className="flex-grow p-4 py-12 text-gray-600">
+            <Markdown className="flex-grow p-4 py-12 text-gray-600 description">
               {description}
             </Markdown>
             <div className="flex gap-2">
