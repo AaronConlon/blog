@@ -52,7 +52,7 @@ function Menu() {
             </div>
           </div>
           {/* 标签 */}
-          <div className="flex fixed items-center bottom-0 bg-[#a865bb]-500 p-4 sm:p-0 sm:bg-white left-0 right-0 justify-between flex-row-reverse sm:flex-row sm:relative">
+          <div className="flex fixed items-center bottom-0 bg-[#a865bb] p-4 sm:p-0 sm:bg-white left-0 right-0 justify-between flex-row-reverse sm:flex-row sm:relative">
             <div
               className="text-white sm:text-purple-900 flex items-center gap-2 sm:mr-6 cursor-pointer w-16"
               onClick={() =>

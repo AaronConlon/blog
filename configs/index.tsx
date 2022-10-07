@@ -1,7 +1,7 @@
+import { BsGithub, BsRss } from "react-icons/bs";
 import { join, resolve } from "path";
 
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
-import { BsRss } from "react-icons/bs";
 import { TbTags } from "react-icons/tb";
 
 export const SITE_NAME = "妙才 Dev";
@@ -11,6 +11,11 @@ export const routePathRecord = {
   index: {
     path: "/",
     text: "首页",
+  },
+  github: {
+    path: "https://github.com/Developer27149/blog",
+    text: "源代码",
+    icon: <BsGithub className="w-5 h-5" />,
   },
   productions: {
     path: "/productions",

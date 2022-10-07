@@ -61,7 +61,11 @@ function Footer() {
           </div>
           <FriendLinks />
         </div>
-        <img src="/work.svg" alt="" className="w-96 sm:w-128 mx-auto my-4" />
+        <img
+          src="/work.svg"
+          alt=""
+          className="w-96 sm:w-112 lg:128 mx-auto my-4"
+        />
       </div>
       <div className="pb-8 max-w-screen lg:max-w-[1200px] mx-auto">
         <GithubContributions
