@@ -1,6 +1,5 @@
 import { OWNER, REPO } from "@/utils/consts";
 
-import generateRssFeed from "./generateRssFeed";
 import { request } from "@octokit/request";
 import { uniqWith } from "lodash-es";
 
@@ -64,9 +63,5 @@ export const getAllIssue = async (pageNum = 1) => {
   if (data.data.length === 100) {
     // 可能存在下一页
     await getAllIssue(pageNum + 1);
-  }
-  // 等一切结束，更新RSS
-  if (pageNum === 1) {
-    generateRssFeed();
   }
 };

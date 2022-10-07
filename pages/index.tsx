@@ -15,7 +15,6 @@ import { MotionDiv } from "@/components/motion";
 import type { NextPage } from "next";
 import { Scrollbars } from "react-custom-scrollbars";
 import clsx from "clsx";
-import generateRssFeed from "@/utils/generateRssFeed";
 import { omit } from "lodash-es";
 import { request } from "@/utils/request";
 import styles from "@/styles/masonry.module.scss";
@@ -178,7 +177,6 @@ export const getServerSideProps: GetStaticProps = async (context) => {
     request.get<any>("/api/about"),
     request.get<any>("/api/posts"),
   ]);
-  generateRssFeed(posts.postList);
 
   return {
     props: {

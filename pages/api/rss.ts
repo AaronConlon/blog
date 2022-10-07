@@ -1,20 +1,23 @@
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import type { NextApiRequest, NextApiResponse } from "next";
+
 import { Feed } from "feed";
 import { IGithubIssue } from "@/interfaces";
+import { cycleTimeCheck } from "@/utils/cycleTimeCheck";
 import fs from "fs";
-import { getAllIssue } from "./github";
+import { getAllIssue } from "@/utils/github";
 import { marked } from "marked";
 
-export default function generateRssFeed(_posts?: IGithubIssue[]) {
-  // 每次获取所有文章的时候都重新生成
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<{ postList: IGithubIssue[] }>
+) {
   try {
     const date = new Date();
     const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
-    console.log(`${date.toLocaleTimeString()} - 开始创建RSS！`);
-
-    const posts = _posts ?? (globalThis.postList as IGithubIssue[]);
-    // RSS 来源于全部文章接口被请求
+    await getAllIssue();
+    const posts = globalThis.postList;
     if (posts === undefined) throw Error("暂无数据");
-
     const author = {
       name: "妙才",
       email: "rivenqinyy@gmail.com",
@@ -39,7 +42,7 @@ export default function generateRssFeed(_posts?: IGithubIssue[]) {
     });
 
     posts.forEach((post) => {
-      const url = `/post/${post.id}`;
+      const url = `${siteURL}/post/${post.id}`;
       feed.addItem({
         title: post.title,
         id: url,
@@ -51,13 +54,23 @@ export default function generateRssFeed(_posts?: IGithubIssue[]) {
         date: new Date(post.updated_at),
       });
     });
+    res
+      .setHeader("Content-Type", "text/xml")
+      .setHeader(
+        "Cache-Control",
+        "public, s-maxage=10, stale-while-revalidate=59"
+      )
+      .status(200)
+      .send(feed.rss2());
 
-    // write to public
-    fs.mkdirSync("./public/rss", { recursive: true });
-    fs.writeFileSync("./public/rss/feed.xml", feed.rss2());
-    fs.writeFileSync("./public/rss/feed.json", feed.json1());
+    // vercel 无法写入文件，暂时不打算单独租服务器运行
+    // // write to public
+    // fs.mkdirSync("./public/rss", { recursive: true });
+    // fs.writeFileSync("./public/rss/feed.xml", feed.rss2());
+    // fs.writeFileSync("./public/rss/feed.json", feed.json1());
   } catch (error) {
     console.log("创建RSS失败：", error);
+    res.status(500).end();
   } finally {
     console.log(`${new Date().toLocaleTimeString()} - RSS任务结束`);
   }
