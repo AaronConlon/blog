@@ -145,4 +145,4 @@ dist
 
 .DS_Store
 
-public/rss/
+# public/rss/
