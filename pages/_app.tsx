@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import LabelList from "@/components/LabelList";
 import Layout from "@/layout";
+import NextNProgress from "nextjs-progressbar";
 import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
+      <NextNProgress color="#a865bb" />
       <LabelList />
       <Layout>
         <Component {...pageProps} />
