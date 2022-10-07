@@ -8,8 +8,7 @@ export default function generateRssFeed() {
   // 没一个小时更新一次
   try {
     const date = new Date();
-    const siteURL =
-      process.env.WEBSITE ?? "https://github.com/Developer27149/blog";
+    const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
     console.log(`${date.toLocaleTimeString()} - 开始创建RSS！`);
 
     const posts = globalThis.postList as IGithubIssue[];
@@ -25,20 +24,20 @@ export default function generateRssFeed() {
       description: "web developer blog.",
       id: siteURL,
       link: siteURL,
-      image: `/code.png`,
-      favicon: `/code.png`,
+      image: `${siteURL}/code.png`,
+      favicon: `${siteURL}/code.png`,
       copyright: `All rights reserved ${date.getFullYear()}, 妙才`,
       updated: date,
       generator: "Feed for Node.js",
       feedLinks: {
-        rss2: `/rss/feed.xml`, // xml format
-        json: `/rss/feed.json`, // json fromat
+        rss2: `${siteURL}/rss/feed.xml`, // xml format
+        json: `${siteURL}/rss/feed.json`, // json fromat
       },
       author,
     });
 
     posts.forEach((post) => {
-      const url = `/blog/${post.id}`;
+      const url = `${siteURL}/post/${post.id}`;
       feed.addItem({
         title: post.title,
         id: url,
