@@ -23,7 +23,7 @@ export const routePathRecord = {
     icon: <AiOutlineFundProjectionScreen className="w-5 h-5" />,
   },
   feed: {
-    path: "/rss/feed.xml",
+    path: "/api/rss/",
     text: "RSS",
     icon: <BsRss className="w-5 h-5" />,
   },
