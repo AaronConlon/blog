@@ -4,14 +4,16 @@ import fs from "fs";
 import { getAllIssue } from "./github";
 import { marked } from "marked";
 
-export default function generateRssFeed() {
+export default function generateRssFeed(_posts?: IGithubIssue[]) {
   // 每次获取所有文章的时候都重新生成
   try {
     const date = new Date();
     const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
     console.log(`${date.toLocaleTimeString()} - 开始创建RSS！`);
 
-    const posts = globalThis.postList as IGithubIssue[];
+    const posts = _posts ?? (globalThis.postList as IGithubIssue[]);
+    // RSS 来源于全部文章接口被请求
+    if (posts === undefined) throw Error("暂无数据");
 
     const author = {
       name: "妙才",
