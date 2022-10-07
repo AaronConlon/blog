@@ -37,7 +37,7 @@ export default function generateRssFeed() {
     });
 
     posts.forEach((post) => {
-      const url = `${siteURL}/post/${post.id}`;
+      const url = `/post/${post.id}`;
       feed.addItem({
         title: post.title,
         id: url,
