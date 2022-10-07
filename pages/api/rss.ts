@@ -10,13 +10,13 @@ import { marked } from "marked";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ postList: IGithubIssue[] }>
+  res: NextApiResponse
 ) {
   try {
     const date = new Date();
     const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
     await getAllIssue();
-    const posts = globalThis.postList;
+    const posts = globalThis.postList as IGithubIssue[];
     if (posts === undefined) throw Error("暂无数据");
     const author = {
       name: "妙才",
