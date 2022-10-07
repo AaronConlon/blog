@@ -23,7 +23,6 @@ import {
 import { DiSass } from "react-icons/di";
 import { MotionDiv } from "./motion";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import codeStyle from "@/styles/codeStyle";
 import { useState } from "react";
 
 const langMap = {
@@ -46,10 +45,10 @@ const langMap = {
   swift: <SiSwift />,
 };
 
-const CodeBlock = ({ className, children }) => {
+const CodeBlock = ({ className, children }: any) => {
   const [showCelebrateIcon, setShowCelebrateIcon] = useState(false);
-  const onCopyCode = (e: HTMLElement) => {
-    const parentElem = e.target.parentElement?.parentElement?.parentElement;
+  const onCopyCode = (e: any) => {
+    const parentElem = e.target?.parentElement?.parentElement?.parentElement;
     if (parentElem) {
       const codeElem = parentElem.querySelector("code");
       if (codeElem?.textContent) {
@@ -109,6 +108,7 @@ const CodeBlock = ({ className, children }) => {
               <TbCopy />
             </MotionDiv>
           )}
+          {/* @ts-ignore */}
           {langMap[lang.toLowerCase()] ?? <BsTextCenter />}
         </div>
         <SyntaxHighlighter language={lang}>{children}</SyntaxHighlighter>
@@ -117,6 +117,7 @@ const CodeBlock = ({ className, children }) => {
   );
 };
 
-const PreBlock = ({ children }) => CodeBlock(children["props"]);
+const PreBlock = ({ children }: { children: Record<string, any> }) =>
+  CodeBlock(children["props"]);
 
 export default PreBlock;

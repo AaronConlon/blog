@@ -1,12 +1,10 @@
-import { BLOG_ARTICLE_DIR, BLOG_DESCRIPTION } from "@/configs/index";
 import { ESort, IGithubIssue, IRepoLabel } from "@/interfaces";
 import { GetServerSideProps, GetStaticProps } from "next";
-import { IDirRecord, ITagRecord } from "@/interfaces/article";
-import { createGithubInstance, github } from "@/utils/github";
 import { labelsAtom, tabAtom, userInfoAtom } from "@/store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 
+import { BLOG_DESCRIPTION } from "@/configs/index";
 import { GrDescend } from "react-icons/gr";
 import Head from "next/head";
 import { IUserInfo } from "@/interfaces/userInfo";
@@ -16,13 +14,10 @@ import MiniArticle from "@/components/MiniArticle";
 import { MotionDiv } from "@/components/motion";
 import type { NextPage } from "next";
 import { Scrollbars } from "react-custom-scrollbars";
-import axios from "axios";
 import clsx from "clsx";
 import generateRssFeed from "@/utils/generateRssFeed";
 import { omit } from "lodash-es";
 import { request } from "@/utils/request";
-// import { request } from "@octokit/request";
-import { scanArticleDir } from "@/utils";
 import styles from "@/styles/masonry.module.scss";
 import { userInfo } from "os";
 
@@ -32,7 +27,8 @@ interface IProps {
   posts: IGithubIssue[];
 }
 
-const Home: NextPage = ({ info, labels, posts }: IProps) => {
+const Home = ({ info, labels, posts }: IProps) => {
+  // @ts-ignore
   const setUserInfo = useSetAtom(userInfoAtom);
   const [tab, setTab] = useAtom(tabAtom);
   const setLabels = useSetAtom(labelsAtom);
@@ -47,15 +43,27 @@ const Home: NextPage = ({ info, labels, posts }: IProps) => {
       const targetList = posts.filter((i) =>
         i.labels.some((j) => j.name === tab)
       );
-      targetList.sort((prev, cur) =>
-        isDesc
-          ? sortValue === "comments"
-            ? prev.comments - cur.comments
-            : new Date(prev.created_at) - new Date(cur.created_at)
-          : sortValue === "comments"
-          ? cur.comments - prev.comments
-          : new Date(cur.created_at) - new Date(prev.created_at)
-      );
+      targetList.sort((prev, cur) => {
+        if (isDesc) {
+          if (sortValue === "comments") {
+            return prev.comments - cur.comments;
+          } else {
+            return (
+              new Date(prev.created_at).valueOf() -
+              new Date(cur.created_at).valueOf()
+            );
+          }
+        } else {
+          if (sortValue === "comments") {
+            return cur.comments - prev.comments;
+          } else {
+            return (
+              new Date(cur.created_at).valueOf() -
+              new Date(prev.created_at).valueOf()
+            );
+          }
+        }
+      });
 
       return targetList;
     });
@@ -65,7 +73,7 @@ const Home: NextPage = ({ info, labels, posts }: IProps) => {
     setUserInfo(info);
     setLabels({ isShow: false, list: labels });
     setTab(labels[0]?.name ?? "CSS");
-  }, []);
+  }, [info, labels, setLabels, setTab, setUserInfo]);
 
   return (
     <>
@@ -165,17 +173,17 @@ const Home: NextPage = ({ info, labels, posts }: IProps) => {
 export default Home;
 
 // return props to current page component as props
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetStaticProps = async (context) => {
   const [labels, info, posts] = await Promise.all([
-    request.get("/api/label"),
-    request.get("/api/about"),
-    request.get("/api/posts"),
+    request.get<any>("/api/label"),
+    request.get<any>("/api/about"),
+    request.get<any>("/api/posts"),
   ]);
   return {
     props: {
       labels,
       info,
-      posts: posts.postList.map((i) => omit(i, "content")),
+      posts: posts.postList.map((i: IGithubIssue) => omit(i, "content")),
     },
   };
 };

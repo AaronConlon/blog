@@ -7,11 +7,11 @@ instance.interceptors.response.use((resp) => {
 });
 
 export const request = {
-  get: <T>(url: string, config?: AxiosRequestConfig = {}): Promise<T> =>
+  get: <T>(url: string, config: AxiosRequestConfig = {}): Promise<T> =>
     instance.get(url, config),
   post: <T>(
     url: string,
     data = {},
-    config?: AxiosRequestConfig = {}
+    config: AxiosRequestConfig = {}
   ): Promise<T> => instance.post(url, data, config),
 };

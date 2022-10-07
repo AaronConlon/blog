@@ -10,7 +10,6 @@ export interface IGithubIssue {
   content: string;
   created_at: string;
   updated_at: string;
-  description: string;
   comments: number;
   comments_url: string;
   number: number;

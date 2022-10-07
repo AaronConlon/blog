@@ -1,3 +1,4 @@
+import { MouseEventHandler, useState } from "react";
 import { OWNER, REPO } from "@/utils/consts";
 import { calcReverseColor, loadingDelay } from "@/utils";
 import { useAtom, useSetAtom } from "jotai";
@@ -8,30 +9,28 @@ import { MotionDiv } from "./motion";
 import { Scrollbars } from "react-custom-scrollbars";
 import { labelsAtom } from "@/store";
 import { request } from "@octokit/request";
-import { useState } from "react";
 
 function LabelList() {
   const [labelStore, setLabelStore] = useAtom(labelsAtom);
   const [postList, setPostList] = useState<IGithubIssue[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSearchPostByLabel = async (e: MouseEvent, name: string) => {
+  const onSearchPostByLabel = async (e: any, name: string) => {
     e.stopPropagation();
     try {
       /**
        * 获取当前label下的文章，展示出来
        */
-      // const data = await request.get(`/api/posts?label=${name}`);
       setIsLoading(true);
-      const { data } = await loadingDelay(() =>
+      // @ts-ignore
+      const { data = [] } = await loadingDelay(() =>
         request("GET /repos/{owner}/{repo}/issues", {
           owner: OWNER,
           repo: REPO,
           labels: name,
         })
       );
-      console.log(data);
-      setPostList(data);
+      setPostList(data as any[]);
     } catch (error) {
       console.log("搜索失败,", error);
       setPostList([]);
@@ -40,18 +39,15 @@ function LabelList() {
     }
   };
 
-  const onClickBox = (e: MouseEvent) => {
-    e.stopPropagation();
-    setLabelStore({ isShow: false, list: labelStore.list });
-  };
-
-  if (labelStore.isShow === false || labelStore.list?.length === 0)
-    return null;
+  if (labelStore.isShow === false || labelStore.list?.length === 0) return null;
 
   return (
     <div
       className="fixed left-0 right-0 bottom-0 right-0 bg-[#808080c9] z-50 w-screen h-screen flex justify-center items-end md:items-start p-8 md:p-32"
-      onClick={onClickBox}
+      onClick={(e) => {
+        e.stopPropagation();
+        setLabelStore({ isShow: false, list: labelStore.list });
+      }}
     >
       <div
         className="p-8 md:p-12 rounded-md max-w-full sm:max-w-[60vw] bg-white min-h-[400px] flex flex-col"

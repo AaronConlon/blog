@@ -14,7 +14,7 @@ interface IProps {
 }
 
 function CustomImage({ src, width, height, alt = "cover image" }: IProps) {
-  const boxRef = useRef();
+  const boxRef = useRef<any>();
   const [isLoading, setIsLoading] = useState(true);
   const [_src, set_src] = useState("");
   const [isError, setIsError] = useState(false);
@@ -35,11 +35,11 @@ function CustomImage({ src, width, height, alt = "cover image" }: IProps) {
         set_src(src);
       }
     });
-    observe.observe(boxRef.current);
+    observe.observe(boxRef.current!);
     return () => {
       observe.disconnect();
     };
-  }, []);
+  }, [set_src, src]);
 
   return (
     <motion.div

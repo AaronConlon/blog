@@ -14,6 +14,7 @@ interface IProps {
 
 function IdeasPage({ info, labels }: IProps) {
   const setLabelStore = useSetAtom(labelsAtom);
+  // @ts-ignore
   const setUserInfoStore = useSetAtom(userInfoAtom);
 
   /**
@@ -22,7 +23,7 @@ function IdeasPage({ info, labels }: IProps) {
   useEffect(() => {
     setLabelStore({ isShow: false, list: labels });
     setUserInfoStore(info);
-  }, []);
+  }, [setLabelStore, setUserInfoStore, info, labels]);
 
   return (
     <div className="py-12">
@@ -39,7 +40,7 @@ function IdeasPage({ info, labels }: IProps) {
 export default IdeasPage;
 
 // return props to current page component as props
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetStaticProps = async (context) => {
   const [labels, info] = await Promise.all([
     request.get("/api/label"),
     request.get("/api/about"),

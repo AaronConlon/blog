@@ -1,7 +1,8 @@
 import Footer from "./Footer";
 import Menu from "./Menu";
+import { ReactNode } from "react";
 
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex-col flex max-w-screen">
       <Menu />

@@ -6,13 +6,13 @@
  * @returns {T}
  */
 export const loadingDelay = async <T, P>(
-  func: (params: P) => Promise<T>,
+  func: (params?: P) => Promise<T>,
   options: {
     params?: P;
     onError?: (err: any) => void;
     delayMs?: number;
   } = {}
-): Promise<T> => {
+): Promise<T | undefined> => {
   const { onError, params, delayMs = 500 } = options;
 
   try {

@@ -35,6 +35,7 @@ export const getAllIssue = async (pageNum = 1) => {
       comments_url,
       number,
     }) => {
+      // @ts-ignore
       globalThis.postList = uniqWith(
         [
           ...globalThis.postList,
@@ -60,7 +61,6 @@ export const getAllIssue = async (pageNum = 1) => {
     }
   );
 
-  
   if (data.data.length === 100) {
     // 可能存在下一页
     await getAllIssue(pageNum + 1);

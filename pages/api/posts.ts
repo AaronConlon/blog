@@ -7,7 +7,7 @@ import { getAllIssue } from "@/utils/github";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<{ postList: IGithubIssue[] }>
 ) {
   //
   const label = req.query?.label;

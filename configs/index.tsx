@@ -12,7 +12,7 @@ export const routePathRecord = {
     path: "/",
     text: "首页",
   },
-  ideas: {
+  productions: {
     path: "/productions",
     text: "作品集",
     icon: <AiOutlineFundProjectionScreen className="w-5 h-5" />,

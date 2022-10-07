@@ -23,13 +23,14 @@ interface IProps {
 
 function Article({ labels, info, post }: IProps) {
   const setLabelStore = useSetAtom(labelsAtom);
+  // @ts-ignore
   const setUserInfoStore = useSetAtom(userInfoAtom);
   const { body, title, labels: _labels } = post;
 
   useEffect(() => {
     setLabelStore({ isShow: false, list: labels });
     setUserInfoStore(info);
-  }, []);
+  }, [info, labels, setLabelStore, setUserInfoStore]);
 
   return (
     <>
@@ -56,32 +57,40 @@ function Article({ labels, info, post }: IProps) {
 export default Article;
 
 // return props to current page component as props
-export const getStaticProps: GetStaticProps = async (context) => {
-  const {
-    params: { id },
-  } = context;
+export const getServerSideProps: GetStaticProps = async (context) => {
+  try {
+    const {
+      params: { id },
+    } = context as any;
 
-  const [labels, info, post] = await Promise.all([
-    request.get("/api/label"),
-    request.get("/api/about"),
-    request.get("/api/post?id=" + id),
-  ]);
-  // 创建RSS文件
-  return {
-    props: {
-      labels,
-      info,
-      post: post.data,
-    },
-  };
+    const [labels, info, post] = await Promise.all([
+      request.get<any>("/api/label"),
+      request.get<any>("/api/about"),
+      request.get<any>("/api/post?id=" + id),
+    ]);
+    // 创建RSS文件
+    return {
+      props: {
+        labels,
+        info,
+        post: post.data,
+      },
+    };
+  } catch (error) {
+    console.log("get api data failed!!", error);
+    return {
+      notFound: true,
+    };
+  }
 };
 
-export async function getStaticPaths() {
-  if (globalThis.postList === undefined) {
-    await getAllIssue();
-  }
-  return {
-    paths: globalThis.postList.map((i) => `/post/${i.number}`),
-    fallback: "blocking",
-  };
-}
+// export async function getStaticPaths() {
+//   if (globalThis.postList === undefined) {
+//     await getAllIssue();
+//   }
+//   return {
+//     // @ts-ignore
+//     paths: globalThis.postList.map((i) => `/post/${i.number}`),
+//     fallback: false,
+//   };
+// }

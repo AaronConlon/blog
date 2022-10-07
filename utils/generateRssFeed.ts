@@ -12,7 +12,7 @@ export default function generateRssFeed() {
     console.log(`${date.toLocaleTimeString()} - 开始创建RSS！`);
 
     const posts = globalThis.postList as IGithubIssue[];
-    const siteURL = process.env.WEBSITE;
+    const siteURL = process.env.WEBSITE!;
 
     const author = {
       name: "妙才",

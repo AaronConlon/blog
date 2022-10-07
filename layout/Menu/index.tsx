@@ -1,11 +1,9 @@
 import { AiFillCode, AiOutlineFundProjectionScreen } from "react-icons/ai";
 import { SITE_NAME, routePathRecord } from "@/configs";
 
-import DateAndTime from "./DateComponent";
 import { HiMenuAlt1 } from "react-icons/hi";
 import LabelList from "@/components/LabelList";
 import Link from "next/link";
-import SubscriptionMe from "./Subscription";
 import clsx from "clsx";
 import { labelsAtom } from "@/store";
 import { motion } from "framer-motion";
@@ -69,6 +67,7 @@ function Menu() {
               {Object.keys(routePathRecord)
                 .filter((i) => i !== "index")
                 .map((key) => {
+                  // @ts-ignore
                   const { path, text, icon } = routePathRecord[key];
                   return (
                     <li
