@@ -8,7 +8,8 @@ export default function generateRssFeed() {
   // 没一个小时更新一次
   try {
     const date = new Date();
-
+    const siteURL =
+      process.env.WEBSITE ?? "https://github.com/Developer27149/blog";
     console.log(`${date.toLocaleTimeString()} - 开始创建RSS！`);
 
     const posts = globalThis.postList as IGithubIssue[];
