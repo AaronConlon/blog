@@ -12,6 +12,7 @@ export default async function handler(
     owner: "Developer27149",
     repo: "blog",
   });
+  console.log("data:", data);
 
   res.status(200).json(data?.filter((i) => i.description === "标签") as any);
 }

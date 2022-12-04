@@ -50,7 +50,7 @@ function LabelList() {
       }}
     >
       <div
-        className="p-8 md:p-12 rounded-md max-w-full sm:max-w-[60vw] bg-white min-h-[400px] flex flex-col"
+        className="p-8 md:p-12 rounded-md max-w-full sm:max-w-[60vw] lg:max-w-[50vw] bg-white min-h-[400px] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <ul className="flex flex-wrap justify-center gap-4 mb-8">
@@ -69,7 +69,7 @@ function LabelList() {
           ))}
         </ul>
         {isLoading ? (
-          <div className="animate-pulse">
+          <div className="animate-pulse ">
             <div className="animate-pulse flex space-x-4">
               <div className="flex-1 space-y-6 py-1">
                 <div className="h-6 bg-slate-200 rounded"></div>
@@ -81,7 +81,7 @@ function LabelList() {
           </div>
         ) : postList.length === 0 ? (
           <div>
-            <img alt="" src="/empty.svg" className="w-[200px] m-auto" />
+            <img alt="" src="/empty.svg" className="w-[300px] m-auto" />
             <p className="text-center text-purple-400 pt-8">暂无数据</p>
           </div>
         ) : (

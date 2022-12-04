@@ -14,8 +14,8 @@ export default async function handler(
 ) {
   try {
     const date = new Date();
-    const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
     await getAllIssue();
+    const siteURL = process.env.WEBSITE ?? "https://blog-dev27149.vercel.app";
     const posts = globalThis.postList as IGithubIssue[];
     if (posts === undefined) throw Error("暂无数据");
     const author = {
