@@ -64,7 +64,7 @@ function Article({ labels, info, post }: IProps) {
           );
         })}
       </div>
-      <div className="flex gap-4 justify-center items-center mb-12">
+      <div className="flex gap-4 justify-center items-center mb-12 cursor-pointer">
         {_labels.map((label) => (
           <Label label={label} key={label.id} />
         ))}

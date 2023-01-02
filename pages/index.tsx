@@ -89,7 +89,7 @@ const Home = ({ info, labels, posts }: IProps) => {
               <li
                 key={id}
                 className={clsx(
-                  "hover:text-purple-600 transition-all hover:bg-blue-50 p-2 py-1 rounded-sm my-1",
+                  "hover:text-purple-600 transition-all hover:bg-blue-50 p-2 py-1 rounded-sm my-1 cursor-pointer",
                   {
                     "bg-blue-50 border-l-solid border-l-purple-800 border-l-2":
                       tab === name,
@@ -177,8 +177,6 @@ export const getServerSideProps: GetStaticProps = async (context) => {
     request.get<any>("/api/about"),
     request.get<any>("/api/posts"),
   ]);
-
-  
 
   return {
     props: {
