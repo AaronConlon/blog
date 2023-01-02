@@ -42,7 +42,7 @@ function Article({ labels, info, post }: IProps) {
       .querySelector(".post_markdown__cw0np")
       ?.querySelectorAll("h3");
 
-    const hList = [];
+    const hList: NodeListOf<HTMLHeadingElement> = [];
     if (_h2) hList.concat(Array.from(_h2));
     if (_h3) hList.concat(Array.from(_h3));
     setTagList(hList);
