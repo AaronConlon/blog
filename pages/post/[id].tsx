@@ -1,5 +1,6 @@
 import { IGithubIssue, IRepoLabel } from "@/interfaces";
 import { labelsAtom, userInfoAtom } from "@/store";
+import { useEffect, useState } from "react";
 
 import { GetStaticProps } from "next";
 import Head from "next/head";
@@ -11,7 +12,6 @@ import clsx from "clsx";
 import { getAllIssue } from "@/utils/github";
 import { request } from "@/utils/request";
 import styles from "@/styles/post.module.scss";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSetAtom } from "jotai";
 
@@ -26,15 +26,43 @@ function Article({ labels, info, post }: IProps) {
   // @ts-ignore
   const setUserInfoStore = useSetAtom(userInfoAtom);
   const { body, title, labels: _labels } = post;
+  const [tagList, setTagList] = useState<HTMLElementTagNameMap[]>([]);
 
   useEffect(() => {
     setLabelStore({ isShow: false, list: labels });
     setUserInfoStore(info);
   }, [info, labels, setLabelStore, setUserInfoStore]);
 
+  useEffect(() => {
+    // 获取文章的目录
+    const hList = [
+      ...(document
+        .querySelector(".post_markdown__cw0np")
+        ?.querySelectorAll("h2") ?? []),
+      ...(document
+        .querySelector(".post_markdown__cw0np")
+        ?.querySelectorAll("h3") ?? []),
+    ];
+    setTagList(hList);
+    console.log(hList);
+  }, []);
+
   return (
     <>
       <h1 className="text-[36px] text-center py-24">{title}</h1>
+      <div className="fixed top-[50%] transform -translate-y-[50%] left-8 hidden lg:flex lg:flex-col text-purple-600 max-w-48">
+        {tagList.map((i, idx) => {
+          return (
+            <a
+              href={`#${i.id}`}
+              key={idx}
+              className="overflow-hidden overflow-ellipsis whitespace-nowrap"
+            >
+              {i.textContent}
+            </a>
+          );
+        })}
+      </div>
       <div className="flex gap-4 justify-center items-center mb-12">
         {_labels.map((label) => (
           <Label label={label} key={label.id} />

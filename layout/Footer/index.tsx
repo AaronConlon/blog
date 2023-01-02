@@ -75,7 +75,7 @@ function Footer() {
           showTitle={false}
         />
       </div>
-      <p className="text-center p-8 text-gray-400">Power By ❤️ and NextJS.</p>
+      <p className="text-center p-8 text-gray-400">Power By Love.</p>
     </motion.footer>
   );
 }

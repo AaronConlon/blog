@@ -5,6 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-size: 12px;
+  scroll-behavior: smooth;
 }
 
 a {
@@ -53,4 +54,11 @@ a {
 .js-calendar-graph {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+@media screen and (min-width: 1200px) {
+  h2,
+  h3 {
+    padding-top: 80px;
+  }
 }

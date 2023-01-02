@@ -83,7 +83,7 @@ const Home = ({ info, labels, posts }: IProps) => {
       <Introduction />
       <div className="flex sm:px-4 py-16 md:py-20">
         <aside className="sticky top-80 self-start">
-          <span className="text-xl font-bold">分类：</span>
+          {/* <span className="text-xl font-bold">分类：</span> */}
           <ul className="text-purple-500 bg-light-50 p-4 ">
             {labels.map(({ name, id }) => (
               <li
