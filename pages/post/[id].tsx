@@ -42,9 +42,12 @@ function Article({ labels, info, post }: IProps) {
       .querySelector(".post_markdown__cw0np")
       ?.querySelectorAll("h3");
     // @ts-ignore
-    const hList: NodeListOf<HTMLHeadingElement> = [];
+    const hList: any[] = [];
+    // @ts-ignore
     if (_h2) hList.concat(Array.from(_h2));
+    // @ts-ignore
     if (_h3) hList.concat(Array.from(_h3));
+    // @ts-ignore
     setTagList(hList);
   }, []);
 
