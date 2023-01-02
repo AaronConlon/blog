@@ -26,7 +26,7 @@ function Article({ labels, info, post }: IProps) {
   // @ts-ignore
   const setUserInfoStore = useSetAtom(userInfoAtom);
   const { body, title, labels: _labels } = post;
-  const [tagList, setTagList] = useState<HTMLElementTagNameMap[]>([]);
+  const [tagList, setTagList] = useState<HTMLHeadingElement[]>([]);
 
   useEffect(() => {
     setLabelStore({ isShow: false, list: labels });
@@ -42,12 +42,9 @@ function Article({ labels, info, post }: IProps) {
       .querySelector(".post_markdown__cw0np")
       ?.querySelectorAll("h3");
     // @ts-ignore
-    const hList: any[] = [];
-    // @ts-ignore
+    const hList: HTMLHeadingElement[] = [];
     if (_h2) hList.concat(Array.from(_h2));
-    // @ts-ignore
     if (_h3) hList.concat(Array.from(_h3));
-    // @ts-ignore
     setTagList(hList);
   }, []);
 
