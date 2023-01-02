@@ -26,6 +26,8 @@ export default async function handler(
         issue_number: +id,
       }
     );
+    console.log("文章：", data);
+
     res.status(200).json({
       data,
     } as any);

@@ -178,6 +178,8 @@ export const getServerSideProps: GetStaticProps = async (context) => {
     request.get<any>("/api/posts"),
   ]);
 
+  
+
   return {
     props: {
       labels,

@@ -36,12 +36,16 @@ function Article({ labels, info, post }: IProps) {
   useEffect(() => {
     // 获取文章的目录
     const hList = [
-      ...(document
-        .querySelector(".post_markdown__cw0np")
-        ?.querySelectorAll("h2") ?? []),
-      ...(document
-        .querySelector(".post_markdown__cw0np")
-        ?.querySelectorAll("h3") ?? []),
+      ...Array.from(
+        document
+          .querySelector(".post_markdown__cw0np")
+          ?.querySelectorAll("h2") ?? []
+      ),
+      ...Array.from(
+        document
+          .querySelector(".post_markdown__cw0np")
+          ?.querySelectorAll("h3") ?? []
+      ),
     ];
     setTagList(hList);
     console.log(hList);
