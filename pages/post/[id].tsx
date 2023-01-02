@@ -35,20 +35,17 @@ function Article({ labels, info, post }: IProps) {
 
   useEffect(() => {
     // 获取文章的目录
-    const hList = [
-      ...Array.from(
-        document
-          .querySelector(".post_markdown__cw0np")
-          ?.querySelectorAll("h2") ?? []
-      ),
-      ...Array.from(
-        document
-          .querySelector(".post_markdown__cw0np")
-          ?.querySelectorAll("h3") ?? []
-      ),
-    ];
+    const _h2 = document
+      .querySelector(".post_markdown__cw0np")
+      ?.querySelectorAll("h2");
+    const _h3 = document
+      .querySelector(".post_markdown__cw0np")
+      ?.querySelectorAll("h3");
+
+    const hList = [];
+    if (_h2) hList.concat(Array.from(_h2));
+    if (_h3) hList.concat(Array.from(_h3));
     setTagList(hList);
-    console.log(hList);
   }, []);
 
   return (
