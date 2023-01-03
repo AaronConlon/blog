@@ -7,6 +7,7 @@ import { IGithubIssue } from "@/interfaces";
 import Link from "next/link";
 import { MotionDiv } from "./motion";
 import { Scrollbars } from "react-custom-scrollbars";
+import { info } from "@/utils/debug";
 import { labelsAtom } from "@/store";
 import { request } from "@octokit/request";
 
@@ -32,7 +33,7 @@ function LabelList() {
       );
       setPostList(data as any[]);
     } catch (error) {
-      console.log("搜索失败,", error);
+      info("搜索失败,", error);
       setPostList([]);
     } finally {
       setIsLoading(false);

@@ -1,5 +1,6 @@
 import { OWNER, REPO } from "@/utils/consts";
 
+import { info } from "./debug";
 import { request } from "@octokit/request";
 import { uniqWith } from "lodash-es";
 
@@ -10,7 +11,7 @@ export const requestWithAuth = request.defaults({
 });
 
 export const getAllIssue = async (pageNum = 1) => {
-  console.log("获取所有issue");
+  info("获取所有issue");
   if (globalThis.postList === undefined) {
     globalThis.postList = [];
   }

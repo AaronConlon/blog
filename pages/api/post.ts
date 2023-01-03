@@ -5,6 +5,7 @@ import { getAllIssue, requestWithAuth } from "@/utils/github";
 
 import { IGithubIssue } from "@/interfaces";
 import { cycleTimeCheck } from "@/utils/cycleTimeCheck";
+import { info } from "@/utils/debug";
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,7 +27,7 @@ export default async function handler(
         issue_number: +id,
       }
     );
-    console.log("文章：", data);
+    info("文章：", data);
 
     res.status(200).json({
       data,

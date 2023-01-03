@@ -15,6 +15,16 @@ function MyApp({ Component, pageProps }: AppProps) {
     } else {
       document.documentElement.classList.add("light");
     }
+    // add global init debug mode function
+    globalThis.__switchDebugMode = () => {
+      const mode = localStorage.getItem("debug");
+      if (mode) {
+        localStorage.removeItem("debug");
+      } else {
+        localStorage.setItem("debug", true);
+      }
+      window.location.reload();
+    };
   }, []);
 
   return (

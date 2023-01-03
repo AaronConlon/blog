@@ -30,9 +30,11 @@ const Home = ({ info, labels, posts }: IProps) => {
   // @ts-ignore
   const setUserInfo = useSetAtom(userInfoAtom);
   const [tab, setTab] = useAtom(tabAtom);
-  const setLabels = useSetAtom(labelsAtom);
+  const [label, setLabel] = useAtom(labelsAtom);
   const [isDesc, setIsDesc] = useState(true);
-  const [articleList, setArticleList] = useState(posts);
+  const [articleList, setArticleList] = useState(
+    posts.filter((i) => i.labels.some((label) => label.name === "CSS"))
+  );
   const [sortValue, setSortValue] = useState<"updated_at" | "comments">(
     "updated_at"
   );
@@ -63,16 +65,15 @@ const Home = ({ info, labels, posts }: IProps) => {
           }
         }
       });
-
       return targetList;
     });
   }, [isDesc, sortValue, posts, tab]);
 
   useEffect(() => {
     setUserInfo(info);
-    setLabels({ isShow: false, list: labels });
+    setLabel({ isShow: false, list: labels });
     setTab(labels[0]?.name ?? "CSS");
-  }, [info, labels, setLabels, setTab, setUserInfo]);
+  }, [info, labels, setLabel, setTab, setUserInfo]);
 
   return (
     <>
@@ -150,7 +151,7 @@ const Home = ({ info, labels, posts }: IProps) => {
                   key={idx}
                   className="rounded-md block bg-gray-50 mb-8 break-inside-avoid"
                 >
-                  <MiniArticle {...i} />
+                  <MiniArticle {...i} index={idx} />
                 </li>
               ))}
             </ul>

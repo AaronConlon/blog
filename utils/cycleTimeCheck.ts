@@ -1,3 +1,5 @@
+import { info } from "./debug";
+
 export const cycleTimeCheck = async (cb: () => Promise<any>) => {
   // 检查全局状态
   const date = new Date();
@@ -6,7 +8,7 @@ export const cycleTimeCheck = async (cb: () => Promise<any>) => {
   }
   // 上次更新时间是五分钟之前，则重新执行任务
   // @ts-ignore
-  console.log("周期性检查");
+  info("周期性检查");
   if (date.valueOf() - globalThis.updateTime.valueOf() >= -5 * 1000 * 60) {
     await cb();
     // 更新全局任务时间

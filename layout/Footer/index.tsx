@@ -32,7 +32,6 @@ function Footer() {
             </div>
           </div>
           <div className="text-gray-500">
-            <p className="py-4">我是{userInfo.name}, 欢迎联系我.</p>
             <div className="flex flex-col gap-2">
               <div className="flex gap-4 items-center">
                 <AiFillGithub />
@@ -75,7 +74,8 @@ function Footer() {
           showTitle={false}
         />
       </div>
-      <p className="text-center p-8 text-gray-400">Power By Love.</p>
+      <p className="text-center pt-12 text-gray-400">Power By Love</p>
+      <p className="text-center py-4 text-gray-400">2022~2023</p>
     </motion.footer>
   );
 }

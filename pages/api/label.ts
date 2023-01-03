@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { IRepoLabel } from "@/interfaces";
+import { info } from "@/utils/debug";
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { requestWithAuth } from "@/utils/github";
 
@@ -12,7 +13,7 @@ export default async function handler(
     owner: "Developer27149",
     repo: "blog",
   });
-  console.log("data:", data);
+  info("data:", data);
 
   res.status(200).json(data?.filter((i) => i.description === "标签") as any);
 }

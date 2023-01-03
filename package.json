@@ -12,6 +12,7 @@
     "@octokit/request": "^6.2.1",
     "axios": "^0.27.2",
     "clsx": "^1.2.1",
+    "consola": "^2.15.3",
     "date-fns": "^2.29.2",
     "feed": "^4.2.2",
     "framer-motion": "^7.2.1",

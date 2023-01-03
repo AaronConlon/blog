@@ -6,6 +6,7 @@ import { IGithubIssue } from "@/interfaces";
 import { cycleTimeCheck } from "@/utils/cycleTimeCheck";
 import fs from "fs";
 import { getAllIssue } from "@/utils/github";
+import { info } from "@/utils/debug";
 import { marked } from "marked";
 
 export default async function handler(
@@ -69,9 +70,9 @@ export default async function handler(
     // fs.writeFileSync("./public/rss/feed.xml", feed.rss2());
     // fs.writeFileSync("./public/rss/feed.json", feed.json1());
   } catch (error) {
-    console.log("创建RSS失败：", error);
+    info("创建RSS失败：", error);
     res.status(500).end();
   } finally {
-    console.log(`${new Date().toLocaleTimeString()} - RSS任务结束`);
+    info(`${new Date().toLocaleTimeString()} - RSS任务结束`);
   }
 }

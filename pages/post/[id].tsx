@@ -10,6 +10,7 @@ import Markdown from "markdown-to-jsx";
 import PreBlock from "@/components/PreBlock";
 import clsx from "clsx";
 import { getAllIssue } from "@/utils/github";
+import { info } from "@/utils/debug";
 import { request } from "@/utils/request";
 import styles from "@/styles/post.module.scss";
 import { useRouter } from "next/router";
@@ -106,7 +107,7 @@ export const getServerSideProps: GetStaticProps = async (context) => {
       },
     };
   } catch (error) {
-    console.log("get api data failed!!", error);
+    info("get api data failed!!", error);
     return {
       notFound: true,
     };
