@@ -1,5 +1,5 @@
-import "windi.css";
 import "@/styles/globals.css";
+import "windi.css";
 
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -16,12 +16,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       document.documentElement.classList.add("light");
     }
     // add global init debug mode function
+    // @ts-ignore
     globalThis.__switchDebugMode = () => {
       const mode = localStorage.getItem("debug");
       if (mode) {
         localStorage.removeItem("debug");
       } else {
-        localStorage.setItem("debug", true);
+        localStorage.setItem("debug", "true");
       }
       window.location.reload();
     };

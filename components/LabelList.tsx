@@ -33,7 +33,7 @@ function LabelList() {
       );
       setPostList(data as any[]);
     } catch (error) {
-      info("搜索失败,", error);
+      info(`搜索失败:${error}`);
       setPostList([]);
     } finally {
       setIsLoading(false);

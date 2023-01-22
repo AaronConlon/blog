@@ -1,12 +1,12 @@
 import consola from "consola";
 
-export const info = (value: string) => {
+export const info = (...args: unknown[]) => {
   if (
     globalThis.localStorage &&
     globalThis.localStorage.getItem("debug") !== null
   ) {
-    consola.info(value);
+    consola.info(args);
   } else {
-    consola.info(value);
+    consola.info(args);
   }
 };
