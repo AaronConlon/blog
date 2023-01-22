@@ -18,6 +18,11 @@ function FriendLinks() {
       href: "https://www.wangmiaozero.cn/",
       avatar: "https://avatars.githubusercontent.com/u/45121589?v=4",
     },
+    {
+      href: "http://www.jimmyxuexue.top",
+      avatar:
+        "https://vitepress-source.oss-cn-beijing.aliyuncs.com/typoraimage-20220326203849385.png",
+    },
   ];
   return (
     <div>
