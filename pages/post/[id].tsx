@@ -1,20 +1,19 @@
+import Label from "@/components/Label";
+import PreBlock from "@/components/PreBlock";
 import { IGithubIssue, IRepoLabel } from "@/interfaces";
+import { IUserInfo } from "@/interfaces/userInfo";
 import { labelsAtom, userInfoAtom } from "@/store";
-import { useEffect, useState } from "react";
-
+import styles from "@/styles/post.module.scss";
+import { info } from "@/utils/debug";
+import { getAllIssue } from "@/utils/github";
+import { request } from "@/utils/request";
+import clsx from "clsx";
+import { useSetAtom } from "jotai";
+import Markdown from "markdown-to-jsx";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { IUserInfo } from "@/interfaces/userInfo";
-import Label from "@/components/Label";
-import Markdown from "markdown-to-jsx";
-import PreBlock from "@/components/PreBlock";
-import clsx from "clsx";
-import { getAllIssue } from "@/utils/github";
-import { info } from "@/utils/debug";
-import { request } from "@/utils/request";
-import styles from "@/styles/post.module.scss";
 import { useRouter } from "next/router";
-import { useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
 
 interface IProps {
   labels: IRepoLabel[];
@@ -52,7 +51,7 @@ function Article({ labels, info, post }: IProps) {
   return (
     <>
       <h1 className="text-[36px] text-center py-24">{title}</h1>
-      <div className="fixed top-[50%] transform -translate-y-[50%] left-8 hidden lg:flex lg:flex-col text-purple-600 max-w-48">
+      <div className="fixed top-[50%] transform -translate-y-[50%] left-64 hidden lg:flex lg:flex-col text-purple-600 max-w-48">
         {tagList.map((i, idx) => {
           return (
             <a
