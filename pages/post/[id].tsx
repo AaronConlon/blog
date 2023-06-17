@@ -51,19 +51,22 @@ function Article({ labels, info, post }: IProps) {
   return (
     <>
       <h1 className="text-[36px] text-center py-24">{title}</h1>
-      <div className="fixed top-[50%] transform -translate-y-[50%] left-64 hidden lg:flex lg:flex-col text-purple-600 max-w-48">
-        {tagList.map((i, idx) => {
-          return (
-            <a
-              href={`#${i.id}`}
-              key={idx}
-              className="overflow-hidden overflow-ellipsis whitespace-nowrap"
-            >
-              {i.textContent}
-            </a>
-          );
-        })}
-      </div>
+      <aside className="fixed top-[50%] transform -translate-y-[50%] left-64 hidden xl:flex xl:flex-col text-purple-600 max-w-48 bg-purple-50 p-2 pl-[32px] rounded-sm">
+        <ul>
+          {tagList.map((i, idx) => {
+            return (
+              <li key={idx} className="list-disc">
+                <a
+                  className="overflow-hidden overflow-ellipsis whitespace-nowrap"
+                  href={`#${i.id}`}
+                >
+                  {i.textContent}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </aside>
       <div className="flex gap-4 justify-center items-center mb-12 cursor-pointer">
         {_labels.map((label) => (
           <Label label={label} key={label.id} />

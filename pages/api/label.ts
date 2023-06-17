@@ -13,7 +13,16 @@ export default async function handler(
     owner: "Developer27149",
     repo: "blog",
   });
-  info("data:", data);
+  info("labels data:", data);
 
-  res.status(200).json(data?.filter((i) => i.description === "标签") as any);
+  res.status(200).json(
+    data
+      ?.filter((i) => i.description === "标签")
+      .sort((a) => {
+        if (a.name === "Weekly") {
+          return -1;
+        }
+        return 0;
+      }) as any
+  );
 }
