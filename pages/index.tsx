@@ -1,17 +1,17 @@
+import { ESort, IGithubIssue, IRepoLabel } from "@/interfaces";
+import { GetServerSideProps, GetStaticProps } from "next";
+import { labelsAtom, tabAtom, userInfoAtom } from "@/store";
+import { useAtom, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+
+import { BLOG_DESCRIPTION } from "@/configs/index";
+import { GrDescend } from "react-icons/gr";
+import Head from "next/head";
+import { IUserInfo } from "@/interfaces/userInfo";
+import Image from "next/image";
 import Introduction from "@/components/Indroduction";
 import MiniArticle from "@/components/MiniArticle";
 import { MotionDiv } from "@/components/motion";
-import { BLOG_DESCRIPTION } from "@/configs/index";
-import { ESort, IGithubIssue, IRepoLabel } from "@/interfaces";
-import { IUserInfo } from "@/interfaces/userInfo";
-import { labelsAtom, tabAtom, userInfoAtom } from "@/store";
-import { useAtom, useSetAtom } from "jotai";
-import { GetServerSideProps, GetStaticProps } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { GrDescend } from "react-icons/gr";
-
 import type { NextPage } from "next";
 import { Scrollbars } from "react-custom-scrollbars";
 import clsx from "clsx";
@@ -30,8 +30,8 @@ const Home = ({ info, labels, posts }: IProps) => {
   // @ts-ignore
   const setUserInfo = useSetAtom(userInfoAtom);
   const [tab, setTab] = useAtom(tabAtom);
-  const [label, setLabel] = useAtom(labelsAtom);
-  const [isDesc, setIsDesc] = useState(true);
+  const [, setLabel] = useAtom(labelsAtom);
+  const [isDesc, setIsDesc] = useState(false);
   const [articleList, setArticleList] = useState(
     posts.filter((i) => i.labels.some((label) => label.name === "CSS"))
   );
