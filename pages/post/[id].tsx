@@ -1,16 +1,17 @@
-import Label from "@/components/Label";
-import PreBlock from "@/components/PreBlock";
 import { IGithubIssue, IRepoLabel } from "@/interfaces";
-import { IUserInfo } from "@/interfaces/userInfo";
 import { labelsAtom, userInfoAtom } from "@/store";
-import styles from "@/styles/post.module.scss";
+import { useEffect, useState } from "react";
+
+import { GetStaticProps } from "next";
+import { IUserInfo } from "@/interfaces/userInfo";
+import Label from "@/components/Label";
+import Markdown from "markdown-to-jsx";
+import PreBlock from "@/components/PreBlock";
+import clsx from "clsx";
 import { info } from "@/utils/debug";
 import { request } from "@/utils/request";
-import clsx from "clsx";
+import styles from "@/styles/post.module.scss";
 import { useSetAtom } from "jotai";
-import Markdown from "markdown-to-jsx";
-import { GetStaticProps } from "next";
-import { useEffect, useState } from "react";
 
 interface IProps {
   labels: IRepoLabel[];
@@ -49,17 +50,12 @@ function Article({ labels, info, post }: IProps) {
     <>
       <h1 className="text-[36px] text-center py-24">{title}</h1>
       {tagList.length > 0 && (
-        <aside className="fixed top-[50%] transform -translate-y-[50%] left-64 hidden xl:flex xl:flex-col text-purple-600 max-w-48 bg-purple-50 p-2 pl-[32px] rounded-sm">
+        <aside className="fixed top-[50%] transform -translate-y-[50%] left-32 hidden xl:flex xl:flex-col text-purple-600 max-w-48 p-[20px] py-4 rounded-sm bg-purple-50 mt-6 opacity-10 hover:opacity-100 transition-opacity">
           <ul>
             {tagList.map((i, idx) => {
               return (
-                <li key={idx} className="list-disc">
-                  <a
-                    className="overflow-hidden overflow-ellipsis whitespace-nowrap"
-                    href={`#${i.id}`}
-                  >
-                    {i.textContent}
-                  </a>
+                <li key={idx} className="list-disc truncate">
+                  <a href={`#${i.id}`}>{i.textContent}</a>
                 </li>
               );
             })}

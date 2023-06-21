@@ -1,8 +1,8 @@
 import { OWNER, REPO } from "@/utils/consts";
-
-import { info } from "./debug";
 import { request } from "@octokit/request";
 import { uniqWith } from "lodash-es";
+
+import { info } from "./debug";
 
 export const requestWithAuth = request.defaults({
   headers: {

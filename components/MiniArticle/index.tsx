@@ -1,8 +1,8 @@
-import CustomImage from "../CustomImage";
 import { IGithubIssue } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "markdown-to-jsx";
+// import CustomImage from "../CustomImage";
 import { MotionDiv } from "../motion";
 import { calcReverseColor } from "@/utils/color";
 import clsx from "clsx";
@@ -14,7 +14,6 @@ function MiniArticle({
   updated_at,
   description,
   cover,
-  id,
   number,
   index,
 }: IGithubIssue & { index: number }) {
