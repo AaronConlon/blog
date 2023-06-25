@@ -40,7 +40,7 @@ yarn && yarn dev
 本项目需要用户创建自己的环境配置文件：`.env`:
 
 ```bash
-TOKEN = 'ghp_H4JTQ6AugTnC2WuM9EvlIY3AtKrx'
+TOKEN = 'ghp_H4JTQ6AugTnC2WuM9EvlIY3AtKrx2'
 WEBSITE = 'http://localhost:3000'
 ```
 
