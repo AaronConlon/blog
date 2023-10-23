@@ -20,8 +20,11 @@ function FriendLinks() {
     },
     {
       href: "http://www.jimmyxuexue.top",
-      avatar:
-        "https://vitepress-source.oss-cn-beijing.aliyuncs.com/typoraimage-20220326203849385.png",
+      avatar: "https://avatars.githubusercontent.com/u/65758455?v=4",
+    },
+    {
+      href: "https://brucesong.xyz/",
+      avatar: "https://avatars.githubusercontent.com/u/62941121?v=4",
     },
   ];
   return (
