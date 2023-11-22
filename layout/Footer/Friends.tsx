@@ -26,6 +26,11 @@ function FriendLinks() {
       href: "https://brucesong.xyz/",
       avatar: "https://avatars.githubusercontent.com/u/62941121?v=4",
     },
+    {
+      href: "https://scarsu.com",
+      avatar:
+        "https://scarsu.oss-cn-shanghai.aliyuncs.com/picgo20201012144739.jpg",
+    },
   ];
   return (
     <div>
