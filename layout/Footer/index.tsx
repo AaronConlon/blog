@@ -2,7 +2,7 @@ import { FcGraduationCap, FcOrganization, FcVoicemail } from "react-icons/fc";
 
 import { AiFillGithub } from "react-icons/ai";
 import FriendLinks from "./Friends";
-import { GithubContributions } from "github-contributions-react";
+import GitHubCalendar from "react-github-calendar";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { userInfoAtom } from "@/store";
@@ -66,13 +66,8 @@ function Footer() {
           className="w-96 sm:w-112 lg:128 mx-auto my-4"
         />
       </div>
-      <div className="pb-8 max-w-screen lg:max-w-[1200px] mx-auto">
-        <GithubContributions
-          username="Developer27149"
-          color="#8B40CC"
-          showTotal={false}
-          showTitle={false}
-        />
+      <div className="pb-8 max-w-screen hidden xl:block lg:max-w-[1200px] mx-auto my-12 mt-32">
+        <GitHubCalendar username="Developer27149" />
       </div>
       <p className="text-center pt-12 text-gray-400">Power By Love</p>
       <p className="text-center py-4 text-gray-400">2022~2023</p>
