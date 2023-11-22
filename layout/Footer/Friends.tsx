@@ -28,8 +28,7 @@ function FriendLinks() {
     },
     {
       href: "https://scarsu.com",
-      avatar:
-        "https://scarsu.oss-cn-shanghai.aliyuncs.com/picgo20201012144739.jpg",
+      avatar: "https://scarsu.com/images/profile_hd.jpg",
     },
   ];
   return (
