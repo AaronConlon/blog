@@ -10,7 +10,7 @@ export default async function handler(
   res: NextApiResponse<IRepoLabel[]>
 ) {
   const { data } = await requestWithAuth("GET /repos/{owner}/{repo}/labels", {
-    owner: "Developer27149",
+    owner: "AaronConlon",
     repo: "blog",
   });
   info("labels data:", data);

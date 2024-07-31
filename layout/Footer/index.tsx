@@ -1,11 +1,11 @@
 import { FcGraduationCap, FcOrganization, FcVoicemail } from "react-icons/fc";
 
-import { AiFillGithub } from "react-icons/ai";
-import FriendLinks from "./Friends";
-import GitHubCalendar from "react-github-calendar";
+import { userInfoAtom } from "@/store";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { userInfoAtom } from "@/store";
+import GitHubCalendar from "react-github-calendar";
+import { AiFillGithub } from "react-icons/ai";
+import FriendLinks from "./Friends";
 
 function Footer() {
   const [userInfo] = useAtom(userInfoAtom);
@@ -67,7 +67,7 @@ function Footer() {
         />
       </div>
       <div className="pb-8 max-w-screen hidden xl:block lg:max-w-[1200px] mx-auto my-12 mt-32">
-        <GitHubCalendar username="Developer27149" />
+        <GitHubCalendar username="AaronConlon" />
       </div>
       <p className="text-center pt-12 text-gray-400">Power By Love</p>
       <p className="text-center py-4 text-gray-400">2022~2023</p>

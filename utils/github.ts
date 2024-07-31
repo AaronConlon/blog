@@ -6,7 +6,7 @@ import { info } from "./debug";
 
 export const requestWithAuth = request.defaults({
   headers: {
-    authorization: `token ${process.env.TOKEN}`,
+    authorization: `bearer ${process.env.TOKEN}`,
   },
 });
 
