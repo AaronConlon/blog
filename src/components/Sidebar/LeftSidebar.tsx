@@ -34,7 +34,7 @@ export default function LeftSidebar() {
         }
       });
     }
-  }, []);
+  }, [items]);
   return (
     <div
       className="fixed left-4 md:left-10 top-[50%] translate-x-[-50%] hidden md:flex gap-4 md:gap-8 z-10 flex-col"

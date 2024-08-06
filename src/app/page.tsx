@@ -8,6 +8,8 @@ import MobileNav from "@/components/MobileNav";
 import SideBar from "@/components/Sidebar";
 import Link from "next/link";
 
+
+
 export default function Home() {
   return (
     <>
@@ -46,9 +48,6 @@ export default function Home() {
         <Contact />
         <SideBar />
       </main>
-      <footer className="text-center p-4 uppercase bg-gradient-to-bl from-gray-50 to-white">
-        Power by ❤️
-      </footer>
     </>
   );
 }

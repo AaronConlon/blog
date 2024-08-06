@@ -40,3 +40,7 @@
   animation: pure-flip-up 0.1s ease-out forwards;
   animation-delay: 800ms;
 }
+
+.markdown-body ul {
+  list-style: auto!important;
+}

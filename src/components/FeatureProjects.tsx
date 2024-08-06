@@ -1,5 +1,3 @@
-"use server";
-
 import CloseSourceProjects from "./CloseSourceProjects";
 import OpenSourceProjects from "./OpenSourceProjects";
 
@@ -16,7 +14,7 @@ export default async function FeatureProjects() {
           I have worked on a number of projects, but here are a few that I am
           particularly proud of:
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 px-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 px-6 md:px-20 xl:px-6 gap-4">
           <OpenSourceProjects />
           <CloseSourceProjects />
         </div>

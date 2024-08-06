@@ -1,6 +1,13 @@
 import BlogContainer from "@/components/Blog/Container";
 import { getCacheIssues, getCacheLabels } from "@/features/cache";
 
+export async function generateStaticParams() {
+  const labels = await getCacheLabels();
+  return labels.map(({ id }) => ({
+    id: id.toString(),
+  }));
+}
+
 export default async function Page({
   params,
 }: {
@@ -8,8 +15,10 @@ export default async function Page({
     id: string;
   };
 }) {
-  const issues = await getCacheIssues();
-  const labels = await getCacheLabels();
+  const [issues, labels] = await Promise.all([
+    getCacheIssues(),
+    getCacheLabels(),
+  ]);
 
   const currentLabelIssues = issues.filter((issue) =>
     issue.labels.some((label) => label.id.toString() === params.id)
@@ -17,5 +26,6 @@ export default async function Page({
   const labelName =
     labels.find((label) => label.id.toString() === params.id)?.name ??
     "UNKNOWN";
+
   return <BlogContainer issues={currentLabelIssues} labelName={labelName} />;
 }

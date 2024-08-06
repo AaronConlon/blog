@@ -1,14 +1,10 @@
+import BlogRecommend from "@/components/Blog/BlogRecommend";
 import ContentNavigate from "@/components/Blog/ContentNavigate";
 import BlogLayout from "@/components/Blog/Layout";
 import MetaInfo from "@/components/Blog/MetaInfo";
 import { CONFIG } from "@/config";
-import { getIssueByIssueNumber } from "@/features/api";
 import { getCacheIssues } from "@/features/cache";
-import {
-  extractHeadings,
-  markedBodyToHTML,
-  resolveIssueBody,
-} from "@/features/format";
+import { markedBodyToHTML, resolveIssueBody } from "@/features/format";
 import { Link2 } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
@@ -37,20 +33,18 @@ export async function generateMetadata(
   };
 }
 
+// SSG for static params, control the static page generation
+export async function generateStaticParams() {
+  const issues = await getCacheIssues();
+  return issues.map(({ id }) => ({
+    id: id.toString(),
+  }));
+}
+
 export default async function BlogPage({ params }: { params: { id: string } }) {
   const issues = await getCacheIssues();
-  const currentIssue = issues.find(
-    (issue) => issue.id.toString() === params.id
-  )!;
-
-  const issueDetail = await getIssueByIssueNumber(currentIssue.number);
-  console.log("issue:", issueDetail);
-  console.log("issue update time:", issueDetail.updated_at);
-  const { content } = resolveIssueBody(issueDetail.body ?? "");
-
-  const tableOfContents = extractHeadings(content);
-
-  console.log(tableOfContents);
+  const issue = issues.find((i) => i.id.toString() === params.id)!;
+  const { content } = resolveIssueBody(issue.body ?? "");
 
   return (
     <BlogLayout>
@@ -61,14 +55,14 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
         {/* current blog content */}
         <div className="pt-12 mt-16 max-w-[860px] mx-auto px-[48px]">
           <h1 className="blog-title text-primary section-leading text-3xl font-semibold mb-8 text-center mx-auto max-w-[760px] flex justify-center items-center gap-4">
-            {currentIssue.title}
+            {issue.title}
             {process.env.DEV && (
-              <Link href={issueDetail.url} target="_blank">
+              <Link href={issue.url} target="_blank">
                 <Link2 size={24} />
               </Link>
             )}
           </h1>
-          <MetaInfo issue={currentIssue} />
+          <MetaInfo issue={issue} />
           <section
             className="text-sm pt-2 px-2 md:px-6 xl:px-8 mb-16 markdown-body"
             dangerouslySetInnerHTML={{
@@ -79,8 +73,10 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
 
         {/* right side: table of content */}
         <aside className="hidden xl:block relative">
-          <ContentNavigate items={tableOfContents} />
+          <ContentNavigate />
         </aside>
+        <div className="giscus w-full p-4 my-4 min-h-[400px]"></div>
+        <BlogRecommend issues={issues} currentIssue={issue} />
       </div>
     </BlogLayout>
   );

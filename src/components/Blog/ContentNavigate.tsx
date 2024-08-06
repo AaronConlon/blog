@@ -1,22 +1,23 @@
 "use client";
 
 import { cn } from "@/features/format";
-import { ITableContent } from "@/features/types";
 import { debounce } from "lodash-es";
 import { BookOpenCheck, ReceiptText } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface TableOfContentItemProps {
-  items: ITableContent[];
-}
-export default function ContentNavigate({ items }: TableOfContentItemProps) {
-  const [progress, setProgress] = useState("0");
+export default function ContentNavigate() {
+  const [progress, setProgress] = useState(0);
   const [wordCount, setWordCount] = useState(0);
+  const [currentHeadingId, setCurrentHeadingId] = useState<string>();
+  const [currentHeadingIndex, setCurrentHeadingIndex] = useState(0);
+  const [headingList, setHeadingList] = useState<
+    { textContent: string; id: string; tagName: string }[]
+  >([]);
 
   const handleToView = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 
@@ -25,39 +26,64 @@ export default function ContentNavigate({ items }: TableOfContentItemProps) {
 
     // 获取标题
     const headings = document.querySelectorAll(
-      ".markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6"
+      ".markdown-body>h1, .markdown-body>h2, .markdown-body>h3, .markdown-body>h4, .markdown-body>h5, .markdown-body>h6"
     );
-    const title = document.querySelector(".blog-title");
-    let titleInView = true;
+    // update blog body headings
+    const newHeadingList = Array.from(headings).map((i) => ({
+      textContent: i.textContent ?? "",
+      id: i.id,
+      tagName: i.tagName,
+    }));
+    setHeadingList(newHeadingList);
 
-    const ob = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].intersectionRatio > 0) {
-          titleInView = true;
+    const inViewGroup = new Set<Element>();
+    let prevPos = 0;
+
+    const ob = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const heading = entry.target;
+        if (entry.isIntersecting) {
+          inViewGroup.add(heading);
         } else {
-          titleInView = false;
+          inViewGroup.delete(heading);
         }
-      },
-      { threshold: 0.5 }
-    );
-
-    title && ob.observe(title);
-
-    const onScroll = debounce(() => {
-      if (mdBody && title) {
-        const { top, height } = mdBody.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const readHeight = windowHeight - top;
-        const readProcess = (readHeight / height) * 100;
-        const result = readProcess >= 100 ? 100 : readProcess;
-        setProgress(result.toFixed(0));
+      });
+      // 根据滚动方向，找到当前可见的标题
+      if (inViewGroup.size > 0) {
+        const headings = Array.from(inViewGroup);
+        const firstHeading = headings[0];
+        const lastHeading = headings[headings.length - 1];
+        const currentTargetId =
+          prevPos < window.scrollY ? lastHeading.id : firstHeading.id;
+        setCurrentHeadingId(currentTargetId);
+        setCurrentHeadingIndex(
+          newHeadingList.findIndex((i) => i.id === currentTargetId)
+        );
       }
-    }, 100);
+    });
+    headings.forEach((heading) => {
+      ob.observe(heading);
+    });
+
+    let prevPos2 = 0;
+    const onScroll = debounce(() => {
+      if (mdBody) {
+        const isScrollDown = window.scrollY > prevPos2;
+        prevPos2 = window.scrollY;
+        if (isScrollDown) {
+          const { top, height } = mdBody.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const readHeight = windowHeight - top;
+          const readProcess = (readHeight / height) * 100;
+          const result = readProcess >= 100 ? 100 : readProcess;
+          setProgress(~~result);
+        }
+      }
+    }, 50);
 
     // 解析文章字数
-    if (mdBody && title) {
+    if (mdBody) {
       const text = mdBody.textContent;
-      console.log(text?.length);
       if (text) {
         setWordCount(text.length);
       }
@@ -70,27 +96,34 @@ export default function ContentNavigate({ items }: TableOfContentItemProps) {
   }, []);
 
   return (
-    <div className="h-max pt-1 pb-4 rounded-md sticky top-32">
+    <div className="h-max pt-1 pb-4 rounded-md sticky top-32 animate-fade-down delay-1000">
       <div className="relative">
         <span
-          className="w-4 h-1 rounded-full bg-primary/80 absolute top-0 left-0 transition-all duration-300"
+          className="w-[2px] left-1 h-3 rounded-full bg-primary absolute transition-all duration-300 transform translate-y-1 ease-in-out"
           style={{
-            top: `${progress}%`,
+            top: `${(currentHeadingIndex / headingList.length) * 100}%`,
           }}
         ></span>
-        {items.map(({ text, id, level }) => (
+        {headingList.map(({ id, textContent, tagName }) => (
           <section
-            className="text-sm font-thin pt-2 flex gap-1 items-start cursor-pointer"
+            title={textContent ?? undefined}
+            className={cn(
+              "text-sm font-thin cursor-pointer truncate transition-colors duration-300 ease-in-out",
+              {
+                "text-primary font-semibold": id === currentHeadingId,
+              }
+            )}
             key={id}
             style={{
-              paddingLeft: `${level * 14}px`,
+              paddingLeft: `${~~tagName.toUpperCase().replace("H", "") * 14}px`,
             }}
             onClick={() => handleToView(id)}
           >
-            {text}
+            {textContent}
           </section>
         ))}
       </div>
+
       <div className="font-thin text-sm flex items-center gap-1 pl-1 mt-8 pt-4 relative">
         <div
           className="h-[4px] w-full rounded-sm absolute top-0 left-0"

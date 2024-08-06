@@ -18,13 +18,13 @@ export function markedBodyToHTML(body: string) {
   // Override function
   const renderer = {
     heading(text: string, depth: string) {
-      const escapedText = text.toLowerCase().replace(/[^\w]+/g, "-");
-      const id = Buffer.from(escapedText).toString("base64");
-      return `
+      const id = Buffer.from(text).toString("base64");
+      return `<div style="height:${(6 - Number(depth)) / 2}em;width:100%"></div>
             <h${depth} class="flex items-center gap-1" id="${id}">
-              <span class="text-primary">#</span>
               ${text}
-            </h${depth}>`;
+            </h${depth}><div style="height:${
+        (6 - Number(depth)) / 2
+      }em;width:100%"></div>`;
     },
   } as unknown as RendererObject;
 
@@ -54,12 +54,14 @@ export function extractHeadings(markdown: string) {
     id: string;
   }[] = [];
 
-  tokens.forEach((token) => {
+  tokens.forEach((token, idx) => {
     if (token.type === "heading" && token.depth >= 1 && token.depth <= 6) {
+      const escapedText = token.text.toLowerCase().replace(/[^\w]+/g, "-");
+      const id = Buffer.from(escapedText).toString("base64") + idx;
       headings.push({
         level: token.depth - 1,
         text: token.text,
-        id: Buffer.from(token.text).toString("base64"),
+        id,
       });
     }
   });

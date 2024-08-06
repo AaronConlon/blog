@@ -1,5 +1,3 @@
-"use server";
-
 import { CONFIG } from "@/config";
 import { getCacheRepos } from "@/features/cache";
 import { ArrowRightCircle, Github, Home, Star } from "lucide-react";
@@ -7,14 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function OpenSourceProjects() {
-  const data = await getCacheRepos();
-
+  const repos = await getCacheRepos();
   return (
     <>
-      <div className="sm:col-span-2 md:col-span-3 2xl:col-span-4 font-semibold text-2xl uppercase">
+      <div className="sm:col-span-2 md:col-span-4 font-semibold text-2xl uppercase">
         open source
       </div>
-      {data
+      {repos
         .filter((project) => project.stargazers_count > 1)
         .sort((prev, cur) => cur.stargazers_count - prev.stargazers_count)
         .map((project) => {
@@ -74,8 +71,8 @@ export default async function OpenSourceProjects() {
         <div className="flex items-center gap-3">
           <Github color="white" size={32} />
           <div>
-            <span className="text-white">{data.length}</span> repositories found
-            in my github profile
+            <span className="text-white">{repos.length}</span> repositories
+            found in my github profile
           </div>
         </div>
         <Link

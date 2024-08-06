@@ -1,10 +1,26 @@
 "use client";
 
+import { useEffect } from "react";
+
 export default function GiscusContainer() {
+  useEffect(() => {
+    const container = document.querySelector(".giscus");
+    let giscusDiv: HTMLDivElement | null = null;
+    if (!container) {
+      // create a container
+      giscusDiv = document.createElement("div");
+      giscusDiv.classList.add("giscus");
+      document.body.appendChild(giscusDiv);
+      giscusDiv.style.maxWidth = "760px";
+    }
+    return () => {
+      if (giscusDiv) {
+        document.body.removeChild(giscusDiv);
+      }
+    };
+  }, []);
   return (
     <>
-      <div className="giscus max-w-[760px] w-full mx-auto p-1 my-4 min-h-[400px] border"></div>
-      ;
       <script
         src="https://giscus.app/client.js"
         data-repo="AaronConlon/blog"

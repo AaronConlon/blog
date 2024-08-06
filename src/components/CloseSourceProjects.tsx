@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function CloseSourceProjects() {
   return (
     <>
-      <div className="sm:col-span-2 md:col-span-3 2xl:col-span-4 font-semibold text-2xl uppercase mt-12">
+      <div className="sm:col-span-2 md:col-span-4 font-semibold text-2xl uppercase mt-12">
         close source
       </div>
       {CONFIG.projects.map((project) => (

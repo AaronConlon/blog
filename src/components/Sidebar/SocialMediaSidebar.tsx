@@ -35,7 +35,7 @@ export default function SocialMediaSidebar() {
   return (
     <div className="fixed right-4 xl:right-8 hidden md:flex bottom-0 flex-col z-10 gap-4 items-center">
       {socialMedias.map(({ name, url, icon: Icon }) => (
-        <Link href={url} className="relative group" target="_blank">
+        <Link href={url} className="relative group" target="_blank" key={name}>
           <Icon
             size={24}
             className="hover:text-primary hover:scale-110 origin-center transition-transform"

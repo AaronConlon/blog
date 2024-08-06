@@ -34,7 +34,6 @@ export async function getAllIssue() {
     "id"
   );
   updateCacheIssues(data);
-  console.log("get all issues:", data[0].title);
   return data as TIssue[];
 }
 

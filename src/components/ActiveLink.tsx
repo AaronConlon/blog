@@ -22,9 +22,7 @@ const ActiveLink = ({
   return (
     <Link href={href} passHref legacyBehavior>
       <a
-        className={`${className} ${
-          isActive ? "section-heading !text-white" : ""
-        }`}
+        className={`${className} ${isActive ? "section-heading" : ""}`}
         data-type="highlight"
         style={style}
       >
