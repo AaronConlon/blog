@@ -22,7 +22,7 @@ export default async function Image({
 }) {
   // Font
   const interSemiBold = await fetch(
-    new URL("./Inter-SemiBold.ttf", import.meta.url)
+    new URL("./public/Inter-SemiBold.ttf", import.meta.url)
   ).then((res) => res.arrayBuffer());
 
   const issues = await getCacheIssues();

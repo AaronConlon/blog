@@ -16,7 +16,7 @@ export const contentType = "image/png";
 // Image generation
 export default async function Image() {
   // Font
-  const interSemiBold = fetch(new URL("/public/Inter-SemiBold.ttf")).then(
+  const interSemiBold = fetch(new URL("./public/Inter-SemiBold.ttf")).then(
     (res) => res.arrayBuffer()
   );
 
