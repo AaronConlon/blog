@@ -1,64 +1,36 @@
-# BLOG
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-我使用`TypeScript + Next + React`以及`Github API`构建里这个博客系统。
+## Getting Started
 
-### 背景
-
-大二的时候，用`WordPress`构建了自己的博客系统，最后却因为没有坚持学习和分享而无疾而终。
-
-毕业后开始使用`Hexo`构建博客系统，却因为未备案和其他一些原因而荒废里`Hexo`。
-
-`Hexo`很棒，但我想用自己所学的知识来构建自己的博客。
-
-### 功能
-
-- 博客文章实时更新
-- 支持RSS订阅
-- 响应式支持，移动端访问良好
-- 个人 GitHub 活跃状态示意图
-
-
-
-### 安装和使用
-
-克隆本项目到本地之后，使用`nvm`来维护`node`版本，我已经将版本号写成里配置文件放在根目录下，你可以直接使用`nvm use`来启用我的版本。
-
-然后，使用:
+First, run the development server:
 
 ```bash
-yarn && yarn dev
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-即可安装依赖和开启开发模式。
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-我将所有的数据都放在`Github`上面，并且通过官方的接口进行数据读取，目前暂未接入文章编辑和发表的功能，因为这一切`Github`都为我们做好了。
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-无论在什么平台，我们都可以通过`Github`的应用去添加新的文章和分类。
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-### 须知
+## Learn More
 
-本项目需要用户创建自己的环境配置文件：`.env`:
+To learn more about Next.js, take a look at the following resources:
 
-```bash
-TOKEN = 'ghp_H4JTQ6AugTnC2WuM9EvlIY3AtKrx2'
-WEBSITE = 'http://localhost:3000'
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-这里我去`github`获取了一个`Token`来让我具有了访问官方接口的能力，这个`Website`变量则跟本地开发接口和`RSS`生成有关。
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-当你部署的时候，也需要为这个项目添加这两个环境变量。
+## Deploy on Vercel
 
-总而言之：
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- token：GitHub Token
-- Website：线上域名
-
-我将我的项目部署到了`vercel`上，本项目使用`Next`框架和`vercel`配合得相得益彰，一切部署的疑难都可以通过`Google`找到 😂
-
-> 国内不越过防火墙则访问不到，个人不介意
-
-
-
-### 其他
-
-欢迎一起交流学习，期待你的邮件。
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
