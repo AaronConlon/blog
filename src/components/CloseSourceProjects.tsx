@@ -6,19 +6,18 @@ export default function CloseSourceProjects() {
   return (
     <>
       <div className="sm:col-span-2 md:col-span-4 font-semibold text-2xl uppercase mt-12">
-        close source
+        Solo projects
       </div>
       {CONFIG.projects.map((project) => (
         <div
           key={project.name}
-          className="bg-white shadow-lg border border-transparent hover:border-primary/50 rounded-t-lg overflow-hidden __project__ group"
+          className="bg-white shadow-lg border border-transparent hover:border-primary/50 rounded-t-lg overflow-hidden __project__ group flex flex-col"
         >
           <div className="overflow-hidden">
             <Image
-              src="
-              https://satnaing.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fastro-paper.73e967f9.webp&w=2048&q=75"
+              src={project.cover}
               alt="repo cover"
-              className="w-full group-hover:scale-110 transition-transform duration-300"
+              className="w-full group-hover:scale-110 transition-transform duration-300 aspect-video"
               width={315}
               height={161}
             />
@@ -33,7 +32,7 @@ export default function CloseSourceProjects() {
             <span className="pl-2">{project.description}</span>
           </Link>
 
-          <div className="flex items-center flex-wrap gap-4 p-2 topics">
+          <div className="flex items-center flex-wrap gap-4 p-2 topics mt-auto">
             {project.topics.map((topic) => (
               <span
                 key={topic}

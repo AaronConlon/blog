@@ -6,6 +6,7 @@ const nextConfig = {
       "satnaing.dev",
       "avatars.githubusercontent.com",
     ],
+    unoptimized: true,
   },
   output: "export",
 };

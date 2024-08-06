@@ -11,9 +11,9 @@ export default async function BlogLayout({
   const labels = await getCacheLabels();
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-gradient-to-bl from-gray-50 to-white p-4 inset-x-0">
+      <header className="sticky top-0 z-50 w-full bg-gradient-to-bl from-gray-50 to-white p-4 inset-x-0 transition-all header">
         <nav className="max-w-[1200px] mx-auto">
-          <ul className="flex items-center justify-end gap-.5 md:gap-1">
+          <ul className="flex items-center justify-end gap-.5 md:gap-1 xl:gap-4">
             <li className="mr-auto">
               <Logo />
             </li>

@@ -22,8 +22,7 @@ export default async function OpenSourceProjects() {
             >
               <div className="overflow-hidden">
                 <Image
-                  src="
-                https://satnaing.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fastro-paper.73e967f9.webp&w=2048&q=75"
+                  src={`https://opengraph.githubassets.com/[random-string]/${CONFIG.author.name}/${project.name}`}
                   alt="repo cover"
                   className="w-full group-hover:scale-110 transition-transform duration-300"
                   width={315}
@@ -68,15 +67,15 @@ export default async function OpenSourceProjects() {
           );
         })}
       <div className="flex justify-center items-center relative flex-col gap-4 bg-gradient-to-tr from-teal-300 to-primary px-8 rounded-md shadow-primary/80 hover:shadow-primary shadow-lg transition-shadow p-12 sm:p-0">
-        <div className="flex items-center gap-3">
-          <Github color="white" size={32} />
+        <div className="flex items-center gap-3 px-2">
+          <Github color="cyan" size={32} />
           <div>
             <span className="text-white">{repos.length}</span> repositories
             found in my github profile
           </div>
         </div>
         <Link
-          className="font-semibold text-2xl px-2"
+          className="font-semibold text-2xl px-2 xl:px-8"
           href={CONFIG.author.githubProfile}
           target="_blank"
         >

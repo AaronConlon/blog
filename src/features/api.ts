@@ -30,7 +30,9 @@ export async function getAllIssue() {
   const dataArr = await Promise.all(respArr);
   const multiLayerData = await Promise.all(dataArr.map((resp) => resp.json()));
   const data = uniqBy(
-    multiLayerData.flat().filter((i) => i.author_association === "OWNER"),
+    multiLayerData
+      .flat()
+      .filter((i) => i.author_association === "OWNER" && i.state === "open"),
     "id"
   );
   updateCacheIssues(data);

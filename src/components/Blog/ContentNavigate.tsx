@@ -17,7 +17,14 @@ export default function ContentNavigate() {
   const handleToView = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      const header = document.querySelector("body > header.header");
+      if (header) {
+        header.classList.add("opacity-0");
+        setTimeout(() => {
+          header.classList.remove("opacity-0");
+        }, 1000);
+      }
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -53,7 +60,7 @@ export default function ContentNavigate() {
         const headings = Array.from(inViewGroup);
         const firstHeading = headings[0];
         const lastHeading = headings[headings.length - 1];
-        const currentTargetId =
+        let currentTargetId =
           prevPos < window.scrollY ? lastHeading.id : firstHeading.id;
         setCurrentHeadingId(currentTargetId);
         setCurrentHeadingIndex(

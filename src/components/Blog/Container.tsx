@@ -2,7 +2,7 @@ import BlogLayout from "@/components/Blog/Layout";
 import { resolveIssueBody } from "@/features/format";
 import { TIssue } from "@/features/types";
 import { format } from "date-fns";
-import { CalendarCheck, Link2 } from "lucide-react";
+import { CalendarCheck } from "lucide-react";
 import { marked } from "marked";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,14 +72,11 @@ export default function BlogContainer({
                         </span>
                       ))}
                     </div>
-                    <Link href={`/blog/post/${id}`} className="ml-auto">
-                      <Link2 size={20} />
-                    </Link>
                   </div>
                   <div className="grid grid-cols-[auto_200px] gap-4">
                     <div>
                       <Link
-                        href={html_url}
+                        href={`/blog/post/${id}`}
                         target="_blank"
                         className="text-lg mb-4 font-semibold text-gray-900 dark:text-white"
                       >

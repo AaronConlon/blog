@@ -1,4 +1,5 @@
 import { TIssue } from "@/features/types";
+import { shuffle } from "lodash-es";
 import BlogItem from "./Item";
 
 interface BlogRecommendProps {
@@ -9,8 +10,8 @@ export default function BlogRecommend({
   issues,
   currentIssue,
 }: BlogRecommendProps) {
-  const recommendIssues = issues
-    .filter(
+  const recommendIssues = shuffle(
+    issues.filter(
       (issue) =>
         issue.id !== currentIssue.id &&
         issue.labels.some((label) =>
@@ -19,7 +20,7 @@ export default function BlogRecommend({
           )
         )
     )
-    .slice(0, 2);
+  ).slice(0, 2);
 
   if (recommendIssues.length === 0) return null;
 
