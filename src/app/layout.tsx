@@ -9,7 +9,30 @@ const inter = Jost({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Hi, This is Aaron Conlon's Blog",
   description: "A blog about software development and other things",
+  openGraph: {
+    images: ["/coder3.svg"],
+    type: "website",
+    siteName: "Aaron Conlon's Blog",
+    title: "Hi, This is Aaron Conlon's Blog",
+    url: process.env.DOMAIN!,
+    description: "A blog about software development and other things",
+  },
+  twitter: {
+    images: [
+      {
+        url: "https://pbs.twimg.com/semantic_core_img/1775195893546856453/f6CELbJn?format=jpg&name=360x360",
+        alt: "Og Image Alt",
+        width: 360,
+        height: 360,
+      },
+    ],
+    card: "summary_large_image",
+    site: "Aaron Conlon's Blog",
+    title: "Hi, This is Aaron Conlon's Blog",
+    description: "A blog about software development and other things",
+  },
 };
+
 
 export default async function RootLayout({
   children,
