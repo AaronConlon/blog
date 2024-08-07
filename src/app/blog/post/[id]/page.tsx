@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       CONFIG.author.name
     }'s Blog`,
     openGraph: {
-      images: ["/coder3.svg"],
+      images: [data?.cover ?? CONFIG.og.imageUrl ?? "/coder3.svg"],
       type: "article",
       siteName: `${CONFIG.author.name}'s Blog`,
       title: `${issue.title} - ${CONFIG.author.name}'s Blog`,
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       images: [
         {
-          url: "https://pbs.twimg.com/semantic_core_img/1775195893546856453/f6CELbJn?format=jpg&name=360x360",
+          url: data?.cover ?? CONFIG.og.imageUrl ?? "/coder3.svg",
           alt: "Og Image Alt",
           width: 360,
           height: 360,

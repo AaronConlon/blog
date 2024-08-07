@@ -44,3 +44,7 @@
 .markdown-body ul {
   list-style: auto!important;
 }
+
+html {
+  scroll-behavior: smooth;
+}
