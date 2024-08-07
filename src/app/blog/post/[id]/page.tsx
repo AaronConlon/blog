@@ -6,7 +6,7 @@ import { CONFIG } from "@/config";
 import { getCacheIssues } from "@/features/cache";
 import { markedBodyToHTML, resolveIssueBody } from "@/features/format";
 import { Link2 } from "lucide-react";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import Link from "next/link";
 
 type Props = {
@@ -14,10 +14,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
   const id = params.id;
   const issues = await getCacheIssues();
@@ -29,7 +26,14 @@ export async function generateMetadata(
     }'s Blog`,
     openGraph: {
       images: ["/coder3.svg"],
+      type: "article",
+      siteName: `${CONFIG.author.name}'s Blog`,
     },
+    twitter: {
+      images: ["/coder3.svg"],
+      card: "summary_large_image",
+    },
+    metadataBase: new URL(process.env.DOMAIN!),
   };
 }
 
