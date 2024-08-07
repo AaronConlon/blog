@@ -79,7 +79,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
         id="blog-container"
       >
         {/* current blog content */}
-        <div className="pt-12 mt-16 max-w-[860px] mx-auto px-[48px]">
+        <div className="pt-12 mt-16 max-w-[860px] mx-auto px-[48px] animate-fade-up delay-500">
           <h1 className="blog-title text-primary section-leading text-3xl font-semibold mb-8 text-center mx-auto max-w-[760px] flex justify-center items-center gap-4">
             {issue.title}
             {process.env.DEV && (
@@ -90,7 +90,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
           </h1>
           <MetaInfo issue={issue} />
           <section
-            className="text-sm pt-2 px-2 md:px-6 xl:px-8 mb-16 markdown-body animate-fade-up delay-500"
+            className="text-sm pt-2 px-2 md:px-6 xl:px-8 mb-16 markdown-body"
             dangerouslySetInnerHTML={{
               __html: markedBodyToHTML(content),
             }}
