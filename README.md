@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Aaron Conlon's Blog
 
-## Getting Started
+[中文](./README.zhCN.md)
 
-First, run the development server:
+Welcome to my personal blog: [i5lin.top](https://i5lin.top/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This blog is built using the following technologies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Next.js 14.2](https://nextjs.org/) with App Router
+- [Tailwind CSS](https://tailwindcss.com/)
+- Sitemap generation
+- RSS subscription
+- GitHub API integration
+- Comment system for articles
+- Open Graph support
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Features
 
-## Learn More
+- Responsive design for various devices
+- Fast loading and excellent performance
+- SEO friendly
+- Support for Markdown articles
+- Integrated GitHub content management
+- Real-time comment functionality (powered by giscus)
 
-To learn more about Next.js, take a look at the following resources:
+## Running Locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository
+   ```
+   git clone https://github.com/AaronConlon/blog.git
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. Install dependencies
+   ```
+   cd blog
+   npm install
+   ```
 
-## Deploy on Vercel
+3. Provide environment variables
+   ```
+   # .local.env
+   # Fetch article and repository data
+   GITHUB_TOKEN='xxxxxxxxxxxxxxxx'
+   # Create webpage meta data
+   DOMAIN='your-deploy-domain'
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Start the development server
+   ```
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+5. Open `http://localhost:3000` in your browser
+
+## Notes
+
+- Article data is stored in the open issues of the blog repository on GitHub
+- Open source project is hosted in the personal GitHub repository
+- Data requests are handled in api.ts with caching mechanisms
+
+## Contributing
+
+Feel free to open issues or submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
