@@ -1,25 +1,39 @@
+import { getCacheIssues, getCacheLabels } from "@/features/cache";
 import { MetadataRoute } from "next";
 
-// TODO: add site map
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap[]> {
+  const [issues, labels] = await Promise.all([
+    getCacheIssues(),
+    getCacheLabels(),
+  ]);
+  const domain = process.env.DOMAIN!;
+  const issueItems: any = issues.map((issue) => ({
+    url: `${domain}/issues/${issue.id}`,
+    lastModified: issue.updated_at,
+    changeFrequency: "daily",
+    priority: 0.8,
+  }));
+
+  const tagItems = labels.map((label) => ({
+    url: `${domain}/tag/${label.id}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
   return [
     {
-      url: "https://acme.com",
+      url: domain,
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "monthly",
       priority: 1,
     },
     {
-      url: "https://acme.com/about",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: "https://acme.com/blog",
+      url: `${domain}/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.5,
+      priority: 1,
     },
+    ...issueItems,
+    ...tagItems,
   ];
 }
