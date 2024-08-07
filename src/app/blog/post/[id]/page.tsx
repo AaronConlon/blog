@@ -38,7 +38,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }'s Blog`,
     },
     twitter: {
-      images: ["/coder3.svg"],
+      images: [
+        {
+          url: "https://pbs.twimg.com/semantic_core_img/1775195893546856453/f6CELbJn?format=jpg&name=360x360",
+          alt: "Og Image Alt",
+          width: 360,
+          height: 360,
+        },
+      ],
       card: "summary_large_image",
       site: `${CONFIG.author.name}'s Blog`,
       title: `${issue.title} - ${CONFIG.author.name}'s Blog`,
@@ -83,7 +90,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
           </h1>
           <MetaInfo issue={issue} />
           <section
-            className="text-sm pt-2 px-2 md:px-6 xl:px-8 mb-16 markdown-body"
+            className="text-sm pt-2 px-2 md:px-6 xl:px-8 mb-16 markdown-body animate-fade-up delay-500"
             dangerouslySetInnerHTML={{
               __html: markedBodyToHTML(content),
             }}
