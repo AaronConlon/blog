@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
   const issues = await getCacheIssues();
   const issue = issues.find((issue) => issue.id.toString() === id)!;
+  const { data } = resolveIssueBody(issue.body ?? "");
 
   return {
     title: `${issue.title} - ${issue.labels.map((i) => i.name).join("-")} - ${
@@ -28,10 +29,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: ["/coder3.svg"],
       type: "article",
       siteName: `${CONFIG.author.name}'s Blog`,
+      title: `${issue.title} - ${CONFIG.author.name}'s Blog`,
+      url: `${process.env.DOMAIN!}/blog/${issue.id}`,
+      description:
+        data?.description ??
+        `${issue.title} - ${issue.labels.map((i) => i.name).join("-")} - ${
+          CONFIG.author.name
+        }'s Blog`,
     },
     twitter: {
       images: ["/coder3.svg"],
       card: "summary_large_image",
+      site: `${CONFIG.author.name}'s Blog`,
+      title: `${issue.title} - ${CONFIG.author.name}'s Blog`,
+      description:
+        data?.description ??
+        `${issue.title} - ${issue.labels.map((i) => i.name).join("-")} - ${
+          CONFIG.author.name
+        }'s Blog`,
     },
     metadataBase: new URL(process.env.DOMAIN!),
   };
