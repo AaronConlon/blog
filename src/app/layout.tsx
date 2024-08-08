@@ -45,6 +45,7 @@ export default async function RootLayout({
       <body className={`${inter.className} w-full overflow-x-hidden`}>
         {children}
         <GoTop />
+        <script async src="https://cdn.seline.so/seline.js"></script>
         <Script
           async
           src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"
