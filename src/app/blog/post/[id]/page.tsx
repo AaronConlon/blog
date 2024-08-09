@@ -94,7 +94,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
         <aside className="hidden xl:block relative">
           <ContentNavigate />
         </aside>
-        <div className="giscus w-full p-4 my-4 min-h-[400px]"></div>
+        <div className="giscus w-full max-w-[760px] mx-auto p-4 my-4 min-h-[400px]"></div>
         <BlogRecommend issues={issues} currentIssue={issue} />
       </div>
     </BlogLayout>
