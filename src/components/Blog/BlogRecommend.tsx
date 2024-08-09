@@ -26,8 +26,8 @@ export default function BlogRecommend({
 
   return (
     <div className="px-4 mt-8">
-      <section className="text-primary font-semibold text-2xl mb-4">
-        同类推荐：
+      <section className="text-primary font-semibold text-xl  sm:text-2xl mb-4">
+        文章推荐
       </section>
       <div className="flex flex-col gap-4">
         {recommendIssues.map((issue) => (

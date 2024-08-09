@@ -43,7 +43,7 @@ export default function BlogContainer({
           </div>
         ) : (
           <p className="py-4">
-            当前共 <span>{issues.length} 篇文章</span>
+            当前共 <span className="text-primary">{issues.length}</span> 篇文章
           </p>
         )}
         <div className="py-12 min-h-[20vh]">
@@ -73,7 +73,7 @@ export default function BlogContainer({
                       ))}
                     </div>
                   </div>
-                  <div className="grid grid-cols-[auto_200px] gap-4">
+                  <div className="grid md:grid-cols-[auto_200px] gap-4">
                     <div>
                       <Link
                         href={`/blog/post/${id}`}
