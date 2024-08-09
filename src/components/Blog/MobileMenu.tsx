@@ -29,7 +29,7 @@ export default function MobileMenu({ labels }: IMobileMenuProps) {
       >
         <WrapText className="text-primary" />
       </button>
-      {!showList && (
+      {showList && (
         <div className="flex gap-2 animate-fade-down absolute inset-x-0 w-full top-14 bg-white p-2 shadow-md justify-center items-center pb-8">
           {labels.map(({ name, id, color }) => (
             <div
