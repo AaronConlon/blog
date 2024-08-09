@@ -1,5 +1,8 @@
 import Logo from "@/components/Logo";
+import { CONFIG } from "@/config";
 import { getCacheLabels } from "@/features/cache";
+import { Rss } from "lucide-react";
+import Link from "next/link";
 import ActiveLink from "../ActiveLink";
 import SocialMediaSidebar from "../Sidebar/SocialMediaSidebar";
 
@@ -16,6 +19,15 @@ export default async function BlogLayout({
           <ul className="flex items-center justify-end gap-.5 md:gap-1 xl:gap-4">
             <li className="mr-auto">
               <Logo />
+            </li>
+            <li>
+              <Link
+                target="_blank"
+                href={CONFIG.rss}
+                type="application/rss+xml"
+              >
+                <Rss className="text-primary" />
+              </Link>
             </li>
             {labels.map(({ name, id, color }) => (
               <li
