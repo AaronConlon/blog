@@ -16,12 +16,11 @@ const headers = {
 
 export async function getAllIssue() {
   const blogCount = getBlogCount();
-  // TODO: 将 100 改回 30
   const respArr = Array.from({ length: Math.ceil(blogCount / 100) }, (_, i) => {
     return fetch(
       `https://api.github.com/repos/${
         CONFIG.author.name
-      }/blog/issues?per_page=30&page=${i + 1}`,
+      }/blog/issues?per_page=100&page=${i + 1}`,
       {
         headers,
       }
