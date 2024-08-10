@@ -15,4 +15,4 @@ jobs:
       - name: Trigger Cloudflare Deploy Hook
         run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/16710477-1a3d-4b98-9a4e-173df1f073f5
       - name: Create notification
-        run: curl -d "Hi" ntfy.sh/aaron-conlon-blog-rebuild
+        run: curl -d "博客构建成功中..." ntfy.sh/aaron-conlon-blog-rebuild

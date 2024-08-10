@@ -22,7 +22,7 @@ export default function BlogItem({
           alt="avatar"
           height={460}
           width={320}
-          className="group-hover:scale-105 aspect-video transition-transform"
+          className="group-hover:scale-105 aspect-video transition-transform w-full"
         />
       </div>
       <Link

@@ -1,3 +1,4 @@
+import FriendLinks from "@/components/FriendLinks";
 import GoTop from "@/components/GoTop";
 import { CONFIG } from "@/config";
 import type { Metadata } from "next";
@@ -34,7 +35,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -44,6 +44,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} w-full overflow-x-hidden`}>
         {children}
+        <FriendLinks />
         <GoTop />
         <script async src="https://cdn.seline.so/seline.js"></script>
         <Script
