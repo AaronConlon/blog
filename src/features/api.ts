@@ -31,7 +31,12 @@ export async function getAllIssue() {
   const data = uniqBy(
     multiLayerData
       .flat()
-      .filter((i) => i.author_association === "OWNER" && i.state === "open"),
+      .filter(
+        (i) =>
+          i.author_association === "OWNER" &&
+          i.state === "open" &&
+          i.body?.trim() !== ""
+      ),
     "id"
   );
   updateCacheIssues(data);
