@@ -35,7 +35,7 @@ export async function getAllIssue() {
         (i) =>
           i.author_association === "OWNER" &&
           i.state === "open" &&
-          i.body?.trim() !== ""
+          i?.body?.trim()?.length
       ),
     "id"
   );
