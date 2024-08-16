@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function LeftSidebar() {
-  const items = ["doing-lately", "projects", "blog", "contact"];
+  const items = useMemo(
+    () => ["doing-lately", "projects", "blog", "contact"],
+    []
+  );
   const [currentItem, setCurrentItem] = useState<string | null>(null);
   const leftSidebar = useRef<HTMLDivElement>(null);
   useEffect(() => {

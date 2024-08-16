@@ -1,30 +1,13 @@
-const fs = require("fs");
-const { Feed } = require("feed");
-const { marked } = require("marked");
-const matter = require("gray-matter");
+import { Feed } from "feed";
+import matter from "gray-matter";
+import { marked } from "marked";
+import fs from "node:fs";
+import { getCacheIssues } from "./cache";
+import { TIssue } from "./types";
+
 const domain = "https://i5lin.top";
 
-let token = process.env.GITHUB_TOKEN;
-
-if (!token) {
-  console.error("GITHUB_TOKEN is required");
-  process.exit(1);
-}
-
-const fetchIssues = async () => {
-  const headers = {
-    Authorization: `bearer ${token}`,
-  };
-  const resp = await fetch(
-    "https://api.github.com/repos/AaronConlon/blog/issues?per_page=100&state=open&owner=AaronConlon",
-    { headers }
-  );
-  if (resp.ok) {
-    return resp.json();
-  }
-};
-
-const buildRss = (issues) => {
+const buildRss = (issues: TIssue[]) => {
   const feed = new Feed({
     title: `AaronConlon's Blog`, // Feed 的标题
     description: `AaronConlon's Blog`, // Feed 的标题`,
@@ -55,7 +38,7 @@ const buildRss = (issues) => {
       description: data?.description || content.slice(0, 200),
       content: marked(content, {
         async: false,
-      }),
+      }) as string,
       author: [
         {
           name: issue.user.login,
@@ -65,12 +48,13 @@ const buildRss = (issues) => {
       date: new Date(issue.created_at),
     });
   });
-  return feed.rss2();
+  fs.writeFileSync("./public/rss.xml", feed.rss2());
 };
 
-(async function main() {
-  const issues = await fetchIssues();
-  const rss = buildRss(issues);
-  fs.writeFileSync("public/rss.xml", rss);
-  console.log("BUILD RSS SUCCESS");
-})();
+export const buildRssFile = async () => {
+  if (process.env?.DEV === "true") {
+    return;
+  }
+  const issues = await getCacheIssues();
+  buildRss(issues);
+};

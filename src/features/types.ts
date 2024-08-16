@@ -19,6 +19,10 @@ export type TIssue = {
     rocket: number;
     eyes: number;
   };
+  user: {
+    login: string;
+    html_url: string;
+  };
 };
 
 export type TRepo = {
