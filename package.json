@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node build.rss.js &&next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "feed": "^4.2.2",
     "gray-matter": "^4.0.3",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.417.0",

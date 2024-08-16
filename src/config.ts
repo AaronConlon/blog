@@ -51,5 +51,5 @@ export const CONFIG = {
     imageUrl:
       "https://de4965e.webp.li/blog-images/2024/08/8a13bcbe6beda1a0f2ee86f9e6ee92d4.png",
   },
-  rss: "https://aaron-conlon-blog-rss.zeabur.app/rss",
+  rss: "/rss.xml",
 };
