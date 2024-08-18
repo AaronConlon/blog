@@ -51,3 +51,22 @@ export interface ITableContent {
   id: string;
   level: number;
 }
+
+export interface LabelOption {
+  readonly value: string;
+  readonly label: string;
+  readonly color: string;
+  readonly isFixed?: boolean;
+  readonly isDisabled?: boolean;
+}
+
+export interface ILocalIssue {
+  title: string;
+  description: string;
+  labels: TLabel[];
+  cover: string;
+  body: string;
+  number: number;
+  updated_at: string;
+  id: string;
+}

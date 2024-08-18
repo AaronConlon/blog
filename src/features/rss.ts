@@ -48,7 +48,9 @@ const buildRss = (issues: TIssue[]) => {
       date: new Date(issue.created_at),
     });
   });
-  fs.writeFileSync("./public/rss.xml", feed.rss2());
+  fs.writeFileSync("./public/rss.xml", feed.rss2(), {
+    mode: "w",
+  });
 };
 
 export const buildRssFile = async () => {

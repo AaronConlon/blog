@@ -32,7 +32,7 @@ export default function GoTop() {
     <div
       className={cn(
         "p-1 rounded-md fixed left-4 bottom-4 bg-primary text-white hidden md:block transition-opacity duration-300",
-        isDownScroll ? "opacity-100" : "opacity-20"
+        isDownScroll ? "opacity-100" : "opacity-0"
       )}
     >
       <button

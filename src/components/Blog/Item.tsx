@@ -4,9 +4,10 @@ import { format } from "date-fns";
 import { CalendarRangeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import EditEntry from "./Editor/EditorEntry";
 
 export default function BlogItem({
-  issue: { id, title, labels, updated_at, body },
+  issue: { id, title, labels, updated_at, body, number },
 }: {
   issue: TIssue;
 }) {
@@ -27,9 +28,10 @@ export default function BlogItem({
       </div>
       <Link
         href={`/blog/post/${id}`}
-        className="line-clamp-2 text-primary text-center"
+        className="line-clamp-2 text-primary text-center group"
       >
         {title}
+        <EditEntry issueNumber={number} />
       </Link>
 
       <div className="flex items-center justify-center gap-2 mt-auto pt-2 font-thin text-sm">

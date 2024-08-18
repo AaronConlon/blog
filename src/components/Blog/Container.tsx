@@ -6,6 +6,9 @@ import { CalendarCheck } from "lucide-react";
 import { marked } from "marked";
 import Image from "next/image";
 import Link from "next/link";
+import FriendLinks from "../FriendLinks";
+import GoTop from "../GoTop";
+import EditEntry from "./Editor/EditorEntry";
 
 export default function BlogContainer({
   issues,
@@ -48,7 +51,7 @@ export default function BlogContainer({
         )}
         <div className="py-12 min-h-[20vh]">
           <ol className="relative border-s border-gray-200 dark:border-gray-700">
-            {issues.map(({ id, title, updated_at, labels, body, html_url }) => {
+            {issues.map(({ id, title, updated_at, labels, body, number }) => {
               const { data } = resolveIssueBody(body);
               return (
                 <li className="mb-10 ms-4" key={id}>
@@ -78,9 +81,10 @@ export default function BlogContainer({
                       <Link
                         href={`/blog/post/${id}`}
                         target="_blank"
-                        className="text-lg mb-4 font-semibold text-gray-900 dark:text-white"
+                        className="text-lg mb-4 font-semibold text-gray-900 dark:text-white group"
                       >
                         {title}
+                        <EditEntry issueNumber={number} />
                       </Link>
                       {data?.description && (
                         <div
@@ -110,6 +114,8 @@ export default function BlogContainer({
         >
           cd ..
         </Link>
+        <FriendLinks />
+        <GoTop />
       </div>
     </BlogLayout>
   );

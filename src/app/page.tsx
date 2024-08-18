@@ -3,13 +3,13 @@ import Contact from "@/components/Contact";
 import DescriptionMe from "@/components/DescriptionMe";
 import WhoAmI from "@/components/DoingLately";
 import FeatureProjects from "@/components/FeatureProjects";
+import FriendLinks from "@/components/FriendLinks";
+import GoTop from "@/components/GoTop";
 import Logo from "@/components/Logo";
 import MobileNav from "@/components/MobileNav";
 import SideBar from "@/components/Sidebar";
 import { buildRssFile } from "@/features/rss";
 import Link from "next/link";
-
-
 
 export default async function Home() {
   await buildRssFile();
@@ -51,6 +51,8 @@ export default async function Home() {
         <Contact />
         <SideBar />
       </main>
+      <FriendLinks />
+      <GoTop />
     </>
   );
 }

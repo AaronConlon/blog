@@ -79,3 +79,13 @@ export async function getIssueByIssueNumber(num: number) {
   const data: TIssue = await response.json();
   return data;
 }
+
+export async function testToken(token: string) {
+  const response = await fetch(`https://api.github.com/user`, {
+    headers: {
+      Authorization: `bearer ${token}`,
+      Accept: "application/vnd.github+json",
+    },
+  });
+  return response.status === 200;
+}
