@@ -25,11 +25,11 @@ export default function RecentIssues({
 
   return (
     <div className="border h-screen overflow-auto">
-      <h1 className="p-4 text-primary font-semibold text-2xl mb-2 sticky top-0 w-full bg-white z-10 flex justify-between">
-        <span className="bg-primary text-white px-2 rounded-md min-w-8 text-center">
-          {issues.length}
-        </span>
+      <h1 className="p-4 text-primary font-semibold text-2xl mb-2 sticky top-0 w-full bg-white z-10 flex gap-4">
         <span>{isLocal ? "Local Issues" : "Online issues"}</span>
+        <span className="text-center font-thin text-sm underline underline-offset-8 mt-1">
+          {issues.length} 篇
+        </span>
       </h1>
 
       <ul className="flex flex-col gap-4 font-thin text-sm p-4">
@@ -38,15 +38,19 @@ export default function RecentIssues({
           : issues.map(({ number, title, updated_at, id, ...rest }) => (
               <li
                 key={number}
-                className="grid grid-cols-[168px_auto_48px] gap-1 group hover:bg-primary/10 p-1"
+                className="grid grid-cols-[190px_auto_48px] gap-1 group hover:bg-primary/10 p-1"
               >
                 <span className="flex items-center gap-1 text-primary">
                   <Calendar size={16} className="opacity-60" />
                   Updated: {formatTimeFromNow(updated_at!)}
                 </span>
-                <Link href={`/blog/post/${id}`} className="truncate">
-                  {title}
-                </Link>
+                {isLocal ? (
+                  <div className="truncate">{title}</div>
+                ) : (
+                  <Link href={`/blog/post/${id}`} className="truncate">
+                    {title}
+                  </Link>
+                )}
                 <div className="flex items-center justify-end">
                   <Edit2Icon
                     className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer mr-2"

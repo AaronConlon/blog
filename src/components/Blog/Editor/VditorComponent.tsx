@@ -38,6 +38,17 @@ export default function VditorComponent({
     const { data, content } = resolveIssueBody(body);
     if (vd === undefined) {
       const vditor = new Vditor("vditor", {
+        outline: {
+          enable: true,
+          position: "left",
+        },
+        mode: "wysiwyg",
+        preview: {
+          hljs: {
+            lineNumber: true,
+            defaultLang: "javascript",
+          },
+        },
         after: () => {
           // 仅初始化时设置
           if (!vd) {
@@ -59,6 +70,12 @@ export default function VditorComponent({
           setVd(vditor);
         },
         height: "100%",
+        cache: {
+          enable: false,
+        },
+        counter: {
+          enable: true,
+        },
         input: () => {
           if (isLocalIssue) {
             // 每次都同步数据到 storage
@@ -78,6 +95,10 @@ export default function VditorComponent({
       });
     } else {
       vd.setValue(content);
+      setTitle(issue?.title ?? "");
+      setDescription(data?.description ?? "");
+      setNewLabels(issue?.labels ?? []);
+      setCover(data?.cover ?? "");
     }
   }, [issue, isLocalIssue]);
 
@@ -145,114 +166,112 @@ export default function VditorComponent({
   };
 
   return (
-    <div className="h-screen flex">
-      <div className="max-w-[760px] bg-gray-50">
-        <div>
-          <div className="relative grid grid-cols-[48px_auto_160px] items-center m-2">
-            <span className="px-2 py-1 rounded-md text-center text-md text-primary font-semibold mt-1">
-              标题
-            </span>
-            <input
-              className="block p-1 mb-1 !border-b outline-none shadow-sm m-2"
-              value={title}
-              onChange={(e) => {
-                const value = e.target.value;
-                setTitle(value);
-              }}
-            />
+    <div className="h-screen max-w-[1260px]">
+      <div>
+        <div className="relative grid grid-cols-[48px_auto_160px] items-center m-2">
+          <span className="px-2 py-1 rounded-md text-center text-md text-primary font-semibold mt-1">
+            标题
+          </span>
+          <input
+            className="block p-1 mb-1 !border-b outline-none shadow-sm m-2"
+            value={title}
+            onChange={(e) => {
+              const value = e.target.value;
+              setTitle(value);
+            }}
+          />
 
-            <div className="flex items-center gap-2 absolute translate-y-[-50%] right-2 top-[50%]">
-              {!isLocalIssue && (
-                <button
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setState(state === "open" ? "closed" : "open");
-                    const newIssue = await updateIssue(
-                      {
-                        state: state === "open" ? "closed" : "open",
-                      },
-                      issue?.number!,
-                      token!
-                    );
-                    setIssues((prev) =>
-                      prev.map((i) => {
-                        if (i.number === issue?.number) {
-                          return newIssue;
-                        }
-                        return i;
-                      })
-                    );
-                  }}
-                  className="border-primary/60 border text-primary px-2 py-1 rounded-md font-thin text-sm"
-                >
-                  {state === "open" ? "⚠️ 关闭" : "🚄 打开"}
-                </button>
-              )}
+          <div className="flex items-center gap-2 absolute translate-y-[-50%] right-2 top-[50%]">
+            {!isLocalIssue && (
               <button
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  onPublish();
+                  setState(state === "open" ? "closed" : "open");
+                  const newIssue = await updateIssue(
+                    {
+                      state: state === "open" ? "closed" : "open",
+                    },
+                    issue?.number!,
+                    token!
+                  );
+                  setIssues((prev) =>
+                    prev.map((i) => {
+                      if (i.number === issue?.number) {
+                        return newIssue;
+                      }
+                      return i;
+                    })
+                  );
                 }}
                 className="border-primary/60 border text-primary px-2 py-1 rounded-md font-thin text-sm"
               >
-                🚀 发布
+                {state === "open" ? "⚠️ 关闭" : "🚄 打开"}
               </button>
-            </div>
-          </div>
-          <div className="flex">
-            <div className="m-2 w-[600px]">
-              <SelectLabels
-                labels={labels}
-                onChange={(e: string[]) => {
-                  console.log("change...", e);
-                  setNewLabels(
-                    e.map((i) => labels.find((label) => label.name === i)!)
-                  );
-                }}
-                defaultLabels={issue?.labels ?? []}
-              />
-            </div>
-            <div className="flex items-center gap-1 ml-auto mr-2 font-thin text-sm">
-              <Calendar size={16} className="opacity-60" />
-              <span>{formatTimeFromNow(issue?.updated_at!)}</span>
-            </div>
+            )}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onPublish();
+              }}
+              className="border-primary/60 border text-primary px-2 py-1 rounded-md font-thin text-sm"
+            >
+              🚀 发布
+            </button>
           </div>
         </div>
-        <div className="h-[calc(100vh-300px)] p-2">
-          <div id="vditor" className="vditor "></div>
+        <div className="flex">
+          <div className="m-2 w-[600px]">
+            <SelectLabels
+              labels={labels}
+              onChange={(e: string[]) => {
+                console.log("change...", e);
+                setNewLabels(
+                  e.map((i) => labels.find((label) => label.name === i)!)
+                );
+              }}
+              defaultLabels={issue?.labels ?? []}
+            />
+          </div>
+          <div className="flex items-center gap-1 ml-auto mr-2 font-thin text-sm">
+            <Calendar size={16} className="opacity-60" />
+            <span>{formatTimeFromNow(issue?.updated_at!)}</span>
+          </div>
         </div>
-        <div className="p-2">
-          <div className="relative">
-            <span className="absolute -top-4 left-4 bg-white p-1 py-0.5 text-primary font-thin">
-              Cover Image
-            </span>
-            <input
-              type="text"
-              value={cover}
-              onChange={(e) => {
-                const value = e.target.value;
-                setCover(value);
-              }}
-              className="w-full p-2 border border-gray-200 outline-none mb-6"
-            />
-          </div>
-          <div className="relative">
-            <span className="absolute -top-4 left-4 bg-white p-1 py-0.5 text-primary font-thin">
-              Description
-            </span>
-            <textarea
-              value={description}
-              onChange={(e) => {
-                const value = e.target.value;
-                setDescription(value);
-              }}
-              className="w-full p-2 border-gray-200 outline-none border"
-              role="textbox"
-              rows={3}
-            />
-          </div>
+      </div>
+      <div className="h-[calc(100vh-300px)] p-2">
+        <div id="vditor" className="vditor "></div>
+      </div>
+      <div className="p-2">
+        <div className="relative">
+          <span className="absolute -top-4 left-4 bg-white p-1 py-0.5 text-primary font-thin">
+            Cover Image
+          </span>
+          <input
+            type="text"
+            value={cover}
+            onChange={(e) => {
+              const value = e.target.value;
+              setCover(value);
+            }}
+            className="w-full p-2 border border-gray-200 outline-none mb-6"
+          />
+        </div>
+        <div className="relative">
+          <span className="absolute -top-4 left-4 bg-white p-1 py-0.5 text-primary font-thin">
+            Description
+          </span>
+          <textarea
+            value={description}
+            onChange={(e) => {
+              const value = e.target.value;
+              setDescription(value);
+            }}
+            className="w-full p-2 border-gray-200 outline-none border"
+            role="textbox"
+            rows={3}
+          />
         </div>
       </div>
     </div>
