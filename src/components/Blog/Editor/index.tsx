@@ -89,6 +89,7 @@ export default function EditorPage({
           isLocal={local}
           issues={local ? localIssues : issues}
           onPickToEdit={onPickToEdit}
+          setIssues={setIssues}
         />
       </div>
       {currentIssue && (

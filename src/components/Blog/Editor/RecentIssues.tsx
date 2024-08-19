@@ -1,18 +1,28 @@
-import { formatTimeFromNow } from "@/features/format";
+import { updateIssue } from "@/features/api";
+import { localIssuesAtom, localTokenAtom } from "@/features/atom";
+import { cn, formatTimeFromNow } from "@/features/format";
 import { ILocalIssue, TIssue } from "@/features/types";
+import { useAtomValue, useSetAtom } from "jotai";
 import { Calendar, Edit2Icon, X } from "lucide-react";
 import Link from "next/link";
+import { Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
 
 interface RecentIssuesProps {
   issues: Partial<TIssue>[] | ILocalIssue[];
   isLocal: boolean;
   onPickToEdit: (issueNumber: number) => void;
+  setIssues: Dispatch<SetStateAction<Partial<TIssue>[]>>;
 }
 export default function RecentIssues({
   issues,
   isLocal,
   onPickToEdit,
+  setIssues,
 }: RecentIssuesProps) {
+  const setLocalIssues = useSetAtom(localIssuesAtom);
+  const token = useAtomValue(localTokenAtom);
+
   return (
     <div className="border h-screen overflow-auto">
       <h1 className="p-4 text-primary font-semibold text-2xl mb-2 sticky top-0 w-full bg-white z-10 flex justify-between">
@@ -25,7 +35,7 @@ export default function RecentIssues({
       <ul className="flex flex-col gap-4 font-thin text-sm p-4">
         {issues.length === 0
           ? "no issue..."
-          : issues.map(({ number, title, updated_at, id }) => (
+          : issues.map(({ number, title, updated_at, id, ...rest }) => (
               <li
                 key={number}
                 className="grid grid-cols-[168px_auto_48px] gap-1 group hover:bg-primary/10 p-1"
@@ -44,10 +54,36 @@ export default function RecentIssues({
                     size={18}
                   />
                   <X
-                    className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                    className={cn(
+                      "opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer",
+                      {
+                        // @ts-ignore
+                        hidden: !isLocal && rest.state === "closed",
+                      }
+                    )}
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
+                      if (isLocal) {
+                        setLocalIssues((prev) =>
+                          prev.filter((i) => i.number !== number)
+                        );
+                      } else {
+                        updateIssue({ state: "closed" }, number!, token!)
+                          .then((newIssue) => {
+                            setIssues((prev) =>
+                              prev.map((i) => {
+                                if (i.number === number) {
+                                  return newIssue;
+                                }
+                                return i;
+                              })
+                            );
+                          })
+                          .catch(() => {
+                            toast.error("Failed to close issue");
+                          });
+                      }
                     }}
                     size={18}
                   />

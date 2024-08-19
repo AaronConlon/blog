@@ -60,9 +60,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // SSG for static params, control the static page generation
 export async function generateStaticParams() {
   const issues = await getCacheIssues();
-  return issues.map(({ id }) => ({
-    id: id.toString(),
-  }));
+  return issues
+    .filter((issue) => issue.body?.trim().length && issue.state === "open")
+    .map(({ id }) => ({
+      id: id.toString(),
+    }));
 }
 
 export default async function BlogPage({ params }: { params: { id: string } }) {

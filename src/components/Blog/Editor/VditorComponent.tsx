@@ -130,6 +130,13 @@ export default function VditorComponent({
             return i;
           })
         );
+        // rebuild blog
+        fetch(
+          "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/16710477-1a3d-4b98-9a4e-173df1f073f5",
+          {
+            method: "POST",
+          }
+        );
       }
       toast.success("发布成功");
     } catch (error) {

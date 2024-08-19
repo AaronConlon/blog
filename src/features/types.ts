@@ -23,6 +23,7 @@ export type TIssue = {
     login: string;
     html_url: string;
   };
+  state: "open" | "closed" | (string & {});
 };
 
 export type TRepo = {
