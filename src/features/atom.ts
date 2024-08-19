@@ -14,5 +14,5 @@ export const localIssuesAtom = atomWithStorage<ILocalIssue[]>(
 
 export const localTokenAtom = atomWithStorage(
   "localToken",
-  localStorage.getItem("localToken") ?? ""
+  globalThis?.localStorage?.getItem("localToken") ?? ""
 );

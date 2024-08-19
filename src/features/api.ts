@@ -120,10 +120,10 @@ export async function createIssue(
 
 export async function updateIssue(
   issue: {
-    title: string;
-    body: string;
-    labels: string[];
-    state: string;
+    title?: string;
+    body?: string;
+    labels?: string[];
+    state?: string;
   },
   issueNumber: number,
   token: string
@@ -145,3 +145,4 @@ export async function updateIssue(
     throw new Error(response.statusText);
   }
 }
+

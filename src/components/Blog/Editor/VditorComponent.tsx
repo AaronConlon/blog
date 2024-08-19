@@ -120,7 +120,6 @@ export default function VditorComponent({
           title,
           body,
           labels: newLabels.map((i) => i.name),
-          state,
         };
         const updateData = await updateIssue(newIssue, issue?.number!, token!);
         setIssues((prev) =>
@@ -158,10 +157,25 @@ export default function VditorComponent({
             <div className="flex items-center gap-2 absolute translate-y-[-50%] right-2 top-[50%]">
               {!isLocalIssue && (
                 <button
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     setState(state === "open" ? "closed" : "open");
+                    const newIssue = await updateIssue(
+                      {
+                        state: state === "open" ? "closed" : "open",
+                      },
+                      issue?.number!,
+                      token!
+                    );
+                    setIssues((prev) =>
+                      prev.map((i) => {
+                        if (i.number === issue?.number) {
+                          return newIssue;
+                        }
+                        return i;
+                      })
+                    );
                   }}
                   className="border-primary/60 border text-primary px-2 py-1 rounded-md font-thin text-sm"
                 >
