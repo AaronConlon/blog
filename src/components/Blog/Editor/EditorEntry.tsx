@@ -11,7 +11,7 @@ interface EditEntryProps {
 
 export default function EditEntry({ issueNumber }: EditEntryProps) {
   const local = useAtomValue(localTokenAtom);
-  if (local) {
+  if (local?.length) {
     return (
       <Link
         href={`/blog/editor?issueNumber=${issueNumber}`}

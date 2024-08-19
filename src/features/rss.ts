@@ -49,7 +49,7 @@ const buildRss = (issues: TIssue[]) => {
     });
   });
   fs.writeFileSync("./public/rss.xml", feed.rss2(), {
-    mode: "w",
+    flag: "w",
   });
 };
 

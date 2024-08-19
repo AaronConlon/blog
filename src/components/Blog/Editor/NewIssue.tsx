@@ -1,7 +1,7 @@
 import { localIssuesAtom } from "@/features/atom";
 import { TLabel } from "@/features/types";
 import { useSetAtom } from "jotai";
-import { ScrollText, X } from "lucide-react";
+import { FilePlus2, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import toast from "react-hot-toast";
@@ -23,17 +23,21 @@ export default function NewIssue({ labels }: NewIssueProps) {
   const [localLabels, setLocalLabels] = useState([] as string[]);
 
   const onConfirm = () => {
-    const title = document.querySelector("#title")?.textContent ?? "没标题";
+    const title =
+      document.querySelector<HTMLInputElement>("#title")?.value ?? "没标题";
     const description =
-      document.querySelector("#description")?.textContent ?? "";
+      document.querySelector<HTMLInputElement>("#description")?.value ?? "";
     const cover =
-      document.querySelector("#cover")?.textContent ?? "/coder3.svg";
+      document.querySelector<HTMLInputElement>("#cover")?.value ??
+      "/coder3.svg";
     form.current = {
       title,
       description,
       cover,
     };
     // create local issue
+    const timestampString = new Date().toISOString();
+    const now = Date.now();
     setLocalIssue((prev) => [
       ...prev,
       {
@@ -42,12 +46,13 @@ export default function NewIssue({ labels }: NewIssueProps) {
           (i) => labels.find((label) => label.name === i)!
         ),
         body: "",
-        number: Date.now(),
-        updated_at: Date.now().toString(),
-        id: Date.now().toString(),
+        number: now,
+        updated_at: timestampString,
+        id: now.toString(),
       },
     ]);
     toast.success("创建成功");
+    setShow(false);
   };
 
   return (
@@ -56,7 +61,7 @@ export default function NewIssue({ labels }: NewIssueProps) {
         className="flex items-center justify-center gap-1"
         onClick={() => setShow(true)}
       >
-        <ScrollText className="w-8" />
+        <FilePlus2 className="w-8" />
       </button>
       {show &&
         createPortal(
@@ -90,13 +95,16 @@ export default function NewIssue({ labels }: NewIssueProps) {
                   className="border border-gray-10 focus-within:border-gray-200 transition-all px-2 py-1 rounded-md outline-none w-full leading-6"
                   placeholder="https://..."
                 />
-                <textarea
-                  name="description"
-                  id="description"
-                  className="p-2 rounded-md border border-gray-100 focus:border-gray-200 transition-all w-full block outline-none"
-                  rows={4}
-                  placeholder="description..."
-                />
+                <div className="flex justify-start">
+                  {/* preview cover */}
+                  <textarea
+                    name="description"
+                    id="description"
+                    className="p-2 rounded-md border border-gray-100 focus:border-gray-200 transition-all flex-grow block outline-none"
+                    rows={4}
+                    placeholder="description..."
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end gap-1">

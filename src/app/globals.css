@@ -45,6 +45,23 @@
   list-style: auto!important;
 }
 
+@font-face {
+  font-family: 'color-font';
+  src: 
+    url('/color-font.woff2') 
+    format('woff2')
+  ;
+}
+
+
+.markdown-body pre {
+  background-color: #0d172e!important;
+  color: #f8f8f2!important;
+}
+.markdown-body pre code {
+  font-family: "color-font", "__Jost_54b096",monospace!important;
+}
+
 html {
   scroll-behavior: smooth;
 }

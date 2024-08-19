@@ -14,6 +14,8 @@ const headers = {
   Accept: "application/vnd.github+json",
 };
 
+
+
 export async function getAllIssue() {
   const blogCount = getBlogCount();
   const respArr = Array.from({ length: Math.ceil(blogCount / 100) }, (_, i) => {
@@ -88,4 +90,58 @@ export async function testToken(token: string) {
     },
   });
   return response.status === 200;
+}
+
+export async function createIssue(
+  issue: {
+    title: string;
+    body: string;
+    labels: string[];
+  },
+  token: string
+) {
+  const response = await fetch(
+    `https://api.github.com/repos/${CONFIG.author.name}/blog/issues`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`,
+        Accept: "application/vnd.github+json",
+      },
+      method: "POST",
+      body: JSON.stringify(issue),
+    }
+  );
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(response.statusText);
+  }
+}
+
+export async function updateIssue(
+  issue: {
+    title: string;
+    body: string;
+    labels: string[];
+    state: string;
+  },
+  issueNumber: number,
+  token: string
+) {
+  const response = await fetch(
+    `https://api.github.com/repos/${CONFIG.author.name}/blog/issues/${issueNumber}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`,
+        Accept: "application/vnd.github+json",
+      },
+      method: "PATCH",
+      body: JSON.stringify(issue),
+    }
+  );
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(response.statusText);
+  }
 }

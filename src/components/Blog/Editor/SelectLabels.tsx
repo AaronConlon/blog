@@ -59,11 +59,19 @@ const customStyles: StylesConfig<LabelOption, true> = {
 export default function SelectLabels({
   labels,
   onChange,
+  defaultLabels,
 }: {
   labels: TLabel[];
   onChange: (newValue: any[]) => void;
+  defaultLabels?: TLabel[];
 }) {
   const options = labels.map((label) => ({
+    value: label.name,
+    label: label.name,
+    color: label.color,
+  }));
+
+  const defaultValue = defaultLabels?.map((label) => ({
     value: label.name,
     label: label.name,
     color: label.color,
@@ -79,6 +87,7 @@ export default function SelectLabels({
         console.log("new value", newValue);
         onChange(newValue.map((i) => i.value));
       }}
+      defaultValue={defaultValue}
     />
   );
 }

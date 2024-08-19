@@ -17,8 +17,14 @@ interface EditorPageProps {
   labels: TLabel[];
 }
 
-export default function EditorPage({ issues, labels }: EditorPageProps) {
-  const [local, setLocal] = useState(false);
+export default function EditorPage({
+  issues: _issue,
+  labels: _labels,
+}: EditorPageProps) {
+  const [issues, setIssues] = useState(_issue);
+  const [labels, setLabels] = useState(_labels);
+
+  const [local, setLocal] = useState(!false);
   const [currentIssue, setCurrentIssue] = useState<TIssue | ILocalIssue>();
   const setToken = useSetAtom(localTokenAtom);
   const localIssues = useAtomValue(localIssuesAtom);
@@ -39,16 +45,16 @@ export default function EditorPage({ issues, labels }: EditorPageProps) {
   }, [local]);
 
   return (
-    <div className="grid grid-cols-[64px_auto_760px] h-screen overflow-hidden fixed inset-0 w-screen z-10 bg-white">
-      <div className="bg-gray-50 h-screen flex flex-col justify-center items-center gap-2">
+    <div className="grid grid-cols-[64px_760px_auto] h-screen overflow-hidden fixed inset-0 w-screen z-10 bg-white">
+      <div className="bg-gray-50 h-screen flex flex-col items-center gap-4 py-4">
         {local ? (
           <CiCloudOn
-            className="w-8 h-8 animate-fade-down"
+            className="w-8 h-8 animate-fade-right"
             onClick={() => setLocal(false)}
           />
         ) : (
           <CiCloudOff
-            className="w-8 h-8 animate-fade-up"
+            className="w-8 h-8 animate-fade-left"
             onClick={() => setLocal(true)}
           />
         )}
@@ -85,7 +91,14 @@ export default function EditorPage({ issues, labels }: EditorPageProps) {
           onPickToEdit={onPickToEdit}
         />
       </div>
-      {currentIssue && <VditorComponent issue={currentIssue} />}
+      {currentIssue && (
+        <VditorComponent
+          issue={currentIssue}
+          labels={labels}
+          isLocalIssue={local}
+          setIssues={setIssues}
+        />
+      )}
     </div>
   );
 }

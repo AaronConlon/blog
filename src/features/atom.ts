@@ -12,11 +12,7 @@ export const localIssuesAtom = atomWithStorage<ILocalIssue[]>(
   }
 );
 
-export const localTokenAtom = atomWithStorage<string | null>(
+export const localTokenAtom = atomWithStorage(
   "localToken",
-  null,
-  undefined,
-  {
-    getOnInit: true,
-  }
+  localStorage.getItem("localToken") ?? ""
 );
