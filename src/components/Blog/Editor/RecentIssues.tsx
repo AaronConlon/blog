@@ -24,7 +24,7 @@ export default function RecentIssues({
   const token = useAtomValue(localTokenAtom);
 
   return (
-    <div className="border h-screen overflow-auto">
+    <div className="border h-screen scrollbar-thumb-rounded-full scrollbar-thin scrollbar-track-rounded-full scrollbar-thumb-primary scrollbar-track-slate-100 overflow-y-scroll">
       <h1 className="p-4 text-primary font-semibold text-2xl mb-2 sticky top-0 w-full bg-white z-10 flex gap-4">
         <span>{isLocal ? "Local Issues" : "Online issues"}</span>
         <span className="text-center font-thin text-sm underline underline-offset-8 mt-1">
@@ -38,7 +38,7 @@ export default function RecentIssues({
           : issues.map(({ number, title, updated_at, id, ...rest }) => (
               <li
                 key={number}
-                className="grid grid-cols-[190px_auto_48px] gap-1 group hover:bg-primary/10 p-1"
+                className="flex flex-wrap 2xl:grid 2xl:grid-cols-[190px_auto_48px] gap-1 group hover:bg-primary/10 p-1"
               >
                 <span className="flex items-center gap-1 text-primary">
                   <Calendar size={16} className="opacity-60" />
@@ -51,7 +51,7 @@ export default function RecentIssues({
                     {title}
                   </Link>
                 )}
-                <div className="flex items-center justify-end">
+                <div className="flex items-center justify-end flex-grow">
                   <Edit2Icon
                     className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer mr-2"
                     onClick={() => onPickToEdit(number!)}

@@ -7,14 +7,12 @@ import {
   updateCacheLabels,
   updateCacheRepos,
 } from "./cache";
-import { TIssue, TLabel, TRepo } from "./types";
+import { IUserInfo, TIssue, TLabel, TRepo } from "./types";
 
 const headers = {
   Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
   Accept: "application/vnd.github+json",
 };
-
-
 
 export async function getAllIssue() {
   const blogCount = getBlogCount();
@@ -75,14 +73,24 @@ export async function getIssueByIssueNumber(num: number) {
   return data;
 }
 
-export async function testToken(token: string) {
+export async function testToken(
+  token: string,
+  setUserInfo?: (info: IUserInfo) => void
+) {
   const response = await fetch(`https://api.github.com/user`, {
     headers: {
       Authorization: `bearer ${token}`,
       Accept: "application/vnd.github+json",
     },
   });
-  return response.status === 200;
+  if (response.ok) {
+    const data = await response.json();
+    if (setUserInfo) {
+      setUserInfo(data);
+    }
+    return true;
+  }
+  return false;
 }
 
 export async function createIssue(

@@ -1,7 +1,7 @@
 "use client";
 
 import { atomWithStorage } from "jotai/utils";
-import { ILocalIssue } from "./types";
+import { ILocalIssue, IUserInfo } from "./types";
 
 export const localIssuesAtom = atomWithStorage<ILocalIssue[]>(
   "localIssues",
@@ -14,5 +14,10 @@ export const localIssuesAtom = atomWithStorage<ILocalIssue[]>(
 
 export const localTokenAtom = atomWithStorage(
   "localToken",
-  globalThis?.localStorage?.getItem("localToken") ?? ""
+  globalThis?.localStorage?.getItem("localToken")?.replace(/"/gi, "") ?? ""
+);
+
+export const localUserInfo = atomWithStorage<IUserInfo>(
+  "userInfo",
+  JSON.parse(globalThis?.localStorage?.getItem("userInfo") ?? "{}")
 );
