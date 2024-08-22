@@ -1,16 +1,16 @@
 import { createIssue, updateIssue } from "@/features/api";
 import { localIssuesAtom, localTokenAtom } from "@/features/atom";
-import { formatTimeFromNow, resolveIssueBody } from "@/features/format";
+import { resolveIssueBody } from "@/features/format";
 import { ILocalIssue, TIssue, TLabel } from "@/features/types";
 import { useAtomValue, useSetAtom } from "jotai";
 import { uniqBy } from "lodash-es";
-import { Calendar } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 import SelectLabels from "./SelectLabels";
 
+import { VscRunAllCoverage } from "react-icons/vsc";
 interface VditorComponentProps {
   issue?: Partial<TIssue> | ILocalIssue;
   labels: TLabel[];
@@ -32,6 +32,7 @@ export default function VditorComponent({
   const token = useAtomValue(localTokenAtom);
   // @ts-ignore
   const [state, setState] = useState(issue?.state ?? "open");
+  const [showMeta, setShowMeta] = useState(false);
 
   useEffect(() => {
     const body = issue?.body ?? "";
@@ -166,7 +167,7 @@ export default function VditorComponent({
   };
 
   return (
-    <div className="h-screen max-w-[1260px]">
+    <div className="h-screen max-w-[1260px] relative">
       <div>
         <div className="relative grid grid-cols-[48px_auto_160px] items-center m-2">
           <span className="px-2 py-1 rounded-md text-center text-md text-primary font-semibold mt-1">
@@ -204,7 +205,7 @@ export default function VditorComponent({
                     })
                   );
                 }}
-                className="border-primary/60 border text-primary px-2 py-1 rounded-md font-thin text-sm"
+                className="border-primary/60 border text-primary px-2 py-0.5 rounded-sm font-thin text-sm"
               >
                 {state === "open" ? "⚠️ 关闭" : "🚄 打开"}
               </button>
@@ -215,13 +216,13 @@ export default function VditorComponent({
                 e.preventDefault();
                 onPublish();
               }}
-              className="border-primary/60 border text-primary px-2 py-1 rounded-md font-thin text-sm"
+              className="border-primary/60 border text-primary px-2 py-0.5 rounded-sm font-thin text-sm"
             >
               🚀 发布
             </button>
           </div>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <div className="m-2 w-[600px]">
             <SelectLabels
               labels={labels}
@@ -234,16 +235,24 @@ export default function VditorComponent({
               defaultLabels={issue?.labels ?? []}
             />
           </div>
-          <div className="flex items-center gap-1 ml-auto mr-2 font-thin text-sm">
-            <Calendar size={16} className="opacity-60" />
-            <span>{formatTimeFromNow(issue?.updated_at!)}</span>
-          </div>
+          <button
+            className="ml-auto mr-2 font-thin text-sm border border-primary px-2 py-0.5 rounded-sm flex items-center gap-1 justify-center"
+            onClick={() => setShowMeta(!showMeta)}
+          >
+            <VscRunAllCoverage className="text-primary" />
+            元数据
+          </button>
         </div>
       </div>
-      <div className="h-[calc(100vh-300px)] p-2">
+      <div className="h-[calc(100vh-120px)] p-2">
         <div id="vditor" className="vditor "></div>
       </div>
-      <div className="p-2">
+      <div
+        className="p-2 absolute inset-x-4 bg-white border border-primary transition-all duration-300 shadow-md z-10 pt-4"
+        style={{
+          bottom: showMeta ? "10px" : "-200px",
+        }}
+      >
         <div className="relative">
           <span className="absolute -top-4 left-4 bg-white p-1 py-0.5 text-primary font-thin">
             Cover Image
