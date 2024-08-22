@@ -23,7 +23,10 @@ interface EditorPageProps {
   labels: TLabel[];
 }
 
-export default function EditorPage({ issues: _issue, labels }: EditorPageProps) {
+export default function EditorPage({
+  issues: _issue,
+  labels,
+}: EditorPageProps) {
   const [issues, setIssues] = useState(_issue);
   const [local, setLocal] = useState(!false);
   const [currentIssue, setCurrentIssue] = useState<TIssue | ILocalIssue>();
@@ -104,13 +107,10 @@ export default function EditorPage({ issues: _issue, labels }: EditorPageProps) 
   }
 
   return (
-    <div className="grid grid-cols-[64px_400px_auto] 2xl:grid-cols-[64px_760px_auto] h-screen overflow-hidden fixed inset-0 w-screen z-10 bg-white">
+    <div className="grid grid-cols-[64px_300px_auto] 2xl:grid-cols-[64px_760px_auto] h-screen overflow-hidden fixed inset-0 w-screen z-10 bg-white">
       <div className="bg-gray-50 h-screen flex flex-col items-center gap-4 py-4">
         {local ? (
-          <CiCloudOn
-            className="w-8 h-8 animate-fade-right"
-            onClick={() => setLocal(false)}
-          />
+          <CiCloudOn className="w-8 h-8" onClick={() => setLocal(false)} />
         ) : (
           <CiCloudOff
             className="w-8 h-8 animate-fade-left"
