@@ -23,13 +23,25 @@ interface EditorPageProps {
   labels: TLabel[];
 }
 
-export default function EditorPage({
-  issues: _issue,
-  labels,
-}: EditorPageProps) {
-  const [issues, setIssues] = useState(_issue);
-  const [local, setLocal] = useState(!false);
-  const [currentIssue, setCurrentIssue] = useState<TIssue | ILocalIssue>();
+function getIssueNumberFromPath() {
+  const queryString = globalThis?.location?.search;
+  if (queryString) {
+    const urlParams = new URLSearchParams(queryString);
+    const res = urlParams.get("issueNumber");
+    if (res) {
+      return res;
+    }
+  }
+  return undefined;
+}
+
+export default function EditorPage({ issues: _issues, labels }: EditorPageProps) {
+  const [issues, setIssues] = useState(_issues);
+  const [local, setLocal] = useState(getIssueNumberFromPath() === undefined);
+  const [currentIssue, setCurrentIssue] = useState<
+    TIssue | ILocalIssue | undefined
+  >(_issues.find((i) => i.number === Number(getIssueNumberFromPath())) as any);
+
   const [token, setToken] = useAtom(localTokenAtom);
   const localIssues = useAtomValue(localIssuesAtom);
   const [userInfo, setUserInfo] = useAtom(localUserInfo);
@@ -46,10 +58,6 @@ export default function EditorPage({
       toast.error("Issue not found");
     }
   };
-
-  useEffect(() => {
-    setCurrentIssue(undefined);
-  }, [local]);
 
   useEffect(() => {
     if (loading) {
@@ -145,7 +153,15 @@ export default function EditorPage({
           setIssues={setIssues}
         />
       ) : (
-        <div className="flex justify-center items-center font-semibold text-primary text-2xl">
+        <div
+          className="flex justify-center items-center font-semibold text-primary text-2xl"
+          onClick={() => {
+            console.log("current issue:", currentIssue, _issues);
+            _issues.map((i) => {
+              console.log(i.number, getIssueNumberFromPath());
+            });
+          }}
+        >
           no current issue...
         </div>
       )}
