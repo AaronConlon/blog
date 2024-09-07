@@ -136,6 +136,9 @@ export default function VditorComponent({
         console.log(token);
         const newIssueData = await createIssue(newIssue, token!);
         setIssues((prev) => uniqBy([...prev, newIssueData], "number"));
+        setLocalIssues((prev) =>
+          prev.filter((i) => i.number !== issue?.number)
+        );
       } else {
         // 更新 issue
         const newIssue = {
