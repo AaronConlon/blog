@@ -1,7 +1,7 @@
 import { CONFIG } from "@/config";
 import Link from "next/link";
 import { FaDev, FaGithub } from "react-icons/fa";
-import { FaLinkedin, FaSquareXTwitter } from "react-icons/fa6";
+import { FaMedium, FaSquareXTwitter } from "react-icons/fa6";
 import { TbBrandJuejin } from "react-icons/tb";
 
 export default function SocialMediaSidebar() {
@@ -17,9 +17,9 @@ export default function SocialMediaSidebar() {
       url: CONFIG.author.twitterProfile,
     },
     {
-      name: "Linkedin",
-      icon: FaLinkedin,
-      url: CONFIG.author.linkedinProfile,
+      name: "Medium",
+      icon: FaMedium,
+      url: CONFIG.author.medium,
     },
     {
       name: "Dev",

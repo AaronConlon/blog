@@ -5,7 +5,7 @@ export const CONFIG = {
       "I am a Full-Stack Developer with a passion for delivering exceptional results.",
     githubProfile: "https://github.com/AaronConlon",
     twitterProfile: "https://twitter.com/AaronConlonDev",
-    linkedinProfile: "https://www.linkedin.com/in/aaron-conlon/",
+    medium: "https://medium.com/@rivenqinyy",
     devProfile: "https://dev.to/aaron_conlon",
     juejinProfile: "https://juejin.cn/user/2013961032055566",
     email: "rivenqinyy@gmail.com",
