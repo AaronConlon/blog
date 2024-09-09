@@ -6,6 +6,7 @@ import { CONFIG } from "@/config";
 import { getCacheIssues } from "@/features/cache";
 import { markedBodyToHTML, resolveIssueBody } from "@/features/format";
 import { Metadata } from "next";
+import Image from "next/image";
 
 type Props = {
   params: { id: string };
@@ -90,6 +91,15 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
               __html: markedBodyToHTML(content),
             }}
           ></section>
+          <div className="flex justify-end gap-4 items-center mt-12">
+            <Image alt="not-by-ai" src={"/no-ai.svg"} width={131} height={42} />
+            <Image
+              alt="not-by-ai"
+              src={"/no-ai-en.svg"}
+              width={131}
+              height={42}
+            />
+          </div>
         </div>
 
         {/* right side: table of content */}

@@ -15,15 +15,16 @@ export default function BlogItem({
   return (
     <div
       key={id}
-      className="bg-white rounded-md hover:shadow-xl origin-center transition-all shadow-primary p-4 flex flex-col group"
+      className="bg-white border border-dashed border-primary rounded-md hover:shadow-xl origin-center transition-all shadow-primary p-4 flex flex-col group relative"
     >
+      <div className="group-hover:translate-x-2 group-hover:translate-y-2 absolute inset-0 w-full h-full border border-dashed border-primary z-[-1] rounded-md transition-transform"></div>
       <div className="relative mb-4 overflow-hidden">
         <Image
           src={data?.cover ?? "/coder2.svg"}
           alt="avatar"
           height={460}
           width={320}
-          className="group-hover:scale-105 aspect-video transition-transform w-full"
+          className="group-hover:scale-105 aspect-video transition-transform w-full max-w-[320px] mx-auto"
         />
       </div>
       <Link

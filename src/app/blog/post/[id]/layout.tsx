@@ -1,4 +1,5 @@
 import GiscusContainer from "@/components/Blog/Giscus";
+import FriendLinks from "@/components/FriendLinks";
 
 export default function AboutLayout({
   children,
@@ -17,6 +18,7 @@ export default function AboutLayout({
       />
       {children}
       <GiscusContainer />
+      <FriendLinks />
     </>
   );
 }

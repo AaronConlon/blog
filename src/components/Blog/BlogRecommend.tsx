@@ -29,7 +29,7 @@ export default function BlogRecommend({
       <section className="text-primary font-semibold text-xl  sm:text-2xl mb-4">
         文章推荐
       </section>
-      <div className="flex xl:flex-col gap-4">
+      <div className="flex flex-col sm:flex-row xl:flex-col gap-4">
         {recommendIssues.map((issue) => (
           <BlogItem key={issue.id} issue={issue} />
         ))}
