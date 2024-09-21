@@ -37,8 +37,8 @@ export default function BlogItem({
 
       <div className="flex items-center justify-center gap-2 mt-auto pt-2 font-thin text-sm">
         <div className="flex items-center gap-1">
-          <CalendarRangeIcon size={13} />
-          <span className="col-span-2 font-thin opacity-40">
+          <CalendarRangeIcon size={13} className="opacity-60" />
+          <span className="col-span-2 font-thin opacity-80">
             {format(new Date(updated_at), "yyyy-MM-dd")} updated.
           </span>
         </div>

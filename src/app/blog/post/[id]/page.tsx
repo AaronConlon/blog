@@ -91,7 +91,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
               __html: markedBodyToHTML(content),
             }}
           ></section>
-          <div className="flex justify-end gap-4 items-center mt-12">
+          <div className="flex justify-center sm:justify-end gap-4 items-center mt-12">
             <Image alt="not-by-ai" src={"/no-ai.svg"} width={131} height={42} />
             <Image
               alt="not-by-ai"
