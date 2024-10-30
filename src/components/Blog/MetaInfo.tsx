@@ -1,7 +1,8 @@
 import { isTooOldIssueCreatedAt } from "@/features/calc";
-import { cn, formatTime, formatTimeFromNow } from "@/features/format";
+import { cn, formatTime } from "@/features/format";
 import { TIssue } from "@/features/types";
 import { Calendar, FileWarning } from "lucide-react";
+import ClientFromNowTime from "./ClientFromNowTime";
 
 interface MetaInfoProps {
   issue: TIssue;
@@ -16,7 +17,7 @@ export default function MetaInfo({ issue }: MetaInfoProps) {
           <Calendar size={20} className="text-primary" />
         )}
         <span>{formatTime(issue.created_at)}</span>
-        <span>上次更新于 {formatTimeFromNow(issue.updated_at)}</span>
+        <span>上次更新于 <ClientFromNowTime updated_at={issue.updated_at} /></span>
       </div>
       <div className="flex w-full items-center justify-center">
         {issue.labels.map((label) => (
