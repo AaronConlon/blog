@@ -34,7 +34,7 @@ export default function FriendLinks() {
     },
     {
       href: 'https://blog.stv.lol',
-      avatar: 'https://blog.stv.lol/favicon.ico',
+      avatar: 'https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fdf8016f2-7cba-4365-a97c-23016c06db49%2Fa88a6550-7941-4c98-a278-136a72c04c4d%2F00119-3903136696%25E5%25B0%258F.jpeg?table=collection&id=1333fe3d-e6dc-8134-a1f0-000b0b277878&t=1333fe3d-e6dc-8134-a1f0-000b0b277878&width=800&cache=v2',
       name: "Steven Lynn's Blog"
     }
   ];
