@@ -8,7 +8,7 @@ export default function FriendLinks() {
       href: "https://github.com/Jimmylxue/blog",
     },
     {
-      href: "https://www.howie6879.cn/",
+      href: "https://www.howie6879.com/",
       avatar: "https://avatars.githubusercontent.com/u/17047388?s=100&v=4",
       name: "老胡",
     },
@@ -18,7 +18,7 @@ export default function FriendLinks() {
       name: "Submara",
     },
     {
-      href: "https://brucesong.xyz/",
+      href: "https://github.com/recallwei",
       avatar: "https://avatars.githubusercontent.com/u/62941121?v=4",
       name: "Bruce Song",
     },
@@ -27,6 +27,11 @@ export default function FriendLinks() {
       avatar: "https://scarsu.com/images/profile_hd.jpg",
       name: "Scarsu",
     },
+    {
+      href: 'https://liuyuyang.net/',
+      avatar: 'https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640',
+      name: '宇阳',
+    }
   ];
 
   return (
