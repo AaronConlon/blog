@@ -31,6 +31,11 @@ export default function FriendLinks() {
       href: 'https://liuyuyang.net/',
       avatar: 'https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640',
       name: '宇阳',
+    },
+    {
+      href: 'https://blog.stv.lol',
+      avatar: 'https://blog.stv.lol/favicon.ico',
+      name: "Steven Lynn's Blog"
     }
   ];
 
@@ -62,4 +67,5 @@ export default function FriendLinks() {
       </div>
     </div>
   );
+
 }
