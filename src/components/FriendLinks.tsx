@@ -1,6 +1,7 @@
-import Image from "next/image";
 
+import Image from "next/image";
 export default function FriendLinks() {
+
   const friends = [
     {
       name: "Jimmy",
@@ -58,9 +59,14 @@ export default function FriendLinks() {
             href={friend.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-8 h-8 mx-2 rounded-full bg-gray-200 dark:bg-gray-800"
-          >
+            className="flex items-center justify-center w-8 h-8 mx-2 rounded-full bg-gray-200 dark:bg-gray-800 relative group"
+          > 
+            <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-100 text-primary text-center p-1 rounded-md w-max text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {friend.name}
+            </div>
+
             <Image
+              data-name={friend.name}
               width={24}
               height={24}
               src={friend.avatar}
