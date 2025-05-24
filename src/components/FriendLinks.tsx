@@ -42,6 +42,11 @@ export default function FriendLinks() {
       href: 'https://www.jimmy-blog.top/',
       avatar: 'https://avatars.githubusercontent.com/u/69883652?v=4',
       name: 'OJ·Jimmy (Other Jimmy)'
+    },
+    {
+      name: "liruifengv - Web 开发者，Astro 项目成员，开源爱好者。",
+      href: "https://liruifengv.com",
+      avatar: "https://bucket.liruifengv.com/avatar.jpg",
     }
   ];
 
