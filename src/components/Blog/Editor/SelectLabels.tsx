@@ -84,7 +84,6 @@ export default function SelectLabels({
       options={options}
       styles={customStyles}
       onChange={(newValue) => {
-        console.log("new value", newValue);
         onChange(newValue.map((i) => i.value));
       }}
       defaultValue={defaultValue}

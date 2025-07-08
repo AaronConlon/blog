@@ -12,7 +12,6 @@ export default function MobileMenu({ labels }: IMobileMenuProps) {
   const [showList, setShowList] = useState(false);
 
   const onShowList = () => {
-    console.log("reverse:", showList);
     setShowList((prev) => !prev);
   };
 

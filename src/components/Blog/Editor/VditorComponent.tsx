@@ -133,7 +133,6 @@ export default function VditorComponent({
           body,
           labels: newLabels.map((i) => i.name),
         };
-        console.log(token);
         const newIssueData = await createIssue(newIssue, token!);
         setIssues((prev) => uniqBy([...prev, newIssueData], "number"));
         setLocalIssues((prev) =>
@@ -230,7 +229,6 @@ export default function VditorComponent({
             <SelectLabels
               labels={labels}
               onChange={(e: string[]) => {
-                console.log("change...", e);
                 setNewLabels(
                   e.map((i) => labels.find((label) => label.name === i)!)
                 );

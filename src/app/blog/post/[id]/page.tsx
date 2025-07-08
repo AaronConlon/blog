@@ -71,9 +71,6 @@ export async function generateStaticParams() {
 export default async function BlogPage({ params }: { params: { id: string } }) {
   const issues = await getCacheIssues();
 
-  console.log("total:", issues.length);
-  console.log(issues);
-
   const issue = issues.find((i) => i.id.toString() === params.id)!;
   const { content } = resolveIssueBody(issue.body ?? "");
 
