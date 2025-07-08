@@ -30,9 +30,9 @@ function checkCacheValid(key: keyof typeof cacheRecords) {
 }
 
 export async function getCacheIssues() {
-  if (checkCacheValid("issues")) {
-    return cacheRecords.issues.data;
-  }
+  // if (checkCacheValid("issues")) {
+  //   return cacheRecords.issues.data;
+  // }
   return getAllIssue();
 }
 

@@ -15,12 +15,22 @@ const headers = {
 };
 
 export async function getAllIssue() {
-  const blogCount = getBlogCount();
-  const respArr = Array.from({ length: Math.ceil(blogCount / 100) }, (_, i) => {
+  const repoMeta = await fetch(
+    `https://api.github.com/repos/${CONFIG.author.name}/blog`,
+    {
+      headers,
+    }
+  );
+  const repoMetaData = await repoMeta.json();
+  const blogCount = repoMetaData.open_issues_count;
+
+  console.log("blogCount:", blogCount);
+
+  const respArr = Array.from({ length: Math.ceil(blogCount / 50) }, (_, i) => {
     return fetch(
       `https://api.github.com/repos/${
         CONFIG.author.name
-      }/blog/issues?per_page=100&page=${i + 1}`,
+      }/blog/issues?per_page=50&page=${i + 1}`,
       {
         headers,
       }
@@ -32,7 +42,10 @@ export async function getAllIssue() {
     multiLayerData.flat().filter((i) => i.author_association === "OWNER"),
     "id"
   );
-  updateCacheIssues(data);
+  data.map((i) => {
+    console.log(i.title, i.number);
+  });
+  // updateCacheIssues(data);
   return data as TIssue[];
 }
 
@@ -43,6 +56,11 @@ export async function getMyRepos(): Promise<TRepo[]> {
   });
   const data: TRepo[] = await resp.json();
   const blogRepo = data.find((i) => i.name === "blog");
+
+  console.log("-".repeat(100));
+  console.log("open issues count:", blogRepo?.open_issues_count);
+  console.log("-".repeat(100));
+
   if (blogRepo) {
     setBlogCount(blogRepo.open_issues_count);
   }
