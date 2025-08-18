@@ -1,8 +1,9 @@
 import BlogLayout from "@/components/Blog/Layout";
+import { CONFIG } from "@/config";
 import { resolveIssueBody } from "@/features/format";
 import { TIssue } from "@/features/types";
 import { format } from "date-fns";
-import { CalendarCheck } from "lucide-react";
+import { ArrowRight, CalendarCheck } from "lucide-react";
 import { marked } from "marked";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,54 +52,72 @@ export default function BlogContainer({
         )}
         <div className="py-12 min-h-[20vh]">
           <ol className="relative border-s border-gray-200 dark:border-gray-700">
-            {issues.map(({ id, title, updated_at, labels, body, number }) => {
-              const { data } = resolveIssueBody(body);
-              return (
-                <li className="mb-10 ms-4" key={id}>
-                  <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <CalendarCheck size={16} className="-mr-2" />
-                    <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                      {format(new Date(updated_at), "yyyy年MM月dd日")}
-                    </time>
-                    <div className="flex items-center">
-                      {labels.map(({ name, color, id }) => (
-                        <span
-                          key={id}
-                          className="px-2 py-1 ml-2 text-xs font-medium leading-none rounded-full"
-                          style={{
-                            color: `#${color}`,
-                            backgroundColor: "#" + color + "2a",
-                          }}
+            {issues.map(
+              ({ id, title, updated_at, labels, body, number, comments }) => {
+                const { data } = resolveIssueBody(body);
+                return (
+                  <li className="mb-10 ms-4" key={id}>
+                    <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <CalendarCheck size={16} className="-mr-2" />
+                      <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+                        {format(new Date(updated_at), "yyyy年MM月dd日")}
+                      </time>
+                      <div className="flex items-center">
+                        {labels.map(({ name, color, id }) => (
+                          <span
+                            key={id}
+                            className="px-2 py-1 ml-2 text-xs font-medium leading-none rounded-full"
+                            style={{
+                              color: `#${color}`,
+                              backgroundColor: "#" + color + "2a",
+                            }}
+                          >
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-[auto_200px] gap-4">
+                      <div>
+                        <Link
+                          href={`/blog/post/${id}`}
+                          target="_blank"
+                          className="text-lg mb-4 font-semibold text-gray-900 dark:text-white group"
                         >
-                          {name}
-                        </span>
-                      ))}
+                          {title}
+                          <EditEntry issueNumber={number} />
+                        </Link>
+                        {data?.description && (
+                          <div
+                            className="my-2 max-w-[800px] text-base font-normal text-gray-500 dark:text-gray-400"
+                            dangerouslySetInnerHTML={{
+                              __html: marked(data?.description ?? "忘了总结"),
+                            }}
+                          ></div>
+                        )}
+                        {comments > 0 && (
+                          <div className="flex items-center gap-2 group pt-2">
+                            <a
+                              href={`https://github.com/${CONFIG.author.name}/blog/issues/${number}#issuecomment-section`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-gray-500 dark:text-gray-400 hover:text-primary transition-colors flex items-center gap-1"
+                            >
+                              {comments} 条评论{" "}
+                              <ArrowRight
+                                size={16}
+                                className="scale-0 group-hover:scale-100 transition-transform duration-300"
+                              />
+                            </a>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="grid md:grid-cols-[auto_200px] gap-4">
-                    <div>
-                      <Link
-                        href={`/blog/post/${id}`}
-                        target="_blank"
-                        className="text-lg mb-4 font-semibold text-gray-900 dark:text-white group"
-                      >
-                        {title}
-                        <EditEntry issueNumber={number} />
-                      </Link>
-                      {data?.description && (
-                        <div
-                          className="my-2 max-w-[800px] text-base font-normal text-gray-500 dark:text-gray-400"
-                          dangerouslySetInnerHTML={{
-                            __html: marked(data?.description ?? "忘了总结"),
-                          }}
-                        ></div>
-                      )}
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
+                  </li>
+                );
+              }
+            )}
           </ol>
         </div>
         {issues.length > 0 && (

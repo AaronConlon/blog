@@ -9,6 +9,7 @@ export type TIssue = {
   body: string;
   author_association: string;
   url: string;
+  comments: number; // 评论数量
   reactions: {
     "+1": number;
     "-1": number;
