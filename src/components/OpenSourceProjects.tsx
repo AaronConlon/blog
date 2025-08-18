@@ -1,11 +1,20 @@
 import { CONFIG } from "@/config";
-import { getCacheRepos } from "@/features/cache";
+import { getReposByRepoNames } from "@/features/api";
+import { TRepo } from "@/features/types";
 import { ArrowRightCircle, Github, Home, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function OpenSourceProjects() {
-  const repos = await getCacheRepos();
+  const repos = await getReposByRepoNames([
+    "blog",
+    "erin",
+    "x-profile-menu-expansion-website",
+    "x-profile-menu-expansion",
+    "GitBatch",
+    "create-juice-app",
+  ]);
+
   return (
     <>
       <div className="sm:col-span-2 md:col-span-4 font-semibold text-2xl uppercase">
@@ -66,25 +75,6 @@ export default async function OpenSourceProjects() {
             </div>
           );
         })}
-      <div className="flex justify-center items-center relative flex-col gap-4 bg-gradient-to-tr from-teal-300 to-primary px-8 rounded-md shadow-primary/80 hover:shadow-primary shadow-lg transition-shadow p-12 sm:p-0">
-        <div className="flex items-center gap-3 px-2">
-          <Github color="cyan" size={32} />
-          <div>
-            <span className="text-white">{repos.length}</span> repositories
-            found in my github profile
-          </div>
-        </div>
-        <Link
-          className="font-semibold text-2xl px-2 xl:px-8"
-          href={CONFIG.author.githubProfile}
-          target="_blank"
-        >
-          Other projects can be explored in my github profile
-        </Link>
-        <Link href={CONFIG.author.githubProfile} target="_blank">
-          <ArrowRightCircle className="absolute bottom-6 right-8" />
-        </Link>
-      </div>
     </>
   );
 }

@@ -42,9 +42,6 @@ export async function getAllIssue() {
     multiLayerData.flat().filter((i) => i.author_association === "OWNER"),
     "id"
   );
-  data.map((i) => {
-    console.log(i.title, i.number);
-  });
   // updateCacheIssues(data);
   return data as TIssue[];
 }
@@ -64,7 +61,7 @@ export async function getMyRepos(): Promise<TRepo[]> {
   if (blogRepo) {
     setBlogCount(blogRepo.open_issues_count);
   }
-  updateCacheRepos(data);
+
   return data;
 }
 
@@ -165,3 +162,32 @@ export async function updateIssue(
   }
 }
 
+/**
+ * 获取指定的多个仓库详情
+ * @param repoNames 仓库路径数组，格式为 ["repo1", "repo2"]
+ */
+export async function getReposByRepoNames(
+  repoNames: string[]
+): Promise<TRepo[]> {
+  const repos = repoNames.map((repo) => `${CONFIG.author.name}/${repo}`);
+  const promises = repos.map((repo) =>
+    fetch(`https://api.github.com/repos/${repo}`, {
+      headers,
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${repo}: ${response.statusText}`);
+      }
+      return response.json();
+    })
+  );
+
+  try {
+    const lists = await Promise.allSettled(promises);
+    return lists
+      .filter((item) => item.status === "fulfilled")
+      .map((item) => item.value);
+  } catch (error) {
+    console.error("Error fetching repositories:", error);
+    throw error;
+  }
+}

@@ -20,22 +20,11 @@ export default function DoingLately() {
           </p>
           <ul className="list-disc list-inside py-4">
             <li className="text-primary hover:underline dark:text-primary">
-              <a href="/">NextJS Blog</a>
-            </li>
-            <li className="text-primary hover:underline dark:text-primary">
               <a
-                href="https://batch-manage-github-repos.i5lin.top/"
+                href="https://x-profile-menu-expansion-website.vercel.app/"
                 target="_blank"
               >
-                Batch manage github repositories
-              </a>
-            </li>
-            <li className="text-primary hover:underline dark:text-primary">
-              <a
-                href="https://chromewebstore.google.com/detail/erin-%E7%BA%AF%E5%87%80%E7%9A%84%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/nobdiagkeelcndaijbdninbmjkdahggd?hl=zh-CN&authuser=0"
-                target="_blank"
-              >
-                Erin
+                X Profile Menu Expansion
               </a>
             </li>
           </ul>
