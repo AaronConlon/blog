@@ -82,7 +82,7 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
       >
         {/* current blog content */}
         <div className="pt-12 sm:mt-16 max-w-[860px] mx-auto sm:px-[48px] animate-fade-up delay-500 w-full">
-          <h1 className="blog-title text-primary section-leading text-xl xl:text-3xl font-semibold mb-8 text-center mx-auto max-w-[760px] flex justify-center items-center gap-4">
+          <h1 className="blog-title text-primary section-leading text-2xl xl:text-3xl 2xl:text-4xl font-semibold mb-8 text-center mx-auto max-w-[760px] flex justify-center items-center gap-4">
             {issue.title}
           </h1>
           <MetaInfo issue={issue} />
