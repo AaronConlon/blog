@@ -25,7 +25,7 @@ export default function CloseSourceProjects() {
           <Link
             href={project.homepage}
             target="_blank"
-            className="font-semibold text-lg text-primary mr-auto p-2 w-full block line-clamp-2 min-h-12"
+            className="font-semibold text-lg text-primary mr-auto p-2 w-full line-clamp-2 min-h-12 leading-[32px]"
           >
             {project.name.trim()}
             {project.description?.length ? ":" : ""}

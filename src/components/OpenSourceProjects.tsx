@@ -1,7 +1,6 @@
 import { CONFIG } from "@/config";
 import { getReposByRepoNames } from "@/features/api";
-import { TRepo } from "@/features/types";
-import { ArrowRightCircle, Github, Home, Star } from "lucide-react";
+import { Home, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -41,7 +40,7 @@ export default async function OpenSourceProjects() {
               <Link
                 href={project.html_url}
                 target="_blank"
-                className="font-semibold text-lg text-primary mr-auto p-2 w-full block line-clamp-2 min-h-12"
+                className="font-semibold text-lg text-primary mr-auto p-2 w-full line-clamp-2 min-h-12 leading-[32px]"
               >
                 {project.name.trim()}
                 {project.description?.length ? ":" : ""}
