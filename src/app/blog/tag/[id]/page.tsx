@@ -1,13 +1,20 @@
 import BlogContainer from "@/components/Blog/Container";
-import { getCacheIssues, getCacheLabels } from "@/features/cache";
+import {
+  getLabelById,
+  getNavigableLabels,
+  getPublishedIssuesByLabelId,
+} from "@/features/blog-data";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-  const labels = await getCacheLabels();
+  const labels = getNavigableLabels();
   return labels.map(({ id }) => ({
     id: id.toString(),
   }));
 }
+
+export const dynamic = "force-static";
+export const dynamicParams = false;
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -39,21 +46,13 @@ export const metadata: Metadata = {
 export default async function Page({
   params,
 }: {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }) {
-  const [issues, labels] = await Promise.all([
-    getCacheIssues(),
-    getCacheLabels(),
-  ]);
-
-  const currentLabelIssues = issues.filter((issue) =>
-    issue.labels.some((label) => label.id.toString() === params.id)
-  );
-  const labelName =
-    labels.find((label) => label.id.toString() === params.id)?.name ??
-    "UNKNOWN";
+  const { id } = await params;
+  const currentLabelIssues = getPublishedIssuesByLabelId(id);
+  const labelName = getLabelById(id)?.name ?? "UNKNOWN";
 
   return <BlogContainer issues={currentLabelIssues} labelName={labelName} />;
 }

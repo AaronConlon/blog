@@ -1,36 +1,36 @@
-import { getCacheIssues, getCacheLabels } from "@/features/cache";
+import { getNavigableLabels, getPublishedIssues } from "@/features/blog-data";
 import { MetadataRoute } from "next";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap[]> {
-  const [issues, labels] = await Promise.all([
-    getCacheIssues(),
-    getCacheLabels(),
-  ]);
+export const dynamic = "force-static";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const issues = getPublishedIssues();
+  const labels = getNavigableLabels();
   const domain = process.env.DOMAIN!;
-  const issueItems: any = issues.map((issue) => ({
-    url: `${domain}/issues/${issue.id}`,
+  const issueItems: MetadataRoute.Sitemap = issues.map((issue) => ({
+    url: `${domain}/blog/post/${issue.id}`,
     lastModified: issue.updated_at,
-    changeFrequency: "daily",
+    changeFrequency: "daily" as const,
     priority: 0.8,
   }));
 
-  const tagItems = labels.map((label) => ({
-    url: `${domain}/tag/${label.id}`,
+  const tagItems: MetadataRoute.Sitemap = labels.map((label) => ({
+    url: `${domain}/blog/tag/${label.id}`,
     lastModified: new Date(),
-    changeFrequency: "weekly",
+    changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
   return [
     {
       url: domain,
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as const,
       priority: 1,
     },
     {
       url: `${domain}/blog`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 1,
     },
     ...issueItems,

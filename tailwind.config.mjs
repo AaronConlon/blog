@@ -1,6 +1,7 @@
-import type { Config } from "tailwindcss";
+const animated = (await import("tailwindcss-animated")).default;
+const scrollbar = (await import("tailwind-scrollbar")).default;
 
-const config: Config = {
+const config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -18,6 +19,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animated"), require("tailwind-scrollbar")],
+  plugins: [animated, scrollbar],
 };
+
 export default config;

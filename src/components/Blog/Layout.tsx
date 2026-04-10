@@ -1,6 +1,6 @@
 import Logo from "@/components/Logo";
 import { CONFIG } from "@/config";
-import { getCacheLabels } from "@/features/cache";
+import { getNavigableLabels } from "@/features/blog-data";
 import { Rss } from "lucide-react";
 import Link from "next/link";
 import ActiveLink from "../ActiveLink";
@@ -12,7 +12,7 @@ export default async function BlogLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const labels = await getCacheLabels();
+  const labels = getNavigableLabels();
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-gradient-to-bl from-gray-50 to-white p-4 inset-x-0 transition-all header">

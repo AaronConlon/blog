@@ -3,21 +3,25 @@ import ContentNavigate from "@/components/Blog/ContentNavigate";
 import BlogLayout from "@/components/Blog/Layout";
 import MetaInfo from "@/components/Blog/MetaInfo";
 import { CONFIG } from "@/config";
-import { getCacheIssues } from "@/features/cache";
+import { getPublishedIssueById, getPublishedIssues } from "@/features/blog-data";
 import { markedBodyToHTML, resolveIssueBody } from "@/features/format";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 
 type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // read route params
-  const id = params.id;
-  const issues = await getCacheIssues();
-  const issue = issues.find((issue) => issue.id.toString() === id)!;
+  const { id } = await params;
+  const issue = getPublishedIssueById(id);
+
+  if (!issue) {
+    return {};
+  }
+
   const { data } = resolveIssueBody(issue.body ?? "");
 
   return {
@@ -60,18 +64,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // SSG for static params, control the static page generation
 export async function generateStaticParams() {
-  const issues = await getCacheIssues();
-  return issues
-    .filter((issue) => issue.body?.trim().length && issue.state === "open")
-    .map(({ id }) => ({
+  return getPublishedIssues().map(({ id }) => ({
       id: id.toString(),
     }));
 }
 
-export default async function BlogPage({ params }: { params: { id: string } }) {
-  const issues = await getCacheIssues();
+export const dynamic = "force-static";
+export const dynamicParams = false;
 
-  const issue = issues.find((i) => i.id.toString() === params.id)!;
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const issues = getPublishedIssues();
+  const issue = getPublishedIssueById(id);
+
+  if (!issue) {
+    notFound();
+  }
+
   const { content } = resolveIssueBody(issue.body ?? "");
 
   return (

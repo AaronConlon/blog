@@ -1,12 +1,12 @@
 import Editor from "@/components/Blog/Editor";
-import { getCacheIssues, getCacheLabels } from "@/features/cache";
+import { getAllIssues, getAllLabels } from "@/features/blog-data";
 import { pick } from "lodash-es";
 
-export default async function EditorPage() {
-  const [issues, labels] = await Promise.all([
-    getCacheIssues(),
-    getCacheLabels(),
-  ]);
+export const dynamic = "force-static";
+
+export default function EditorPage() {
+  const issues = getAllIssues();
+  const labels = getAllLabels();
 
   return (
     <Editor

@@ -10,26 +10,36 @@ export function resolveIssueBody(markdown: string): {
   content: string;
   data: { [key: string]: any };
 } {
-  // @ts-ignore
-  return matter(markdown);
+  try {
+    // @ts-ignore
+    return matter(markdown);
+  } catch {
+    return {
+      content: markdown,
+      data: {},
+    };
+  }
 }
 
 export function markedBodyToHTML(body: string) {
-  // Override function
   const renderer = {
-    heading(text: string, depth: string) {
+    heading(token: {
+      depth: number;
+      text?: string;
+      tokens?: unknown[];
+    }) {
+      const text = token.text ?? "";
+      const depth = Number(token.depth ?? 1);
       const id = Buffer.from(text).toString("base64");
-      return `<div style="height:${(6 - Number(depth)) / 2}em;width:100%"></div>
+      return `<div style="height:${(6 - depth) / 2}em;width:100%"></div>
             <h${depth} class="flex items-center gap-1" id="${id}">
               ${text}
-            </h${depth}><div style="height:${
-        (6 - Number(depth)) / 2
-      }em;width:100%"></div>`;
+            </h${depth}><div style="height:${(6 - depth) / 2}em;width:100%"></div>`;
     },
   } as unknown as RendererObject;
 
   marked.use({ renderer });
-  return marked.parse(body);
+  return marked.parse(body) as string;
 }
 
 /**

@@ -2,7 +2,7 @@ import { Feed } from "feed";
 import matter from "gray-matter";
 import { marked } from "marked";
 import fs from "node:fs";
-import { getCacheIssues } from "./cache";
+import { getPublishedIssues } from "./blog-data";
 import { TIssue } from "./types";
 
 const domain = "https://i5lin.top";
@@ -36,9 +36,7 @@ const buildRss = (issues: TIssue[]) => {
       id: issue.id.toString(),
       link: `${domain}/blog/post/${issue.id}`,
       description: data?.description || content.slice(0, 200),
-      content: marked(content, {
-        async: false,
-      }) as string,
+      content: marked.parse(content) as string,
       author: [
         {
           name: issue.user.login,
@@ -57,6 +55,6 @@ export const buildRssFile = async () => {
   if (process.env?.DEV === "true") {
     return;
   }
-  const issues = await getCacheIssues();
+  const issues = getPublishedIssues();
   buildRss(issues);
 };

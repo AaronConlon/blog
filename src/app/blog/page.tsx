@@ -1,7 +1,9 @@
 import BlogContainer from "@/components/Blog/Container";
-import { getCacheIssues } from "@/features/cache";
+import { getPublishedIssues } from "@/features/blog-data";
 
-export default async function BlogsPage() {
-  const issues = await getCacheIssues();
+export const dynamic = "force-static";
+
+export default function BlogsPage() {
+  const issues = getPublishedIssues();
   return <BlogContainer issues={issues} />;
 }

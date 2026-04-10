@@ -1,13 +1,28 @@
 import { CONFIG } from "@/config";
 import type { Metadata } from "next";
-import { Jost } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
-const inter = Jost({ subsets: ["latin"] });
+const inter = localFont({
+  src: [
+    {
+      path: "../../public/fonts/jost-latin.woff2",
+      style: "normal",
+      weight: "100 900",
+    },
+    {
+      path: "../../public/fonts/jost-latin-ext.woff2",
+      style: "normal",
+      weight: "100 900",
+    },
+  ],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.DOMAIN ?? "https://i5lin.top"),
   title: "Hi, This is Aaron Conlon's Blog",
   description: "A blog about software development and other things",
   openGraph: {

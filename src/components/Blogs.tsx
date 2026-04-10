@@ -1,10 +1,10 @@
-import { getCacheIssues } from "@/features/cache";
+import { getPublishedIssues } from "@/features/blog-data";
 
 import Link from "next/link";
 import BlogItem from "./Blog/Item";
 
 export default async function Blogs() {
-  const issues = await getCacheIssues();
+  const issues = getPublishedIssues();
   return (
     <div className="flex flex-col gap-8 py-20 bg-gray-50">
       <div className="font-semibold text-2xl flex justify-center">
