@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import RoughNotationText from "./RoughNotationText";
 export default function FriendLinks() {
 
   const friends = [
@@ -53,8 +54,8 @@ export default function FriendLinks() {
   return (
     <div className="my-20">
       <div className="flex justify-center">
-        <h2 className="text-xl sm:text-2xl font-bold text-center section-heading mb-6">
-          Friends
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-6">
+          <RoughNotationText>友情链接</RoughNotationText>
         </h2>
       </div>
       <div className="mx-auto w-full max-w-[760px] px-8 flex items-center justify-center">

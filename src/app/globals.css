@@ -1,43 +1,35 @@
 @import "tailwindcss";
 @config "../../tailwind.config.mjs";
 
-@keyframes flip-up {
+.section-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-background-text {
+  transform: translate3d(40px, 222px, 0) rotate(6deg) scale(1.6);
+  transform-origin: center;
+  animation: hero-background-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes hero-background-drift {
   0% {
-    opacity: 0.5;
-    transform: translateY(3%);
+    transform: translate3d(40px, 222px, 0) rotate(6deg) scale(1.6);
   }
+
+  50% {
+    transform: translate3d(-24px, 190px, 0) rotate(3deg) scale(1.68);
+  }
+
   100% {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(72px, 168px, 0) rotate(8deg) scale(1.58);
   }
 }
 
-@keyframes pure-flip-up {
-  0% {
-    transform: translateY(12px);
-    opacity: 0;
+@media (prefers-reduced-motion: reduce) {
+  .hero-background-text {
+    animation: none;
   }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.project-flip-up {
-  animation: flip-up 0.5s ease-out;
-}
-.project-flip-up > a,.project-flip-up > .topics {
-  transform: translateY(12px);
-  opacity: 0;
-  animation: pure-flip-up 0.1s ease-out forwards;
-  animation-delay: 500ms;
-}
-
-.project-flip-up > .more-info {
-  transform: translateY(12px);
-  opacity: 0;
-  animation: pure-flip-up 0.1s ease-out forwards;
-  animation-delay: 800ms;
 }
 
 .markdown-body ul {

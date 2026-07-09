@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FriendLinks from "../FriendLinks";
 import GoTop from "../GoTop";
+import RoughNotationText from "../RoughNotationText";
 import EditEntry from "./Editor/EditorEntry";
 
 export default function BlogContainer({
@@ -22,13 +23,9 @@ export default function BlogContainer({
     <BlogLayout>
       <div className="mx-auto max-w-[1000px] p-4">
         <h3 className="text-primary font-semibold text-2xl mt-4">
-          <span
-            className="section-heading"
-            data-type="highlight"
-            data-color="#fff176"
-          >
+          <RoughNotationText type="highlight" color="#fff176">
             {labelName ? `分类：${labelName}` : "所有分类"}
-          </span>
+          </RoughNotationText>
         </h3>
         {issues.length === 0 ? (
           <div className="py-12">

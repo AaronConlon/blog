@@ -17,7 +17,7 @@ export default async function OpenSourceProjects() {
   return (
     <>
       <div className="sm:col-span-2 md:col-span-4 font-semibold text-2xl uppercase">
-        open source
+        开源项目
       </div>
       {repos
         .filter((project) => project.stargazers_count > 1)
@@ -26,13 +26,13 @@ export default async function OpenSourceProjects() {
           return (
             <div
               key={project.id}
-              className="bg-white shadow-lg border border-transparent hover:border-primary/50 rounded-t-lg overflow-hidden __project__ flex flex-col group"
+              className="bg-white shadow-sm border border-primary/10 rounded-t-lg overflow-hidden flex flex-col"
             >
               <div className="overflow-hidden">
                 <Image
                   src={`https://opengraph.githubassets.com/[random-string]/${CONFIG.author.name}/${project.name}`}
-                  alt="repo cover"
-                  className="w-full group-hover:scale-110 transition-transform duration-300"
+                  alt="仓库封面"
+                  className="w-full"
                   width={315}
                   height={161}
                 />
@@ -40,18 +40,23 @@ export default async function OpenSourceProjects() {
               <Link
                 href={project.html_url}
                 target="_blank"
-                className="font-semibold text-lg text-primary mr-auto p-2 w-full line-clamp-2 min-h-12 leading-[32px]"
+                className="text-primary mr-auto p-2 w-full min-h-16 flex flex-col justify-center"
               >
-                {project.name.trim()}
-                {project.description?.length ? ":" : ""}
-                <span className="pl-2">{project.description}</span>
+                <span className="font-semibold text-lg leading-7 truncate mb-2">
+                  {project.name.trim()}
+                </span>
+                {
+                  <span className="text-sm leading-5 line-clamp-1 text-primary/80">
+                    {project.description || "-"}
+                  </span>
+                }
               </Link>
 
               <div className="flex items-center flex-wrap gap-4 p-2 topics">
                 {project.topics.map((topic) => (
                   <span
                     key={topic}
-                    className="bg-primary/10 text-primary px-1 rounded-sm"
+                    className="bg-primary/5 text-primary p-0.5 rounded-full px-2"
                   >
                     {topic}
                   </span>

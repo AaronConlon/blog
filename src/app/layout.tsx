@@ -1,7 +1,6 @@
 import { CONFIG } from "@/config";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
@@ -55,20 +54,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${inter.className} w-full overflow-x-hidden`}>
         {children}
         <Toaster />
         <script async src="https://cdn.seline.so/seline.js"></script>
-        <Script
-          async
-          src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"
-        ></Script>
-        <Script
-          src="/scripts/raw-scripts.js"
-          type={"text/javascript"}
-          defer
-        ></Script>
       </body>
     </html>
   );

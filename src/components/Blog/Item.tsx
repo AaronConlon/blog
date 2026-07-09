@@ -15,16 +15,16 @@ export default function BlogItem({
   return (
     <div
       key={id}
-      className="bg-white border border-dashed border-primary rounded-md hover:shadow-xl origin-center transition-all shadow-primary p-4 flex flex-col group relative"
+      className="bg-white border border-primary/10 rounded-md origin-center transition-all shadow-primary p-4 flex flex-col group relative"
     >
       <div className="group-hover:translate-x-2 group-hover:translate-y-2 absolute inset-0 w-full h-full border border-dashed border-primary z-[-1] rounded-md transition-transform"></div>
-      <div className="relative mb-4 overflow-hidden">
+      <div className="relative mb-4 overflow-hidden transition-all">
         <Image
           src={data?.cover ?? "/coder2.svg"}
-          alt="avatar"
+          alt="文章封面"
           height={460}
           width={320}
-          className="group-hover:scale-105 aspect-video transition-transform w-full max-w-[320px] mx-auto"
+          className="group-hover:scale-105 transition-all duration-500 aspect-video w-full max-w-[320px] mx-auto"
         />
       </div>
       <Link
@@ -39,7 +39,7 @@ export default function BlogItem({
         <div className="flex items-center gap-1">
           <CalendarRangeIcon size={13} className="opacity-60" />
           <span className="col-span-2 font-thin opacity-80">
-            {format(new Date(updated_at), "yyyy-MM-dd")} updated.
+            更新于 {format(new Date(updated_at), "yyyy-MM-dd")}
           </span>
         </div>
       </div>

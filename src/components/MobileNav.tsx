@@ -22,16 +22,16 @@ export default function MobileNav() {
         }}
       >
         <li className="pt-12">
-          <a href="#doing-lately">What am I doing lately?</a>
+          <a href="#doing-lately">最近在做什么？</a>
         </li>
         <li>
-          <a href="#blog">Blog</a>
+          <a href="#blog">博客</a>
         </li>
         <li>
-          <a href="#projects">Projects</a>
+          <a href="#projects">项目</a>
         </li>
         <li>
-          <a href="#contact">Contact</a>
+          <a href="#contact">联系</a>
         </li>
       </ul>
     </div>
