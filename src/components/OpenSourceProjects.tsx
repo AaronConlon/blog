@@ -1,8 +1,8 @@
 import { CONFIG } from "@/config";
 import { getReposByRepoNames } from "@/features/api";
 import { Home, Star } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import OpenSourceProjectCover from "./OpenSourceProjectCover";
 
 export default async function OpenSourceProjects() {
   const repos = await getReposByRepoNames([
@@ -29,12 +29,9 @@ export default async function OpenSourceProjects() {
               className="bg-white shadow-sm border border-primary/10 rounded-t-lg overflow-hidden flex flex-col"
             >
               <div className="overflow-hidden">
-                <Image
+                <OpenSourceProjectCover
                   src={`https://opengraph.githubassets.com/[random-string]/${CONFIG.author.name}/${project.name}`}
-                  alt="仓库封面"
-                  className="w-full"
-                  width={315}
-                  height={161}
+                  alt={`${project.name} 仓库封面`}
                 />
               </div>
               <Link
