@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "de4965e.webp.li",
       },
+      {
+        protocol: "https",
+        hostname: "codia.i5lin.top",
+      },
     ],
     unoptimized: true,
   },

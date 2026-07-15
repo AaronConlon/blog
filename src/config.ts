@@ -12,6 +12,14 @@ export const CONFIG = {
   },
   projects: [
     {
+      name: "Codia",
+      description:
+        "Codia 是一个面向人类和 API 的代码图片生成工具。通过友好的 Playground UI 和 API-first 渲染能力，把代码快速生成适合文档、博客、社媒与自动化工作流使用的漂亮图片。",
+      homepage: "https://codia.i5lin.top/",
+      topics: ["Web 工具", "API", "代码图片"],
+      cover: "https://codia.i5lin.top/og-image.png",
+    },
+    {
       name: "Sisyphus 西西弗标签页",
       description:
         "Sisyphus 是一个为阅读者设计的新标签页插件。精选来自经典文学、哲学与历史作品中的名言，在碎片时间中重新发现思考。",
