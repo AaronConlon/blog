@@ -38,6 +38,15 @@ function isPublishedIssue(issue) {
   );
 }
 
+function getPublishedIssues(issues) {
+  return issues
+    .filter(isPublishedIssue)
+    .sort(
+      (left, right) =>
+        new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime()
+    );
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -240,11 +249,15 @@ async function main() {
 
     await writeArtifacts(data);
 
+    const publishedIssues = getPublishedIssues(data.issues);
+
     console.log(
-      `[prepare-static-data] snapshot refreshed with ${
-        data.issues.filter(isPublishedIssue).length
-      } published posts`
+      `[prepare-static-data] snapshot refreshed with ${publishedIssues.length} published posts`
     );
+    console.log("[prepare-static-data] published issue titles (newest first):");
+    publishedIssues.forEach((issue) => {
+      console.log(`- ${issue.updated_at} ${issue.title}`);
+    });
   } catch (error) {
     if (!allowStaleSnapshot) {
       throw error;
