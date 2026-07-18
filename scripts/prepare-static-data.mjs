@@ -9,6 +9,9 @@ const domain = process.env.DOMAIN ?? "https://i5lin.top";
 const owner = "AaronConlon";
 const repo = "blog";
 const token = process.env.GITHUB_TOKEN;
+const requestTimeoutMs = Number(process.env.GITHUB_API_TIMEOUT_MS ?? 15000);
+const maxRetries = Number(process.env.GITHUB_API_RETRIES ?? 3);
+const allowStaleSnapshot = process.env.ALLOW_STALE_SNAPSHOT === "true";
 const snapshotPath = path.join(cwd, "src/generated/blog-data.json");
 const rssPath = path.join(cwd, "public/rss.xml");
 
@@ -35,30 +38,104 @@ function isPublishedIssue(issue) {
   );
 }
 
-async function fetchJson(url) {
-  const response = await fetch(url, { headers });
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}: ${url}`);
+function getRetryDelay(response, attempt) {
+  const retryAfter = Number(response.headers.get("retry-after"));
+
+  if (Number.isFinite(retryAfter) && retryAfter >= 0) {
+    return Math.min(retryAfter * 1000, 10000);
   }
 
-  return response.json();
+  return Math.min(500 * 2 ** attempt, 5000);
+}
+
+function isRetryableResponse(response) {
+  return response.status === 429 || response.status >= 500;
+}
+
+function getNextLink(linkHeader) {
+  if (!linkHeader) {
+    return null;
+  }
+
+  for (const link of linkHeader.split(",")) {
+    const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/);
+
+    if (match?.[2].split(" ").includes("next")) {
+      return match[1];
+    }
+  }
+
+  return null;
+}
+
+async function fetchJsonResponse(url) {
+  for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), requestTimeoutMs);
+
+    try {
+      const response = await fetch(url, { headers, signal: controller.signal });
+
+      if (response.ok) {
+        const data = await response.json();
+        return { data, response };
+      }
+
+      if (!isRetryableResponse(response) || attempt === maxRetries) {
+        const error = new Error(`${response.status} ${response.statusText}: ${url}`);
+        error.name = "GitHubApiResponseError";
+        throw error;
+      }
+
+      await sleep(getRetryDelay(response, attempt));
+      continue;
+    } catch (error) {
+      if (error instanceof Error && error.name === "GitHubApiResponseError") {
+        throw error;
+      }
+
+      if (attempt === maxRetries) {
+        throw new Error(
+          `GitHub API request failed after ${maxRetries + 1} attempts: ${url}`,
+          { cause: error }
+        );
+      }
+
+      await sleep(Math.min(500 * 2 ** attempt, 5000));
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  throw new Error(`GitHub API request failed: ${url}`);
+}
+
+async function fetchPaginatedArray(url) {
+  const items = [];
+  let nextUrl = url;
+
+  while (nextUrl) {
+    const { data, response } = await fetchJsonResponse(nextUrl);
+
+    if (!Array.isArray(data)) {
+      throw new Error(`Expected an array response from GitHub: ${nextUrl}`);
+    }
+
+    items.push(...data);
+    nextUrl = getNextLink(response.headers.get("link"));
+  }
+
+  return items;
 }
 
 async function fetchPaginatedIssues() {
-  const issues = [];
-
-  for (let page = 1; ; page += 1) {
-    const pageItems = await fetchJson(
-      `https://api.github.com/repos/${owner}/${repo}/issues?state=all&per_page=100&page=${page}`
-    );
-
-    issues.push(...pageItems);
-
-    if (pageItems.length < 100) {
-      break;
-    }
-  }
+  const issues = await fetchPaginatedArray(
+    `https://api.github.com/repos/${owner}/${repo}/issues?state=all&per_page=100&sort=created&direction=desc`
+  );
 
   return normalizeIssues(issues);
 }
@@ -131,14 +208,27 @@ async function writeArtifacts(data) {
 
 async function readSnapshot() {
   const raw = await fs.readFile(snapshotPath, "utf8");
-  return JSON.parse(raw);
+  const snapshot = JSON.parse(raw);
+
+  if (
+    !snapshot ||
+    !Array.isArray(snapshot.issues) ||
+    !Array.isArray(snapshot.labels) ||
+    !Array.isArray(snapshot.repos)
+  ) {
+    throw new Error(`Invalid blog snapshot: ${snapshotPath}`);
+  }
+
+  return snapshot;
 }
 
 async function main() {
   try {
     const [issues, labels] = await Promise.all([
       fetchPaginatedIssues(),
-      fetchJson(`https://api.github.com/repos/${owner}/${repo}/labels?per_page=100`),
+      fetchPaginatedArray(
+        `https://api.github.com/repos/${owner}/${repo}/labels?per_page=100`
+      ),
     ]);
 
     const data = {
@@ -156,6 +246,10 @@ async function main() {
       } published posts`
     );
   } catch (error) {
+    if (!allowStaleSnapshot) {
+      throw error;
+    }
+
     const fallback = await readSnapshot().catch(() => null);
 
     if (!fallback) {
@@ -163,10 +257,10 @@ async function main() {
     }
 
     await writeArtifacts(fallback);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.warn(
-      `[prepare-static-data] refresh failed, reused existing snapshot: ${
-        error instanceof Error ? error.message : String(error)
-      }`
+      `[prepare-static-data] refresh failed, reused existing snapshot because ` +
+        `ALLOW_STALE_SNAPSHOT=true: ${errorMessage}`
     );
   }
 }

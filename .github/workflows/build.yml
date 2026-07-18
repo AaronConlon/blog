@@ -7,27 +7,36 @@ on:
   issues:
     types: [opened, edited, deleted, transferred, pinned, unpinned, closed, reopened, assigned, unassigned, labeled, unlabeled, locked, unlocked, milestoned, demilestoned]
 
+concurrency:
+  group: blog-deploy-${{ github.repository }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      CLOUDFLARE_PAGES_DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL }}
       BARK_SERVER_URL: https://api.day.app
-      BARK_TOKEN: FekCH2UJRgiCmBJff8ph8P
+      BARK_TOKEN: ${{ secrets.BARK_TOKEN }}
       BARK_ICON_URL: https://de4965e.webp.li/blog-images/2026/04/862880b1ebd5612d23b40998fde85d7b.png
       BARK_SOUND: calypso
       BARK_GROUP: Blog
 
     steps:
       - name: Trigger Cloudflare Deploy Hook
-        run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/16710477-1a3d-4b98-9a4e-173df1f073f5
-
-      - name: Notify deploy started via Bark
         run: |
-          curl --fail --show-error \
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error --max-time 30 \
+            --request POST \
+            "$CLOUDFLARE_PAGES_DEPLOY_HOOK_URL"
+
+      - name: Notify deploy hook accepted via Bark
+        run: |
+          curl --fail-with-body --silent --show-error --max-time 15 \
             "${BARK_SERVER_URL}/${BARK_TOKEN}/博客开始构建/已触发%20Cloudflare%20Pages%20Deploy%20Hook?icon=${BARK_ICON_URL}&sound=${BARK_SOUND}&group=${BARK_GROUP}"
 
-      - name: Notify deploy failed via Bark
+      - name: Notify deployment trigger failed via Bark
         if: failure()
         run: |
-          curl --fail --show-error \
-            "${BARK_SERVER_URL}/${BARK_TOKEN}/博客构建失败/请检查%20GitHub%20Actions%20日志?icon=${BARK_ICON_URL}&sound=${BARK_SOUND}&group=${BARK_GROUP}"
+          curl --fail-with-body --silent --show-error --max-time 15 \
+            "${BARK_SERVER_URL}/${BARK_TOKEN}/博客部署触发失败/请检查%20GitHub%20Actions%20日志?icon=${BARK_ICON_URL}&sound=${BARK_SOUND}&group=${BARK_GROUP}"
