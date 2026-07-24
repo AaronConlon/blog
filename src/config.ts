@@ -20,6 +20,15 @@ export const CONFIG = {
       cover: "https://codia.i5lin.top/og-image.png",
     },
     {
+      name: "Eye宝",
+      description:
+        "Eye宝是一款面向家庭的智能眼健康助手，集在线问诊、视力档案、预约记录与专业智能体咨询于一体，帮助用户更轻松地了解视力状况、管理眼健康，让每一次看见都更安心。",
+      homepage: "https://demo.i5lin.top/",
+      topics: ["Web 应用", "AI", "眼健康"],
+      cover:
+        "https://de4965e.webp.li/blog-images/2026/07/a62b08226d4b7604c7191170cb90b7b1.png",
+    },
+    {
       name: "Sisyphus 西西弗标签页",
       description:
         "Sisyphus 是一个为阅读者设计的新标签页插件。精选来自经典文学、哲学与历史作品中的名言，在碎片时间中重新发现思考。",
