@@ -12,6 +12,14 @@ export const CONFIG = {
   },
   projects: [
     {
+      name: "Slokit Analytics",
+      description:
+        "Slokit Analytics 是一款轻量、隐私友好的 Web Analytics 平台，帮助独立开发者了解访问量、用户来源、热门页面与访问趋势，让每一次访问都变得可理解、可优化。",
+      homepage: "https://slokit-gateway.i5lin.top/",
+      topics: ["Web Analytics", "隐私友好", "Cloudflare"],
+      cover: "https://slokit-gateway.i5lin.top/og-image.png",
+    },
+    {
       name: "Codia",
       description:
         "Codia 是一个面向人类和 API 的代码图片生成工具。通过友好的 Playground UI 和 API-first 渲染能力，把代码快速生成适合文档、博客、社媒与自动化工作流使用的漂亮图片。",
