@@ -53,6 +53,143 @@
   font-family: "color-font", "__Jost_54b096",monospace!important;
 }
 
+.markdown-body .semantic-callout {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--callout-border, transparent);
+  border-radius: 4px;
+  background-color: var(--callout-bg, #f8eadb);
+  color: var(--callout-text, #25201b);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.markdown-body .semantic-callout-laugh,
+.markdown-body .semantic-callout-happy,
+.markdown-body .semantic-callout-angry,
+.markdown-body .semantic-callout-scared,
+.markdown-body .semantic-callout-sad,
+.markdown-body .semantic-callout-cry,
+.markdown-body .semantic-callout-surprise,
+.markdown-body .semantic-callout-think,
+.markdown-body .semantic-callout-tip,
+.markdown-body .semantic-callout-warning,
+.markdown-body .semantic-callout-error,
+.markdown-body .semantic-callout-quote {
+  --callout-color: #c58b4a;
+  --callout-bg: #f8eadb;
+  --callout-text: #25201b;
+}
+
+.markdown-body .semantic-callout-info {
+  --callout-color: #5d6ee8;
+  --callout-bg: #fff;
+  --callout-border: #dfe4ff;
+  --callout-text: #24211d;
+  padding: 16px 18px;
+  border-radius: 6px;
+  box-shadow: 0 10px 24px rgb(42 51 93 / 6%);
+}
+
+.markdown-body .semantic-callout-wow {
+  position: relative;
+  display: block;
+  margin: 24px 0;
+  padding: 34px 24px 28px;
+  border: 0;
+  border-radius: 6px;
+  background-color: #fffaf2;
+  color: #25201b;
+}
+
+.markdown-body .semantic-callout-comma {
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  width: 42px;
+  height: 42px;
+  color: #c58b4a;
+  opacity: 0.24;
+  line-height: 1;
+}
+
+.markdown-body .semantic-callout-comma svg {
+  display: block;
+  width: 42px;
+  height: 42px;
+  fill: currentColor;
+}
+
+.markdown-body .semantic-callout-wow .semantic-callout-body {
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.markdown-body .semantic-callout-emoji {
+  display: block;
+  flex: 0 0 24px;
+  margin: 0;
+  padding: 2px 0 0;
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.markdown-body .semantic-callout-info .semantic-callout-emoji {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 999px;
+  background-color: #eef0ff;
+  color: var(--callout-color);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.markdown-body .semantic-callout-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--callout-text, #25201b);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+.markdown-body .semantic-callout-body p,
+.markdown-body .semantic-callout-body ul,
+.markdown-body .semantic-callout-body ol,
+.markdown-body .semantic-callout-body li,
+.markdown-body .semantic-callout-body strong,
+.markdown-body .semantic-callout-body b,
+.markdown-body .semantic-callout-body a {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.markdown-body .semantic-callout-body > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .semantic-callout-info .semantic-callout-body strong {
+  background: transparent;
+  color: #5d6ee8;
+  font-weight: 700;
+}
+
+.markdown-body .semantic-callout a::after {
+  display: none;
+}
+
 .markdown-body a {
   color: #007a7a!important;
   text-decoration: underline!important;
