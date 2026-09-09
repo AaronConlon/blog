@@ -22,6 +22,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "codia.i5lin.top",
       },
+      {
+        protocol: "https",
+        hostname: "microdraft.i5lin.top",
+      },
     ],
     unoptimized: true,
   },
