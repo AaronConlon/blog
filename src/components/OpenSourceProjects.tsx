@@ -6,6 +6,7 @@ import OpenSourceProjectCover from "./OpenSourceProjectCover";
 
 export default async function OpenSourceProjects() {
   const repos = await getReposByRepoNames([
+    "upy",
     "blog",
     "erin",
     "x-profile-menu-expansion-website",

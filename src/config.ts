@@ -12,6 +12,14 @@ export const CONFIG = {
   },
   projects: [
     {
+      name: "upy",
+      description:
+        "轻量级 Go 单二进制 Web 部署与运维工具。零外部依赖、极低内存占用，支持从 GitHub Releases 或本地 bundle 秒级部署 SPA 静态应用、Docker 容器与 Systemd 原生服务，内置磁盘维护与约定备份。",
+      homepage: "https://github.com/AaronConlon/upy",
+      topics: ["Go", "DevOps", "部署工具"],
+      cover: "/projects/upy-cover.png",
+    },
+    {
       name: "微稿 MicroDraft",
       description:
         "微稿是一款面向个人创作者的本地优先写作工具，通过对话打开思路，支持 Markdown 与可视化编辑、微信公众号排版、AI 协作和素材管理，帮助你从一闪而过的念头写成可以发布的初稿。",
@@ -62,15 +70,6 @@ export const CONFIG = {
       topics: ["Web 平台"],
       cover:
         "https://de4965e.webp.li/blog-images/2026/07/8581b8f2a4b0fa4067a10b339b63568f.png",
-    },
-    {
-      name: "Agent 写作(未发布公开服务)",
-      description:
-        "通过调用 Codex 的功能，实现本地化的 Agent 协作写作、调整、整理、生图、发布等功能，辅助用户编写微信公众号。",
-      homepage: "",
-      topics: ["本地平台", "AI"],
-      cover:
-        "https://de4965e.webp.li/blog-images/2026/07/f8f83d581f53a7deff5389b638b55328.png",
     },
   ],
   og: {

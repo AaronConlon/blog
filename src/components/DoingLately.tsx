@@ -19,19 +19,18 @@ export default function DoingLately() {
           <p className="leading-6">工作之余，我也会凭兴趣做一些项目，比如：</p>
           <ul className="list-disc list-inside py-4">
             <li className="text-primary hover:underline dark:text-primary">
-              <a href="https://sisyhus.i5lin.top/" target="_blank">
-                Sisyphus 西西弗标签页
+              <a href="https://github.com/AaronConlon/upy" target="_blank">
+                upy — 轻量级 Go 单二进制 Web 部署与运维工具
               </a>
             </li>
           </ul>
           <p className="leading-6">我也在持续学习一些新的技术和工程方法：</p>
           <ul className="list-disc list-inside py-4">
             <li className="text-primary">
-              TanStack 生态：Query、Router、Form 等
+              AI 工作流和 Web 开发
             </li>
-            <li className="text-primary">前端 Monorepo 工程化</li>
-            <li className="text-primary">Go 微服务开发</li>
-            <li className="text-primary">AI Agent 开发</li>
+            <li className="text-primary">Go 语言</li>
+            <li className="text-primary">自媒体写作</li>
           </ul>
         </div>
       </div>

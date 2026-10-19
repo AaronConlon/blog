@@ -23,7 +23,7 @@ export default function CloseSourceProjects() {
             />
           </div>
           <Link
-            href={project.homepage == "" ? "/" : project.homepage}
+            href={project.homepage || "/"}
             target="_blank"
             className="text-primary mr-auto p-2 w-full min-h-16 flex flex-col justify-center"
           >

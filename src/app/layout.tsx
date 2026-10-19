@@ -59,6 +59,11 @@ export default async function RootLayout({
         {children}
         <Toaster />
         <script async src="https://cdn.seline.so/seline.js"></script>
+        <script
+          defer
+          src="https://slokit-gateway.i5lin.top/slokit.js?v=4"
+          data-site="app_df4b0692469e42b88523c681ee5d8dea"
+        ></script>
       </body>
     </html>
   );

@@ -1,6 +1,178 @@
 {
-  "generatedAt": "2026-08-02T11:02:43.954Z",
+  "generatedAt": "2026-10-19T05:04:41.330Z",
   "issues": [
+    {
+      "url": "https://api.github.com/repos/AaronConlon/blog/issues/133",
+      "repository_url": "https://api.github.com/repos/AaronConlon/blog",
+      "labels_url": "https://api.github.com/repos/AaronConlon/blog/issues/133/labels{/name}",
+      "comments_url": "https://api.github.com/repos/AaronConlon/blog/issues/133/comments",
+      "events_url": "https://api.github.com/repos/AaronConlon/blog/issues/133/events",
+      "html_url": "https://github.com/AaronConlon/blog/issues/133",
+      "id": 5200620824,
+      "node_id": "I_kwDOEdO7x88AAAABNfstGA",
+      "number": 133,
+      "title": "GitHub 故障 7 小时复盘：最隐蔽的重试风暴",
+      "user": {
+        "login": "AaronConlon",
+        "id": 23721611,
+        "node_id": "MDQ6VXNlcjIzNzIxNjEx",
+        "avatar_url": "https://avatars.githubusercontent.com/u/23721611?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/AaronConlon",
+        "html_url": "https://github.com/AaronConlon",
+        "followers_url": "https://api.github.com/users/AaronConlon/followers",
+        "following_url": "https://api.github.com/users/AaronConlon/following{/other_user}",
+        "gists_url": "https://api.github.com/users/AaronConlon/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/AaronConlon/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/AaronConlon/subscriptions",
+        "organizations_url": "https://api.github.com/users/AaronConlon/orgs",
+        "repos_url": "https://api.github.com/users/AaronConlon/repos",
+        "events_url": "https://api.github.com/users/AaronConlon/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/AaronConlon/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 7279265991,
+          "node_id": "LA_kwDOEdO7x88AAAABseDIxw",
+          "url": "https://api.github.com/repos/AaronConlon/blog/labels/%E7%BC%96%E7%A8%8B",
+          "name": "编程",
+          "color": "A897CC",
+          "default": false,
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
+        }
+      ],
+      "state": "open",
+      "locked": false,
+      "assignees": [],
+      "milestone": null,
+      "comments": 0,
+      "created_at": "2026-08-20T06:57:58Z",
+      "updated_at": "2026-08-20T06:57:58Z",
+      "closed_at": null,
+      "assignee": null,
+      "author_association": "OWNER",
+      "active_lock_reason": null,
+      "sub_issues_summary": {
+        "total": 0,
+        "completed": 0,
+        "percent_completed": 0
+      },
+      "issue_dependencies_summary": {
+        "blocked_by": 0,
+        "total_blocked_by": 0,
+        "blocking": 0,
+        "total_blocking": 0
+      },
+      "body": "---\ndescription: 从一次提交代码时的真实翻车现场切入，带你读懂 GitHub 官方事故复盘，拆解代理容量瓶颈与客户端重试如何层层放大系统故障。\ncover: https://de4965e.webp.li/blog-images/2026/08/719123f011eb83c706a5311d1f983a45.webp\n---\n\nhello！大家好！\n\n上周五晚上九点半左右，我坐在电脑前正准备把一个功能分支合并进主分支。\n\n在网页上点下 Merge 后，浏览器顶部那条蓝色的进度条卡在中间不动了。过了几秒，整页直接跳出一片空白，随后返回了 500 错误。我顺手强制刷新页面，依然无法加载。\n\n第一反应是以为本地网络代理出了问题，我随手新开了一个标签页刷了下某个屎黄色站点，视频秒开，网络非常顺畅。再切回 VS Code，右下角 Copilot 图标也悄悄亮起了无法连接的提示。\n\n这时候在技术交流群里已经有人开始发截图问：“GitHub 是不是挂了？”。然而群里的反馈并不一致：有的朋友说完全打不开，有的朋友却说自己拉取代码一切正常。推特时间线上也有不少开发者陆续晒出 500 报错页面。\n\n大家一边在群里发表情包，一边排查到底发生了什么。这种“部分地区能用、部分地区报错”的半瘫痪状态持续了很久。部分用户的 PR 无法合并、CI/CD 停滞，VS Code 里的 Copilot 也频频断连。\n\n一直到第二天早上，经历了整整 7 个多小时的局部震荡后，GitHub Status 正式发布了事故复盘。报告里记录了这次事故的前因后果。\n\n撇开那些过于晦涩的技术术语，我们用清晰、直白的方式，看看这场局部受损却波及极广的事故到底是怎么发生的。\n\n来源：[GitHub Status 事故报告](https://www.githubstatus.com/incidents/zkxwbgr0cnmx)\n\n## 事故影响：部分服务与区域受阻\n\n根据 GitHub Status 官方记录（ 8 月 17 日 13:28–21:15），本次事故持续了整整 7 小时 47 分钟。\n\n需要先明确一个关键事实：**本次事故并非全球全站彻底下线，主要受灾区域集中在 Central US 数据中心，表现为部分地区与部分服务的间歇性高错误率。**\n\n官方披露的核心受损指标相当直观：\n\n- 网页端与 REST/GraphQL API 整体错误率峰值接近 20%（其余大部分正常流量依然可达）。\n- 仓库 archive 与 raw content 的下载错误率攀升至约 50%。\n- Issues、Pull Requests、Actions 和 Webhooks 出现大面积降级，Git 操作、Pages 与 Copilot 均受到不同程度冲击。\n- 涉及企业级身份认证的 SAML/OIDC、SCIM 以及 Team Sync 路径同样出现局部故障。\n- 采用 Data Residency 架构的企业客户，由于部分 Actions 工作流依赖 GitHub.com 托管的公开 Step 定义，也遭到级联波及。\n- 与此同时，通过 GitHub CLI 和 GitHub App 使用 Copilot 的用户全程未受影响，受灾最严重的是 VS Code 等桌面客户端。\n\n这种“有人正常、有人全挂”的局部异常，反而让排查变得更加扑朔迷离。\n\n## 故障根因：容量配置盲区引发连锁阻塞\n\n梳理官方报告可以发现，整场事故的源头来自一个容易被忽视的网络代理配置盲区：\n\n1. **Sidecar 代理触及并发上限**：Central US 数据中心遭遇流量高峰，负责内部网络路由的单个 Istio sidecar pod 达到了并发连接上限。举个例子，就好比一个业务窗口虽然大门敞开，但门前的专用安检通道已经挤满了人，流量大到挤满通道，没法疏导。\n2. **自动扩容指标未联动**：自动扩缩容策略（HPA）当时只盯住了宿主业务服务的 CPU 和请求指标，未把 Sidecar 代理的并发负荷算进去。系统误以为容量充足，未及时启动弹性扩容。\n3. **关键节点连接耗尽**：局部的网络阻塞迅速扩散，直接导致上游 4 个关键 HAProxy 节点耗尽了连接与流量配额（flow limit）。\n4. **认证通路大面积变慢**：HAProxy 承载着网关身份鉴权的核心链路。一旦这里堵死，依赖鉴权验证的网页端、API、Actions 和 Copilot 服务立即陷入大面积延迟和超时。\n\n认证网关如同整座系统的总闸机，闸机卡住后，内部即便各模块完好，外部用户也无法正常通行。\n\n![](https://de4965e.webp.li/blog-images/2026/08/8d44090b8af8070ed12ad266c9fc21b8.webp)\n\n## 放大效应：客户端重试引发流量风暴\n\n如果仅仅是局部网关卡顿，系统或许能较快排查并完成切换。真正让事故拉锯了近 8 个小时的关键，在于各层**重试机制**造成的流量放大。\n\n平时遇到接口报错，大家最下意识的动作是什么？\n重试！不行就再点一次！接着连续狂按重试！\n大家总觉得“多试一次总能成”，而客户端程序更是在后台不知疲倦地把这个动作放大了成千上万倍。\n\n在大规模故障场景下，未经节制的重试往往会演变成无意识的集群压迫：\n\n- 鉴权与服务端响应延迟飙升。\n- 客户端判定请求超时并自动触发重试。\n- 网关层根据既定策略同样向下游追加重试。\n- 呈几何级数叠加的重试流量，彻底挤占了负载均衡器与认证服务的全部可用带宽。\n\n用户在 VS Code 里看到的只是一句“Copilot 登录超时”，而在服务端看来，这就如同几万名用户因为闸机稍慢了一拍，在几秒内疯狂连刷了几十次卡。\n\n官方数据揭示了这一惊人事实：Copilot Token Service 日常请求量为 7–9K RPS，在重试叠加下被暴力推升至 **70–100K RPS**。整整 10 倍的畸形洪峰，直接让正在尝试恢复的服务再次过载。\n\n此外，VS Code 内部存在一个潜伏的重试逻辑缺陷，当某个内部端点响应稍有延迟，编辑器便会进入快速循环补发，成为了阻碍恢复的核心堵点。\n\n系统出现故障时，盲目的重试机制往往比原始缺陷更快拖垮整套架构。\n\n![](https://de4965e.webp.li/blog-images/2026/08/888c3e86676fe53f74fec02c6ba34127.webp)\n\n## 跨区域调度与紧急止血手段\n\n为了分流压力，GitHub 曾尝试将 Central US 的受阻流量切往 Northern Virginia 数据中心。\n\n然而，跨区域调度只能改变请求的目的地，无法削减总调用量。数以百万计的客户端依然在以极高频率狂发重试，这股被放大了 10 倍的洪峰涌入新机房后，很快又给新的节点带来了沉重负担。\n\n面对不断自我繁殖的恶性流量，GitHub 采取了数项强硬的阻断措施：\n\n- 紧急推送配置，在网关层大幅降低自动重试的频次。\n- 在负载均衡器层对部分 Copilot Token 请求直接返回 403 拒绝，强行截断客户端的重试死循环。\n- 分站点、小批量逐步放行流量，给后端留出充足的缓冲时间。\n- 同步暂停存在异常的 HAProxy 节点并完成状态恢复。\n\n把盲目的重试流量完全压制住之后，整个服务集群才终于恢复平稳。\n\n## 看完报告的几点体会\n\n笔者作为每天都在使用 GitHub 的“麻瓜”开发者，读完这篇详实的官方复盘，还是发表一下感触吧：\n\n- **强如行业标杆，也会被微小的配置盲区绊倒**：业务服务与代理容器没有联动扩容、客户端埋着一个偶发的重试死循环，平时风平浪静，一旦遇上业务高峰就会引发连锁反应。\n- **多机房调度并不是万能解药**：面对失控的客户端重试风暴，单纯切机房只是把压力转移到另一个地方，甚至会迅速拖垮健康的备用节点。\n- **详实透明的复盘具有极高价值**：GitHub 没有用一句含糊的“系统维护”带过，而是把完整的故障周期（7 小时 47 分钟）、各业务受损指标（API 20%、下载 50%）、10 倍流量放大数据以及具体的改进举措完整公开。这种复盘不仅能给用户明确的交代，也是极具参考价值的工程教材，这里就不得不提一下国内某大厂，简直是反着来，恶心！\n\n## 日常开发的避坑建议\n\nGitHub 的架构规模非常庞大，但这场事故里暴露出的问题，也许在咱们的日常业务开发中同样很常见。结合这次教训，在和 Claude Fable ”老师“ 一起讨论过后，总结了几个小建议 😆：\n\n### 1. 写重试时，务必加上退避与随机抖动\n\n在封装前端请求、调用第三方 API 或消费消息队列时，不要简单写一个固定次数的死循环重试。\n\n当下游服务真正崩溃时，成千上万个客户端同时无间隔重试，等于在联手攻击自己的后端。务必给重试加上**最大尝试次数**、**递增的等待时间（指数退避）**以及**随机抖动（Jitter）**，错开并发请求，避免形成共振。\n\n![](https://de4965e.webp.li/blog-images/2026/08/4ce3c65795d8aed561f35d20270565b4.webp)\n\n### 2. 监控业务指标，不只看进程存活状态\n\n很多时候监控看板上的 CPU、内存一切平稳，容器状态也全绿，但核心业务可能已经不可用了。\n\n这次事故中大部分基础服务进程并没有挂，瘫痪的是最前端的鉴权通道。日常开发中，应将**接口真实状态码分布（4xx/5xx）**、**核心业务成功率**与 **耗时**作为第一梯队的告警依据。\n\n### 3. 关注调用链条上的每一层代理限制\n\n在现代架构中，请求到达业务代码之前往往要经过浏览器、Nginx 反向代理、API 网关以及各种辅助服务。\n\n业务代码写得再快，只要前面的 Nginx 连接数超标或辅助服务代理并发被打满，请求在进入代码前就已经失败了。做压力测试和容量规划时，必须将整条网络路径上的各层代理限制一并纳入评估。\n\n## 最后\n\n看来，强如 GitHub 这样的顶级工程师团队依然会犯错。在复杂系统中，很多看似为了“保障可用性”而编写的重试与容错逻辑，在极端场景下极易异化为击垮系统的最后一把推手。\n\n建立重试边界，管控调用放大。下一次在代码中执行重试时，值得多为系统的极限承载力多考虑一些异常情况。\n\n还有一个挺逗的事情，故障发生时，推特上有条关于 500 报错页的高赞调侃：\n\n> GitHub 不应该用独角兽作为服务不可用页面的 UI 图片，因为独角兽几乎看不到，而 GitHub 经常挂掉。\n\n调侃归调侃，其实每次 GitHub 出故障，都是一次近距离学习大型服务故障防护的好机会 😆。\n\n好了，今天就到这里，大家下次见~\n\n---\n\n![](https://de4965e.webp.li/blog-images/2026/08/7f8c7e2f6dcdc79b937a398de4ab0e9c.png)\n",
+      "closed_by": null,
+      "reactions": {
+        "url": "https://api.github.com/repos/AaronConlon/blog/issues/133/reactions",
+        "total_count": 0,
+        "+1": 0,
+        "-1": 0,
+        "laugh": 0,
+        "hooray": 0,
+        "confused": 0,
+        "heart": 0,
+        "rocket": 0,
+        "eyes": 0
+      },
+      "timeline_url": "https://api.github.com/repos/AaronConlon/blog/issues/133/timeline",
+      "performed_via_github_app": null,
+      "state_reason": null,
+      "pinned_comment": null
+    },
+    {
+      "url": "https://api.github.com/repos/AaronConlon/blog/issues/132",
+      "repository_url": "https://api.github.com/repos/AaronConlon/blog",
+      "labels_url": "https://api.github.com/repos/AaronConlon/blog/issues/132/labels{/name}",
+      "comments_url": "https://api.github.com/repos/AaronConlon/blog/issues/132/comments",
+      "events_url": "https://api.github.com/repos/AaronConlon/blog/issues/132/events",
+      "html_url": "https://github.com/AaronConlon/blog/issues/132",
+      "id": 5148759953,
+      "node_id": "I_kwDOEdO7x88AAAABMuPXkQ",
+      "number": 132,
+      "title": "opencodex 实测：Codex 与 Claude Code 的账户池与任意模型路由方案",
+      "user": {
+        "login": "AaronConlon",
+        "id": 23721611,
+        "node_id": "MDQ6VXNlcjIzNzIxNjEx",
+        "avatar_url": "https://avatars.githubusercontent.com/u/23721611?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/AaronConlon",
+        "html_url": "https://github.com/AaronConlon",
+        "followers_url": "https://api.github.com/users/AaronConlon/followers",
+        "following_url": "https://api.github.com/users/AaronConlon/following{/other_user}",
+        "gists_url": "https://api.github.com/users/AaronConlon/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/AaronConlon/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/AaronConlon/subscriptions",
+        "organizations_url": "https://api.github.com/users/AaronConlon/orgs",
+        "repos_url": "https://api.github.com/users/AaronConlon/repos",
+        "events_url": "https://api.github.com/users/AaronConlon/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/AaronConlon/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 4618031591,
+          "node_id": "LA_kwDOEdO7x88AAAABE0GR5w",
+          "url": "https://api.github.com/repos/AaronConlon/blog/labels/%E5%B7%A5%E5%85%B7",
+          "name": "工具",
+          "color": "89638B",
+          "default": false,
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
+        }
+      ],
+      "state": "open",
+      "locked": false,
+      "assignees": [],
+      "milestone": null,
+      "comments": 0,
+      "created_at": "2026-08-14T05:53:05Z",
+      "updated_at": "2026-08-14T05:53:05Z",
+      "closed_at": null,
+      "assignee": null,
+      "author_association": "OWNER",
+      "active_lock_reason": null,
+      "sub_issues_summary": {
+        "total": 0,
+        "completed": 0,
+        "percent_completed": 0
+      },
+      "issue_dependencies_summary": {
+        "blocked_by": 0,
+        "total_blocked_by": 0,
+        "blocking": 0,
+        "total_blocking": 0
+      },
+      "body": "---\ndescription: 在 Codex 里使用 DeepSeek？没问题！Opencodex 账户池自动接力，多家供应商轻松聚合，模型随便路由，日常使用几乎无感。\ncover: https://de4965e.webp.li/blog-images/2026/08/7f0d0a28961f230ca04b4b3db3f09b95.png\n---\n\nhello！大家好！\n\n我从 Codex 发布初期就开始使用了。当时由于预算有限，我既无力承担 20x 的高阶套餐，甚至连 5x 套餐也难以负担，只能勉强维持一个 Plus 订阅。\n\n随着需求增长，单个 Plus 账号已无法满足我的使用量，于是我开始转向第三方中转服务。然而，随着 OpenAI 对低价账号打击力度的加大，中转服务的价格一路飙升。最终，我还是回归了官方渠道，并同时订阅了多个 Plus 账号以满足使用需求。\n\n重度使用 Codex Plus 时，每周的额度往往很快耗尽。为了缓解这一问题，我曾尝试使用各类 CLI 工具及知名的 CC Switch 来辅助切换账号，并借此度过了一段过渡期。\n\n然而，频繁地打开终端或通过 CC Switch 切换账号，再重启 Codex 的过程很快便令我感到厌倦。于是，我开始寻求一种更高效的解决方案。\n\n## 我想要的其实是一个「账户池」\n\n在寻找解决方案之前，我把我的需求捋了一遍：\n\n- 几个账号一起认证登录，不要手动登出登入；\n- 新会话自动挑余量最多的账号，实现负载均衡；\n- 已在跑的会话不要动，长任务中途换账号效果不佳；\n- 每个账号的用量状态能一眼看到，不需要逐个登录去查，满足一下个人查看额度的需求。\n\n如上所述，我真正需要的是在“个人”与“官方服务”之间建立一层管理机制，而目前的官方客户端并不提供此项功能。\n\n前几天刷 GitHub，正好刷到一个对上这个需求的项目：[lidge-jun/opencodex](https://github.com/lidge-jun/opencodex)。\n\n![opencodex 架构图：左侧 Codex 客户端通过 /v1/responses 把请求发给本地代理，右侧代理对接各家 provider](https://de4965e.webp.li/blog-images/2026/08/57bb3ab252201439f6b2fbaade779d4d.png)\n\n这是一个本地驻留代理，所有 Codex 请求均经由它进行中转，并根据逻辑自动分发至指定的账号与模型。\n\n## 账户池的两条关键规则\n\n装好之后，再逐个添加账号。它有两个行为，正好对上我的需求。\n\n现有会话将固定在原账户上。会话会绑定至启动它的账户，并在后续轮次中持续复用。即使在 SSH 或 tmux 等长会话场景下，也不会出现中途被切换账户的情况。\n\n新会话将自动路由至负载最低的账户。系统会对比 5 小时、每周这三两时间窗口的用量，并选取压力最大的指标作为参考。当活跃账户达到阈值后，新会话将自动分配给余量充足的合格账户。\n\n这两条规则相辅相成，有效解决了核心痛点：在高峰期，系统能够将压力均衡分配至多个账户；同时，对于正在进行的会话，又确保了其持久性，避免了中途切换带来的干扰。\n\n仪表盘还能一键刷新所有账户配额，三个窗口的用量一屏看完，不用再逐个登录。\n\n正好我手头还有 DeepSeek 和 SuperGrok，也一起添加进来！\n\n在仪表盘中开启 Codex Auth 后，即可添加池账户，并可查看下一会话所分配的账户。若关闭自动切换功能，系统将始终锁定并使用当前账户。\n\n另一个体现功底的细节是：当凭证失效时，系统会将账户标记为“需重新认证”，而非静默替换；当收到 429 配额限制响应时，账户会进入冷却状态，后续任务将自动切换至资源池中的其他可用账户。\n\n该报错时即报错，因为代理后台擅自替换凭证反而会带来不可控的风险。\n\n## 毫无存在感\n\n其他工具很多是「有存在感」的：要你记得打开，或者记得反复切换。\n\n而 Opencodex 其最大的优势在于：使用体验极其自然，几乎察觉不到它的存在。\n\n模型选择器依然沿用 Codex 原生逻辑，命令调用与日常操作保持一致，会话及历史记录位置也未作变动。当某个账号达到使用上限时，系统会自动平滑切换至下一个可用池；若非仪表盘中留有请求日志，我甚至察觉不到系统已完成了接力。\n\n我的直观感受是：将多个账号的配额整合在一起，体验如同拥有了一个无限额度的账号。这正是我所追求的理想状态——让工具隐于后台，使我能专注于任务本身。\n\n想看后台在发生什么，打开 opencodex 的仪表盘：provider、账户配额、实时请求日志都非常完整，如果需要可以随时查看。\n\n## 模型自助，随你喜欢\n\n切换账号仅仅是我的入门需求；OpenCodeX 的核心优势在于它彻底开放了模型选择权。\n\n它支持同时接入多家供应商，包括 Anthropic、Google、xAI、DeepSeek、GLM、Kimi、OpenRouter，以及本地的 Ollama。任何兼容 OpenAI 标准的端点均可接入，README 中列出的内置提供商已超过 40 家。配置完成后，所有模型将统一呈现在同一个选择器中。\n\n我目前同时接入了 DeepSeek 和 OpenCode Go 套餐路由的一系列模型。使用时，只需在选择器中按需切换，体验与原生模型无异，甚至还能针对特定模型调节推理强度（reasoning effort）。\n\n![Codex App 模型选择器里出现 opencodex 路由模型，包括 opencode-go 路由的 DeepSeek、GLM、Kimi 等，还能选 Reasoning effort](https://de4965e.webp.li/blog-images/2026/08/a00c73e9e54d83ae7371dc8d2ff65ed3.png)\n\n命令行里也可以用 -m 直接指定：\n\n```bash\ncodex -m \"anthropic/claude-opus-5\" \"解释这个 stack trace\"\n\ncodex -m \"ollama/llama3\" \"重构这个函数\"\n```\n\n当省略 `provider/` 前缀时，系统会自动路由至默认提供商，或根据模型名称模式进行匹配（例如，`claude-` 开头的模型将路由至 Anthropic，`gpt-` 开头的模型将路由至 OpenAI）。\n\nClaude Code 也具备同样的功能。使用 `ocx claude` 启动时，其选择器逻辑与原生保持一致，用户可根据需求自由选择模型。\n\n![Claude Code 通过 opencodex 跑路由模型，状态栏显示当前模型为 gpt-5.6-luna-medium](https://de4965e.webp.li/blog-images/2026/08/91da99e06ffb006dc74ddad2cea7fd0e.gif)\n\n启用此服务后，您可以在各类 CLI 工具的模型切换列表中看到并使用您添加的所有模型，随心所欲。即使在 Claude Code 中使用 DeepSeek，体验也如同官方原生支持一般，完美契合您的使用习惯。\n\n![Codex 应用里用路由的非 OpenAI 模型执行任务](https://de4965e.webp.li/blog-images/2026/08/d23398c70e5f57888cae69c3e13963d3.gif)\n\n认证方式多种多样：xAI、Anthropic 及 Kimi 支持 OAuth 登录，可实现 Token 自动刷新；此外，也支持通过转发 Codex 登录、直接粘贴 API Key 或引用环境变量（${ENV_VAR}）进行配置。\n\n## 它还是本机网关：其他软件也能接进来\n\n在使用一段时间后，我发现了它的另一重身份：整台机器的本地网关。\n\nOpenCodex 在本地 127.0.0.1:10100 提供统一的 API 入口。任何支持自定义请求地址的软件——无论是编辑器插件、自研脚本还是第三方客户端——均可将请求交由其处理，从而实现对同一供应商及账户池的复用。\n\n这意味着本地工具无需再分别配置 API Key 或路由规则；只需在网关完成一次配置，即可实现全局共享。对于喜欢折腾工具的用户而言，这一设计极为实用。\n\n以 AI 翻译软件为例，若需接入 OpenAI 服务，通常需要配置专属 API Key。此时，用户可以直接使用 OpenCodex 网关替代官方服务。鉴于目前许多软件已支持自定义 AI 服务商，这种应用方式具有非常广泛的适用性。\n\n## 不是唯一方案，只是我个人喜欢\n\n先说清楚，这类需求的方案不止一个。\n\n再次介绍 [CC Switch](https://github.com/farion1231/cc-switch)，一个开源跨平台桌面应用，统一管理 Claude Code、Codex、Gemini CLI 等工具的供应商配置，一键切换 provider，还带 MCP 和 Skills 管理。\n\nOpenCodex 采取了截然不同的路径：通过常驻代理、账户自动接力，以及将模型直接集成至原生选择器，一旦配置完成，几乎可以实现无感使用。我个人更倾向于后者——我希望将模型切换的工作完全交给工具处理，从而彻底摆脱对此类琐事的关注。\n\n类似思路的工具还有好几个，萝卜青菜各有所爱，选择自己喜欢的就好！\n\n## 安装和几个实用命令\n\n安装就两条命令，需要 Node 18+：\n\n```bash\nnpm install -g @bitkyc08/opencodex\nocx start\n```\n\nocx start 会启动代理，并打开 http://localhost:10100 的仪表盘；添加 provider、选模型、管账户都在网页里完成。随时可以跑 ocx gui 重新打开。想后台常驻、开机自启，用 ocx service。\n\n几个常用命令：\n\n- `ocx status`：看代理是否在运行\n- `ocx account list`：查看账户和用量，脱敏显示\n- `ocx stop`：停掉代理，并把 Codex 恢复成原始配置\n\n最后一点尤为值得一提：在停止运行 OCX 后，Codex 的表现如同从未安装过 OpenCodex 一般——既无残留配置，也无僵尸进程。对于这类会修改客户端配置的工具而言，能够实现“干净退出”至关重要。\n\n没有人希望软件卸载后仍留有冗余文件，正如没有人喜欢 macOS 在用户目录中留下 .DS_Store 文件一样 😆。\n\n> 安装时如果遇到 bundled Bun runtime is missing，说明 npm 拦截了安装脚本。用 npm install -g --allow-scripts=bun @bitkyc08/opencodex 重装，别加 --ignore-scripts。\n\n## 用之前要知道的几件事\n\n若您打算尝试使用 OpenCodex，请先注意以下几点：\n\nOpenCodex 是一个社区驱动的开源项目，与 OpenAI、Anthropic 等官方机构无任何关联。请注意，部分服务提供商（尤其是 Anthropic）可能会对通过第三方代理路由 API 流量的账户采取限制措施。正如 README 文档中所明确声明的：使用风险需由用户自行承担。\n\n## 最后\n\n回顾这一需求，初衷其实很简单：摆脱繁琐的账号切换，无需担忧配额耗尽，并能根据需求自由选择模型。\n\nOpenCodex 将这三个痛点整合为一个常驻本地代理：通过自动轮询账号池和聚合多供应商接口，使其成为整台机器的统一网关。如果你也厌倦了在多个账号间频繁切换，花十分钟尝试一下非常值得。\n\nAI 的发展实在太快，也许这个方案再过一段时间就过时，到时候如果有更好的方案，我还会分享出来给大家！\n\n---\n\n![](https://de4965e.webp.li/blog-images/2026-07/95ad239eab6a898699ec13740ddebb81.png)\n",
+      "closed_by": null,
+      "reactions": {
+        "url": "https://api.github.com/repos/AaronConlon/blog/issues/132/reactions",
+        "total_count": 0,
+        "+1": 0,
+        "-1": 0,
+        "laugh": 0,
+        "hooray": 0,
+        "confused": 0,
+        "heart": 0,
+        "rocket": 0,
+        "eyes": 0
+      },
+      "timeline_url": "https://api.github.com/repos/AaronConlon/blog/issues/132/timeline",
+      "performed_via_github_app": null,
+      "state_reason": null,
+      "pinned_comment": null
+    },
     {
       "url": "https://api.github.com/repos/AaronConlon/blog/issues/131",
       "repository_url": "https://api.github.com/repos/AaronConlon/blog",
@@ -41,7 +213,9 @@
           "name": "工具",
           "color": "89638B",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         },
         {
           "id": 4964354141,
@@ -50,7 +224,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -134,7 +310,9 @@
           "name": "工具",
           "color": "89638B",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -218,7 +396,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -302,7 +482,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -386,7 +568,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -470,7 +654,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -554,7 +740,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -638,7 +826,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -722,7 +912,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "closed",
@@ -826,7 +1018,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -910,7 +1104,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -994,7 +1190,9 @@
           "name": "工具",
           "color": "89638B",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         },
         {
           "id": 7279265991,
@@ -1003,7 +1201,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1087,7 +1287,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1171,7 +1373,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1255,7 +1459,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1339,7 +1545,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1423,7 +1631,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1507,7 +1717,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1591,7 +1803,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1675,7 +1889,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1759,7 +1975,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1843,7 +2061,9 @@
           "name": "资讯",
           "color": "185743",
           "default": false,
-          "description": "传播自己接收到的资讯"
+          "description": "传播自己接收到的资讯",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -1927,7 +2147,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2011,7 +2233,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2095,7 +2319,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2179,7 +2405,9 @@
           "name": "翻译",
           "color": "1d76db",
           "default": false,
-          "description": "它山之石可以攻玉"
+          "description": "它山之石可以攻玉",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2263,7 +2491,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2347,7 +2577,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2431,7 +2663,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2515,7 +2749,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2599,7 +2835,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2683,7 +2921,9 @@
           "name": "翻译",
           "color": "1d76db",
           "default": false,
-          "description": "它山之石可以攻玉"
+          "description": "它山之石可以攻玉",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2767,7 +3007,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2851,7 +3093,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -2935,7 +3179,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3019,7 +3265,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3103,7 +3351,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3187,7 +3437,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3271,7 +3523,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3355,7 +3609,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3439,7 +3695,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3523,7 +3781,9 @@
           "name": "资讯",
           "color": "185743",
           "default": false,
-          "description": "传播自己接收到的资讯"
+          "description": "传播自己接收到的资讯",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3607,7 +3867,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3691,7 +3953,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3775,7 +4039,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "closed",
@@ -3879,7 +4145,9 @@
           "name": "工具",
           "color": "89638B",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -3963,7 +4231,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4047,7 +4317,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "closed",
@@ -4151,7 +4423,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4235,7 +4509,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4319,7 +4595,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4403,7 +4681,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4487,7 +4767,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4571,7 +4853,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4655,7 +4939,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4739,7 +5025,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4823,7 +5111,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4907,7 +5197,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -4991,7 +5283,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5075,7 +5369,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5159,7 +5455,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5243,7 +5541,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5327,7 +5627,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5411,7 +5713,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5495,7 +5799,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5579,7 +5885,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5663,7 +5971,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5747,7 +6057,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5831,7 +6143,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5915,7 +6229,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -5999,7 +6315,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6083,7 +6401,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6167,7 +6487,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6251,7 +6573,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6335,7 +6659,9 @@
           "name": "资讯",
           "color": "185743",
           "default": false,
-          "description": "传播自己接收到的资讯"
+          "description": "传播自己接收到的资讯",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6419,7 +6745,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6503,7 +6831,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6587,7 +6917,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6671,7 +7003,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6755,7 +7089,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6839,7 +7175,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -6923,7 +7261,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7007,7 +7347,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7091,7 +7433,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7175,7 +7519,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7259,7 +7605,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7343,7 +7691,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7427,7 +7777,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7511,7 +7863,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7595,7 +7949,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7679,7 +8035,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7763,7 +8121,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7847,7 +8207,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -7931,7 +8293,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8015,7 +8379,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8099,7 +8465,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8183,7 +8551,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8267,7 +8637,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8351,7 +8723,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8435,7 +8809,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8519,7 +8895,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8603,7 +8981,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8687,7 +9067,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8771,7 +9153,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8855,7 +9239,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -8939,7 +9325,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9023,7 +9411,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9107,7 +9497,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9191,7 +9583,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9275,7 +9669,9 @@
           "name": "通识",
           "color": "32D504",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9359,7 +9755,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9443,7 +9841,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9527,7 +9927,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9611,7 +10013,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9695,7 +10099,9 @@
           "name": "编程",
           "color": "A897CC",
           "default": false,
-          "description": "软件开发的旅途"
+          "description": "软件开发的旅途",
+          "archived_at": null,
+          "archived_by": null
         },
         {
           "id": 7279399954,
@@ -9704,7 +10110,9 @@
           "name": "翻译",
           "color": "1d76db",
           "default": false,
-          "description": "它山之石可以攻玉"
+          "description": "它山之石可以攻玉",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9788,7 +10196,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -9872,7 +10282,9 @@
           "name": "通识",
           "color": "32D504",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "closed",
@@ -9976,7 +10388,9 @@
           "name": "资讯",
           "color": "185743",
           "default": false,
-          "description": "传播自己接收到的资讯"
+          "description": "传播自己接收到的资讯",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10060,7 +10474,9 @@
           "name": "工具",
           "color": "89638B",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10144,7 +10560,9 @@
           "name": "工具",
           "color": "89638B",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10228,7 +10646,9 @@
           "name": "Weekly",
           "color": "4436CA",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10312,7 +10732,9 @@
           "name": "Talk",
           "color": "5319E7",
           "default": false,
-          "description": "自我和解"
+          "description": "自我和解",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10396,7 +10818,9 @@
           "name": "通识",
           "color": "32D504",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10480,7 +10904,9 @@
           "name": "通识",
           "color": "32D504",
           "default": false,
-          "description": "标签"
+          "description": "标签",
+          "archived_at": null,
+          "archived_by": null
         }
       ],
       "state": "open",
@@ -10533,7 +10959,9 @@
       "name": "Talk",
       "color": "5319E7",
       "default": false,
-      "description": "自我和解"
+      "description": "自我和解",
+      "archived_at": null,
+      "archived_by": null
     },
     {
       "id": 4964354141,
@@ -10542,7 +10970,9 @@
       "name": "Weekly",
       "color": "4436CA",
       "default": false,
-      "description": "标签"
+      "description": "标签",
+      "archived_at": null,
+      "archived_by": null
     },
     {
       "id": 4618031591,
@@ -10551,7 +10981,9 @@
       "name": "工具",
       "color": "89638B",
       "default": false,
-      "description": "标签"
+      "description": "标签",
+      "archived_at": null,
+      "archived_by": null
     },
     {
       "id": 7279265991,
@@ -10560,7 +10992,9 @@
       "name": "编程",
       "color": "A897CC",
       "default": false,
-      "description": "软件开发的旅途"
+      "description": "软件开发的旅途",
+      "archived_at": null,
+      "archived_by": null
     },
     {
       "id": 7279399954,
@@ -10569,7 +11003,9 @@
       "name": "翻译",
       "color": "1d76db",
       "default": false,
-      "description": "它山之石可以攻玉"
+      "description": "它山之石可以攻玉",
+      "archived_at": null,
+      "archived_by": null
     },
     {
       "id": 7279257412,
@@ -10578,7 +11014,9 @@
       "name": "资讯",
       "color": "185743",
       "default": false,
-      "description": "传播自己接收到的资讯"
+      "description": "传播自己接收到的资讯",
+      "archived_at": null,
+      "archived_by": null
     },
     {
       "id": 4618030886,
@@ -10587,7 +11025,9 @@
       "name": "通识",
       "color": "32D504",
       "default": false,
-      "description": "标签"
+      "description": "标签",
+      "archived_at": null,
+      "archived_by": null
     }
   ],
   "repos": []
