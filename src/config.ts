@@ -25,7 +25,8 @@ export const CONFIG = {
         "微稿是一款面向个人创作者的本地优先写作工具，通过对话打开思路，支持 Markdown 与可视化编辑、微信公众号排版、AI 协作和素材管理，帮助你从一闪而过的念头写成可以发布的初稿。",
       homepage: "https://microdraft.i5lin.top/",
       topics: ["写作工具", "AI", "微信公众号"],
-      cover: "https://microdraft.i5lin.top/og-image.png",
+      cover:
+        "https://de4965e.webp.li/blog-images/2026/10/e24293e4d578c11778155c5354af4f0b.png",
     },
     {
       name: "Slokit Analytics",
